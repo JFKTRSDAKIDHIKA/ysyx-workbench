@@ -128,7 +128,7 @@ static int cmd_info(char* args){
 }
 
 static int cmd_x(char* args){
-  char *arg0 = strtok(NULL, "");
+  char *arg0 = strtok(NULL, " ");
   char *arg1 = strtok(NULL, "");
 
   printf("arg0=%s,arg1=%s\n",arg0,arg1);
