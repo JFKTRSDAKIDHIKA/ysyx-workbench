@@ -136,6 +136,11 @@ static int cmd_x(char* args){
     return 0; 
   }
 
+  if (strncmp(arg1, "0x", 2) != 0){
+    printf("Error: String does not start with \"0x\"\n");
+    return 0;
+  }
+
   int len = 4 * atoi(arg0);
   paddr_t starting_addr = strtoul(arg1, NULL, 16);
   paddr_t addr = starting_addr;
