@@ -131,6 +131,7 @@ static int cmd_x(char* args){
   char *arg0 = strtok(NULL, "");
   char *arg1 = strtok(NULL, "");
 
+  printf("arg0=%s,arg1=%s\n",arg0,arg1);
   int len = 4 * atoi(arg0);
   paddr_t addr = strtoul(arg1, NULL, 16);
 
