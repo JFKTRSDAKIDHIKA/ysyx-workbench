@@ -18,6 +18,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "sdb.h"
+#include <memory/paddr.h>
 
 static int is_batch_mode = false;
 
@@ -58,6 +59,8 @@ static int cmd_info(char* args);
 
 static int cmd_help(char *args);
 
+static int cmd_x(char* args);
+
 static struct {
   const char *name;
   const char *description;
@@ -68,7 +71,9 @@ static struct {
   { "q", "Exit NEMU", cmd_q },
   { "si", "让程序单步执行N条指令后暂停执行,当N没有给出时, 缺省为1", cmd_si },
   { "info", "打印寄存器状态", cmd_info},
+  { "x", "求出表达式EXPR的值, 将结果作为起始内存地址, 以十六进制形式输出连续的N个4字节", cmd_x}
 };
+
 
 #define NR_CMD ARRLEN(cmd_table)
 
@@ -119,6 +124,19 @@ static int cmd_info(char* args){
   } else {
     printf("Unknown arg '%s'\n", arg);
   }
+  return 0;
+}
+
+static int cmd_x(char* args){
+  char *arg0 = strtok(NULL, "");
+  char *arg1 = strtok(NULL, "");
+
+  int len = 4 * atoi(arg0);
+  paddr_t addr = strtoul(arg1, NULL, 16);
+
+  word_t data = paddr_read(addr, len);
+  printf("Data read from 0x%x (length %d): 0x%x\n", addr, len, data);
+
   return 0;
 }
 
