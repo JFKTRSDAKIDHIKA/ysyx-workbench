@@ -132,11 +132,12 @@ static int cmd_x(char* args){
   char *arg1 = strtok(NULL, "");
 
   int len = 4 * atoi(arg0);
-  paddr_t addr = strtoul(arg1, NULL, 16);
-
-  word_t data = paddr_read(addr, len);
-  printf("Data read from 0x%x (length %d): 0x%x\n", addr, len, data);
-
+  paddr_t starting_addr = strtoul(arg1, NULL, 16);
+  paddr_t addr = starting_addr;
+  for (; addr < starting_addr + len; addr = addr + 4){
+    word_t data = paddr_read(addr, 4);
+    printf("Data read from 0x%x (length %d): 0x%x\n", addr, 4, data);
+  }
   return 0;
 }
 
