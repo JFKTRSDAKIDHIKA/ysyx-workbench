@@ -133,8 +133,6 @@ static int cmd_x(char* args){
 
   int len = 4 * atoi(arg0);
   paddr_t addr = strtoul(arg1, NULL, 16);
-  printf("len=%d,addr=%x\n",len,addr);
-
 
   word_t data = paddr_read(addr, len);
   printf("Data read from 0x%x (length %d): 0x%x\n", addr, len, data);
