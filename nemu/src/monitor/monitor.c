@@ -21,7 +21,7 @@ void init_log(const char *log_file);
 void init_mem();
 void init_difftest(char *ref_so_file, long img_size, int port);
 void init_device();
-void init_sdb();
+void init_sdb(); // 初始化一个简单的调试器（Simple Debugger）。
 void init_disasm();
 
 static void welcome() {
@@ -32,8 +32,6 @@ static void welcome() {
   Log("Build time: %s, %s", __TIME__, __DATE__);
   printf("Welcome to %s-NEMU!\n", ANSI_FMT(str(__GUEST_ISA__), ANSI_FG_YELLOW ANSI_BG_RED));
   printf("For help, type \"help\"\n");
-  Log("Exercise: Please remove me in the source code and compile NEMU again.");
-  assert(0);
 }
 
 #ifndef CONFIG_TARGET_AM

@@ -18,6 +18,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "sdb.h"
+#include <memory/paddr.h>
 
 static int is_batch_mode = false;
 
@@ -52,7 +53,13 @@ static int cmd_q(char *args) {
   return -1;
 }
 
+static int cmd_si(char* args);
+
+static int cmd_info(char* args);
+
 static int cmd_help(char *args);
+
+static int cmd_x(char* args);
 
 static struct {
   const char *name;
@@ -62,10 +69,11 @@ static struct {
   { "help", "Display information about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
-
-  /* TODO: Add more commands */
-
+  { "si", "让程序单步执行N条指令后暂停执行,当N没有给出时, 缺省为1", cmd_si },
+  { "info", "打印寄存器状态", cmd_info},
+  { "x", "求出表达式EXPR的值, 将结果作为起始内存地址, 以十六进制形式输出连续的N个4字节", cmd_x}
 };
+
 
 #define NR_CMD ARRLEN(cmd_table)
 
@@ -88,6 +96,57 @@ static int cmd_help(char *args) {
       }
     }
     printf("Unknown command '%s'\n", arg);
+  }
+  return 0;
+}
+
+static int cmd_si(char* args){
+  char *arg = strtok(NULL, "");
+
+  if (arg == NULL) {
+    cpu_exec(1);
+  } else {
+    cpu_exec(atoi(arg));
+  }
+  return 0;
+}
+
+static int cmd_info(char* args){
+  char *arg = strtok(NULL, "");
+
+  if (arg == NULL){
+    printf("info r : 打印寄存器状态\n");
+    printf("info w : 打印监视点信息\n");
+  } else if (strcmp(arg, "r") == 0) {
+    isa_reg_display();
+  } else if (strcmp(arg, "w") == 0) {
+    printf("under developing\n");
+  } else {
+    printf("Unknown arg '%s'\n", arg);
+  }
+  return 0;
+}
+
+static int cmd_x(char* args){
+  char *arg0 = strtok(NULL, " ");
+  char *arg1 = strtok(NULL, "");
+  
+  if (arg1 == NULL || arg0 == NULL){
+    printf("Invalid args\n");
+    return 0; 
+  }
+
+  if (strncmp(arg1, "0x", 2) != 0){
+    printf("Error: String does not start with \"0x\"\n");
+    return 0;
+  }
+
+  int len = 4 * atoi(arg0);
+  paddr_t starting_addr = strtoul(arg1, NULL, 16);
+  paddr_t addr = starting_addr;
+  for (; addr < starting_addr + len; addr = addr + 4){
+    word_t data = paddr_read(addr, 4);
+    printf("Data read from 0x%x (length %d): 0x%x\n", addr, 4, data);
   }
   return 0;
 }
