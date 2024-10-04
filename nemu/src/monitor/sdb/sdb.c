@@ -54,6 +54,8 @@ static int cmd_q(char *args) {
 
 static int cmd_si(char* args);
 
+static int cmd_info(char* args);
+
 static int cmd_help(char *args);
 
 static struct {
@@ -65,8 +67,7 @@ static struct {
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
   { "si", "让程序单步执行N条指令后暂停执行,当N没有给出时, 缺省为1", cmd_si },
-
-
+  { "info", "打印寄存器状态", cmd_info},
 };
 
 #define NR_CMD ARRLEN(cmd_table)
@@ -97,11 +98,26 @@ static int cmd_help(char *args) {
 static int cmd_si(char* args){
   char *arg = strtok(NULL, "");
 
-  printf("The first arg of cmd_si is %s\n", arg);
   if (arg == NULL) {
     cpu_exec(1);
   } else {
     cpu_exec(atoi(arg));
+  }
+  return 0;
+}
+
+static int cmd_info(char* args){
+  char *arg = strtok(NULL, "");
+
+  if (arg == NULL){
+    printf("info r : 打印寄存器状态\n");
+    printf("info w : 打印监视点信息\n");
+  } else if (strcmp(arg, "r") == 0) {
+    isa_reg_display();
+  } else if (strcmp(arg, "w") == 0) {
+    printf("under developing\n");
+  } else {
+    printf("Unknown arg '%s'\n", arg);
   }
   return 0;
 }
