@@ -130,6 +130,11 @@ static int cmd_info(char* args){
 static int cmd_x(char* args){
   char *arg0 = strtok(NULL, " ");
   char *arg1 = strtok(NULL, "");
+  
+  if (arg1 == NULL || arg0 == NULL){
+    printf("Invalid args\n");
+    return 0; 
+  }
 
   int len = 4 * atoi(arg0);
   paddr_t starting_addr = strtoul(arg1, NULL, 16);
