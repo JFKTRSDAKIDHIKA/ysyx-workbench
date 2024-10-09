@@ -152,7 +152,7 @@ word_t eval(int p, int q){
     return eval(p + 1, q - 1);
   }else {
     int op = find_main_operator(p ,q);
-    printf("main_operator is at %d. Starting from %d, ending in %d.\n", op, p, q);
+  //  printf("main_operator is at %d. Starting from %d, ending in %d.\n", op, p, q);
     uint val1 = eval(p, op - 1);
     uint val2 = eval(op + 1, q);
     switch (tokens[op].type) {
@@ -189,7 +189,7 @@ int find_main_operator(int p, int q){
     
     if (get_priority(tokens[p].type) <= get_priority(tokens[main_op].type)){
       main_op = p;
-      printf("main_op = %d\n",main_op);
+   //   printf("main_op = %d\n",main_op);
     }
   }
   return main_op;
