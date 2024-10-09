@@ -126,7 +126,7 @@ word_t expr(char *e, bool *success) {
     *success = false;
     return 0;
   }
-  printf("nr_token = %d\n", nr_token);
+  //printf("nr_token = %d\n", nr_token);
   /* TODO: Insert codes to evaluate the expression. */
   return eval(0, nr_token - 1);
   
@@ -141,18 +141,18 @@ word_t eval(int p, int q){
     return 0;
   }else if (p == q){
     if (tokens[p].type == TK_NUM){
-      printf("token type: %d\n", tokens[p].type);
-      printf("tokens str: %d\n", atoi(tokens[p].str));
+   //   printf("token type: %d\n", tokens[p].type);
+   //   printf("tokens str: %d\n", atoi(tokens[p].str));
       return (uint)(atoi(tokens[p].str)); 
     }else {
       printf("this token should be a number.\n");
     }
   }else if (check_parentheses(p, q) == 1){
-    printf("expression 被括号包起来了. Starting from %d, ending in %d.\n", p, q);
+  //  printf("expression 被括号包起来了. Starting from %d, ending in %d.\n", p, q);
     return eval(p + 1, q - 1);
   }else {
     int op = find_main_operator(p ,q);
-    printf("main_operator is at %d. Starting from %d, ending in %d.\n", op, p, q);
+   // printf("main_operator is at %d. Starting from %d, ending in %d.\n", op, p, q);
     uint val1 = eval(p, op - 1);
     uint val2 = eval(op + 1, q);
     switch (tokens[op].type) {
