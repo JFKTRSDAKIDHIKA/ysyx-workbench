@@ -42,7 +42,7 @@ int main(int argc, char *argv[]) {
     unsigned int expected_result;
     if (sscanf(line, "%u %[^/n]", &expected_result, expression) == 2) { // Read expected result and expression
       bool success = true;
-      printf("expression is %s\n", expression);
+      printf("expression is %s", expression);
       uint32_t actual_result = expr(expression, &success);
 
       if (!success) {
