@@ -188,8 +188,10 @@ int find_main_operator(int p, int q){
       continue;
     
 
-    if (get_priority(tokens[p].str[0]) <= get_priority(tokens[main_op].str[0]))
+    if (get_priority(tokens[p].str[0]) <= get_priority(tokens[main_op].str[0])){
       main_op = p;
+      printf("main_op = %d\n",main_op);
+    }
   }
   return main_op;
 }
