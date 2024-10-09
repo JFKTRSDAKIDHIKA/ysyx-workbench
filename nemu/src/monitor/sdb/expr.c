@@ -221,6 +221,10 @@ bool check_parentheses(int p, int q){
         sp++;
         stk[sp] = TK_LPAREN;
       } 
+      
+      if (sp == -1 && p != q)
+        return 0;
+
     }
     if (sp == -1)
       return 1;
