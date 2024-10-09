@@ -128,7 +128,7 @@ word_t expr(char *e, bool *success) {
   }
 
   /* TODO: Insert codes to evaluate the expression. */
-  eval(0, nr_token - 1);
+  return eval(0, nr_token - 1);
   
 
 
@@ -142,8 +142,8 @@ word_t eval(int p, int q){
   }else if (p == q){
     if (tokens[p].type == TK_NUM){
       printf("token type: %d\n", tokens[p].type);
-      printf("tokens str: %d", atoi(tokens[p].str));
-      return (uint)atoi(tokens[p].str); 
+      printf("tokens str: %d\n", atoi(tokens[p].str));
+      return (uint)(atoi(tokens[p].str)); 
     }else {
       printf("this token should be a number.\n");
     }
