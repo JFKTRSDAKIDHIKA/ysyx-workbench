@@ -41,6 +41,11 @@ int main(int argc, char *argv[]) {
     char expression[100];
     unsigned int expected_result;
     if (sscanf(line, "%u %[^/n]", &expected_result, expression) == 2) { // Read expected result and expression
+      size_t len = strlen(expression);					
+      if (len > 0 && expression[len - 1] == '\n'){
+	printf("最后的字符:%c\n", expression[len - 1]);
+        expression[len - 1] = '\0';
+      }
       bool success = true;
       printf("expression is %s", expression);
       uint32_t actual_result = expr(expression, &success);
