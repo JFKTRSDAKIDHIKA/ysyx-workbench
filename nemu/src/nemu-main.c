@@ -30,8 +30,7 @@ int main(int argc, char *argv[]) {
   init_monitor(argc, argv);
 #endif
 
-    if (1) { // Test mode if -t argument is provided
-        FILE *input = fopen("../tools/gen-expr/input", "r"); // Open the input file
+        FILE *input = fopen("/root/ysyx-workbench/nemu/tools/gen-expr/input", "r"); // Open the input file
         if (input == NULL) {
             perror("Failed to open input file");
             return 1;
@@ -60,10 +59,5 @@ int main(int argc, char *argv[]) {
 
         }
         fclose(input);
-    } else {
-
-        /* Start engine. */
-        engine_start();
-    }
   return is_exit_status_bad();
 }
