@@ -186,6 +186,8 @@ int find_main_operator(int p, int q){
 
     if (paren_level != 0)
       continue;
+    
+    main_op = p;
 
     if (get_priority(tokens[p].str[0]) <= get_priority(tokens[main_op].str[0]))
       main_op = p;
