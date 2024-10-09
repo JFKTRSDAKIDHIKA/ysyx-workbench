@@ -21,7 +21,7 @@
 #include <regex.h>
 
 bool check_parentheses(int, int);
-int get_priority(char);
+int get_priority(int);
 int find_main_operator(int, int);
 word_t eval(int, int);
 
@@ -187,9 +187,7 @@ int find_main_operator(int p, int q){
     if (paren_level != 0)
       continue;
     
-
-    printf("tokens[p].str = %s\n", tokens[p].str);
-    if (get_priority(tokens[p].str[0]) <= get_priority(tokens[main_op].str[0])){
+    if (get_priority(tokens[p].type) <= get_priority(tokens[main_op].type)){
       main_op = p;
       printf("main_op = %d\n",main_op);
     }
@@ -237,10 +235,10 @@ bool check_parentheses(int p, int q){
   }
 }
 
-int get_priority(char op) {
-    if (op == '+' || op == '-') {
+int get_priority(int op) {
+    if (op == '+' || op == TK_MINUS) {
         return 1;  // 加法和减法的优先级最低
-    } else if (op == '*' || op == '/') {
+    } else if (op == TK_MULT || op == TK_DIV) {
         return 2;  // 乘法和除法优先级稍高
     } else {
         return 3; // 非运算符返回一个无效值
