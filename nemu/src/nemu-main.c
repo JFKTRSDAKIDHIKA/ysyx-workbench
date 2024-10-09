@@ -43,7 +43,7 @@ int main(int argc, char *argv[]) {
     if (sscanf(line, "%u %[^/n]", &expected_result, expression) == 2) { // Read expected result and expression
       size_t len = strlen(expression);					
       if (len > 0 && expression[len - 1] == '\n'){
-	//printf("最后的字符:%c\n", expression[len - 1]);
+	printf("最后的字符:%c\n", expression[len - 1]);
         expression[len - 1] = '\0';
       }
       bool success = true;
