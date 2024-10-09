@@ -137,7 +137,7 @@ word_t expr(char *e, bool *success) {
 
 word_t eval(int p, int q){
   if (p > q){
-    printf("Bad expression!\n");
+    printf("Bad expression! Starting from %d, ending in %d.\n",p ,q);
     return 0;
   }else if (p == q){
     if (tokens[p].type == TK_NUM){
