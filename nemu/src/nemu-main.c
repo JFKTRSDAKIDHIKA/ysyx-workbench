@@ -38,9 +38,9 @@ int main(int argc, char *argv[]) {
 
   char line[MAX_TOKENS * 2]; // Increased size for longer expressions
   while (fgets(line, sizeof(line), input) != NULL) {
-    char *expression = NULL;
+    char expression[100];
     unsigned int expected_result;
-    if (sscanf(line, "%u %ms", &expected_result, &expression) == 2) { // Read expected result and expression
+    if (sscanf(line, "%u %[^/n]", &expected_result, expression) == 2) { // Read expected result and expression
       bool success = true;
       printf("expression is %s\n", expression);
       uint32_t actual_result = expr(expression, &success);
@@ -52,7 +52,6 @@ int main(int argc, char *argv[]) {
         } else {
         printf("Test failed: %s\nExpected: %u\nActual: %u\n", expression, expected_result, actual_result);
         }
-        free(expression); // Free allocated memory
     } else {
       printf("Invalid input line: %s\n", line);
             }
