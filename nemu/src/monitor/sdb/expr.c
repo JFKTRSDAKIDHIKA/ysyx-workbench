@@ -187,7 +187,6 @@ int find_main_operator(int p, int q){
     if (paren_level != 0)
       continue;
     
-    main_op = p;
 
     if (get_priority(tokens[p].str[0]) <= get_priority(tokens[main_op].str[0]))
       main_op = p;
@@ -241,7 +240,7 @@ int get_priority(char op) {
     } else if (op == '*' || op == '/') {
         return 2;  // 乘法和除法优先级稍高
     } else {
-        return -1; // 非运算符返回一个无效值
+        return 3; // 非运算符返回一个无效值
     }
 }
 
