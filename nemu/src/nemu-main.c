@@ -30,8 +30,8 @@ int main(int argc, char *argv[]) {
   init_monitor(argc, argv);
 #endif
 
-    if (argc > 1 && strcmp(argv[1], "-t") == 0) { // Test mode if -t argument is provided
-        FILE *input = fopen("input", "r"); // Open the input file
+    if (1) { // Test mode if -t argument is provided
+        FILE *input = fopen("../tools/gen-expr/input", "r"); // Open the input file
         if (input == NULL) {
             perror("Failed to open input file");
             return 1;
