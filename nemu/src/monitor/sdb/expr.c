@@ -142,6 +142,7 @@ word_t eval(int p, int q){
   }else if (p == q){
     if (tokens[p].type == TK_NUM){
       printf("token type: %d\n", tokens[p].type);
+      printf("tokens str: %d", atoi(tokens[p].str));
       return (uint)atoi(tokens[p].str); 
     }else {
       printf("this token should be a number.\n");
