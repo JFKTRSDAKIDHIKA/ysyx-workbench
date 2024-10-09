@@ -128,8 +128,7 @@ word_t expr(char *e, bool *success) {
   }
 
   /* TODO: Insert codes to evaluate the expression. */
-  printf("nr_token = %d\n", nr_token);
-  eval(0, nr_token);
+  eval(0, nr_token - 1);
   
 
 
