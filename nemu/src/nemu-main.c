@@ -30,34 +30,35 @@ int main(int argc, char *argv[]) {
   init_monitor(argc, argv);
 #endif
 
-        FILE *input = fopen("/root/ysyx-workbench/nemu/tools/gen-expr/input", "r"); // Open the input file
-        if (input == NULL) {
-            perror("Failed to open input file");
-            return 1;
+  FILE *input = fopen("/root/ysyx-workbench/nemu/tools/gen-expr/input", "r"); // Open the input file
+  if (input == NULL) {
+    perror("Failed to open input file");
+    return 1;
+  }
+
+  char line[MAX_TOKENS * 2]; // Increased size for longer expressions
+  while (fgets(line, sizeof(line), input) != NULL) {
+    char *expression = NULL;
+    unsigned int expected_result;
+
+    if (sscanf(line, "%u %ms", &expected_result, &expression) == 2) { // Read expected result and expression
+      bool success = true;
+      printf("expression is %s\n", expression);
+      uint32_t actual_result = expr(expression, &success);
+
+      if (!success) {
+        printf("Expression evaluation failed: %s\n", expression);
+      } else if (actual_result == expected_result) {
+        printf("Test passed: %s = %u\n", expression, actual_result);
+        } else {
+        printf("Test failed: %s\nExpected: %u\nActual: %u\n", expression, expected_result, actual_result);
         }
-
-        char line[MAX_TOKENS * 2]; // Increased size for longer expressions
-        while (fgets(line, sizeof(line), input) != NULL) {
-            char *expression = NULL;
-            unsigned int expected_result;
-
-            if (sscanf(line, "%u %ms", &expected_result, &expression) == 2) { // Read expected result and expression
-                bool success = true;
-                uint32_t actual_result = expr(expression, &success);
-
-                if (!success) {
-                  printf("Expression evaluation failed: %s\n", expression);
-                } else if (actual_result == expected_result) {
-                    printf("Test passed: %s = %u\n", expression, actual_result);
-                } else {
-                    printf("Test failed: %s\nExpected: %u\nActual: %u\n", expression, expected_result, actual_result);
-                }
-                free(expression); // Free allocated memory
-            } else {
-                printf("Invalid input line: %s\n", line);
+        free(expression); // Free allocated memory
+    } else {
+      printf("Invalid input line: %s\n", line);
             }
 
-        }
-        fclose(input);
+  }
+  fclose(input);
   return is_exit_status_bad();
 }
