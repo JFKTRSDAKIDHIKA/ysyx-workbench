@@ -148,6 +148,7 @@ word_t eval(int p, int q){
       printf("this token should be a number.\n");
     }
   }else if (check_parentheses(p, q) == 1){
+    printf("expression 被括号包起来了\n");
     return eval(p + 1, q - 1);
   }else {
     int op = find_main_operator(p ,q);
