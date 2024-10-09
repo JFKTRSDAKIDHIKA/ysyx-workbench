@@ -40,7 +40,6 @@ int main(int argc, char *argv[]) {
   while (fgets(line, sizeof(line), input) != NULL) {
     char *expression = NULL;
     unsigned int expected_result;
-
     if (sscanf(line, "%u %ms", &expected_result, &expression) == 2) { // Read expected result and expression
       bool success = true;
       printf("expression is %s\n", expression);
