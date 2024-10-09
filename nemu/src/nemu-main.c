@@ -59,8 +59,8 @@ int main(int argc, char *argv[]) {
         }
     } else {
       printf("Invalid input line: %s\n", line);
-            }
-
+      }
+    memset(expression, 0, sizeof(expression));  // 全部初始化为 '\0'
   }
   fclose(input);
   return is_exit_status_bad();
