@@ -151,7 +151,7 @@ word_t eval(int p, int q){
     printf("expression 被括号包起来了. Starting from %d, ending in %d.\n", p, q);
     return eval(p + 1, q - 1);
   }else {
-    int op = find_main_operator(p ,q);
+    int op = find_main_operator(1 ,5);
     printf("main_operator is at %d. Starting from %d, ending in %d.\n", op, p, q);
     uint val1 = eval(p, op - 1);
     uint val2 = eval(op + 1, q);
