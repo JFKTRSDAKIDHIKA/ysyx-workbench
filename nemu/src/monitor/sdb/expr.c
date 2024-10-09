@@ -141,7 +141,7 @@ word_t eval(int p, int q){
     return 0;
   }else if (p == q){
     if (tokens[p].type == TK_NUM){
-      return atoi(tokens[p].str); 
+      return (uint)atoi(tokens[p].str); 
     }else {
       printf("this token should be a number.\n");
     }
@@ -149,8 +149,8 @@ word_t eval(int p, int q){
     return eval(p + 1, q - 1);
   }else {
     int op = find_main_operator(p ,q);
-    int val1 = eval(p, op - 1);
-    int val2 = eval(op + 1, q);
+    uint val1 = eval(p, op - 1);
+    uint val2 = eval(op + 1, q);
     switch (tokens[op].type) {
       case '+': return val1 + val2;
       case TK_MINUS : return val1 - val2;

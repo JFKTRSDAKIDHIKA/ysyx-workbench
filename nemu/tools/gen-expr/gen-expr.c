@@ -31,39 +31,112 @@ static char *code_format =
 "  return 0; "
 "}";
 
-static void gen_rand_expr() {
-  buf[0] = '\0';
+
+// choose函数用于生成一个小于n的随机数
+static uint32_t choose(uint32_t n) {
+    return rand() % n;
+}
+
+static void gen_num() {
+    uint32_t num = rand() % 1000;
+    char str[32];
+    sprintf(str, "%d", num);
+    strcat(buf, str);
+}
+
+static void gen_rand_op() {
+    switch (choose(4)) {
+        case 0: strcat(buf, " + "); break;
+        case 1: strcat(buf, " - "); break;
+        case 2: strcat(buf, " * "); break;
+        default: strcat(buf, " / "); break;
+    }
+}
+
+static void gen_rand_expr(int depth) {
+    if (depth > 10) {  // 控制递归深度，避免生成过长表达式
+        gen_num();  // 生成数字作为叶子节点
+        return;
+    }
+
+    switch (choose(3)) {
+        case 0: 
+            gen_num();  // 生成数字
+            break;
+        case 1:
+            strcat(buf, "(");  // 生成带括号的子表达式
+            gen_rand_expr(depth + 1);
+            strcat(buf, ")");
+            break;
+        default:
+            // 递归生成运算符两边的表达式
+            gen_rand_expr(depth + 1);
+            gen_rand_op();  // 添加运算符
+            gen_rand_expr(depth + 1);
+            break;
+    }
 }
 
 int main(int argc, char *argv[]) {
-  int seed = time(0);
-  srand(seed);
-  int loop = 1;
-  if (argc > 1) {
-    sscanf(argv[1], "%d", &loop);
-  }
-  int i;
-  for (i = 0; i < loop; i ++) {
-    gen_rand_expr();
+    int seed = time(0);
+    srand(seed);
+    int loop = 1;
+    if (argc > 1) {
+        sscanf(argv[1], "%d", &loop);
+    }
 
-    sprintf(code_buf, code_format, buf);
+    for (int i = 0; i < loop; i++) {
+        memset(buf, 0, sizeof(buf)); // Clear buffer at the start of each loop
+        gen_rand_expr(5); // Generate expression (adjust depth as needed)
 
-    FILE *fp = fopen("/tmp/.code.c", "w");
-    assert(fp != NULL);
-    fputs(code_buf, fp);
-    fclose(fp);
+        sprintf(code_buf, code_format, buf);
 
-    int ret = system("gcc /tmp/.code.c -o /tmp/.expr");
-    if (ret != 0) continue;
+        FILE *fp = fopen("/tmp/.code.c", "w");
+        assert(fp != NULL);
+        fputs(code_buf, fp);
+        fclose(fp);
 
-    fp = popen("/tmp/.expr", "r");
-    assert(fp != NULL);
+        FILE *pipe = popen("gcc -Werror=div-by-zero /tmp/.code.c -o /tmp/.expr 2>&1", "r");
+        if (!pipe) {
+            perror("popen failed");
+            return 1; // Return an error code
+        }
 
-    int result;
-    ret = fscanf(fp, "%d", &result);
-    pclose(fp);
+        char compiler_output[1024];
+         while (fgets(compiler_output, sizeof(compiler_output), pipe) != NULL) {
+            if (strstr(compiler_output, "division by zero") != NULL || strstr(compiler_output, "error:")) {
+                pclose(pipe);
+                i--; // Decrement i to retry
+                goto next_iteration;
+            }
+        }
 
-    printf("%u %s\n", result, buf);
-  }
-  return 0;
+
+        int status = pclose(pipe);
+        if (status != 0) {
+            i--;
+            goto next_iteration;
+        }
+
+
+        fp = popen("/tmp/.expr", "r");
+        assert(fp != NULL);
+        unsigned int result;
+
+        if (fscanf(fp, "%u", &result) != 1) {
+            pclose(fp);
+            perror("fscanf failed");
+            return 1; // Return an error code
+        }
+        pclose(fp);
+
+
+
+
+        printf("%u %s\n", result, buf);
+
+next_iteration:;
+    }
+
+    return 0;
 }
