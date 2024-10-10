@@ -20,25 +20,34 @@
  */
 #include <regex.h>
 
+bool check_parentheses(int, int);
+int get_priority(int);
+int find_main_operator(int, int);
+word_t eval(int, int);
+
 enum {
   TK_NOTYPE = 256, TK_EQ,
-
-  /* TODO: Add more token types */
-
+  TK_NUM,
+  TK_MINUS,
+  TK_MULT,
+  TK_DIV,
+  TK_LPAREN,
+  TK_RPAREN
 };
 
 static struct rule {
   const char *regex;
   int token_type;
 } rules[] = {
-
-  /* TODO: Add more rules.
-   * Pay attention to the precedence level of different rules.
-   */
-
   {" +", TK_NOTYPE},    // spaces
   {"\\+", '+'},         // plus
   {"==", TK_EQ},        // equal
+  {"\\-", TK_MINUS},     // minus	 
+  {"\\*", TK_MULT},	 // multiplicate
+  {"\\/", TK_DIV},       // divide
+  {"\\(", TK_LPAREN},
+  {"\\)", TK_RPAREN},
+  {"[0-9]+", TK_NUM},  
 };
 
 #define NR_REGEX ARRLEN(rules)
@@ -67,7 +76,7 @@ typedef struct token {
   char str[32];
 } Token;
 
-static Token tokens[32] __attribute__((used)) = {};
+static Token tokens[128] __attribute__((used)) = {};
 static int nr_token __attribute__((used))  = 0;
 
 static bool make_token(char *e) {
@@ -81,23 +90,32 @@ static bool make_token(char *e) {
     /* Try all rules one by one. */
     for (i = 0; i < NR_REGEX; i ++) {
       if (regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) {
+	// int regexec(const regex_t *preg, const char *string, size_t nmatch, regmatch_t pmatch[], int eflags);
+	// preg : 指向编译好的正则表达式对象，该对象是通过 regcomp() 函数编译得到的。这是待匹配的正则表达式。
+	// char : 指向要进行匹配操作的输入字符串。
+	// nmatch : 指定要捕获的子表达式（即匹配组）的最大数量。
+	// pmatch : 用于存储匹配到的子表达式的起始和结束位置。包含两个成员：rm_so（匹配的开始位置）和 rm_eo（匹配的结束位置）。
+	// falgs
+	// return 0 implys 匹配成功。
         char *substr_start = e + position;
         int substr_len = pmatch.rm_eo;
 
+	/*
         Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
             i, rules[i].regex, position, substr_len, substr_len, substr_start);
+	*/
 
         position += substr_len;
 
-        /* TODO: Now a new token is recognized with rules[i]. Add codes
-         * to record the token in the array `tokens'. For certain types
-         * of tokens, some extra actions should be performed.
-         */
-
-        switch (rules[i].token_type) {
-          default: TODO();
-        }
-
+	if (rules[i].token_type != TK_NOTYPE){
+	  tokens[nr_token].type = rules[i].token_type;
+ 	
+	  if (rules[i].token_type == TK_NUM){
+	    strncpy(tokens[nr_token].str, substr_start, substr_len);
+	    tokens[nr_token].str[substr_len] = '\0';
+	  }
+	  nr_token++;
+	}
         break;
       }
     }
@@ -112,14 +130,129 @@ static bool make_token(char *e) {
 }
 
 
-word_t expr(char *e, bool *success) {
+uint32_t expr(char *e, bool *success) {
   if (!make_token(e)) {
     *success = false;
     return 0;
   }
-
+  // printf("nr_token = %d\n", nr_token);
   /* TODO: Insert codes to evaluate the expression. */
-  TODO();
+  return eval(0, nr_token - 1);
+  
+
 
   return 0;
 }
+
+word_t eval(int p, int q){
+  if (p > q){
+    printf("Bad expression! Starting from %d, ending in %d.\n",p ,q);
+    return 0;
+  }else if (p == q){
+    if (tokens[p].type == TK_NUM){
+   //   printf("token type: %d\n", tokens[p].type);
+   //   printf("tokens str: %d\n", atoi(tokens[p].str));
+      return (uint)(atoi(tokens[p].str)); 
+      // ASCII to Integer
+    }else {
+      printf("this token should be a number.\n");
+    }
+  }else if (check_parentheses(p, q) == 1){
+  //  printf("expression 被括号包起来了. Starting from %d, ending in %d.\n", p, q);
+    return eval(p + 1, q - 1);
+  }else {
+    int op = find_main_operator(p ,q);
+  //  printf("main_operator is at %d. Starting from %d, ending in %d.\n", op, p, q);
+    uint32_t val1 = eval(p, op - 1);
+    uint32_t val2 = eval(op + 1, q);
+    switch (tokens[op].type) {
+      case '+': return val1 + val2;
+      case TK_MINUS : return val1 - val2;
+      case TK_MULT: return val1 * val2;
+      case TK_DIV: return val1 / val2;
+      default: assert(0); 
+  }
+  }
+  return -1;
+}
+
+int find_main_operator(int p, int q){
+  int paren_level = 0;
+  int main_op = p;
+
+  for (; p <= q; p++){
+    if (tokens[p].type == TK_LPAREN){
+      paren_level++;
+      continue;
+    }
+    
+    if (tokens[p].type == TK_RPAREN){
+      paren_level--;
+      continue;
+    }
+
+    if (tokens[p].type == TK_NUM)
+      continue;
+
+    if (paren_level != 0)
+      continue;
+    
+    if (get_priority(tokens[p].type) <= get_priority(tokens[main_op].type)){
+      main_op = p;
+   //   printf("main_op = %d\n",main_op);
+    }
+  }
+  return main_op;
+}
+
+bool check_parentheses(int p, int q){
+  int sp = -1; // statck pointer.
+  int stk[32];
+  if (tokens[p].type != TK_LPAREN){
+    return 0;
+  }else {
+    sp++; // invariance: sp always points to the hightest element in the array.
+    stk[sp] = TK_LPAREN;
+    p++;
+    for(; p <= q; p++){
+      if (tokens[p].type == TK_RPAREN){
+        if (sp == -1){
+	  return 0;
+	}else {
+	  if (stk[sp] == TK_LPAREN){
+	    stk[sp] = 0;
+	    sp--;
+	  }
+	} 
+      }
+
+      if (tokens[p].type == TK_LPAREN){
+	// in case of condition : "(4 + 3) * (2 - 1)"   // false, the leftmost '(' and the rightmost ')' are not matched
+	if (sp == -1)
+	  return 0;
+        sp++;
+        stk[sp] = TK_LPAREN;
+      } 
+      
+      if (sp == -1 && p != q)
+        return 0;
+
+    }
+    if (sp == -1)
+      return 1;
+    else 
+      return 0; 
+  }
+}
+
+int get_priority(int op) {
+    if (op == '+' || op == TK_MINUS) {
+        return 1;  // 加法和减法的优先级最低
+    } else if (op == TK_MULT || op == TK_DIV) {
+        return 2;  // 乘法和除法优先级稍高
+    } else {
+        return 3; // 非运算符返回一个无效值
+    }
+}
+
+
