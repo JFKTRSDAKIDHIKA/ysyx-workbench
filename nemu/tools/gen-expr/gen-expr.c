@@ -90,14 +90,20 @@ int main(int argc, char *argv[]) {
         gen_rand_expr(5); // Generate expression (adjust depth as needed)
 
         sprintf(code_buf, code_format, buf);
+	// sprintf() : instead of printing to the console, it prints string to a string.
 
         FILE *fp = fopen("/tmp/.code.c", "w");
-        assert(fp != NULL);
+        if(fp == NULL){
+	  perror("fopen failed");
+	  return 1;
+	}
         fputs(code_buf, fp);
         fclose(fp);
 
         FILE *pipe = popen("gcc -Werror=div-by-zero /tmp/.code.c -o /tmp/.expr 2>&1", "r");
-        if (!pipe) {
+	// "gcc -Werror=div-by-zero /tmp/.code.c -o /tmp/.expr 2>&1" 会调用 gcc 编译器，并将任何警告或错误消息重定向到标准输出
+	// 2>&1 将 标准错误输出（stderr） 重定向到 标准输出（stdout）
+	if (pipe == NULL) {
             perror("popen failed");
             return 1; // Return an error code
         }
@@ -124,18 +130,17 @@ int main(int argc, char *argv[]) {
         unsigned int result;
 
         if (fscanf(fp, "%u", &result) != 1) {
+	    // fscanf 用于从文件中读取格式化的数据。
             pclose(fp);
             perror("fscanf failed");
             return 1; // Return an error code
         }
         pclose(fp);
 
-
-
-
         printf("%u %s\n", result, buf);
 
-next_iteration:;
+        next_iteration:
+	  ;
     }
 
     return 0;

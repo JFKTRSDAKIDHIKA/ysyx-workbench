@@ -90,6 +90,13 @@ static bool make_token(char *e) {
     /* Try all rules one by one. */
     for (i = 0; i < NR_REGEX; i ++) {
       if (regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) {
+	// int regexec(const regex_t *preg, const char *string, size_t nmatch, regmatch_t pmatch[], int eflags);
+	// preg : 指向编译好的正则表达式对象，该对象是通过 regcomp() 函数编译得到的。这是待匹配的正则表达式。
+	// char : 指向要进行匹配操作的输入字符串。
+	// nmatch : 指定要捕获的子表达式（即匹配组）的最大数量。
+	// pmatch : 用于存储匹配到的子表达式的起始和结束位置。包含两个成员：rm_so（匹配的开始位置）和 rm_eo（匹配的结束位置）。
+	// falgs
+	// return 0 implys 匹配成功。
         char *substr_start = e + position;
         int substr_len = pmatch.rm_eo;
 
@@ -144,6 +151,7 @@ word_t eval(int p, int q){
    //   printf("token type: %d\n", tokens[p].type);
    //   printf("tokens str: %d\n", atoi(tokens[p].str));
       return (uint)(atoi(tokens[p].str)); 
+      // ASCII to Integer
     }else {
       printf("this token should be a number.\n");
     }
