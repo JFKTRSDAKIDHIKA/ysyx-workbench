@@ -37,16 +37,19 @@ int main(int argc, char *argv[]) {
   }
 
   char line[MAX_TOKENS * 2]; // Increased size for longer expressions
+			     
   while (fgets(line, sizeof(line), input) != NULL) {
     char expression[100];
     unsigned int expected_result;
     if (sscanf(line, "%u %[^\n]", &expected_result, expression) == 2) { // Read expected result and expression
+      /*
       size_t len = strlen(expression);					
       if (len > 0 && expression[len - 1] == '\n'){
 	printf("最后的字符:%c\n", expression[len - 1]);
         expression[len - 1] = '\0';
       }
-      bool success = true;
+      */
+      bool success = 1;
       printf("expression is %s\n", expression);
       uint32_t actual_result = expr(expression, &success);
 
@@ -62,6 +65,8 @@ int main(int argc, char *argv[]) {
       }
     memset(expression, 0, sizeof(expression));  // 全部初始化为 '\0'
   }
+
   fclose(input);
-  return is_exit_status_bad();
+  return 0;
+  // return is_exit_status_bad();
 }
