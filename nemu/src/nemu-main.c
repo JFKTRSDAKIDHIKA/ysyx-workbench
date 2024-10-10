@@ -17,7 +17,7 @@
 #define MAX_TOKENS 1024  // Adjust as needed
 			 
 
-word_t expr(char *e, bool *success);
+uint32_t expr(char *e, bool *success);
 void init_monitor(int, char *[]);
 void am_init_monitor();
 void engine_start();
