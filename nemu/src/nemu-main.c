@@ -50,7 +50,7 @@ int main(int argc, char *argv[]) {
       }
       */
       bool success = 1;
-      printf("expression is %s\n", expression);
+       //printf("expression is %s\n", expression);
       uint32_t actual_result = expr(expression, &success);
 
       if (!success) {
