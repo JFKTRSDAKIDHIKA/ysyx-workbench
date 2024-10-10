@@ -54,7 +54,7 @@ static void gen_rand_op() {
 }
 
 static void gen_rand_expr(int depth) {
-    if (depth > 3) {  // 控制递归深度，避免生成过长表达式
+    if (depth > 5) {  // 控制递归深度，避免生成过长表达式
         gen_num();  // 生成数字作为叶子节点
         return;
     }
@@ -87,7 +87,7 @@ int main(int argc, char *argv[]) {
 
     for (int i = 0; i < loop; i++) {
         memset(buf, 0, sizeof(buf)); // Clear buffer at the start of each loop
-        gen_rand_expr(5); // Generate expression (adjust depth as needed)
+        gen_rand_expr(0); // Generate expression (adjust depth as needed)
 
         sprintf(code_buf, code_format, buf);
 	// sprintf() : instead of printing to the console, it prints string to a string.
