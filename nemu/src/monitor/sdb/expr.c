@@ -161,8 +161,8 @@ word_t eval(int p, int q){
   }else {
     int op = find_main_operator(p ,q);
   //  printf("main_operator is at %d. Starting from %d, ending in %d.\n", op, p, q);
-    uint val1 = eval(p, op - 1);
-    uint val2 = eval(op + 1, q);
+    uint32_t val1 = eval(p, op - 1);
+    uint32_t val2 = eval(op + 1, q);
     switch (tokens[op].type) {
       case '+': return val1 + val2;
       case TK_MINUS : return val1 - val2;
