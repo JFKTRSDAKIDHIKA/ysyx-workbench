@@ -189,6 +189,7 @@ word_t eval(int p, int q){
   //  printf("expression 被括号包起来了. Starting from %d, ending in %d.\n", p, q);
     return eval(p + 1, q - 1);
   }else if (check_dereference(p, q)){
+    printf("check_dereference : true\n");
     return vaddr_read(eval(p + 1, q), 4);
   }else {
     int op = find_main_operator(p ,q);
