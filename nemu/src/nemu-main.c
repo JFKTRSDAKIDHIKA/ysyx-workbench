@@ -56,7 +56,7 @@ int main(int argc, char *argv[]) {
       if (!success) {
         printf("Expression evaluation failed: %s\n", expression);
       } else if (actual_result == expected_result) {
-        // printf("Test passed: %s = %u\n", expression, actual_result);
+         printf("Test passed: %s = %u\n", expression, actual_result);
         } else {
         printf("Test failed: %s\nExpected: %u\nActual: %u\n", expression, expected_result, actual_result);
         }
