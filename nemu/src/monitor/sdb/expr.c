@@ -20,34 +20,45 @@
  */
 #include <regex.h>
 
+word_t isa_reg_str2val(const char *s, bool *success);
 bool check_parentheses(int, int);
 int get_priority(int);
 int find_main_operator(int, int);
 word_t eval(int, int);
+word_t vaddr_read(vaddr_t addr, int len);
+bool check_dereference(int p, int q);
 
 enum {
   TK_NOTYPE = 256, TK_EQ,
   TK_NUM,
   TK_MINUS,
-  TK_MULT,
   TK_DIV,
   TK_LPAREN,
-  TK_RPAREN
+  TK_RPAREN,
+  TK_NEQ,         // !=
+  TK_AND,         // and
+  TK_HEX,         // hex number
+  TK_REG,         // register name
+  TK_DEREF,       // 词法分析时,识别所有'*'为同一类型,求值时再区分。
 };
 
 static struct rule {
   const char *regex;
   int token_type;
 } rules[] = {
-  {" +", TK_NOTYPE},    // spaces
-  {"\\+", '+'},         // plus
-  {"==", TK_EQ},        // equal
-  {"\\-", TK_MINUS},     // minus	 
-  {"\\*", TK_MULT},	 // multiplicate
-  {"\\/", TK_DIV},       // divide
-  {"\\(", TK_LPAREN},
-  {"\\)", TK_RPAREN},
-  {"[0-9]+", TK_NUM},  
+  {" +", TK_NOTYPE},         // spaces
+  {"\\+", '+'},              // plus
+  {"==", TK_EQ},             // equal
+  {"!=", TK_NEQ},            // noe equal
+  {"\\-", TK_MINUS},         // minus	 
+  {"\\*", '*'},	             // multiplicate or dereference
+  {"\\/", TK_DIV},           // divide
+  {"\\(", TK_LPAREN},        // left paren
+  {"\\)", TK_RPAREN},        // right paren
+  {"[0-9]+", TK_NUM},        // num
+  {"0x[0-9a-fA-F]+", TK_HEX},// hex number
+  {"\\$[a-zA-Z}+", TK_REG},  // register name
+  {"&&", TK_AND},            // and
 };
 
 #define NR_REGEX ARRLEN(rules)
@@ -114,6 +125,16 @@ static bool make_token(char *e) {
 	    strncpy(tokens[nr_token].str, substr_start, substr_len);
 	    tokens[nr_token].str[substr_len] = '\0';
 	  }
+	  
+	  if (rules[i].token_type == TK_HEX){
+	    strncpy(tokens[nr_token].str, substr_start, substr_len);
+	    tokens[nr_token].str[substr_len] = '\0';
+	  }
+ 	  
+	  if (rules[i].token_type == TK_REG){
+	    strncpy(tokens[nr_token].str, substr_start + 1, substr_len - 1);
+	    tokens[nr_token].str[substr_len - 1] = '\0';
+	  }
 	  nr_token++;
 	}
         break;
@@ -135,6 +156,14 @@ uint32_t expr(char *e, bool *success) {
     *success = false;
     return 0;
   }
+  
+  for (int i = 0; i < nr_token; i ++) {
+    if (tokens[i].type == '*' && (i == 0 || (tokens[i - 1].type != TK_NUM && tokens[i - 1].type != TK_HEX && tokens[i - 1].type != TK_REG &&
+tokens[i - 1].type != TK_RPAREN))) {
+    tokens[i].type = TK_DEREF;  // 识别为解引用操作
+  }
+}
+
   // printf("nr_token = %d\n", nr_token);
   /* TODO: Insert codes to evaluate the expression. */
   return eval(0, nr_token - 1);
@@ -149,17 +178,20 @@ word_t eval(int p, int q){
     printf("Bad expression! Starting from %d, ending in %d.\n",p ,q);
     return 0;
   }else if (p == q){
-    if (tokens[p].type == TK_NUM){
-   //   printf("token type: %d\n", tokens[p].type);
-   //   printf("tokens str: %d\n", atoi(tokens[p].str));
-      return (uint)(atoi(tokens[p].str)); 
-      // ASCII to Integer
+    if (tokens[p].type == TK_NUM)
+      return (uint32_t)(atoi(tokens[p].str)); 
+    if (tokens[p].type == TK_REG)
+      return (uint32_t)(isa_reg_str2val(tokens[p].str, NULL));
+    if (tokens[p].type == TK_HEX){
+      return (uint32_t)(strtol(tokens[p].str, NULL, 16));
     }else {
       printf("this token should be a number.\n");
     }
   }else if (check_parentheses(p, q) == 1){
   //  printf("expression 被括号包起来了. Starting from %d, ending in %d.\n", p, q);
     return eval(p + 1, q - 1);
+  }else if (check_dereference(p, q)){
+    return vaddr_read(eval(p + 1, q), 4);
   }else {
     int op = find_main_operator(p ,q);
   //  printf("main_operator is at %d. Starting from %d, ending in %d.\n", op, p, q);
@@ -168,8 +200,11 @@ word_t eval(int p, int q){
     switch (tokens[op].type) {
       case '+': return val1 + val2;
       case TK_MINUS : return val1 - val2;
-      case TK_MULT: return val1 * val2;
+      case '*': return val1 * val2;
       case TK_DIV: return val1 / val2;
+      case TK_EQ : return val1 == val2;
+      case TK_NEQ : return val1 != val2;
+      case TK_AND : return val1 && val2;
       default: assert(0); 
   }
   }
@@ -246,13 +281,27 @@ bool check_parentheses(int p, int q){
 }
 
 int get_priority(int op) {
-    if (op == '+' || op == TK_MINUS) {
+    if (op == TK_EQ || op == TK_NEQ){
+        return 0;
+    } else if (op == '+' || op == TK_MINUS) {
         return 1;  // 加法和减法的优先级最低
-    } else if (op == TK_MULT || op == TK_DIV) {
+    } else if (op == '*' || op == TK_DIV || op == TK_AND) {
         return 2;  // 乘法和除法优先级稍高
     } else {
         return 3; // 非运算符返回一个无效值
     }
 }
 
-
+bool check_dereference(int p, int q){
+  if (tokens[p].type != TK_DEREF){
+    return 0;
+  } else {
+    if ((tokens[p + 1].type == TK_NUM || tokens[p + 1].type == TK_HEX) && q == p + 1){
+      return 1;
+    } else if (tokens[p + 1].type == TK_LPAREN && tokens[q].type == TK_RPAREN){
+      return 1;
+    } else {
+      return 0;
+    }
+  }
+}
