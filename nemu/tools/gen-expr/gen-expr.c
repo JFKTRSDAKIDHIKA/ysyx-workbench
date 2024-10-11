@@ -54,7 +54,7 @@ static void gen_rand_op() {
 }
 
 static void gen_rand_expr(int depth) {
-    if (depth > 10) {  // 控制递归深度，避免生成过长表达式
+    if (depth > 5) {  // 控制递归深度，避免生成过长表达式
         gen_num();  // 生成数字作为叶子节点
         return;
     }
