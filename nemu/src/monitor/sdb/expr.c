@@ -55,8 +55,8 @@ static struct rule {
   {"\\/", TK_DIV},           // divide
   {"\\(", TK_LPAREN},        // left paren
   {"\\)", TK_RPAREN},        // right paren
-  {"[0-9]+", TK_NUM},        // num
   {"0x[0-9a-fA-F]+", TK_HEX},// hex number
+  {"[0-9]+", TK_NUM},        // num
   {"\\$[a-zA-Z]+", TK_REG},  // register name
   {"&&", TK_AND},            // and
 };
