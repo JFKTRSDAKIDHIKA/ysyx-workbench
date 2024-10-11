@@ -193,6 +193,7 @@ word_t eval(int p, int q){
     printf("check_dereference : true\n");
     return vaddr_read(eval(p + 1, q), 4);
   }else {
+    printf("check_dereference : false\n");
     int op = find_main_operator(p ,q);
   //  printf("main_operator is at %d. Starting from %d, ending in %d.\n", op, p, q);
     uint32_t val1 = eval(p, op - 1);
