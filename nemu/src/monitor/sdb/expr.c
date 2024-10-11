@@ -57,7 +57,7 @@ static struct rule {
   {"\\)", TK_RPAREN},        // right paren
   {"0x[0-9a-fA-F]+", TK_HEX},// hex number
   {"[0-9]+", TK_NUM},        // num
-  {"\\$[a-zA-Z]+", TK_REG},  // register name
+  {"\\$[a-zA-Z0-9]+", TK_REG},  // register name
   {"&&", TK_AND},            // and
 };
 
