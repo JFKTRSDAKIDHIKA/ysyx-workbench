@@ -178,8 +178,10 @@ word_t eval(int p, int q){
   }else if (p == q){
     if (tokens[p].type == TK_NUM)
       return (uint32_t)(atoi(tokens[p].str)); 
-    if (tokens[p].type == TK_REG)
+    if (tokens[p].type == TK_REG){
+      printf("reg name : %s\n", tokens[p].str);   
       return (uint32_t)(isa_reg_str2val(tokens[p].str, NULL));
+    }
     if (tokens[p].type == TK_HEX){
       printf("hex : %s to decimal %ld\n", tokens[p].str, strtol(tokens[p].str, NULL, 16));
       return (uint32_t)(strtol(tokens[p].str, NULL, 16));
