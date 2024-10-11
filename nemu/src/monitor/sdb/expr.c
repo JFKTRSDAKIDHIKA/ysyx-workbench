@@ -181,6 +181,7 @@ word_t eval(int p, int q){
     if (tokens[p].type == TK_REG)
       return (uint32_t)(isa_reg_str2val(tokens[p].str, NULL));
     if (tokens[p].type == TK_HEX){
+      printf("hex : %s\n", tokens[p].str);
       return (uint32_t)(strtol(tokens[p].str, NULL, 16));
     }else {
       printf("this token should be a number.\n");
