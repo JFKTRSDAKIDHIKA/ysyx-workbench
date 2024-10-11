@@ -195,7 +195,7 @@ word_t eval(int p, int q){
   }else {
     printf("check_dereference : false\n");
     int op = find_main_operator(p ,q);
-  //  printf("main_operator is at %d. Starting from %d, ending in %d.\n", op, p, q);
+    printf("main_operator is at %d. Starting from %d, ending in %d.\n", op, p, q);
     uint32_t val1 = eval(p, op - 1);
     uint32_t val2 = eval(op + 1, q);
     switch (tokens[op].type) {
