@@ -40,7 +40,8 @@ bool check_watchpoint() {
     uint32_t nval = expr(wp->exp, NULL); 
     printf("expr:%s, val=%d\n", wp->exp, nval);
     if (nval != wp->val) {
-        printf("=============== 触发了监视点 ===============\n");
+        printf("============= 监视表达式变化! =============\n");
+        printf("表达式：%s, 监视点编号：%d\n", wp->exp, wp->NO);
         printf("旧值: %-10d 新值: %-10d\n", wp->val, nval);   
  	printf("===========================================\n");
         wp->val = nval;
