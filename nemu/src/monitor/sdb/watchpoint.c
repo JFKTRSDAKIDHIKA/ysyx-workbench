@@ -35,7 +35,7 @@ static WP *head = NULL, *free_ = NULL;
 void print_watchpoint() {
   WP* wp = head;
   while (wp != NULL) {
-    printf("监视点%d，表达式：%s\n", wp->NO, wp->exp);
+    printf("监视点%d，表达式：%s, 值：%d\n", wp->NO, wp->exp, wp->val);
     wp = wp->next;
   }
 }
