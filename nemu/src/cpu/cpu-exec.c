@@ -17,6 +17,7 @@
 #include <cpu/decode.h>
 #include <cpu/difftest.h>
 #include <locale.h>
+#include "../monitor/sdb/watchpoint.h"
 
 /* The assembly code of instructions executed is only output to the screen
  * when the number of instructions executed is less than this value.
@@ -25,22 +26,10 @@
  */
 #define MAX_INST_TO_PRINT 10
 
-
-typedef struct watchpoint {
-  int NO;
-  struct watchpoint *next;
-  char* exp;
-  uint32_t val;
-  /* 可以在这里添加更多的成员变量 */
-} WP;
-
 CPU_state cpu = {};
 uint64_t g_nr_guest_inst = 0;
 static uint64_t g_timer = 0; // unit: us
 static bool g_print_step = false;
-WP* new_wp();
-void free_wp(WP *wp);
-bool check_watchpoint();
 void device_update();
 
 static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
