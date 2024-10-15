@@ -38,6 +38,7 @@ bool check_watchpoint() {
   int trigger_count = 0;
   while (wp != NULL) {
     uint32_t nval = expr(wp->exp, NULL); 
+    printf("expr:%s, val=%d\n", wp->exp, nval);
     if (nval != wp->val) {
         printf("触发了监视点!\n老的值=%d, 新的值=%d", wp->val, nval);
         wp->val = nval;
