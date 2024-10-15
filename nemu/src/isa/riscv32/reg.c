@@ -37,8 +37,8 @@ word_t isa_reg_str2val(const char *s, bool *success) {
   printf("isa_reg:%s\n", s);
   int num_regs = MUXDEF(CONFIG_RVE, 16, 32);
   for (int i = 0; i < num_regs; i++){
+    printf("regs[i]:%s, value:%d\n", regs[i], cpu.gpr[i]);
     if (strcmp(s, regs[i]) == 0){
-       printf("regs[i]:%s, value:%d\n", regs[i], cpu.gpr[i]);
        *success = 1;
        return cpu.gpr[i];
     }
