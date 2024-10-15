@@ -39,7 +39,7 @@ WP* find_NO(int NO){
 void print_watchpoint() {
   WP* wp = head;
   while (wp != NULL) {
-    printf("监视点%d，表达式：%s, 值：%d\n", wp->NO, wp->exp, wp->NO);
+    printf("监视点%d，表达式：%s, 值：%d\n", wp->NO, wp->exp, wp->val);
     wp = wp->next;
   }
 }

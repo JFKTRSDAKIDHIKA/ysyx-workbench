@@ -127,6 +127,16 @@ endmenu
 menu "Testing and Debugging"
 
 
+
+config WATCHPOINT
+  bool "Enable watchpoint checking"
+  default n
+  help
+    Enable watchpoint checking in trace_and_difftest.
+    Turning on this feature will allow NEMU to check watchpoints,
+    which may slightly impact performance. When you do not need
+    watchpoint checks, turn this option off to improve NEMU performance.
+
 config TRACE
   bool "Enable tracer"
   default y
