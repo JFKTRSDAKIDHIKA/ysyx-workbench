@@ -32,12 +32,18 @@ typedef struct watchpoint {
 static WP wp_pool[NR_WP] = {};
 static WP *head = NULL, *free_ = NULL;
 
+void print_watchpoint() {
+  WP* wp = head;
+  while (wp != NULL) {
+    printf("监视点%d，表达式：%s\n", wp->NO, wp->exp);
+  }
+}
+
 bool check_watchpoint() {
   WP* wp = head;
   int trigger_count = 0;
   while (wp != NULL) {
     uint32_t nval = expr(wp->exp, NULL); 
-    printf("expr:%s, val=%d\n", wp->exp, nval);
     if (nval != wp->val) {
         printf("============= 监视表达式变化! =============\n");
         printf("表达式：%s, 监视点编号：%d\n", wp->exp, wp->NO);

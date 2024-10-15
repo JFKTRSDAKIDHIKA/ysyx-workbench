@@ -19,21 +19,12 @@
 #include <readline/history.h>
 #include "sdb.h"
 #include <memory/paddr.h>
-
+#include "watchpoint.h"
 static int is_batch_mode = false;
-typedef struct watchpoint {
-  int NO;
-  struct watchpoint *next;
-  char* exp;
-  uint32_t val;
-  /* 可以在这里添加更多的成员变量 */
-} WP;
 
 void init_regex();
 void init_wp_pool();
 uint32_t expr(char *e, bool *success);
-WP* new_wp();
-void free__wp(WP* wp);
 
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
@@ -83,7 +74,7 @@ static struct {
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
   { "si", "让程序单步执行N条指令后暂停执行,当N没有给出时, 缺省为1", cmd_si },
-  { "info", "打印寄存器状态", cmd_info},
+  { "info", "打印寄存器状态和监视点", cmd_info},
   { "x", "求出表达式EXPR的值, 将结果作为起始内存地址, 以十六进制形式输出连续的N个4字节", cmd_x},
   { "w", "当表达式EXPR的值发生变化时, 暂停程序执行", cmd_w}
 };
@@ -134,7 +125,7 @@ static int cmd_info(char* args){
   } else if (strcmp(arg, "r") == 0) {
     isa_reg_display();
   } else if (strcmp(arg, "w") == 0) {
-    printf("under developing\n");
+    print_watchpoint(); 
   } else {
     printf("Unknown arg '%s'\n", arg);
   }
