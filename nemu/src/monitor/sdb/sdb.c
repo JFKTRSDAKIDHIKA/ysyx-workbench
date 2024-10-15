@@ -25,7 +25,7 @@ static int is_batch_mode = false;
 void init_regex();
 void init_wp_pool();
 uint32_t expr(char *e, bool *success);
-
+word_t vaddr_read(vaddr_t addr, int len);
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 static char* rl_gets() {
@@ -149,11 +149,12 @@ static int cmd_x(char* args){
     return 0;
   }
 
+  // How many bytes to read ?
   int len = 4 * atoi(arg0);
-  paddr_t starting_addr = strtoul(arg1, NULL, 16);
-  paddr_t addr = starting_addr;
+  vaddr_t starting_addr = strtoul(arg1, NULL, 16);
+  vaddr_t addr = starting_addr;
   for (; addr < starting_addr + len; addr = addr + 4){
-    word_t data = paddr_read(addr, 4);
+    word_t data = vaddr_read(addr, 4);
     printf("Data read from 0x%x (length %d): 0x%x\n", addr, 4, data);
   }
   return 0;
