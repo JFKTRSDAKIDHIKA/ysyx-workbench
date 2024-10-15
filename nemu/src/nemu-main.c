@@ -35,20 +35,20 @@ int main(int argc, char *argv[]) {
     perror("Failed to open input file");
     return 1;
   }
-
+/*
   char line[MAX_TOKENS * 2]; // Increased size for longer expressions
 			     
   while (fgets(line, sizeof(line), input) != NULL) {
     char expression[100];
     unsigned int expected_result;
     if (sscanf(line, "%u %[^\n]", &expected_result, expression) == 2) { // Read expected result and expression
-      /*
+      
       size_t len = strlen(expression);					
       if (len > 0 && expression[len - 1] == '\n'){
 	printf("最后的字符:%c\n", expression[len - 1]);
         expression[len - 1] = '\0';
       }
-      */
+      
       bool success = 1;
        //printf("expression is %s\n", expression);
       uint32_t actual_result = expr(expression, &success);
@@ -67,6 +67,7 @@ int main(int argc, char *argv[]) {
   }
 
   fclose(input);
+*/
   engine_start();
   return is_exit_status_bad();
 }

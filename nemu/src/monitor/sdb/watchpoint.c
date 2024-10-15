@@ -26,7 +26,6 @@ typedef struct watchpoint {
   char* exp; 
   // 表达式的value。
   uint32_t val;
-  /* TODO: Add more members if necessary */
 
 } WP;
 
@@ -107,15 +106,3 @@ void free__wp(WP* wp) {
   wp->next = free_;
   free_ = wp;
 }
-
-
-
-
-
-
-
-
-
-
-
-
