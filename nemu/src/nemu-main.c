@@ -67,6 +67,6 @@ int main(int argc, char *argv[]) {
   }
 
   fclose(input);
-  return 0;
-  // return is_exit_status_bad();
+  engine_start();
+  return is_exit_status_bad();
 }
