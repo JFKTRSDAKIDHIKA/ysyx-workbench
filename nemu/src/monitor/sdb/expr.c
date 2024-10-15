@@ -162,7 +162,6 @@ tokens[i - 1].type != TK_RPAREN))) {
   }
 }
 
-  printf("nr_token = %d\n", nr_token);
   /* TODO: Insert codes to evaluate the expression. */
   return eval(0, nr_token - 1);
   
