@@ -45,6 +45,7 @@ bool check_watchpoint() {
     } else {
         wp->val = nval;
     }
+    wp = wp->next;
   }
   // 返回0，代表触发了监视点。
   if (trigger_count == 0)
