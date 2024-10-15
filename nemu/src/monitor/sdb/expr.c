@@ -179,11 +179,9 @@ word_t eval(int p, int q){
     if (tokens[p].type == TK_NUM)
       return (uint32_t)(atoi(tokens[p].str)); 
     if (tokens[p].type == TK_REG){
-      printf("reg name : %s\n", tokens[p].str);   
       return (uint32_t)(isa_reg_str2val(tokens[p].str, NULL));
     }
     if (tokens[p].type == TK_HEX){
-      printf("hex : %s to decimal %ld\n", tokens[p].str, strtol(tokens[p].str, NULL, 16));
       return (uint32_t)(strtol(tokens[p].str, NULL, 16));
     }else {
       printf("this token should be a number.\n");
@@ -192,12 +190,9 @@ word_t eval(int p, int q){
   //  printf("expression 被括号包起来了. Starting from %d, ending in %d.\n", p, q);
     return eval(p + 1, q - 1);
   }else if (check_dereference(p, q)){
-    printf("check_dereference : true\n");
     return vaddr_read(eval(p + 1, q), 4);
   }else {
-    printf("check_dereference : false\n");
     int op = find_main_operator(p ,q);
-    printf("main_operator is at %d. Starting from %d, ending in %d.\n", op, p, q);
     uint32_t val1 = eval(p, op - 1);
     uint32_t val2 = eval(op + 1, q);
     switch (tokens[op].type) {
