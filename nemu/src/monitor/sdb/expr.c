@@ -178,7 +178,6 @@ word_t eval(int p, int q){
     if (tokens[p].type == TK_NUM)
       return (uint32_t)(atoi(tokens[p].str)); 
     if (tokens[p].type == TK_REG){
-      printf("in expc.c, regname:%s\n", tokens[p].str);
       return (uint32_t)(isa_reg_str2val(tokens[p].str, NULL));
     }
     if (tokens[p].type == TK_HEX){
