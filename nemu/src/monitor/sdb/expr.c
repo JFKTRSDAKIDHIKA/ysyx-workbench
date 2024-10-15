@@ -180,10 +180,12 @@ word_t eval(int p, int q){
     if (tokens[p].type == TK_REG){
       bool success;
       uint32_t reg_val = isa_reg_str2val(tokens[p].str, &success); 
-      if (success == 0)
-        return -1;
-      else 
-        return reg_val;
+      if (success == 0) {
+          printf("Invalid reg name!\n");
+          return -1;
+      } else { 
+          return reg_val;
+      }
     }
     if (tokens[p].type == TK_HEX){
       return (uint32_t)(strtol(tokens[p].str, NULL, 16));
