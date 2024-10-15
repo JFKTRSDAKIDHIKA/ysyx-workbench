@@ -136,22 +136,18 @@ static int cmd_info(char* args){
 }
 
 static int cmd_x(char* args){
-  char *arg0 = strtok(NULL, " ");
-  char *arg1 = strtok(NULL, "");
-  
-  if (arg1 == NULL || arg0 == NULL){
-    printf("Invalid args\n");
-    return 0; 
-  }
+  int arg0;
+  char arg1[100];  // 假设表达式不会超过100个字符
 
-  if (strncmp(arg1, "0x", 2) != 0){
-    printf("Error: String does not start with \"0x\"\n");
-    return 0;
-  }
-
+  // 使用 %d 解析第一个数字，然后用正则表达式剩余的部分
+  if (sscanf(args, "%d %[^\n]", &arg0, arg1) != 2) {
+     printf("Invalid args\n");
+     return -1;
+   }
   // How many bytes to read ?
-  int len = 4 * atoi(arg0);
-  vaddr_t starting_addr = strtoul(arg1, NULL, 16);
+  int len = 4 * arg0;
+  bool success;
+  vaddr_t starting_addr = expr(arg1, &success);
   vaddr_t addr = starting_addr;
   for (; addr < starting_addr + len; addr = addr + 4){
     word_t data = vaddr_read(addr, 4);
