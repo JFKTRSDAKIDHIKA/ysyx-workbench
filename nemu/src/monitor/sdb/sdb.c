@@ -65,6 +65,8 @@ static int cmd_x(char* args);
 
 static int cmd_w(char* args);
 
+static int cmd_d(char* args);
+
 static struct {
   const char *name;
   const char *description;
@@ -76,7 +78,8 @@ static struct {
   { "si", "让程序单步执行N条指令后暂停执行,当N没有给出时, 缺省为1", cmd_si },
   { "info", "打印寄存器状态和监视点", cmd_info},
   { "x", "求出表达式EXPR的值, 将结果作为起始内存地址, 以十六进制形式输出连续的N个4字节", cmd_x},
-  { "w", "当表达式EXPR的值发生变化时, 暂停程序执行", cmd_w}
+  { "w", "当表达式EXPR的值发生变化时, 暂停程序执行", cmd_w},
+  { "d", "删除序号为N的监视点", cmd_d}
 };
 
 
@@ -172,6 +175,16 @@ static int cmd_w(char* args) {
   return 0;
 }
 
+static int cmd_d(char* args) {
+  char *arg0 = strtok(NULL, " ");
+
+  if (arg0 == NULL){
+    printf("Invalid args\n");
+    return 0; 
+  } 
+  free__wp(find_NO(atoi(arg0)));
+  return 0;
+}
 
 void sdb_set_batch_mode() {
   is_batch_mode = true;
