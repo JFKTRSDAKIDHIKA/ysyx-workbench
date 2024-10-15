@@ -39,7 +39,6 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 
   if (check_watchpoint()) {
     // 有监视点相应表达式的值发生变化
-    printf("监视点触发，程序暂停\n");
     nemu_state.state = NEMU_STOP;
   }  
   
