@@ -127,10 +127,9 @@ endmenu
 menu "Testing and Debugging"
 
 
-
 config WATCHPOINT
   bool "Enable watchpoint checking"
-  default n
+  default y
   help
     Enable watchpoint checking in trace_and_difftest.
     Turning on this feature will allow NEMU to check watchpoints,
