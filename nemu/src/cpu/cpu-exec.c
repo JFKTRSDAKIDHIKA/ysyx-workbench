@@ -33,6 +33,7 @@ typedef struct watchpoint {
   uint32_t val;
   /* 可以在这里添加更多的成员变量 */
 } WP;
+
 CPU_state cpu = {};
 uint64_t g_nr_guest_inst = 0;
 static uint64_t g_timer = 0; // unit: us
