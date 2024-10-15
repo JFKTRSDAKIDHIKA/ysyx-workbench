@@ -21,9 +21,20 @@
 #include <memory/paddr.h>
 
 static int is_batch_mode = false;
+typedef struct watchpoint {
+  int NO;
+  struct watchpoint *next;
+  char* exp;
+  uint32_t val;
+  /* 可以在这里添加更多的成员变量 */
+} WP;
 
 void init_regex();
 void init_wp_pool();
+uint32_t expr(char *e, bool *success);
+WP* new_wp();
+void free__wp(WP* wp);
+
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 static char* rl_gets() {
@@ -61,6 +72,8 @@ static int cmd_help(char *args);
 
 static int cmd_x(char* args);
 
+static int cmd_w(char* args);
+
 static struct {
   const char *name;
   const char *description;
@@ -71,7 +84,8 @@ static struct {
   { "q", "Exit NEMU", cmd_q },
   { "si", "让程序单步执行N条指令后暂停执行,当N没有给出时, 缺省为1", cmd_si },
   { "info", "打印寄存器状态", cmd_info},
-  { "x", "求出表达式EXPR的值, 将结果作为起始内存地址, 以十六进制形式输出连续的N个4字节", cmd_x}
+  { "x", "求出表达式EXPR的值, 将结果作为起始内存地址, 以十六进制形式输出连续的N个4字节", cmd_x},
+  { "w", "当表达式EXPR的值发生变化时, 暂停程序执行", cmd_w}
 };
 
 
@@ -150,6 +164,23 @@ static int cmd_x(char* args){
   }
   return 0;
 }
+
+static int cmd_w(char* args) {
+  char *arg0 = strtok(NULL, " ");
+  
+  if (arg0 == NULL){
+    printf("Invalid args\n");
+    return 0; 
+  }
+  
+  WP* wp = new_wp();
+  wp->exp = (char*)malloc(strlen(arg0) + 1);
+  strcpy(wp->exp, arg0);
+  wp->val = expr(wp->exp, NULL);
+  
+  return 0;
+}
+
 
 void sdb_set_batch_mode() {
   is_batch_mode = true;

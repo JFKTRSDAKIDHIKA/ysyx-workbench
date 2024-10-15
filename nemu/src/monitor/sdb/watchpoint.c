@@ -17,16 +17,41 @@
 
 #define NR_WP 32
 
+uint32_t expr(char *e, bool *success);
+
 typedef struct watchpoint {
   int NO;
   struct watchpoint *next;
-
+  // 监视点监视的表达式。
+  char* exp; 
+  // 表达式的value。
+  uint32_t val;
   /* TODO: Add more members if necessary */
 
 } WP;
 
 static WP wp_pool[NR_WP] = {};
 static WP *head = NULL, *free_ = NULL;
+
+bool check_watchpoint() {
+  WP* wp = head;
+  int trigger_count = 0;
+  while (wp != NULL) {
+    uint32_t nval = expr(wp->exp, NULL); 
+    if (nval != wp->val) {
+        printf("触发了监视点!\n老的值=%d, 新的值=%d", wp->val, nval);
+        wp->val = nval;
+        trigger_count++;
+    } else {
+        wp->val = nval;
+    }
+  }
+  // 返回0，代表触发了监视点。
+  if (trigger_count == 0)
+      return 0;
+  else 
+      return 1; 
+}
 
 void init_wp_pool() {
   int i;
@@ -40,4 +65,52 @@ void init_wp_pool() {
 }
 
 /* TODO: Implement the functionality of watchpoint */
+
+// return a free watchpoint from linked list free.
+WP* new_wp() {
+  if (free_ == NULL) {
+     // if no free_ watchpoint, assert(0).
+     assert(0);
+     return 0;
+  } else {
+     // delete the wp from list free_.
+     WP* wp = free_; 
+     free_ = wp->next;
+     // add the wp to list head.
+     wp->next = head;
+     head = wp;
+     return wp;
+  } 
+}
+
+// free_ a watchpoint from head to free_.
+void free__wp(WP* wp) {
+  // 特殊处理链表的第一个节点。
+  if (head->NO == wp->NO) {
+      head = head->next;    
+  } else { 
+    WP* wtpt = head->next;
+    WP* prev = head;
+    while (wtpt->NO != wp->NO) {
+      prev = prev->next;
+      wtpt = wtpt->next; 
+    } 
+    prev->next = wp->next; 
+  }
+  
+  // push the node wp to list free_.
+  wp->next = free_;
+  free_ = wp;
+}
+
+
+
+
+
+
+
+
+
+
+
 
