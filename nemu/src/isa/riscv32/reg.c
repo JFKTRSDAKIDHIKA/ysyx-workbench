@@ -34,7 +34,11 @@ void isa_reg_display() {
 }
 
 word_t isa_reg_str2val(const char *s, bool *success) { 
-  printf("isa_reg:%s\n", s);
+  if (strcmp(s, "PC") == 0){
+      *success = 1;
+      return cpu.pc;
+  }
+
   int num_regs = MUXDEF(CONFIG_RVE, 16, 32);
   for (int i = 0; i < num_regs; i++){
     printf("regs[i]:%s, value:%d\n", regs[i], cpu.gpr[i]);
@@ -43,6 +47,7 @@ word_t isa_reg_str2val(const char *s, bool *success) {
        return cpu.gpr[i];
     }
   }
+
   *success = 0;
   return 0;
 }
