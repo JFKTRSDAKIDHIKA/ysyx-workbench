@@ -141,7 +141,7 @@ static int cmd_x(char* args){
 
   if (args == NULL){
      printf("Lack args\n");
-     return -1;
+     return 0;
   }
      
 
