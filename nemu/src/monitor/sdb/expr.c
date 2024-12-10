@@ -154,7 +154,8 @@ uint32_t expr(char *e, bool *success) {
     *success = false;
     return 0;
   }
-  
+  printf("ok\n ");
+    
   for (int i = 0; i < nr_token; i ++) {
     if (tokens[i].type == '*' && (i == 0 || (tokens[i - 1].type != TK_NUM && tokens[i - 1].type != TK_HEX && tokens[i - 1].type != TK_REG &&
 tokens[i - 1].type != TK_RPAREN))) {
