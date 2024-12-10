@@ -21,8 +21,8 @@
 #include <string.h>
 
 // this should be enough
-static char buf[262144] = {};
-static char code_buf[262144 + 128] = {}; // a little larger than `buf`
+static char buf[62144] = {};
+static char code_buf[262144] = {}; // a little larger than `buf`
 static char *code_format =
 "#include <stdio.h>\n"
 "#include <stdint.h>\n"
@@ -58,7 +58,7 @@ static void gen_rand_op() {
 }
 
 static void gen_rand_expr(int depth) {
-    if (depth > 10) {  // 控制递归深度，避免生成过长表达式
+    if (depth > 6) {  // 控制递归深度，避免生成过长表达式
         gen_num();  // 生成数字作为叶子节点
         return;
     }
@@ -91,23 +91,21 @@ int main(int argc, char *argv[]) {
 
     for (int i = 0; i < loop; i++) {
         memset(buf, 0, sizeof(buf)); // Clear buffer at the start of each loop
-        gen_rand_expr(0); // Generate expression (adjust depth as needed)
+        gen_rand_expr(0);            // Generate expression (adjust depth as needed)
 
         sprintf(code_buf, code_format, buf);
-	// sprintf() : instead of printing to the console, it prints string to a string.
-
         FILE *fp = fopen("/tmp/.code.c", "w");
         if(fp == NULL){
-	  perror("fopen failed");
-	  return 1;
-	}
+	      perror("fopen failed");
+	      return 1;
+	    }
         fputs(code_buf, fp);
         fclose(fp);
 
         FILE *pipe = popen("gcc -m32 -funsigned-char -Werror=div-by-zero /tmp/.code.c -o /tmp/.expr 2>&1", "r");
-	// "gcc -Werror=div-by-zero /tmp/.code.c -o /tmp/.expr 2>&1" 会调用 gcc 编译器，并将任何警告或错误消息重定向到标准输出
-	// 2>&1 将 标准错误输出（stderr） 重定向到 标准输出（stdout）
-	if (pipe == NULL) {
+	    // "gcc -Werror=div-by-zero /tmp/.code.c -o /tmp/.expr 2>&1" 会调用 gcc 编译器，并将任何警告或错误消息重定向到标准输出
+	    // 2>&1 将 标准错误输出（stderr） 重定向到 标准输出（stdout）
+	    if (pipe == NULL) {
             perror("popen failed");
             return 1; // Return an error code
         }
