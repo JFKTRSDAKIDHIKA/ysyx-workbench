@@ -21,13 +21,13 @@
 #include <string.h>
 
 // this should be enough
-static char buf[65536] = {};
-static char code_buf[65536 + 128] = {}; // a little larger than `buf`
+static char buf[131072] = {};
+static char code_buf[131072 + 256] = {}; // a little larger than `buf`
 static char *code_format =
 "#include <stdio.h>\n"
 "int main() { "
 "  uint32_t result = %s; "
-"  printf(\"%%u\", result); "
+"  printf(\"%u\", result); "
 "  return 0; "
 "}";
 
