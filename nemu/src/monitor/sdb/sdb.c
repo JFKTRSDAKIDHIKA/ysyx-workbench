@@ -139,7 +139,11 @@ static int cmd_x(char* args){
   int arg0;
   char arg1[100]; 
 
-  printf("OK\n");
+  if (args == NULL){
+     printf("Lack args\n");
+     return -1;
+  }
+     
 
   if (sscanf(args, "%d %[^\n]", &arg0, arg1) != 2) {
      printf("Invalid args\n");
