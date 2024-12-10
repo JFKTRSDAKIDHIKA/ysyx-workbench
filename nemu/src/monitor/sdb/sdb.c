@@ -144,10 +144,9 @@ static int cmd_x(char* args){
      return 0;
   }
      
-
   if (sscanf(args, "%d %[^\n]", &arg0, arg1) != 2) {
      printf("Invalid args\n");
-     return -1;
+     return 0;
    }
 
    printf("OK\n");
