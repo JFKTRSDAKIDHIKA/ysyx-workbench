@@ -183,7 +183,7 @@ static int cmd_d(char* args) {
     printf("Invalid args\n");
     return 0; 
   } 
-  free_wp(find_NO(atoi(arg0)));
+  free__wp(find_NO(atoi(arg0)));
   return 0;
 }
 
