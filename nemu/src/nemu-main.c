@@ -52,6 +52,7 @@ int main(int argc, char *argv[]) {
   }
 
   fclose(input);
+  printf("expr ok!\n");
   return 0;
   // return is_exit_status_bad();
 }
