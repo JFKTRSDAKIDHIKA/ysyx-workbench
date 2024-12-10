@@ -27,7 +27,7 @@ static char *code_format =
 "#include <stdio.h>\n"
 "int main() { "
 "  unsigned result = %s; "
-"  printf(\"%%u\", result); "
+"  printf(\"%%d\", result); "
 "  return 0; "
 "}";
 
