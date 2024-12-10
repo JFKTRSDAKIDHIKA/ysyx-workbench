@@ -40,7 +40,7 @@ static uint32_t choose(uint32_t n) {
 static void gen_num() {
     uint32_t num = rand() % 1000;
     char str[32];
-    sprintf(str, (uint32_t)"%u", num);
+    sprintf(str, "(uint32_t)%u", num);
     strcat(buf, str);
 }
 
@@ -54,7 +54,7 @@ static void gen_rand_op() {
 }
 
 static void gen_rand_expr(int depth) {
-    if (depth > 10) {  // 控制递归深度，避免生成过长表达式
+    if (depth > 8) {  // 控制递归深度，避免生成过长表达式
         gen_num();     // 生成数字作为叶子节点
         return;
     }
