@@ -25,11 +25,14 @@ static char buf[131072] = {};
 static char code_buf[131072 + 256] = {}; // a little larger than `buf`
 static char *code_format =
 "#include <stdio.h>\n"
+"typedef unsigned int uint32_t;\n"
+"static inline uint32_t U32(uint32_t x) { return x; }\n"
 "int main() { "
-"  uint32_t result = %s; "
-"  printf(\"%u\", result); "
+"  uint32_t result = U32(%s); "
+"  printf(\"%%u\", result); "
 "  return 0; "
 "}";
+
 
 
 // choose函数用于生成一个小于n的随机数
@@ -100,7 +103,7 @@ int main(int argc, char *argv[]) {
         fputs(code_buf, fp);
         fclose(fp);
 
-        FILE *pipe = popen("gcc -m32 -funsigned-char -Werror=div-by-zero /tmp/.code.c -o /tmp/.expr 2>&1", "r");
+        FILE *pipe = popen("gcc -m32 -fwrapv -funsigned-char -Werror=div-by-zero /tmp/.code.c -o /tmp/.expr 2>&1", "r");
 	// "gcc -Werror=div-by-zero /tmp/.code.c -o /tmp/.expr 2>&1" 会调用 gcc 编译器，并将任何警告或错误消息重定向到标准输出
 	// 2>&1 将 标准错误输出（stderr） 重定向到 标准输出（stdout）
 	if (pipe == NULL) {
