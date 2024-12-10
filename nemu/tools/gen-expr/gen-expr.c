@@ -22,9 +22,11 @@
 
 // this should be enough
 static char buf[65536] = {};
-static char code_buf[65536 + 128] = {}; // a little larger than `buf`
+static char code_buf[262144] = {}; // a little larger than `buf`
 static char *code_format =
 "#include <stdio.h>\n"
+"#include <stdint.h>\n"
+"#include <stdlib.h>\n"
 "int main() { "
 "  unsigned result = %s; "
 "  printf(\"%%u\", result); "
@@ -38,11 +40,14 @@ static uint32_t choose(uint32_t n) {
 }
 
 static void gen_num() {
-    uint32_t num = rand() % 1000;
-    char str[32];
-    sprintf(str, "%d", num);
-    strcat(buf, str);
+    uint32_t num = rand() % 1000; // 生成 0 到 999 的随机数
+    char str[64];
+
+    strcat(buf, "(uint32_t)"); // 先拼接强制类型转换
+    sprintf(str, "%u", num);  // 生成数字字符串
+    strcat(buf, str);         // 追加数字字符串
 }
+
 
 static void gen_rand_op() {
     switch (choose(4)) {
@@ -54,7 +59,7 @@ static void gen_rand_op() {
 }
 
 static void gen_rand_expr(int depth) {
-    if (depth > 10) {  // 控制递归深度，避免生成过长表达式
+    if (depth > 2) {  // 控制递归深度，避免生成过长表达式
         gen_num();  // 生成数字作为叶子节点
         return;
     }
