@@ -165,7 +165,7 @@ tokens[i - 1].type != TK_RPAREN))) {
   return eval(0, nr_token - 1);
 }
 
-word_t eval(int p, int q){
+uint32_t eval(int p, int q){
   if (p > q){
     printf("Bad expression! Starting from %d, ending in %d.\n",p ,q);
     return 0;
