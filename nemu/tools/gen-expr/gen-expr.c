@@ -40,7 +40,7 @@ static uint32_t choose(uint32_t n) {
 static void gen_num() {
     uint32_t num = rand() % 1000;
     char str[32];
-    sprintf(str, "%d", num);
+    sprintf(str, (uint32_t)"%u", num);
     strcat(buf, str);
 }
 
