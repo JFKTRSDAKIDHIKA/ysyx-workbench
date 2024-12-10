@@ -40,7 +40,7 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 #ifdef CONFIG_WATCHPOINT
   if (check_watchpoint()) {
     // 有监视点相应表达式的值发生变化
-    nemu_state.state = NEMU_STOP;
+    //nemu_state.state = NEMU_STOP;
   }  
 #endif
   
