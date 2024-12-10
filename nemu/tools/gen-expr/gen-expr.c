@@ -21,8 +21,8 @@
 #include <string.h>
 
 // this should be enough
-static char buf[65536] = {};
-static char code_buf[262144] = {}; // a little larger than `buf`
+static char buf[262144] = {};
+static char code_buf[262144 + 128] = {}; // a little larger than `buf`
 static char *code_format =
 "#include <stdio.h>\n"
 "#include <stdint.h>\n"
@@ -47,7 +47,6 @@ static void gen_num() {
     sprintf(str, "%u", num);  // 生成数字字符串
     strcat(buf, str);         // 追加数字字符串
 }
-
 
 static void gen_rand_op() {
     switch (choose(4)) {
