@@ -39,7 +39,7 @@ WP* find_NO(int NO){
 void print_watchpoint() {
   WP* wp = head;
   while (wp != NULL) {
-    printf("监视点%d，表达式：%s, 值：%d\n", wp->NO, wp->exp, wp->val);
+    printf("监视点: %d，表达式：%s, 值：%d\n", wp->NO, wp->exp, wp->val);
     wp = wp->next;
   }
 }
@@ -53,7 +53,7 @@ bool check_watchpoint() {
         printf("============= 监视表达式变化! =============\n");
         printf("表达式：%s, 监视点编号：%d\n", wp->exp, wp->NO);
         printf("旧值: %-10d 新值: %-10d\n", wp->val, nval);   
- 	printf("===========================================\n");
+ 	      printf("===========================================\n");
         wp->val = nval;
         trigger_count++;
     } else {
@@ -99,7 +99,7 @@ WP* new_wp() {
 }
 
 // free_ a watchpoint from head to free_.
-void free__wp(WP* wp) {
+void free_wp(WP* wp) {
   // 特殊处理链表的第一个节点。
   if (head->NO == wp->NO) {
       head = head->next;    
