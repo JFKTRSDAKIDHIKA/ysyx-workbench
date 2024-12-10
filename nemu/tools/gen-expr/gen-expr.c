@@ -21,18 +21,15 @@
 #include <string.h>
 
 // this should be enough
-static char buf[131072] = {};
-static char code_buf[131072 + 256] = {}; // a little larger than `buf`
+static char buf[65536] = {};
+static char code_buf[65536 + 128] = {}; // a little larger than `buf`
 static char *code_format =
 "#include <stdio.h>\n"
-"typedef unsigned int uint32_t;\n"
-"static inline uint32_t U32(uint32_t x) { return x; }\n"
 "int main() { "
-"  uint32_t result = U32(%s); "
+"  unsigned result = %s; "
 "  printf(\"%%u\", result); "
 "  return 0; "
 "}";
-
 
 
 // choose函数用于生成一个小于n的随机数
@@ -42,8 +39,8 @@ static uint32_t choose(uint32_t n) {
 
 static void gen_num() {
     uint32_t num = rand() % 1000;
-    char str[64];
-    sprintf(str, "%u", num);
+    char str[32];
+    sprintf(str, "%d", num);
     strcat(buf, str);
 }
 
@@ -57,8 +54,8 @@ static void gen_rand_op() {
 }
 
 static void gen_rand_expr(int depth) {
-    if (depth > 5) {  // 控制递归深度，避免生成过长表达式
-        gen_num();     // 生成数字作为叶子节点
+    if (depth > 10) {  // 控制递归深度，避免生成过长表达式
+        gen_num();  // 生成数字作为叶子节点
         return;
     }
 
@@ -103,7 +100,7 @@ int main(int argc, char *argv[]) {
         fputs(code_buf, fp);
         fclose(fp);
 
-        FILE *pipe = popen("gcc -m32 -fwrapv -funsigned-char -Werror=div-by-zero /tmp/.code.c -o /tmp/.expr 2>&1", "r");
+        FILE *pipe = popen("gcc -m32 -funsigned-char -Werror=div-by-zero /tmp/.code.c -o /tmp/.expr 2>&1", "r");
 	// "gcc -Werror=div-by-zero /tmp/.code.c -o /tmp/.expr 2>&1" 会调用 gcc 编译器，并将任何警告或错误消息重定向到标准输出
 	// 2>&1 将 标准错误输出（stderr） 重定向到 标准输出（stdout）
 	if (pipe == NULL) {
