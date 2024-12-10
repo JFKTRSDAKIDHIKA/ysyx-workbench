@@ -100,7 +100,7 @@ static bool make_token(char *e) {
   while (e[position] != '\0') {
     if (position >= 257) {
       printf("Error: Position overflow. Position = %d, max allowed = 256\n", position);
-      return 0;
+      return false;
     }
 
     /* Try all rules one by one. */
