@@ -159,8 +159,8 @@ uint32_t expr(char *e, bool *success) {
     if (tokens[i].type == '*' && (i == 0 || (tokens[i - 1].type != TK_NUM && tokens[i - 1].type != TK_HEX && tokens[i - 1].type != TK_REG &&
 tokens[i - 1].type != TK_RPAREN))) {
     tokens[i].type = TK_DEREF;  // 识别为解引用操作
+    }
   }
-}
 
   return eval(0, nr_token - 1);
 }
