@@ -126,6 +126,7 @@ int main(int argc, char *argv[]) {
             goto next_iteration;
         }
 
+
         fp = popen("/tmp/.expr", "r");
         assert(fp != NULL);
         unsigned int result;

@@ -3,6 +3,7 @@ typedef struct watchpoint {
   struct watchpoint *next;
   char* exp;
   uint32_t val;
+  /* 可以在这里添加更多的成员变量 */
 } WP;
 
 
