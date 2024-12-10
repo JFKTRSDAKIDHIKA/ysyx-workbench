@@ -94,11 +94,11 @@ static bool make_token(char *e) {
   int position = 0;
   int i;
   regmatch_t pmatch;
-  printf("ok\n");
 
   nr_token = 0;
 
   while (e[position] != '\0') {
+    printf("%d\n", position);
     /* Try all rules one by one. */
     for (i = 0; i < NR_REGEX; i ++) {
       if (regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) {
