@@ -149,8 +149,6 @@ static int cmd_x(char* args){
      return 0;
    }
 
-   printf("OK\n");
-
   int len = 4 * arg0;
   bool success;
   vaddr_t starting_addr = expr(arg1, &success);
