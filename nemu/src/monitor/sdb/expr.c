@@ -162,12 +162,7 @@ tokens[i - 1].type != TK_RPAREN))) {
   }
 }
 
-  /* TODO: Insert codes to evaluate the expression. */
   return eval(0, nr_token - 1);
-  
-
-
-  return 0;
 }
 
 word_t eval(int p, int q){

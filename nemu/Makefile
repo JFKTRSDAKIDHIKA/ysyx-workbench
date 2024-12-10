@@ -61,3 +61,7 @@ else
 # Include rules to build NEMU
 include $(NEMU_HOME)/scripts/native.mk
 endif
+
+# 统计工程代码行数的目标
+count:
+	@find $(NEMU_HOME) -name "*.c" -o -name "*.h" | xargs wc -l
