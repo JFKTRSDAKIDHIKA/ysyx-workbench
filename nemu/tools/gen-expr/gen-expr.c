@@ -98,11 +98,11 @@ int main(int argc, char *argv[]) {
         if(fp == NULL){
 	      perror("fopen failed");
 	      return 1;
-	    }
+	}
         fputs(code_buf, fp);
         fclose(fp);
 
-        FILE *pipe = popen("gcc -m32 -funsigned-char -Werror=div-by-zero /tmp/.code.c -o /tmp/.expr 2>&1", "r");
+        FILE *pipe = popen("gcc -Werror=div-by-zero /tmp/.code.c -o /tmp/.expr 2>&1", "r");
 	    // "gcc -Werror=div-by-zero /tmp/.code.c -o /tmp/.expr 2>&1" 会调用 gcc 编译器，并将任何警告或错误消息重定向到标准输出
 	    // 2>&1 将 标准错误输出（stderr） 重定向到 标准输出（stdout）
 	    if (pipe == NULL) {
