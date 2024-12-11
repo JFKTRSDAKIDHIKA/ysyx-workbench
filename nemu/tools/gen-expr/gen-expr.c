@@ -22,7 +22,7 @@
 
 // this should be enough
 static char buf[62144] = {};
-static char code_buf[262144] = {}; // a little larger than `buf`
+static char code_buf[62144+1024] = {}; // a little larger than `buf`
 static char *code_format =
 "#include <stdio.h>\n"
 "#include <stdint.h>\n"
@@ -125,7 +125,6 @@ int main(int argc, char *argv[]) {
             i--;
             goto next_iteration;
         }
-
 
         fp = popen("/tmp/.expr", "r");
         assert(fp != NULL);
