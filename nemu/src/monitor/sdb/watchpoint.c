@@ -26,6 +26,7 @@ typedef struct watchpoint {
   char* exp; 
   // 表达式的value。
   uint32_t val;
+
 } WP;
 
 static WP wp_pool[NR_WP] = {};
@@ -60,7 +61,7 @@ bool check_watchpoint() {
     }
     wp = wp->next;
   }
-
+  // 返回0，代表触发了监视点。
   if (trigger_count == 0)
       return 0;
   else 
@@ -111,6 +112,7 @@ void free_wp(WP* wp) {
     } 
     prev->next = wp->next; 
   }
+  
   // push the node wp to list free_.
   wp->next = free_;
   free_ = wp;
