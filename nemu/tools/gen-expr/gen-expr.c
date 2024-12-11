@@ -102,12 +102,13 @@ int main(int argc, char *argv[]) {
         fputs(code_buf, fp);
         fclose(fp);
 
+	// "gcc -Werror=div-by-zero /tmp/.code.c -o /tmp/.expr 2>&1" 会调用 gcc 编译器，并将任何警告或错误消息重定向到标准输出
+	// 2>&1 将 标准错误输出（stderr） 重定向到 标准输出（stdout）
         FILE *pipe = popen("gcc -Werror=div-by-zero /tmp/.code.c -o /tmp/.expr 2>&1", "r");
-	    // "gcc -Werror=div-by-zero /tmp/.code.c -o /tmp/.expr 2>&1" 会调用 gcc 编译器，并将任何警告或错误消息重定向到标准输出
-	    // 2>&1 将 标准错误输出（stderr） 重定向到 标准输出（stdout）
-	    if (pipe == NULL) {
+	
+	if (pipe == NULL) {
             perror("popen failed");
-            return 1; // Return an error code
+            return 1; 
         }
 
         char compiler_output[1024];
@@ -119,7 +120,6 @@ int main(int argc, char *argv[]) {
             }
         }
 
-
         int status = pclose(pipe);
         if (status != 0) {
             i--;
@@ -130,11 +130,10 @@ int main(int argc, char *argv[]) {
         assert(fp != NULL);
         unsigned int result;
 
-        if (fscanf(fp, "%u", &result) != 1) {
-	    // fscanf 用于从文件中读取格式化的数据。
+        if (fscanf(fp, "%u", &result) != 1) {  // fscanf 用于从文件中读取格式化的数据。
             pclose(fp);
             perror("fscanf failed");
-            return 1; // Return an error code
+            return 1; 
         }
         pclose(fp);
 
