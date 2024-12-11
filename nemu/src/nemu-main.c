@@ -24,7 +24,7 @@ int main(int argc, char *argv[]) {
   char line[MAX_TOKENS * 2]; // Increased size for longer expressions
 			     
   while (fgets(line, sizeof(line), input) != NULL) {
-    char expression[100];
+    char expression[100000];
     unsigned int expected_result;
     if (sscanf(line, "%u %[^\n]", &expected_result, expression) == 2) { // Read expected result and expression
       /*
