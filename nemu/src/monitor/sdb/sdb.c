@@ -148,13 +148,13 @@ static int cmd_x(char* args){
      printf("Invalid args\n");
      return 0;
    }
-  
-  // arg0:读取的内存行数;len:读取的内存Byte数
+
   int len = 4 * arg0;
-  vaddr_t starting_addr = expr(arg1, NULL);
+  bool success;
+  vaddr_t starting_addr = expr(arg1, &success);
   vaddr_t addr = starting_addr;
   for (; addr < starting_addr + len; addr = addr + 4){
-    word_t data = vaddr_read(addr, 4); // 每次读取一行内存的数据
+    word_t data = vaddr_read(addr, 4);
     printf("Data read from 0x%x (length %d): 0x%x\n", addr, 4, data);
   }
   return 0;
