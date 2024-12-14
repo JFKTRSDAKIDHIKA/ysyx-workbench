@@ -64,4 +64,8 @@ endif
 
 # 统计工程代码行数的目标
 count:
-	@find $(NEMU_HOME) -name "*.c" -o -name "*.h" | xargs wc -l
+	@echo "统计工程代码总行数："
+	@find $(NEMU_HOME) -name "*.c" -o -name "*.h" | xargs grep -vE '^\s*\(//|/\*|\*|$\)' | wc -l
+	@echo "统计与 master 分支的代码差异："
+	@git diff --shortstat master
+
