@@ -98,6 +98,7 @@ static bool make_token(char *e) {
   nr_token = 0;
 
   while (e[position] != '\0') {
+    // 生成的表达式最大长度是256,这里检查position大小以防止段错误。
     if (position >= 257) {
       printf("Error: Position overflow. Position = %d, max allowed = 256\n", position);
       return false;
