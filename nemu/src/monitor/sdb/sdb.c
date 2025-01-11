@@ -19,11 +19,13 @@
 #include <readline/history.h>
 #include "sdb.h"
 #include <memory/paddr.h>
-
+#include "watchpoint.h"
 static int is_batch_mode = false;
 
 void init_regex();
 void init_wp_pool();
+uint32_t expr(char *e, bool *success);
+word_t vaddr_read(vaddr_t addr, int len);
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 static char* rl_gets() {
@@ -61,6 +63,10 @@ static int cmd_help(char *args);
 
 static int cmd_x(char* args);
 
+static int cmd_w(char* args);
+
+static int cmd_d(char* args);
+
 static struct {
   const char *name;
   const char *description;
@@ -70,8 +76,10 @@ static struct {
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
   { "si", "让程序单步执行N条指令后暂停执行,当N没有给出时, 缺省为1", cmd_si },
-  { "info", "打印寄存器状态", cmd_info},
-  { "x", "求出表达式EXPR的值, 将结果作为起始内存地址, 以十六进制形式输出连续的N个4字节", cmd_x}
+  { "info", "打印寄存器状态和监视点", cmd_info},
+  { "x", "求出表达式EXPR的值, 将结果作为起始内存地址, 以十六进制形式输出连续的N个4字节", cmd_x},
+  { "w", "当表达式EXPR的值发生变化时, 暂停程序执行", cmd_w},
+  { "d", "删除序号为N的监视点", cmd_d}
 };
 
 
@@ -120,7 +128,7 @@ static int cmd_info(char* args){
   } else if (strcmp(arg, "r") == 0) {
     isa_reg_display();
   } else if (strcmp(arg, "w") == 0) {
-    printf("under developing\n");
+    print_watchpoint(); 
   } else {
     printf("Unknown arg '%s'\n", arg);
   }
@@ -128,26 +136,54 @@ static int cmd_info(char* args){
 }
 
 static int cmd_x(char* args){
-  char *arg0 = strtok(NULL, " ");
-  char *arg1 = strtok(NULL, "");
+  int arg0;
+  char arg1[100]; 
+
+  if (args == NULL){
+     printf("Lack args\n");
+     return 0;
+  }
+     
+  if (sscanf(args, "%d %[^\n]", &arg0, arg1) != 2) {
+     printf("Invalid args\n");
+     return 0;
+   }
   
-  if (arg1 == NULL || arg0 == NULL){
+  // arg0:读取的内存行数;len:读取的内存Byte数
+  int len = 4 * arg0;
+  vaddr_t starting_addr = expr(arg1, NULL);
+  vaddr_t addr = starting_addr;
+  for (; addr < starting_addr + len; addr = addr + 4){
+    word_t data = vaddr_read(addr, 4); // 每次读取一行内存的数据
+    printf("Data read from 0x%x (length %d): 0x%x\n", addr, 4, data);
+  }
+  return 0;
+}
+
+static int cmd_w(char* args) {
+  char *arg0 = strtok(NULL, " ");
+  
+  if (arg0 == NULL){
     printf("Invalid args\n");
     return 0; 
   }
+  
+  WP* wp = new_wp();
+  wp->exp = (char*)malloc(strlen(arg0) + 1);
+  strcpy(wp->exp, arg0);
+  wp->val = expr(wp->exp, NULL);
+  
+  return 0;
+}
 
-  if (strncmp(arg1, "0x", 2) != 0){
-    printf("Error: String does not start with \"0x\"\n");
-    return 0;
-  }
+static int cmd_d(char* args) {
+  char *arg0 = strtok(NULL, " ");
 
-  int len = 4 * atoi(arg0);
-  paddr_t starting_addr = strtoul(arg1, NULL, 16);
-  paddr_t addr = starting_addr;
-  for (; addr < starting_addr + len; addr = addr + 4){
-    word_t data = paddr_read(addr, 4);
-    printf("Data read from 0x%x (length %d): 0x%x\n", addr, 4, data);
-  }
+  if (arg0 == NULL){
+    printf("Invalid args\n");
+    return 0; 
+  } 
+  free_wp(find_NO(atoi(arg0)));
   return 0;
 }
 

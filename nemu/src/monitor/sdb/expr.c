@@ -98,6 +98,12 @@ static bool make_token(char *e) {
   nr_token = 0;
 
   while (e[position] != '\0') {
+    // 生成的表达式最大长度是256,这里检查position大小以防止段错误。
+    if (position >= 257) {
+      printf("Error: Position overflow. Position = %d, max allowed = 256\n", position);
+      return false;
+    }
+
     /* Try all rules one by one. */
     for (i = 0; i < NR_REGEX; i ++) {
       if (regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) {
@@ -154,24 +160,18 @@ uint32_t expr(char *e, bool *success) {
     *success = false;
     return 0;
   }
-  
+
   for (int i = 0; i < nr_token; i ++) {
     if (tokens[i].type == '*' && (i == 0 || (tokens[i - 1].type != TK_NUM && tokens[i - 1].type != TK_HEX && tokens[i - 1].type != TK_REG &&
 tokens[i - 1].type != TK_RPAREN))) {
     tokens[i].type = TK_DEREF;  // 识别为解引用操作
+    }
   }
-}
 
-  printf("nr_token = %d\n", nr_token);
-  /* TODO: Insert codes to evaluate the expression. */
   return eval(0, nr_token - 1);
-  
-
-
-  return 0;
 }
 
-word_t eval(int p, int q){
+uint32_t eval(int p, int q){
   if (p > q){
     printf("Bad expression! Starting from %d, ending in %d.\n",p ,q);
     return 0;
@@ -179,11 +179,16 @@ word_t eval(int p, int q){
     if (tokens[p].type == TK_NUM)
       return (uint32_t)(atoi(tokens[p].str)); 
     if (tokens[p].type == TK_REG){
-      printf("reg name : %s\n", tokens[p].str);   
-      return (uint32_t)(isa_reg_str2val(tokens[p].str, NULL));
+      bool success;
+      uint32_t reg_val = isa_reg_str2val(tokens[p].str, &success); 
+      if (success == 0) {
+          printf("Invalid reg name!\n");
+          return -1;
+      } else { 
+          return reg_val;
+      }
     }
     if (tokens[p].type == TK_HEX){
-      printf("hex : %s to decimal %ld\n", tokens[p].str, strtol(tokens[p].str, NULL, 16));
       return (uint32_t)(strtol(tokens[p].str, NULL, 16));
     }else {
       printf("this token should be a number.\n");
@@ -192,12 +197,9 @@ word_t eval(int p, int q){
   //  printf("expression 被括号包起来了. Starting from %d, ending in %d.\n", p, q);
     return eval(p + 1, q - 1);
   }else if (check_dereference(p, q)){
-    printf("check_dereference : true\n");
     return vaddr_read(eval(p + 1, q), 4);
   }else {
-    printf("check_dereference : false\n");
     int op = find_main_operator(p ,q);
-    printf("main_operator is at %d. Starting from %d, ending in %d.\n", op, p, q);
     uint32_t val1 = eval(p, op - 1);
     uint32_t val2 = eval(op + 1, q);
     switch (tokens[op].type) {

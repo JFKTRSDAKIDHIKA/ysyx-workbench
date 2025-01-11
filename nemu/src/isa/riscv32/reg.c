@@ -33,6 +33,20 @@ void isa_reg_display() {
   printf("PC = 0x%lx\n", (long)cpu.pc);
 }
 
-word_t isa_reg_str2val(const char *s, bool *success) {
+word_t isa_reg_str2val(const char *s, bool *success) { 
+  if (strcmp(s, "PC") == 0){
+      *success = 1;
+      return cpu.pc;
+  }
+
+  int num_regs = MUXDEF(CONFIG_RVE, 16, 32);
+  for (int i = 0; i < num_regs; i++){
+    if (strcmp(s, regs[i]) == 0){
+       *success = 1;
+       return cpu.gpr[i];
+    }
+  }
+
+  *success = 0;
   return 0;
 }
