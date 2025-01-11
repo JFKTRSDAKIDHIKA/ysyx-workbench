@@ -23,6 +23,5 @@ void engine_start() {
 #else
   /* Receive commands from user. */
   sdb_mainloop();
-  return;
 #endif
 }
