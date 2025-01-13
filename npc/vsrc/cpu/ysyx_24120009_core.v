@@ -1,4 +1,5 @@
 `include "vsrc/include/ysyx_24120009_defs.vh"
+import "DPI-C" function void simulation_exit();
 
 module ysyx_24120009_core (
     input wire clk,
@@ -20,7 +21,6 @@ module ysyx_24120009_core (
     assign Op1_debug = Op1;
     assign Op2_debug = Op2;
 
-    import "DPI-C" function void simulation_exit();
     always @(*) begin
         if (inst == 32'h00100073) begin // ebreak 指令
             $display("EBREAK: Simulation exiting...");

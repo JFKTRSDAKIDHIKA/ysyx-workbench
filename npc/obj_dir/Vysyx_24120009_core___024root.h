@@ -8,9 +8,13 @@
 #include "verilated.h"
 
 class Vysyx_24120009_core__Syms;
+class Vysyx_24120009_core___024unit;
+
 
 class Vysyx_24120009_core___024root final : public VerilatedModule {
   public:
+    // CELLS
+    Vysyx_24120009_core___024unit* __PVT____024unit;
 
     // DESIGN SPECIFIC STATE
     VL_IN8(clk,0,0);
