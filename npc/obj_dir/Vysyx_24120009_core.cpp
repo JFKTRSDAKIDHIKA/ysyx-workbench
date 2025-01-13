@@ -3,6 +3,7 @@
 
 #include "Vysyx_24120009_core.h"
 #include "Vysyx_24120009_core__Syms.h"
+#include "verilated_dpi.h"
 
 //============================================================
 // Constructors
@@ -20,6 +21,7 @@ Vysyx_24120009_core::Vysyx_24120009_core(VerilatedContext* _vcontextp__, const c
     , pc_debug{vlSymsp->TOP.pc_debug}
     , Op1_debug{vlSymsp->TOP.Op1_debug}
     , Op2_debug{vlSymsp->TOP.Op2_debug}
+    , __PVT____024unit{vlSymsp->TOP.__PVT____024unit}
     , rootp{&(vlSymsp->TOP)}
 {
     // Register model with the context
