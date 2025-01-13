@@ -1,4 +1,6 @@
 // Control logic for RV32 instructions 
+`include "include/ysyx_24120009_defs.vh"
+
 module ControlLogic (
     input  [31:0] inst,       // RV32 instruction input
     input         br_eq,      // Branch condition: rs1 == rs2 (unused here)
@@ -28,16 +30,6 @@ module ControlLogic (
     reg [1:0] wb_sel_reg;
 
     always @(*) begin
-        // Default values
-        alu_op_reg   = 5'bxxxxx;
-        op1_sel_reg  = 2'bxx;
-        op2_sel_reg  = 2'bxx;
-        pc_sel_reg   = 3'b000;
-        rf_we_reg    = 1'b0;
-        mem_en_reg   = 1'b0;
-        mem_wen_reg  = 1'b0;
-        wb_sel_reg   = 2'b00;
-
         case (opcode)
             7'b0010011: begin // I-type instructions
                 case (funct3)
@@ -45,7 +37,10 @@ module ControlLogic (
                         alu_op_reg   = 5'b00000;
                         op1_sel_reg  = 2'b00;
                         op2_sel_reg  = 2'b01;
+                        pc_sel_reg   = 3'b000;
                         rf_we_reg    = 1'b1;
+                        mem_en_reg   = 1'b0;
+                        mem_wen_reg  = 1'b0;
                         wb_sel_reg   = 2'b10;
                     end
                     // Add more I-type instructions here
@@ -67,9 +62,29 @@ module ControlLogic (
                         pc_sel_reg   = 3'b100;
                     end
                     // Add more system instructions here
+                    default: begin
+                        alu_op_reg   = 5'bxxxxx;
+                        op1_sel_reg  = 2'bxx;
+                        op2_sel_reg  = 2'bxx;
+                        pc_sel_reg   = 3'b000;
+                        rf_we_reg    = 1'b0;
+                        mem_en_reg   = 1'b0;
+                        mem_wen_reg  = 1'b0;
+                        wb_sel_reg   = 2'b00;
+                    end
                 endcase
             end
             // Add more opcode cases here
+            default: begin
+                        alu_op_reg   = 5'bxxxxx;
+                        op1_sel_reg  = 2'bxx;
+                        op2_sel_reg  = 2'bxx;
+                        pc_sel_reg   = 3'b000;
+                        rf_we_reg    = 1'b0;
+                        mem_en_reg   = 1'b0;
+                        mem_wen_reg  = 1'b0;
+                        wb_sel_reg   = 2'b00;
+            end
         endcase
     end
 

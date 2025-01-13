@@ -4,10 +4,10 @@ module ysyx_24120009_core (
     input wire clk,
     input wire rst,
     // Memory interface
-    output wire [`ysyx_24120009_DATA_WIDTH-1:0] mem_addr,
-    output wire [31:0] mem_wdata,
-    output wire mem_wen,
-    input wire [31:0] mem_rdata
+    output wire [31:0] imem_addr,
+    output wire [`ysyx_24120009_DATA_WIDTH-1:0] imem_wdata,
+    output wire imem_wen,
+    input wire [`ysyx_24120009_DATA_WIDTH-1:0] imem_rdata
 );
 
     // Internal signals
@@ -31,42 +31,72 @@ module ysyx_24120009_core (
     wire br_eq;
     wire br_lt;
     wire br_ltu;
-
-    // Instruction Memory
-    reg [`ysyx_24120009_DATA_WIDTH-1:0] inst_mem [0:255];
-    initial begin
-        $readmemh("inst_mem.hex", inst_mem);
-    end
+    //
+    wire [`ysyx_24120009_REG_ADDR_WIDTH-1:0] rs1_addr;
+    wire [`ysyx_24120009_REG_ADDR_WIDTH-1:0] rs2_addr;
+    wire [`ysyx_24120009_REG_ADDR_WIDTH-1:0] waddr;
+    wire [`ysyx_24120009_DATA_WIDTH-1:0] rdata1;
+    wire [`ysyx_24120009_DATA_WIDTH-1:0] rdata2;
 
     // Register File
-    reg [`ysyx_24120009_DATA_WIDTH-1:0] regfile [0:31];
-    always @(posedge clk) begin
-        if (rf_we) begin
-            regfile[inst[11:7]] <= reg_write_data;
-        end
-    end
-
+    ysyx_24120009_RegisterFile #(
+        .ADDR_WIDTH(`ysyx_24120009_REG_ADDR_WIDTH),
+        .DATA_WIDTH(`ysyx_24120009_DATA_WIDTH)
+    ) u_RegisterFile (
+        .clk(clk),
+        .wdata(reg_write_data),
+        .waddr(waddr),
+        .wen(rf_we),
+        .raddr1(rs1_addr),
+        .raddr2(rs2_addr),
+        .rdata1(rdata1),
+        .rdata2(rdata2)
+    );
+        
+        
     // Fetch instruction
-    assign inst = inst_mem[pc[`ysyx_24120009_DATA_WIDTH-1:2]];
+    ysyx_24120009_IFU ifu (
+        .clk(clk),
+        .rst(rst),
+        .pc_sel(pc_sel),
+        .jump_reg_target(jump_reg_target),
+        .br_target(br_target),
+        .jmp_target(jmp_target),
+        .pc_wen(1'b1),
+        .pc_o(pc),
+        .inst_o(inst),
+        .inst_i(imem_rdata)
+    );
+    assign imem_addr = pc;
+
 
     // Instantiate IDU
     ysyx_24120009_IDU idu (
+        // Instruction input
         .inst_i(inst),
-        .rd_o(),
+        // Operands output
         .Op1(Op1),
         .Op2(Op2),
         .Op1Sel(op1_sel),
         .Op2Sel(op2_sel),
-        .rs1_data_i(),
-        .rs2_data_i(),
+        // Register data
+        .rs1_data_i(rdata1),
+        .rs2_data_i(rdata2),
+        .rd_addr_o(waddr),
+        .rs1_addr(rs1_addr),
+        .rs2_addr(rs2_addr),
+        // Program counter input
         .pc_i(pc),
+        // Target address outputs
         .jump_reg_target_o(jump_reg_target),
         .br_target_o(br_target),
         .jmp_target_o(jmp_target),
+        // Branch condition outputs
         .br_eq(br_eq),
         .br_lt(br_lt),
         .br_ltu(br_ltu)
     );
+
 
     // Instantiate Control Logic
     ControlLogic control (
@@ -96,9 +126,5 @@ module ysyx_24120009_core (
         .reg_write_data(reg_write_data)
     );
 
-    // Memory interface connections
-    assign mem_addr = pc;
-    assign mem_wdata = reg_write_data;
-    assign mem_wen = mem_wen_internal;
 
 endmodule
