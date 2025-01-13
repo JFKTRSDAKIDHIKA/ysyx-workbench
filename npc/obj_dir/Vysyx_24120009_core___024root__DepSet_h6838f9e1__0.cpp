@@ -70,7 +70,7 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root___ico_sequent__TOP__0(Vysyx_241
                                    >> 0x14U)) | (0x1fU 
                                                  & (vlSelf->imem_rdata 
                                                     >> 7U))));
-    vlSelf->ysyx_24120009_core__DOT__idu__DOT__op2_sel_mux__DOT__i0__DOT__data_list[3U] 
+    vlSelf->ysyx_24120009_core__DOT__idu__DOT__op2_sel_mux__DOT__i0__DOT__data_list[2U] 
         = (((- (IData)((vlSelf->imem_rdata >> 0x1fU))) 
             << 0xcU) | (vlSelf->imem_rdata >> 0x14U));
     vlSelf->ysyx_24120009_core__DOT__idu__DOT__op2_sel_mux__DOT__i0__DOT__data_list[0U] 
@@ -549,7 +549,7 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root___nba_sequent__TOP__0(Vysyx_241
                                                            | (0x1eU 
                                                               & (vlSelf->imem_rdata 
                                                                  >> 7U)))))));
-    vlSelf->ysyx_24120009_core__DOT__idu__DOT__op2_sel_mux__DOT__i0__DOT__data_list[2U] 
+    vlSelf->ysyx_24120009_core__DOT__idu__DOT__op2_sel_mux__DOT__i0__DOT__data_list[3U] 
         = vlSelf->ysyx_24120009_core__DOT__pc;
     vlSelf->pc_debug = vlSelf->imem_addr;
 }
