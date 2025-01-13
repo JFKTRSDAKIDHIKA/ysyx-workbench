@@ -1,5 +1,4 @@
 `include "vsrc/include/ysyx_24120009_defs.vh"
-import "DPI-C" function void simulation_exit();
 
 module ysyx_24120009_core (
     input wire clk,
@@ -20,15 +19,6 @@ module ysyx_24120009_core (
     assign pc_debug = pc;
     assign Op1_debug = Op1;
     assign Op2_debug = Op2;
-
-    always @(posedge clk) begin
-        if (inst == 32'h00100073) begin
-           $display("EBREAK: Simulation exiting...");
-           simulation_exit();
-        end
-    end
-
-
 
     // Internal signals
     wire [`ysyx_24120009_DATA_WIDTH-1:0] pc;
@@ -51,12 +41,23 @@ module ysyx_24120009_core (
     wire br_eq;
     wire br_lt;
     wire br_ltu;
-    //
+    //  Register file address
     wire [`ysyx_24120009_REG_ADDR_WIDTH-1:0] rs1_addr;
     wire [`ysyx_24120009_REG_ADDR_WIDTH-1:0] rs2_addr;
     wire [`ysyx_24120009_REG_ADDR_WIDTH-1:0] waddr;
     wire [`ysyx_24120009_DATA_WIDTH-1:0] rdata1;
     wire [`ysyx_24120009_DATA_WIDTH-1:0] rdata2;
+
+    // handle ebreak signal
+    wire is_ebreak;
+    import "DPI-C" function void simulation_exit();
+    always @(*) begin
+        if (is_ebreak) begin
+           $display("EBREAK: Simulation exiting...");
+           simulation_exit(); // 通知仿真环境结束
+        end
+    end
+
 
     // Register File
     ysyx_24120009_RegisterFile #(
@@ -135,7 +136,8 @@ module ysyx_24120009_core (
         .rf_we(rf_we),
         .mem_en(mem_en),
         .mem_wen(mem_wen_internal),
-        .wb_sel(wb_sel)
+        .wb_sel(wb_sel),
+        .is_ebreak(is_ebreak)
     );
 
     // Instantiate EXU

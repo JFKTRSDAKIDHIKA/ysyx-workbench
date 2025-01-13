@@ -13,12 +13,13 @@ module ysyx_24120009_ControlLogic (
     output        rf_we,      // Register file write enable
     output        mem_en,     // Memory enable 
     output        mem_wen,    // Memory write enable 
-    output [1:0]  wb_sel      // Write-back source selection
+    output [1:0]  wb_sel,     // Write-back source selection
+    output        is_ebreak   // Flag for ebreak instruction
 );
 
     localparam DATA_LEN  = 19;  // Length of control signals
     localparam KEY_LEN   = 17;  // Length of inst key
-    localparam NR_KEY    = 23;  // Number of keys
+    localparam NR_KEY    = 24;  // Number of keys
 
     wire [6:0] opcode = inst[6:0];
     wire [2:0] funct3 = inst[14:12];
@@ -57,10 +58,14 @@ module ysyx_24120009_ControlLogic (
         17'b1100011_100_0000000, 19'b00000_00_00_000_0_0_0_00, // BLT
         17'b1100011_110_0000000, 19'b00000_00_00_000_0_0_0_00, // BLTU
         // JALR instruction(1)
-        17'b1100111_000_0000000, 19'b00000_00_01_001_1_0_0_01  // JALR
+        17'b1100111_000_0000000, 19'b00000_00_01_001_1_0_0_01, // JALR
+        // ebreak instruction(1)
+        17'b1110011_000_0000000, 19'b00000_00_00_000_0_0_0_00  // EBREAK
         })
     );
 
+    wire is_ebreak_internal = (inst_key == 17'b1110011_000_0000000);
+    assign is_ebreak = is_ebreak_internal;
 
     // Decode control signals
     assign alu_op   = ctl_signals[18:14];
