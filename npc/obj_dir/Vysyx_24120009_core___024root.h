@@ -19,9 +19,6 @@ class Vysyx_24120009_core___024root final : public VerilatedModule {
     // DESIGN SPECIFIC STATE
     VL_IN8(clk,0,0);
     VL_IN8(rst,0,0);
-    CData/*0:0*/ ysyx_24120009_core__DOT__exu__DOT__wb_mux__DOT__i1__DOT__hit;
-    CData/*0:0*/ __VdfgTmp_h9d12977d__0;
-    CData/*0:0*/ __VdfgTmp_h9d0653ad__0;
     CData/*0:0*/ __Vtrigrprev__TOP__clk;
     CData/*0:0*/ __VactContinue;
     VL_OUT(imem_addr,31,0);
@@ -34,21 +31,11 @@ class Vysyx_24120009_core___024root final : public VerilatedModule {
     VL_OUT(Op2_debug,31,0);
     IData/*31:0*/ ysyx_24120009_core__DOT__pc;
     IData/*31:0*/ ysyx_24120009_core__DOT__reg_write_data;
-    IData/*31:0*/ ysyx_24120009_core__DOT__Op1;
-    IData/*31:0*/ ysyx_24120009_core__DOT__Op2;
     IData/*31:0*/ ysyx_24120009_core__DOT__pc_plus4;
     IData/*31:0*/ ysyx_24120009_core__DOT__rdata1;
     IData/*31:0*/ ysyx_24120009_core__DOT__ifu__DOT__pc_next;
-    IData/*31:0*/ ysyx_24120009_core__DOT__ifu__DOT__mux_pc_sel__DOT__i0__DOT__lut_out;
     IData/*31:0*/ ysyx_24120009_core__DOT__idu__DOT__imm_i_sext;
-    IData/*31:0*/ ysyx_24120009_core__DOT__idu__DOT__op1_sel_mux__DOT__i0__DOT__lut_out;
-    IData/*31:0*/ ysyx_24120009_core__DOT__idu__DOT__op2_sel_mux__DOT__i0__DOT__lut_out;
-    IData/*16:0*/ ysyx_24120009_core__DOT__control__DOT__inst_key;
     IData/*18:0*/ ysyx_24120009_core__DOT__control__DOT__ctl_signals;
-    IData/*18:0*/ ysyx_24120009_core__DOT__control__DOT__funct_mux__DOT__i0__DOT__lut_out;
-    IData/*31:0*/ ysyx_24120009_core__DOT__exu__DOT__result;
-    IData/*31:0*/ ysyx_24120009_core__DOT__exu__DOT__alu_instance__DOT__alu_mux__DOT__i0__DOT__lut_out;
-    IData/*31:0*/ ysyx_24120009_core__DOT__exu__DOT__wb_mux__DOT__i1__DOT__lut_out;
     IData/*31:0*/ __VstlIterCount;
     IData/*31:0*/ __VicoIterCount;
     IData/*31:0*/ __VactIterCount;
