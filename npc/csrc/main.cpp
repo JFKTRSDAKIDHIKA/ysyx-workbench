@@ -48,9 +48,9 @@ int main(int argc, char **argv) {
         // 输出状态
         std::cout << "Cycle: " << cycle
                   << ", PC = 0x" << std::hex << top->pc_debug
-                  << ", x1 = " << top->x1
-                  << ", x2 = " << top->x2
-                  << ", x3 = " << top->x3 << std::endl;
+                  << ", x1 = " << std::hex << top->x1
+                  << ", x2 = " << std::hex << top->x2
+                  << ", x3 = " << std::hex << top->x3 << std::endl;
     }
 
 
