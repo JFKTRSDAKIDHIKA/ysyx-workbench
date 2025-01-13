@@ -1,5 +1,7 @@
 // Control logic for RV32 instructions 
 `include "vsrc/include/ysyx_24120009_defs.vh"
+import "DPI-C" function void simulation_exit();
+
 
 module ysyx_24120009_ControlLogic (
     input  [31:0] inst,       // RV32 instruction input
@@ -13,73 +15,23 @@ module ysyx_24120009_ControlLogic (
     output        rf_we,      // Register file write enable
     output        mem_en,     // Memory enable 
     output        mem_wen,    // Memory write enable 
-    output [1:0]  wb_sel,     // Write-back source selection
-    output        is_ebreak   // Flag for ebreak instruction
+    output [1:0]  wb_sel      // Write-back source selection
 );
-
-    localparam DATA_LEN  = 17;  // Length of control signals
-    localparam KEY_LEN   = 17;  // Length of inst key
-    localparam NR_KEY    = 24;  // Number of keys
 
     wire [6:0] opcode = inst[6:0];
     wire [2:0] funct3 = inst[14:12];
-    wire [6:0] funct7 = inst[31:25];
+    wire [6:0] func7 = inst[31:25];
 
-    wire [KEY_LEN-1:0] inst_key = {opcode, funct3, funct7};
-    wire [DATA_LEN-1:0] ctl_signals;
-    MuxKey #(NR_KEY, KEY_LEN, DATA_LEN) funct_mux (
-        .out(ctl_signals),
-        .key(inst_key),
-        .lut({
-        // opcode_func3_func7 | {alu_op, op1_sel, op2_sel, pc_sel, rf_we, mem_en, mem_wen, wb_sel}
-        // R-type instructions(10)
-        17'b0110011_000_0000000, 17'b00000_00_11_000_1_0_0_10, // ADD
-        17'b0110011_000_0100000, 17'b00001_00_11_000_1_0_0_10, // SUB
-        17'b0110011_001_0000000, 17'b00111_00_11_000_1_0_0_10, // SLL
-        17'b0110011_010_0000000, 17'b00010_00_11_000_1_0_0_10, // SLT
-        17'b0110011_011_0000000, 17'b00011_00_11_000_1_0_0_10, // SLTU
-        17'b0110011_100_0000000, 17'b00100_00_11_000_1_0_0_10, // XOR
-        17'b0110011_101_0000000, 17'b01000_00_11_000_1_0_0_10, // SRL
-        17'b0110011_101_0100000, 17'b01001_00_11_000_1_0_0_10, // SRA
-        17'b0110011_110_0000000, 17'b00101_00_11_000_1_0_0_10, // OR
-        17'b0110011_111_0000000, 17'b00110_00_11_000_1_0_0_10, // AND
-        // I-type instructions(9)
-        17'b0010011_000_0000000, 17'b00000_00_01_000_1_0_0_10, // ADDI
-        17'b0010011_010_0000000, 17'b00010_00_01_000_1_0_0_10, // SLTI
-        17'b0010011_011_0000000, 17'b00011_00_01_000_1_0_0_10, // SLTIU
-        17'b0010011_100_0000000, 17'b00100_00_01_000_1_0_0_10, // XORI
-        17'b0010011_110_0000000, 17'b00101_00_01_000_1_0_0_10, // ORI
-        17'b0010011_111_0000000, 17'b00110_00_01_000_1_0_0_10, // ANDI
-        17'b0010011_001_0000000, 17'b00111_00_01_000_1_0_0_10, // SLLI
-        17'b0010011_101_0000000, 17'b00000_00_01_000_1_0_0_10, // SRLI
-        17'b0010011_101_0100000, 17'b00001_00_01_000_1_0_0_10, // SRAI
-        // B-type instructions(3)
-        17'b1100011_000_0000000, 17'b00000_00_00_000_0_0_0_00, // BEQ
-        17'b1100011_100_0000000, 17'b00000_00_00_000_0_0_0_00, // BLT
-        17'b1100011_110_0000000, 17'b00000_00_00_000_0_0_0_00, // BLTU
-        // JALR instruction(1)
-        17'b1100111_000_0000000, 17'b00000_00_01_001_1_0_0_01, // JALR
-        // ebreak instruction(1)
-        17'b1110011_000_0000000, 17'b00000_00_00_000_0_0_0_00  // EBREAK
-        })
-    );
+    // Default outputs
+    reg [4:0] alu_op_reg;
+    reg [1:0] op1_sel_reg;
+    reg [1:0] op2_sel_reg;
+    reg [2:0] pc_sel_reg;
+    reg       rf_we_reg;
+    reg       mem_en_reg;
+    reg       mem_wen_reg;
+    reg [1:0] wb_sel_reg;
 
-    wire is_ebreak_internal = (inst_key == 17'b1110011_000_0000000);
-    assign is_ebreak = is_ebreak_internal;
-
-    // Decode control signals
-    assign alu_op   = ctl_signals[16:12];
-    assign op1_sel  = ctl_signals[11:10];
-    assign op2_sel  = ctl_signals[9:8];
-    assign pc_sel   = ctl_signals[7:5];
-    assign rf_we    = ctl_signals[4];
-    assign mem_en   = ctl_signals[3];
-    assign mem_wen  = ctl_signals[2];
-    assign wb_sel   = ctl_signals[1:0];
-
-endmodule
-
-    /*
     always @(*) begin
         case (opcode)
             7'b0010011: begin // I-type instructions
@@ -145,7 +97,7 @@ endmodule
                         wb_sel_reg   = 2'b10;
                     end
                     3'b101: begin // srli 和 srai
-                        case (funct7)
+                        case (func7)
                             7'b0000000: begin // srli
                                 alu_op_reg   = 5'b01000;
                                 op1_sel_reg  = 2'b00;
@@ -204,7 +156,7 @@ endmodule
             7'b0110011: begin // R-type instructions
                 case (funct3)
                     3'b000: begin // ADD, SUB
-                        case (funct7)
+                        case (func7)
                             7'b0000000: begin // ADD
                                 alu_op_reg   = 5'b00000;
                                 op1_sel_reg  = 2'b00;
@@ -278,7 +230,7 @@ endmodule
                         wb_sel_reg   = 2'b10;
                     end
                     3'b101: begin // SRL 和 SRA
-                        case (funct7)
+                        case (func7)
                             7'b0000000: begin // SRL
                                 alu_op_reg   = 5'b01000;
                                 op1_sel_reg  = 2'b00;
@@ -491,4 +443,14 @@ endmodule
             end
         endcase
     end
-    */
+
+    assign alu_op   = alu_op_reg;
+    assign op1_sel  = op1_sel_reg;
+    assign op2_sel  = op2_sel_reg;
+    assign pc_sel   = pc_sel_reg;
+    assign rf_we    = rf_we_reg;
+    assign mem_en   = mem_en_reg;
+    assign mem_wen  = mem_wen_reg;
+    assign wb_sel   = wb_sel_reg;
+
+endmodule

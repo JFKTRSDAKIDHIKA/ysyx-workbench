@@ -58,7 +58,8 @@ int main(int argc, char **argv) {
                   << ", x3 = " << std::hex << top->x3 << std::endl;
 
     int cycle = 0;
-    for(; cycle <= 5; cycle++) {  
+    do {
+        
         // Fetch 阶段
         uint32_t pc = top->imem_addr;          
         top->imem_rdata = pmem_read(pc);       
@@ -73,7 +74,8 @@ int main(int argc, char **argv) {
                   << ", Op1 = " << std::hex << top->Op1_debug
                   << ", Op2 = " << std::hex << top->Op2_debug
                   << std::endl;
-    } 
+        cycle++;
+    } while (!Verilated::gotFinish());
 
 
     delete top;
