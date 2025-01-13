@@ -12,6 +12,20 @@ void load_instructions() {
     // 可以继续添加更多指令
 }
 
+void tick(Vysyx_24120009_core* top) {
+    top->clk = 0; top->eval();
+    top->clk = 1; top->eval();
+    Verilated::timeInc(1); // 增加仿真时间
+}
+
+void reset(Vysyx_24120009_core* top, int cycles) {
+    top->rst = 1;
+    for (int i = 0; i < cycles; ++i) {
+        tick(top);
+    }
+    top->rst = 0;
+}
+
 int main(int argc, char **argv) {
     Verilated::commandArgs(argc, argv);
     Vysyx_24120009_core* top = new Vysyx_24120009_core;
@@ -20,24 +34,23 @@ int main(int argc, char **argv) {
     load_instructions();
 
     // Reset
-    top->rst = 1;
-    int n = 10;
-    while (n >= 0) {
-        top->clk = 0; top->eval();
-        top->clk = 1; top->eval();
-        n--;
-    }
-    top->rst = 0;
+    reset(top, 10); // 复位保持 10 个周期
 
-    // 仿真循环，只运行三个指令
+
     for (int cycle = 0; cycle < 3; ++cycle) {
-        uint32_t pc = top->imem_addr;           // 从顶层模块读取 PC
-        top->imem_rdata = pmem_read(pc);       // 根据 PC 从存储器读取指令
-        top->clk = 0; top->eval();
-        top->clk = 1; top->eval();
-
-        Verilated::timeInc(1);                 // 增加仿真时间
+        // Fetch 阶段
+        uint32_t pc = top->imem_addr;          
+        top->imem_rdata = pmem_read(pc);       
+        // Tick 时钟
+        tick(top);
+        // 输出状态
+        /* std::cout << "Cycle: " << cycle
+                  << ", PC = 0x" << std::hex << pc
+                  << ", x1 = " << top->x1
+                  << ", x2 = " << top->x2
+                  << ", x3 = " << top->x3 << std::endl;*/
     }
+
 
     delete top;
     return 0;
