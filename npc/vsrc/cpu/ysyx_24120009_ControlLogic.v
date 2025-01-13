@@ -24,14 +24,6 @@ module ysyx_24120009_ControlLogic (
     wire [2:0] funct3 = inst[14:12];
     wire [6:0] funct7 = inst[31:25];
 
-    import "DPI-C" function void simulation_exit();
-    always @(*) begin
-        if (inst == 32'h00100073) begin // ebreak 指令
-            $display("EBREAK: Simulation exiting...");
-            simulation_exit(); // 通知仿真环境结束
-        end
-    end
-
     wire [KEY_LEN-1:0] inst_key = {opcode, funct3, funct7};
     wire [DATA_LEN-1:0] ctl_signals;
     MuxKey #(NR_KEY, KEY_LEN, DATA_LEN) funct_mux (

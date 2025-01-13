@@ -20,6 +20,14 @@ module ysyx_24120009_core (
     assign Op1_debug = Op1;
     assign Op2_debug = Op2;
 
+    import "DPI-C" function void simulation_exit();
+    always @(*) begin
+        if (inst == 32'h00100073) begin // ebreak 指令
+            $display("EBREAK: Simulation exiting...");
+            simulation_exit(); // 通知仿真环境结束
+        end
+    end
+
 
     // Internal signals
     wire [`ysyx_24120009_DATA_WIDTH-1:0] pc;
