@@ -38,6 +38,12 @@ int main(int argc, char **argv) {
     // Reset
     reset(top, 10); // 复位保持 10 个周期
 
+    std::cout << "AfterReset: "
+                  << ", PC = 0x" << std::hex << top->pc_debug
+                  << ", x1 = " << std::hex << top->x1
+                  << ", x2 = " << std::hex << top->x2
+                  << ", x3 = " << std::hex << top->x3 << std::endl;
+
 
     for (int cycle = 0; cycle < 1; ++cycle) {
         // Fetch 阶段
