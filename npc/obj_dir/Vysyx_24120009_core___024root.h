@@ -25,6 +25,10 @@ class Vysyx_24120009_core___024root final : public VerilatedModule {
     CData/*0:0*/ __VactContinue;
     VL_OUT(imem_addr,31,0);
     VL_IN(imem_rdata,31,0);
+    VL_OUT(x1,31,0);
+    VL_OUT(x2,31,0);
+    VL_OUT(x3,31,0);
+    VL_OUT(pc_debug,31,0);
     IData/*31:0*/ ysyx_24120009_core__DOT__pc;
     IData/*31:0*/ ysyx_24120009_core__DOT__reg_write_data;
     IData/*31:0*/ ysyx_24120009_core__DOT__pc_plus4;

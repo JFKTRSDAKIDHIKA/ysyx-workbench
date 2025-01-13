@@ -14,6 +14,10 @@ Vysyx_24120009_core::Vysyx_24120009_core(VerilatedContext* _vcontextp__, const c
     , rst{vlSymsp->TOP.rst}
     , imem_addr{vlSymsp->TOP.imem_addr}
     , imem_rdata{vlSymsp->TOP.imem_rdata}
+    , x1{vlSymsp->TOP.x1}
+    , x2{vlSymsp->TOP.x2}
+    , x3{vlSymsp->TOP.x3}
+    , pc_debug{vlSymsp->TOP.pc_debug}
     , rootp{&(vlSymsp->TOP)}
 {
     // Register model with the context

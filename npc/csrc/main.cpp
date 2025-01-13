@@ -1,5 +1,7 @@
 #include "Vysyx_24120009_core.h" // 顶层模块的 Verilator 生成类
 #include "verilated.h"
+#include <ostream>
+#include <iostream>
 
 void pmem_write(uint32_t address, uint32_t data);
 uint32_t pmem_read(uint32_t address);
@@ -44,11 +46,11 @@ int main(int argc, char **argv) {
         // Tick 时钟
         tick(top);
         // 输出状态
-        /* std::cout << "Cycle: " << cycle
-                  << ", PC = 0x" << std::hex << pc
+        std::cout << "Cycle: " << cycle
+                  << ", PC = 0x" << std::hex << top->pc_debug
                   << ", x1 = " << top->x1
                   << ", x2 = " << top->x2
-                  << ", x3 = " << top->x3 << std::endl;*/
+                  << ", x3 = " << top->x3 << std::endl;
     }
 
 

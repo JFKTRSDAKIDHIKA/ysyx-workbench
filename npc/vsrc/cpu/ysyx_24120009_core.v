@@ -5,8 +5,12 @@ module ysyx_24120009_core (
     input wire rst,
     // Memory interface
     output wire [31:0] imem_addr,
-    input wire [`ysyx_24120009_DATA_WIDTH-1:0] imem_rdata
+    input wire [`ysyx_24120009_DATA_WIDTH-1:0] imem_rdata,
     // For debug purpose
+    output [`ysyx_24120009_DATA_WIDTH-1:0] x1,
+    output [`ysyx_24120009_DATA_WIDTH-1:0] x2,
+    output [`ysyx_24120009_DATA_WIDTH-1:0] x3,
+    output [`ysyx_24120009_DATA_WIDTH-1:0] pc_debug
 );
 
     // Internal signals
@@ -49,8 +53,13 @@ module ysyx_24120009_core (
         .raddr1(rs1_addr),
         .raddr2(rs2_addr),
         .rdata1(rdata1),
-        .rdata2(rdata2)
+        .rdata2(rdata2),
+        // For debug purpose
+        .x1(x1),
+        .x2(x2),
+        .x3(x3)
     );
+    assign pc_debug = pc;
         
         
     // Fetch instruction
