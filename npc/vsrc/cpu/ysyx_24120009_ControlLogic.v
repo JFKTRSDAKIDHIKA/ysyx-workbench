@@ -25,7 +25,7 @@ module ysyx_24120009_ControlLogic (
     wire [6:0] funct7 = inst[31:25];
 
     import "DPI-C" function void simulation_exit();
-    always @(posedge clk) begin
+    always @(*) begin
         if (inst == 32'h00100073) begin // ebreak 指令
             $display("EBREAK: Simulation exiting...");
             simulation_exit(); // 通知仿真环境结束
@@ -65,7 +65,7 @@ module ysyx_24120009_ControlLogic (
         17'b1100011_100_0000000, 19'b00000_00_00_000_0_0_0_00, // BLT
         17'b1100011_110_0000000, 19'b00000_00_00_000_0_0_0_00, // BLTU
         // JALR instruction(1)
-        17'b1100111_000_0000000, 19'b00000_00_01_001_1_0_0_01, // JALR
+        17'b1100111_000_0000000, 19'b00000_00_01_001_1_0_0_01  // JALR
         })
     );
 
