@@ -73,7 +73,6 @@ int main(int argc, char **argv) {
                   << ", Op1 = " << std::hex << top->Op1_debug
                   << ", Op2 = " << std::hex << top->Op2_debug
                   << std::endl;
-        cycle++;
     } 
 
 
