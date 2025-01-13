@@ -26,6 +26,8 @@ module ysyx_24120009_ControlLogic (
     wire [6:0] funct7 = inst[31:25];
 
     wire [KEY_LEN-1:0] inst_key = {opcode, funct3, funct7};
+    assign inst_key = (opcode == 7'b0010011) ? {opcode, funct3, 7'b0} : {opcode, funct3, funct7};
+
     wire [DATA_LEN-1:0] ctl_signals;
     MuxKey #(NR_KEY, KEY_LEN, DATA_LEN) funct_mux (
         .out(ctl_signals),
