@@ -39,7 +39,7 @@ int main(int argc, char **argv) {
     reset(top, 10); // 复位保持 10 个周期
 
 
-    for (int cycle = 0; cycle < 3; ++cycle) {
+    for (int cycle = 0; cycle < 0; ++cycle) {
         // Fetch 阶段
         uint32_t pc = top->imem_addr;          
         top->imem_rdata = pmem_read(pc);       
