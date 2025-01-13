@@ -46,14 +46,14 @@ module ysyx_24120009_IDU (
     // 符号扩展（Sign Extend）
     wire [`ysyx_24120009_DATA_WIDTH-1:0] imm_i_sext;
     wire [`ysyx_24120009_DATA_WIDTH-1:0] imm_s_sext;
-    wire [`ysyx_24120009_DATA_WIDTH-1:0] imm_b_usext;
+    wire [`ysyx_24120009_DATA_WIDTH-1:0] imm_b_sext;
     wire [`ysyx_24120009_DATA_WIDTH-1:0] imm_u_sext;
     wire [`ysyx_24120009_DATA_WIDTH-1:0] imm_j_sext;
 
+    // sign extend bits should be consistent with macro ysyx_24120009_DATA_WIDTH
     assign imm_i_sext = {{20{imm_i[11]}}, imm_i}; 
     assign imm_s_sext = {{20{imm_s[11]}}, imm_s}; 
-    // assign imm_b_sext = {{19{imm_b[12]}}, imm_b, 1'b0}; 
-    assign imm_b_usext = {{19{1'b0}}, imm_b, 1'b0};
+    assign imm_b_sext = {{19{imm_b[11]}}, imm_b, 1'b0}; 
     assign imm_u_sext = {imm_u, 12'b0}; 
     assign imm_j_sext = {{11{imm_j[19]}}, imm_j, 1'b0}; 
 
@@ -63,7 +63,7 @@ module ysyx_24120009_IDU (
     // -----------------------------
     // 计算跳转目标地址
     assign jump_reg_target_o = rs1_data_i + imm_i_sext; // JALR 指令
-    assign br_target_o       = pc_i + imm_b_usext; // 分支指令
+    assign br_target_o       = pc_i + imm_b_sext;
     assign jmp_target_o      = pc_i + imm_j_sext; // JAL 指令
 
 
@@ -79,14 +79,12 @@ module ysyx_24120009_IDU (
     // 3) 输出给 EXU 和寄存器文件
     // -----------------------------
     assign rd_addr_o       = wb_addr;
-    MuxKey #(4, 2, `ysyx_24120009_DATA_WIDTH) op1_sel_mux (
+    MuxKey #(2, 2, `ysyx_24120009_DATA_WIDTH) op1_sel_mux (
         .out(Op1),
         .key(Op1Sel),
         .lut({
             2'b00, rs1_data_i,
-            2'b01, imm_u_sext,
-            2'b10, {`ysyx_24120009_DATA_WIDTH{1'b0}},
-            2'b11, {`ysyx_24120009_DATA_WIDTH{1'b0}}
+            2'b01, imm_u_sext
         })
     );
 

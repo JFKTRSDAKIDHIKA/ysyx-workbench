@@ -79,18 +79,23 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root___ico_sequent__TOP__0(Vysyx_241
                                                               & (vlSelf->imem_rdata 
                                                                  >> 0x14U)))))));
     vlSelf->ysyx_24120009_core__DOT__ifu__DOT__mux_pc_sel__DOT__i0__DOT__data_list[2U] 
-        = (vlSelf->ysyx_24120009_core__DOT__pc + ((0x1000U 
-                                                   & (vlSelf->imem_rdata 
-                                                      >> 0x13U)) 
-                                                  | ((0x800U 
+        = (vlSelf->ysyx_24120009_core__DOT__pc + ((
+                                                   (- (IData)(
+                                                              (vlSelf->imem_rdata 
+                                                               >> 0x1fU))) 
+                                                   << 0xdU) 
+                                                  | ((0x1000U 
                                                       & (vlSelf->imem_rdata 
-                                                         << 4U)) 
-                                                     | ((0x7e0U 
+                                                         >> 0x13U)) 
+                                                     | ((0x800U 
                                                          & (vlSelf->imem_rdata 
-                                                            >> 0x14U)) 
-                                                        | (0x1eU 
-                                                           & (vlSelf->imem_rdata 
-                                                              >> 7U))))));
+                                                            << 4U)) 
+                                                        | ((0x7e0U 
+                                                            & (vlSelf->imem_rdata 
+                                                               >> 0x14U)) 
+                                                           | (0x1eU 
+                                                              & (vlSelf->imem_rdata 
+                                                                 >> 7U)))))));
     vlSelf->ysyx_24120009_core__DOT__idu__DOT__imm_i_sext 
         = (((- (IData)((vlSelf->imem_rdata >> 0x1fU))) 
             << 0xcU) | (vlSelf->imem_rdata >> 0x14U));
@@ -344,18 +349,23 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root___nba_sequent__TOP__0(Vysyx_241
                                                               & (vlSelf->imem_rdata 
                                                                  >> 0x14U)))))));
     vlSelf->ysyx_24120009_core__DOT__ifu__DOT__mux_pc_sel__DOT__i0__DOT__data_list[2U] 
-        = (vlSelf->ysyx_24120009_core__DOT__pc + ((0x1000U 
-                                                   & (vlSelf->imem_rdata 
-                                                      >> 0x13U)) 
-                                                  | ((0x800U 
+        = (vlSelf->ysyx_24120009_core__DOT__pc + ((
+                                                   (- (IData)(
+                                                              (vlSelf->imem_rdata 
+                                                               >> 0x1fU))) 
+                                                   << 0xdU) 
+                                                  | ((0x1000U 
                                                       & (vlSelf->imem_rdata 
-                                                         << 4U)) 
-                                                     | ((0x7e0U 
+                                                         >> 0x13U)) 
+                                                     | ((0x800U 
                                                          & (vlSelf->imem_rdata 
-                                                            >> 0x14U)) 
-                                                        | (0x1eU 
-                                                           & (vlSelf->imem_rdata 
-                                                              >> 7U))))));
+                                                            << 4U)) 
+                                                        | ((0x7e0U 
+                                                            & (vlSelf->imem_rdata 
+                                                               >> 0x14U)) 
+                                                           | (0x1eU 
+                                                              & (vlSelf->imem_rdata 
+                                                                 >> 7U)))))));
     vlSelf->ysyx_24120009_core__DOT__idu__DOT__op2_sel_mux__DOT__i0__DOT__data_list[3U] 
         = vlSelf->ysyx_24120009_core__DOT__pc;
     vlSelf->pc_debug = vlSelf->imem_addr;

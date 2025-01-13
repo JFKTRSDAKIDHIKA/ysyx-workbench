@@ -8,7 +8,7 @@ uint32_t pmem_read(uint32_t address);
 
 void load_instructions() {
     // 示例：在存储器的开头放置若干条 addi 指令
-    pmem_write(0, 0x00100093); // addi x1, x0, 1
+    pmem_write(0, 0xfff00093); // addi x1, x0, 1
     pmem_write(4, 0x00208113); // addi x2, x1, 2
     pmem_write(8, 0x00310193); // addi x3, x2, 3
     // 可以继续添加更多指令
