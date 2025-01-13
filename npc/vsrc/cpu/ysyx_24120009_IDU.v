@@ -79,7 +79,7 @@ module ysyx_24120009_IDU (
     // 3) 输出给 EXU 和寄存器文件
     // -----------------------------
     assign rd_addr_o       = wb_addr;
-    assign Op1  = Op1Sel[0] ? rs1_data_i : imm_u_sext;
+    assign Op1  = Op1Sel[0] ? imm_u_sext : rs1_data_i;
     MuxKey #(4, 2, `ysyx_24120009_DATA_WIDTH) op2_sel_mux (
         .out(Op2),
         .key(Op2Sel),
