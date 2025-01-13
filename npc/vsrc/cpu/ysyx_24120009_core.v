@@ -22,11 +22,12 @@ module ysyx_24120009_core (
     assign Op2_debug = Op2;
 
     always @(posedge clk) begin
-        if (inst == 32'h00100073) begin // ebreak 指令
-            $display("EBREAK: Simulation exiting...");
-            simulation_exit(); // 通知仿真环境结束
+        if (inst == 32'h00100073) begin
+           $display("EBREAK: Simulation exiting...");
+           simulation_exit();
         end
     end
+
 
 
     // Internal signals
