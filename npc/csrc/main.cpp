@@ -19,11 +19,22 @@ int main(int argc, char **argv) {
     // 初始化存储器并加载指令
     load_instructions();
 
+    // Reset
+    top->rst = 1;
+    int n = 10;
+    while (n >= 0) {
+        top->clk = 0; top->eval();
+        top->clk = 1; top->eval();
+        n--;
+    }
+    top->rst = 0;
+
     // 仿真循环，只运行三个指令
     for (int cycle = 0; cycle < 3; ++cycle) {
         uint32_t pc = top->imem_addr;           // 从顶层模块读取 PC
         top->imem_rdata = pmem_read(pc);       // 根据 PC 从存储器读取指令
-        top->eval();                           // 计算下一个周期
+        top->clk = 0; top->eval();
+        top->clk = 1; top->eval();
 
         Verilated::timeInc(1);                 // 增加仿真时间
     }
