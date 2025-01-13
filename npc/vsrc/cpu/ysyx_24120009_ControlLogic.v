@@ -1,7 +1,7 @@
 // Control logic for RV32 instructions 
-`include "include/ysyx_24120009_defs.vh"
+`include "vsrc/include/ysyx_24120009_defs.vh"
 
-module ControlLogic (
+module ysyx_24120009_ControlLogic (
     input  [31:0] inst,       // RV32 instruction input
     input         br_eq,      // Branch condition: rs1 == rs2 (unused here)
     input         br_lt,      // Branch condition: rs1 < rs2 (unused here)

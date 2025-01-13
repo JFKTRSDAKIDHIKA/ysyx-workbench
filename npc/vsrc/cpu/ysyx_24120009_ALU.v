@@ -1,4 +1,4 @@
-`include "include/ysyx_24120009_defs.vh"
+`include "vsrc/include/ysyx_24120009_defs.vh"
 
 module ysyx_24120009_ALU (
     input [`ysyx_24120009_DATA_WIDTH-1:0] A,

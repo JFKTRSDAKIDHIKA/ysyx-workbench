@@ -1,4 +1,4 @@
-`include "include/ysyx_24120009_defs.vh"
+`include "vsrc/include/ysyx_24120009_defs.vh"
 
 module ysyx_24120009_EXU (
     input wire clk,

@@ -1,14 +1,25 @@
-`include "include/ysyx_24120009_defs.vh"
+`include "vsrc/include/ysyx_24120009_defs.vh"
 
 module ysyx_24120009_core (
     input wire clk,
     input wire rst,
     // Memory interface
     output wire [31:0] imem_addr,
-    output wire [`ysyx_24120009_DATA_WIDTH-1:0] imem_wdata,
-    output wire imem_wen,
-    input wire [`ysyx_24120009_DATA_WIDTH-1:0] imem_rdata
+    input wire [`ysyx_24120009_DATA_WIDTH-1:0] imem_rdata,
+    // For debug purpose
+    output [`ysyx_24120009_DATA_WIDTH-1:0] x1,
+    output [`ysyx_24120009_DATA_WIDTH-1:0] x2,
+    output [`ysyx_24120009_DATA_WIDTH-1:0] x3,
+    output [`ysyx_24120009_DATA_WIDTH-1:0] pc_debug,
+    output [`ysyx_24120009_DATA_WIDTH-1:0] Op1_debug,
+    output [`ysyx_24120009_DATA_WIDTH-1:0] Op2_debug
 );
+
+    // Debug signal declaration
+    assign pc_debug = pc;
+    assign Op1_debug = Op1;
+    assign Op2_debug = Op2;
+
 
     // Internal signals
     wire [`ysyx_24120009_DATA_WIDTH-1:0] pc;
@@ -50,7 +61,11 @@ module ysyx_24120009_core (
         .raddr1(rs1_addr),
         .raddr2(rs2_addr),
         .rdata1(rdata1),
-        .rdata2(rdata2)
+        .rdata2(rdata2),
+        // For debug purpose
+        .x1(x1),
+        .x2(x2),
+        .x3(x3)
     );
         
         
@@ -99,7 +114,7 @@ module ysyx_24120009_core (
 
 
     // Instantiate Control Logic
-    ControlLogic control (
+    ysyx_24120009_ControlLogic control (
         .inst(inst),
         .br_eq(br_eq),
         .br_lt(br_lt),
