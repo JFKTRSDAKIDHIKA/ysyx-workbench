@@ -50,6 +50,7 @@ module ysyx_24120009_IDU (
     wire [`ysyx_24120009_DATA_WIDTH-1:0] imm_u_sext;
     wire [`ysyx_24120009_DATA_WIDTH-1:0] imm_j_sext;
 
+    // sign extend bits should be consistent with macro ysyx_24120009_DATA_WIDTH
     assign imm_i_sext = {{20{imm_i[11]}}, imm_i}; 
     assign imm_s_sext = {{20{imm_s[11]}}, imm_s}; 
     assign imm_b_sext = {{19{imm_b[11]}}, imm_b, 1'b0}; 
@@ -78,14 +79,12 @@ module ysyx_24120009_IDU (
     // 3) 输出给 EXU 和寄存器文件
     // -----------------------------
     assign rd_addr_o       = wb_addr;
-    MuxKey #(4, 2, `ysyx_24120009_DATA_WIDTH) op1_sel_mux (
+    MuxKey #(2, 2, `ysyx_24120009_DATA_WIDTH) op1_sel_mux (
         .out(Op1),
         .key(Op1Sel),
         .lut({
             2'b00, rs1_data_i,
-            2'b01, imm_u_sext,
-            2'b10, {`ysyx_24120009_DATA_WIDTH{1'b0}},
-            2'b11, {`ysyx_24120009_DATA_WIDTH{1'b0}}
+            2'b01, imm_u_sext
         })
     );
 

@@ -18,6 +18,7 @@ module ysyx_24120009_ControlLogic (
 
     wire [6:0] opcode = inst[6:0];
     wire [2:0] funct3 = inst[14:12];
+    wire [6:0] func7 = inst[31:25];
 
     // Default outputs
     reg [4:0] alu_op_reg;
@@ -42,6 +43,110 @@ module ysyx_24120009_ControlLogic (
                         mem_en_reg   = 1'b0;
                         mem_wen_reg  = 1'b0;
                         wb_sel_reg   = 2'b10;
+                    end
+                    3'b010: begin // slti
+                        alu_op_reg   = 5'b00010;
+                        op1_sel_reg  = 2'b00;
+                        op2_sel_reg  = 2'b01;
+                        pc_sel_reg   = 3'b000;
+                        rf_we_reg    = 1'b1;
+                        mem_en_reg   = 1'b0;
+                        mem_wen_reg  = 1'b0;
+                        wb_sel_reg   = 2'b10;
+                    end
+                    3'b011: begin // sltiu
+                        alu_op_reg   = 5'b00011;
+                        op1_sel_reg  = 2'b00;
+                        op2_sel_reg  = 2'b01;
+                        pc_sel_reg   = 3'b000;
+                        rf_we_reg    = 1'b1;
+                        mem_en_reg   = 1'b0;
+                        mem_wen_reg  = 1'b0;
+                        wb_sel_reg   = 2'b10;
+                    end
+                    3'b100: begin // xori
+                        alu_op_reg   = 5'b00100;
+                        op1_sel_reg  = 2'b00;
+                        op2_sel_reg  = 2'b01;
+                        pc_sel_reg   = 3'b000;
+                        rf_we_reg    = 1'b1;
+                        mem_en_reg   = 1'b0;
+                        mem_wen_reg  = 1'b0;
+                        wb_sel_reg   = 2'b10;
+                    end
+                    3'b110: begin // ori
+                        alu_op_reg   = 5'b00101;
+                        op1_sel_reg  = 2'b00;
+                        op2_sel_reg  = 2'b01;
+                        pc_sel_reg   = 3'b000;
+                        rf_we_reg    = 1'b1;
+                        mem_en_reg   = 1'b0;
+                        mem_wen_reg  = 1'b0;
+                        wb_sel_reg   = 2'b10;
+                    end
+                    3'b111: begin // andi
+                        alu_op_reg   = 5'b00110;
+                        op1_sel_reg  = 2'b00;
+                        op2_sel_reg  = 2'b01;
+                        pc_sel_reg   = 3'b000;
+                        rf_we_reg    = 1'b1;
+                        mem_en_reg   = 1'b0;
+                        mem_wen_reg  = 1'b0;
+                        wb_sel_reg   = 2'b10;
+                    end
+                    3'b101: begin // srli 和 srai
+                        case (func7)
+                            7'b0000000: begin // srli
+                                alu_op_reg   = 5'b01000;
+                                op1_sel_reg  = 2'b00;
+                                op2_sel_reg  = 2'b01;
+                                pc_sel_reg   = 3'b000;
+                                rf_we_reg    = 1'b1;
+                                mem_en_reg   = 1'b0;
+                                mem_wen_reg  = 1'b0;
+                                wb_sel_reg   = 2'b10;
+                            end
+                            7'b0100000: begin // srai
+                                alu_op_reg   = 5'b01001; 
+                                op1_sel_reg  = 2'b00;
+                                op2_sel_reg  = 2'b01;
+                                pc_sel_reg   = 3'b000;
+                                rf_we_reg    = 1'b1;
+                                mem_en_reg   = 1'b0;
+                                mem_wen_reg  = 1'b0;
+                                wb_sel_reg   = 2'b10;
+                            end
+                            default: begin // 未知的 func7，预留
+                                alu_op_reg   = 5'bxxxxx; // 默认无效操作
+                                op1_sel_reg  = 2'bxx;
+                                op2_sel_reg  = 2'bxx;
+                                pc_sel_reg   = 3'bxxx;
+                                rf_we_reg    = 1'bx;
+                                mem_en_reg   = 1'bx;
+                                mem_wen_reg  = 1'bx;
+                                wb_sel_reg   = 2'bxx;
+                            end
+                        endcase
+                    end
+                    3'b001: begin // slli
+                        alu_op_reg   = 5'b00111;
+                        op1_sel_reg  = 2'b00;
+                        op2_sel_reg  = 2'b01;
+                        pc_sel_reg   = 3'b000;
+                        rf_we_reg    = 1'b1;
+                        mem_en_reg   = 1'b0;
+                        mem_wen_reg  = 1'b0;
+                        wb_sel_reg   = 2'b10;
+                    end
+                    3'b111: begin // jalr
+                        alu_op_reg   = 5'b00000;
+                        op1_sel_reg  = 2'b00;
+                        op2_sel_reg  = 2'b01;
+                        pc_sel_reg   = 3'b001;
+                        rf_we_reg    = 1'b1;
+                        mem_en_reg   = 1'b0;
+                        mem_wen_reg  = 1'b0;
+                        wb_sel_reg   = 2'b01;
                     end
                     // Add more I-type instructions here
                     default: begin
