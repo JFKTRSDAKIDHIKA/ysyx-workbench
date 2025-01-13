@@ -10,8 +10,16 @@ module ysyx_24120009_core (
     output [`ysyx_24120009_DATA_WIDTH-1:0] x1,
     output [`ysyx_24120009_DATA_WIDTH-1:0] x2,
     output [`ysyx_24120009_DATA_WIDTH-1:0] x3,
-    output [`ysyx_24120009_DATA_WIDTH-1:0] pc_debug
+    output [`ysyx_24120009_DATA_WIDTH-1:0] pc_debug,
+    output [`ysyx_24120009_DATA_WIDTH-1:0] Op1_debug,
+    output [`ysyx_24120009_DATA_WIDTH-1:0] Op2_debug
 );
+
+    // Debug signal declaration
+    assign pc_debug = pc;
+    assign Op1_debug = Op1;
+    assign Op2_debug = Op2;
+
 
     // Internal signals
     wire [`ysyx_24120009_DATA_WIDTH-1:0] pc;
@@ -59,7 +67,6 @@ module ysyx_24120009_core (
         .x2(x2),
         .x3(x3)
     );
-    assign pc_debug = pc;
         
         
     // Fetch instruction

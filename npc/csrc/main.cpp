@@ -56,7 +56,10 @@ int main(int argc, char **argv) {
                   << ", PC = 0x" << std::hex << top->pc_debug
                   << ", x1 = " << std::hex << top->x1
                   << ", x2 = " << std::hex << top->x2
-                  << ", x3 = " << std::hex << top->x3 << std::endl;
+                  << ", x3 = " << std::hex << top->x3 
+                  << ", Op1 = " << std::hex << top->Op1_debug
+                  << ", Op2 = " << std::hex << top->Op2_debug
+                  << std::endl;
     }
 
 
