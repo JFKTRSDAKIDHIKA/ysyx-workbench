@@ -1,5 +1,7 @@
 // Control logic for RV32 instructions 
 `include "vsrc/include/ysyx_24120009_defs.vh"
+import "DPI-C" function void simulation_exit();
+
 
 module ysyx_24120009_ControlLogic (
     input  [31:0] inst,       // RV32 instruction input
@@ -137,16 +139,6 @@ module ysyx_24120009_ControlLogic (
                         mem_en_reg   = 1'b0;
                         mem_wen_reg  = 1'b0;
                         wb_sel_reg   = 2'b10;
-                    end
-                    3'b111: begin // jalr
-                        alu_op_reg   = 5'b00000;
-                        op1_sel_reg  = 2'b00;
-                        op2_sel_reg  = 2'b01;
-                        pc_sel_reg   = 3'b001;
-                        rf_we_reg    = 1'b1;
-                        mem_en_reg   = 1'b0;
-                        mem_wen_reg  = 1'b0;
-                        wb_sel_reg   = 2'b01;
                     end
                     // Add more I-type instructions here
                     default: begin
@@ -292,25 +284,7 @@ module ysyx_24120009_ControlLogic (
                         wb_sel_reg   = 2'b10;
                     end
                 endcase
-            end
-            7'b1110011: begin // System instructions
-                case (funct3)
-                    3'b000: begin // EBREAK
-                        pc_sel_reg   = 3'b100;
-                    end
-                    // Add more system instructions here
-                    default: begin
-                        alu_op_reg   = 5'bxxxxx;
-                        op1_sel_reg  = 2'bxx;
-                        op2_sel_reg  = 2'bxx;
-                        pc_sel_reg   = 3'b000;
-                        rf_we_reg    = 1'b0;
-                        mem_en_reg   = 1'b0;
-                        mem_wen_reg  = 1'b0;
-                        wb_sel_reg   = 2'b00;
-                    end
-                endcase
-            end
+            end    
             7'b1100011: begin // B-type instructions
                 case (funct3)
                     3'b000: begin // BEQ
@@ -415,7 +389,45 @@ module ysyx_24120009_ControlLogic (
                             end
                         endcase
                     end
-
+                    default: begin
+                        alu_op_reg   = 5'bxxxxx;
+                        op1_sel_reg  = 2'bxx;
+                        op2_sel_reg  = 2'bxx;
+                        pc_sel_reg   = 3'b000;
+                        rf_we_reg    = 1'b0;
+                        mem_en_reg   = 1'b0;
+                        mem_wen_reg  = 1'b0;
+                        wb_sel_reg   = 2'b00;
+                    end
+                endcase
+            end
+            7'b1100111: begin // I-type instruction (jalr)
+                        alu_op_reg   = 5'b00000;
+                        op1_sel_reg  = 2'b00;
+                        op2_sel_reg  = 2'b01;
+                        pc_sel_reg   = 3'b001;
+                        rf_we_reg    = 1'b1;
+                        mem_en_reg   = 1'b0;
+                        mem_wen_reg  = 1'b0;
+                        wb_sel_reg   = 2'b01;
+            end
+            7'b1110011: begin // System instructions
+                case (funct3)
+                    3'b000: begin // EBREAK
+                        $display("EBREAK: Simulation exiting...");
+                         simulation_exit(); // 通知仿真环境结束仿真
+                    end
+                    // Add more system instructions here
+                    default: begin
+                        alu_op_reg   = 5'bxxxxx;
+                        op1_sel_reg  = 2'bxx;
+                        op2_sel_reg  = 2'bxx;
+                        pc_sel_reg   = 3'b000;
+                        rf_we_reg    = 1'b0;
+                        mem_en_reg   = 1'b0;
+                        mem_wen_reg  = 1'b0;
+                        wb_sel_reg   = 2'b00;
+                    end
                 endcase
             end
             // Add more opcode cases here

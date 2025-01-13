@@ -11,8 +11,8 @@ always @(*) begin
     case (ALUFun)
         5'b00000: Result = A + B; // Addition
         5'b00001: Result = A - B; // Subtraction
-        5'b00010: Result = $signed (A) < $signed (B); // Less than signed
-        5'b00011: Result = A < B; // Less than unsigned
+        5'b00010: Result = {31'b0, ($signed(A) < $signed(B))}; // Less than signed
+        5'b00011: Result = {31'b0, (A < B)}; // Less than unsigned
         5'b00100: Result = A ^ B; // Bitwise XOR
         5'b00101: Result = A | B; // Bitwise OR
         5'b00110: Result = A & B; // Bitwise AND
