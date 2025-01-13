@@ -46,14 +46,13 @@ module ysyx_24120009_IDU (
     // 符号扩展（Sign Extend）
     wire [`ysyx_24120009_DATA_WIDTH-1:0] imm_i_sext;
     wire [`ysyx_24120009_DATA_WIDTH-1:0] imm_s_sext;
-    wire [`ysyx_24120009_DATA_WIDTH-1:0] imm_b_usext;
+    wire [`ysyx_24120009_DATA_WIDTH-1:0] imm_b_sext;
     wire [`ysyx_24120009_DATA_WIDTH-1:0] imm_u_sext;
     wire [`ysyx_24120009_DATA_WIDTH-1:0] imm_j_sext;
 
     assign imm_i_sext = {{20{imm_i[11]}}, imm_i}; 
     assign imm_s_sext = {{20{imm_s[11]}}, imm_s}; 
-    // assign imm_b_sext = {{19{imm_b[12]}}, imm_b, 1'b0}; 
-    assign imm_b_usext = {{19{1'b0}}, imm_b, 1'b0};
+    assign imm_b_sext = {{19{imm_b[11]}}, imm_b, 1'b0}; 
     assign imm_u_sext = {imm_u, 12'b0}; 
     assign imm_j_sext = {{11{imm_j[19]}}, imm_j, 1'b0}; 
 
@@ -63,7 +62,7 @@ module ysyx_24120009_IDU (
     // -----------------------------
     // 计算跳转目标地址
     assign jump_reg_target_o = rs1_data_i + imm_i_sext; // JALR 指令
-    assign br_target_o       = pc_i + imm_b_usext; // 分支指令
+    assign br_target_o       = pc_i + imm_b_sext;
     assign jmp_target_o      = pc_i + imm_j_sext; // JAL 指令
 
 
