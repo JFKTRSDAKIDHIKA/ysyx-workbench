@@ -245,9 +245,14 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root___stl_sequent__TOP__0(Vysyx_2412
             ? 0U : vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf
            [(0x1fU & (vlSelf->imem_rdata >> 0x14U))]);
     vlSelf->ysyx_24120009_core__DOT__control__DOT__inst_key 
-        = ((0x1fc00U & (vlSelf->imem_rdata << 0xaU)) 
-           | ((0x380U & (vlSelf->imem_rdata >> 5U)) 
-              | (vlSelf->imem_rdata >> 0x19U)));
+        = ((0x9dU == ((0x3f8U & (vlSelf->imem_rdata 
+                                 << 3U)) | (7U & (vlSelf->imem_rdata 
+                                                  >> 0xcU))))
+            ? ((0x1fc00U & (vlSelf->imem_rdata << 0xaU)) 
+               | ((0x380U & (vlSelf->imem_rdata >> 5U)) 
+                  | (vlSelf->imem_rdata >> 0x19U)))
+            : ((0x1fc00U & (vlSelf->imem_rdata << 0xaU)) 
+               | (0x380U & (vlSelf->imem_rdata >> 5U))));
     vlSelf->pc_debug = vlSelf->imem_addr;
     vlSelf->ysyx_24120009_core__DOT__ifu__DOT__mux_pc_sel__DOT__i0__DOT__data_list[3U] 
         = (vlSelf->ysyx_24120009_core__DOT__rdata1 
