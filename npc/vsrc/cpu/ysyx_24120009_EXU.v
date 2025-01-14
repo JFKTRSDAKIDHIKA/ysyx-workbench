@@ -19,7 +19,7 @@ module ysyx_24120009_EXU (
       .Result(result)
     );
 
-    MuxKeyWithDefault #(
+    ysyx_24120009_MuxKeyWithDefault #(
         .NR_KEY(4),
         .KEY_LEN(2),
         .DATA_LEN(`ysyx_24120009_DATA_WIDTH)

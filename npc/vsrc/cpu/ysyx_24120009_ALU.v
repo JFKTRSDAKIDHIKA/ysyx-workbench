@@ -20,7 +20,7 @@ module ysyx_24120009_ALU (
     wire [`ysyx_24120009_DATA_WIDTH-1:0] sra_result     = $signed(A) >>> B;       // Arithmetic shift right
 
     // Instantiate MuxKey module
-    MuxKey #(10, 5, `ysyx_24120009_DATA_WIDTH) alu_mux (
+    ysyx_24120009_MuxKey #(10, 5, `ysyx_24120009_DATA_WIDTH) alu_mux (
         .out(Result),
         .key(ALUFun),
         .lut({
