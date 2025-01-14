@@ -31,7 +31,7 @@ module ysyx_24120009_ControlLogic (
     // remain tobe continued!
 
     wire [DATA_LEN-1:0] ctl_signals;
-    MuxKey #(NR_KEY, KEY_LEN, DATA_LEN) funct_mux (
+    ysyx_24120009_MuxKey #(NR_KEY, KEY_LEN, DATA_LEN) funct_mux (
         .out(ctl_signals),
         .key(inst_key),
         .lut({

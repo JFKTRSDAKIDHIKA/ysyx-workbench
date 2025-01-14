@@ -43,7 +43,7 @@ module ysyx_24120009_IFU (
   // -----------------------------
   assign pc_plus4 = pc_o + `ysyx_24120009_PC_STEP;
 
-  MuxKey #(5, 3, `ysyx_24120009_DATA_WIDTH) mux_pc_sel (pc_next, pc_sel, {
+  ysyx_24120009_MuxKey #(5, 3, `ysyx_24120009_DATA_WIDTH) mux_pc_sel (pc_next, pc_sel, {
     3'b000, pc_plus4,
     3'b001, jump_reg_target,
     3'b010, br_target,

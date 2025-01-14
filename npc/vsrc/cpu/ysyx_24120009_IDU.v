@@ -79,7 +79,7 @@ module ysyx_24120009_IDU (
     // 3) 输出给 EXU 和寄存器文件
     // -----------------------------
     assign rd_addr_o       = wb_addr;
-    MuxKey #(2, 2, `ysyx_24120009_DATA_WIDTH) op1_sel_mux (
+    ysyx_24120009_MuxKey #(2, 2, `ysyx_24120009_DATA_WIDTH) op1_sel_mux (
         .out(Op1),
         .key(Op1Sel),
         .lut({
@@ -88,7 +88,7 @@ module ysyx_24120009_IDU (
         })
     );
 
-    MuxKey #(4, 2, `ysyx_24120009_DATA_WIDTH) op2_sel_mux (
+    ysyx_24120009_MuxKey #(4, 2, `ysyx_24120009_DATA_WIDTH) op2_sel_mux (
         .out(Op2),
         .key(Op2Sel),
         .lut({
