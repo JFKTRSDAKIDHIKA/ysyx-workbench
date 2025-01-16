@@ -18,6 +18,7 @@
 #include <device/mmio.h>
 #include <isa.h>
 #include <cpu/cpu.h>
+#include <utils.h> 
 
 
 #if   defined(CONFIG_PMEM_MALLOC)
@@ -52,15 +53,54 @@ void init_mem() {
   Log("physical memory area [" FMT_PADDR ", " FMT_PADDR "]", PMEM_LEFT, PMEM_RIGHT);
 }
 
+// 辅助函数：检查是否需要记录访问信息
+static inline bool need_mtrace(paddr_t addr) {
+#if defined(CONFIG_MTRACE)
+  // 如果超出范围，不记录
+  if (addr < MTRACE_START || addr >= MTRACE_END) {
+    return false;
+  }
+  // 如果在范围内，则返回 true 表示要记录
+  return true;
+#else
+  // 如果没有启用 MTRACE，直接返回 false
+  return false;
+#endif
+}
+
 word_t paddr_read(paddr_t addr, int len) {
-  if (likely(in_pmem(addr))) return pmem_read(addr, len);
+  if (likely(in_pmem(addr))) {
+    word_t data = pmem_read(addr, len);
+
+#ifdef CONFIG_MTRACE
+    if (need_mtrace(addr)) {
+      // 这里可用 printf、log_write 或其他日志机制
+      // 假设我们使用 log_write 做简单输出
+      log_write("[MTRACE] Read  %d bytes at paddr 0x%08"PRIx64" (PC=0x%08"PRIx64"): 0x%016"PRIx64,
+                len, (uint64_t)addr, (uint64_t)cpu.pc, (uint64_t)data);
+    }
+#endif
+
+    return data;
+  }
   IFDEF(CONFIG_DEVICE, return mmio_read(addr, len));
   out_of_bound(addr);
   return 0;
 }
 
 void paddr_write(paddr_t addr, int len, word_t data) {
-  if (likely(in_pmem(addr))) { pmem_write(addr, len, data); return; }
+  if (likely(in_pmem(addr))) {
+    pmem_write(addr, len, data);
+
+#ifdef CONFIG_MTRACE
+    if (need_mtrace(addr)) {
+      log_write("[MTRACE] Write %d bytes at paddr 0x%08"PRIx64" (PC=0x%08"PRIx64"): 0x%016"PRIx64,
+                len, (uint64_t)addr, (uint64_t)cpu.pc, (uint64_t)data);
+    }
+#endif
+
+    return;
+  }
   IFDEF(CONFIG_DEVICE, mmio_write(addr, len, data); return);
   out_of_bound(addr);
 }
