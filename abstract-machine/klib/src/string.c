@@ -46,10 +46,12 @@ char *strcat(char *dst, const char *src) {
 
 // 5. 字符串比较，返回值 < 0 / = 0 / > 0
 int strcmp(const char *s1, const char *s2) {
+  /*
   while (*s1 && (*s1 == *s2)) {
     s1++;
     s2++;
   }
+  */
   return (unsigned char)(*s1) - (unsigned char)(*s2);
 }
 
@@ -111,7 +113,7 @@ void *memcpy(void *out, const void *in, size_t n) {
 
 // 10. 比较两个内存区的前 n 个字节
 int memcmp(const void *s1, const void *s2, size_t n) {
-  /*const unsigned char *p1 = (const unsigned char *)s1;
+  const unsigned char *p1 = (const unsigned char *)s1;
   const unsigned char *p2 = (const unsigned char *)s2;
   while (n--) {
     if (*p1 != *p2) {
@@ -119,7 +121,7 @@ int memcmp(const void *s1, const void *s2, size_t n) {
     }
     p1++; 
     p2++;
-  }*/
+  }
   return 0;
 }
 
