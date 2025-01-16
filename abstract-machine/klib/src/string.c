@@ -46,7 +46,7 @@ char *strcat(char *dst, const char *src) {
 
 // 5. 字符串比较，返回值 < 0 / = 0 / > 0
 int strcmp(const char *s1, const char *s2) {
-  while (*s1 && (*s1 == *s2)) {
+  while ((*s1 != '\0') && (*s1 == *s2)) {
     s1++;
     s2++;
   }
