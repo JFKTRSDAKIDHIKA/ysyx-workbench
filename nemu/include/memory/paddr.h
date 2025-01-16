@@ -34,4 +34,22 @@ static inline bool in_pmem(paddr_t addr) {
 word_t paddr_read(paddr_t addr, int len);
 void paddr_write(paddr_t addr, int len, word_t data);
 
+#ifdef CONFIG_MTRACE
+  #define MTRACE_COND (1)
+#else
+  #define MTRACE_COND (0)
+#endif
+
+#ifdef CONFIG_MTRACE_START
+  #define MTRACE_START (CONFIG_MTRACE_START)
+#else
+  #define MTRACE_START (0)
+#endif
+
+#ifdef CONFIG_MTRACE_END
+  #define MTRACE_END   (CONFIG_MTRACE_END)
+#else
+  #define MTRACE_END   (0xffffffff)
+#endif
+
 #endif
