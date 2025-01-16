@@ -86,6 +86,9 @@ static void execute(uint64_t n) {
   for (;n > 0; n --) {
     exec_once(&s, cpu.pc);
     g_nr_guest_inst ++;
+#ifdef CONFIG_IRINGBUF
+    iringbuf_push(&s);          // 将当前指令信息写入环形缓冲区
+#endif
     trace_and_difftest(&s, cpu.pc);
     if (nemu_state.state != NEMU_RUNNING) break;
     IFDEF(CONFIG_DEVICE, device_update());
@@ -100,6 +103,58 @@ static void statistic() {
   if (g_timer > 0) Log("simulation frequency = " NUMBERIC_FMT " inst/s", g_nr_guest_inst * 1000000 / g_timer);
   else Log("Finish running in less than 1 us and can not calculate the simulation frequency");
 }
+
+#ifdef CONFIG_IRINGBUF
+
+// 环形缓冲区元素，用于保存一条指令的关键信息
+typedef struct {
+  vaddr_t pc;           // 该指令的 PC
+  char logbuf[128];     // 用于存储反汇编结果或调试日志
+} IRingBufItem;
+
+// 定义环形缓冲区数组
+static IRingBufItem iringbuf[IRINGBUF_SIZE] = {0};
+static int iringbuf_index = 0;  // 环形缓冲区当前写入位置
+static bool iringbuf_full = false; // 标记是否已经写满过一轮
+
+static void iringbuf_push(Decode *s) {
+  // 将当前指令信息写入环形缓冲区
+  IRingBufItem *slot = &iringbuf[iringbuf_index];
+  slot->pc = s->pc;
+  // 将 s->logbuf（里存有：PC、机器码、反汇编等信息）复制进来
+  // s->logbuf 由 exec_once() 中组装好
+  strncpy(slot->logbuf, s->logbuf, sizeof(slot->logbuf) - 1);
+  slot->logbuf[sizeof(slot->logbuf) - 1] = '\0';
+
+  // 更新索引
+  iringbuf_index = (iringbuf_index + 1) % IRINGBUF_SIZE;
+  if (iringbuf_index == 0) {
+    iringbuf_full = true;
+  }
+}
+
+// 辅助函数：打印环形缓冲区内容
+// 当出现访存越界或其他错误，需要调试时调用此函数
+static void iringbuf_print() {
+  printf("\n================ IRINGBUF DUMP ================\n");
+
+  // 如果还没写满过，说明缓冲区只有从 0 到 iringbuf_index-1 的内容
+  // 如果已经写满，说明缓冲区已循环过一轮，需要从 iringbuf_index 开始打印
+  int start = iringbuf_full ? iringbuf_index : 0;
+  int count = iringbuf_full ? IRINGBUF_SIZE : iringbuf_index;
+
+  // 逐条输出指令信息，顺序是最先写入 -> 最后写入
+  for (int i = 0; i < count; i++) {
+    int idx = (start + i) % IRINGBUF_SIZE;
+    IRingBufItem *slot = &iringbuf[idx];
+    printf("%2d: %s\n", i, slot->logbuf);
+  }
+
+  printf("================ IRINGBUF END ================\n\n");
+}
+
+#endif // CONFIG_IRINGBUF
+
 
 void assert_fail_msg() {
   isa_reg_display();
@@ -129,6 +184,10 @@ void cpu_exec(uint64_t n) {
     case NEMU_STOP: break;
 
     case NEMU_END: case NEMU_ABORT:
+      // 在程序正常结束或者出现错误（ABORT）时，都可以打印出最近指令
+#ifdef CONFIG_IRINGBUF
+      iringbuf_print(); 
+#endif
       Log("nemu: %s at pc = " FMT_WORD,
           (nemu_state.state == NEMU_ABORT ? ANSI_FMT("ABORT", ANSI_FG_RED) :
            (nemu_state.halt_ret == 0 ? ANSI_FMT("HIT GOOD TRAP", ANSI_FG_GREEN) :
