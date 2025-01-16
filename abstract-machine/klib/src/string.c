@@ -50,7 +50,7 @@ int strcmp(const char *s1, const char *s2) {
     s1++;
     s2++;
   }
-  return (unsigned char)(*s1) - (unsigned char)(*s2);
+  return (*s1) - (*s2);
 }
 
 // 6. 在 n 范围内比较字符串
@@ -63,7 +63,7 @@ int strncmp(const char *s1, const char *s2, size_t n) {
   if (n == 0) {
     return 0; // 前 n 个字符均相等
   }
-  return (*s1) - (*s2);
+  return (unsigned char)(*s1) - (unsigned char)(*s2);
 }
 
 // 7. 将内存区 s 的前 n 个字节设置为 c
