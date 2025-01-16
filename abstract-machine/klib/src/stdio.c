@@ -5,98 +5,116 @@
 
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
-// 辅助函数：将整数转换为字符串
-static void itoa(char *buf, int num) {
-  char temp[12]; // 临时缓冲区，足够存储 32 位整数
+// 工具函数：将整型转换成字符串
+static void int_to_str(int value, char *buf) {
+  // 这里采用简单的方式，将整数转换成字符串并写入buf中
+  // 不考虑 64 位长整型；若有需要再自行扩展
+  // 也没有考虑进制转换需求（比如 %x），如有需要再自行实现
+
+  char temp[32]; // 暂存反转前的数字字符
+  int pos = 0;
+  bool neg = false;
+
+  if (value < 0) {
+    neg = true;
+    value = -value;
+  }
+
+  // 特殊情况：value 为 0
+  if (value == 0) {
+    temp[pos++] = '0';
+  } else {
+    // 将数字逆序存放到 temp 中
+    while (value > 0) {
+      temp[pos++] = (char)('0' + (value % 10));
+      value /= 10;
+    }
+  }
+
+  // 如果是负数，记得加上 '-'
+  if (neg) {
+    temp[pos++] = '-';
+  }
+
+  // 现在 temp 中是逆序存放的数字字符（最后一位是正负号或数字）
+  // 将其反转到 buf 中
   int i = 0;
-  int is_negative = 0;
-
-  if (num < 0) {
-    is_negative = 1;
-    num = -num; // 转为正数
+  while (pos > 0) {
+    buf[i++] = temp[--pos];
   }
-
-  // 将数字转换为字符串（反向存储）
-  do {
-    temp[i++] = '0' + (num % 10);
-    num /= 10;
-  } while (num > 0);
-
-  // 如果是负数，添加负号
-  if (is_negative) {
-    temp[i++] = '-';
-  }
-
-  // 反转到最终缓冲区
-  for (int j = i - 1; j >= 0; j--) {
-    *buf++ = temp[j];
-  }
-
-  *buf = '\0'; // 添加字符串结束符
+  buf[i] = '\0';
 }
 
-int printf(const char *fmt, ...) {
-  panic("Not implemented");
-}
-
-// 核心函数：vsprintf
+// vsprintf 函数负责根据可变参数列表将结果写到 out 中
 int vsprintf(char *out, const char *fmt, va_list ap) {
-  char *str = out; // 输出缓冲区指针
+  char *str = out;
   const char *p = fmt;
-
   while (*p) {
     if (*p == '%') {
-      p++; // 跳过 '%'
-
+      p++;
       switch (*p) {
-        case 's': { // 字符串
-          const char *arg_str = va_arg(ap, const char *);
-          while (*arg_str) {
-            *str++ = *arg_str++;
+        case 'd': {
+          int val = va_arg(ap, int);
+          char buf[32];
+          int_to_str(val, buf);
+          // 将 buf 中的内容复制到 str
+          char *b = buf;
+          while (*b) {
+            *str++ = *b++;
           }
           break;
         }
-        case 'd': { // 十进制整数
-          int arg_int = va_arg(ap, int);
-          char num_buf[12]; // 足够存储 32 位整数
-          itoa(num_buf, arg_int);
-          char *num_p = num_buf;
-          while (*num_p) {
-            *str++ = *num_p++;
+        case 's': {
+          char *s = va_arg(ap, char *);
+          if (s == NULL) s = "(null)";
+          while (*s) {
+            *str++ = *s++;
           }
           break;
         }
-        default: // 未知格式符，直接输出
+        // 如果有需要支持更多的格式，例如 %c、%x、%f 等
+        // 可以在这里添加对应的逻辑
+        default: {
+          // 遇到未知的格式化符号，直接原样输出
           *str++ = '%';
           *str++ = *p;
           break;
+        }
       }
     } else {
-      // 普通字符，直接拷贝
+      // 普通字符，直接输出
       *str++ = *p;
     }
     p++;
   }
-
-  *str = '\0'; // 添加字符串结束符
-  return str - out; // 返回写入的字符数
+  *str = '\0';              // 在末尾补上 '\0'
+  return (int)(str - out);  // 返回输出的字符数，不包括末尾的 '\0'
 }
 
-// 包装函数：sprintf
+// sprintf 函数：先启动可变参数，然后调用 vsprintf
 int sprintf(char *out, const char *fmt, ...) {
   va_list ap;
   va_start(ap, fmt);
-  int written = vsprintf(out, fmt, ap);
+  int ret = vsprintf(out, fmt, ap);
   va_end(ap);
-  return written;
+  return ret;
+}
+
+// 由于只需要通过 hello-str 测试，你也可以暂时不实现以下函数
+// 或者简单地调用 panic("Not implemented") 
+int printf(const char *fmt, ...) {
+  panic("Not implemented");
+  return 0;
 }
 
 int snprintf(char *out, size_t n, const char *fmt, ...) {
   panic("Not implemented");
+  return 0;
 }
 
 int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
   panic("Not implemented");
+  return 0;
 }
 
 #endif
