@@ -15,6 +15,7 @@
 
 #include <isa.h>
 #include <memory/paddr.h>
+#include <elf.h>
 
 void init_rand();
 void init_log(const char *log_file);
@@ -23,6 +24,140 @@ void init_difftest(char *ref_so_file, long img_size, int port);
 void init_device();
 void init_sdb(); // 初始化一个简单的调试器（Simple Debugger）。
 void init_disasm();
+
+#define MAX_FUNC 1000  
+
+typedef struct {
+  uint32_t start;  
+  uint32_t size;   
+  char *name;      
+} FuncSymbol;
+
+static FuncSymbol func_table[MAX_FUNC];
+static int nr_func = 0;  
+
+// static bool ftrace_enabled = false;
+
+// helper function to find function name by address
+const char* find_func(uint32_t addr) {
+  for(int i = 0; i < nr_func; i++) {
+    uint32_t start = func_table[i].start;
+    uint32_t end   = start + func_table[i].size;
+    if (addr >= start && addr < end) {
+      return func_table[i].name;
+    }
+  }
+  return "???";
+}
+
+static void parse_elf_symbols(const char *elf_file) {
+  FILE *fp = fopen(elf_file, "rb");
+  if (!fp) {
+    printf("Cannot open ELF file: %s\n", elf_file);
+    return;
+  }
+
+  // 读取 ELF Header
+  Elf32_Ehdr ehdr;
+  if (fread(&ehdr, sizeof(Elf32_Ehdr), 1, fp) != 1) {
+    fprintf(stderr, "Error reading ELF header\n");
+    fclose(fp);
+    return;
+  }
+  // 检查 magic
+  if (memcmp(ehdr.e_ident, ELFMAG, SELFMAG) != 0) {
+    printf("Not a valid ELF file: %s\n", elf_file);
+    fclose(fp);
+    return;
+  }
+
+  // 根据 ELF Header 找到 Section Header Table 的起始位置
+  // e_shoff 是 Section Header Table 的文件偏移
+  // e_shnum 是 Section Header 数目
+  // e_shstrndx 是 Section Header 字符串表所在的下标
+  Elf32_Shdr *sh_table = (Elf32_Shdr *)malloc(ehdr.e_shnum * sizeof(Elf32_Shdr));
+  fseek(fp, ehdr.e_shoff, SEEK_SET);
+  if (fread(sh_table, sizeof(Elf32_Shdr), ehdr.e_shnum, fp) != ehdr.e_shnum) {
+    fprintf(stderr, "Error reading section header table\n");
+    free(sh_table);
+    fclose(fp);
+    return;
+  }
+
+  // 首先找 .symtab 和 .strtab 所在的下标及信息
+  int symtab_idx = -1, strtab_idx = -1;
+  for(int i = 0; i < ehdr.e_shnum; i++) {
+    // 这里需要先获取节名，但为了简化，这里只做一个“通过类型判断”的示例
+    // 你也可以通过读取 e_shstrndx 对应的字符串表，再拿 sh_name 来真正比对名称
+    if(sh_table[i].sh_type == SHT_SYMTAB) {
+      symtab_idx = i;
+    }
+    else if(sh_table[i].sh_type == SHT_STRTAB && i != ehdr.e_shstrndx) {
+      // 注意有些 ELF 里不止一个 STRTAB（比如 .shstrtab），
+      // 所以要排除 e_shstrndx 的那个（它是节名表，不是符号名表）。
+      strtab_idx = i;
+    }
+  }
+
+  if(symtab_idx == -1 || strtab_idx == -1) {
+    printf("No .symtab or .strtab found in ELF. ftrace will be disabled.\n");
+    free(sh_table);
+    fclose(fp);
+    return;
+  }
+
+  // 读取 .symtab
+  Elf32_Shdr symtab_hdr = sh_table[symtab_idx];
+  Elf32_Shdr strtab_hdr = sh_table[strtab_idx];
+
+  Elf32_Sym *symtab = (Elf32_Sym *)malloc(symtab_hdr.sh_size);
+  fseek(fp, symtab_hdr.sh_offset, SEEK_SET);
+  if (fread(symtab, symtab_hdr.sh_size, 1, fp) != 1) {
+    fprintf(stderr, "Error reading symbol table\n");
+    free(sh_table);
+    free(symtab);
+    fclose(fp);
+    return;
+  }
+
+  // 读取 .strtab
+  char *strtab = (char *)malloc(strtab_hdr.sh_size);
+  fseek(fp, strtab_hdr.sh_offset, SEEK_SET);
+  if (fread(strtab, strtab_hdr.sh_size, 1, fp) != 1) {
+    fprintf(stderr, "Error reading string table\n");
+    free(sh_table);
+    free(symtab);
+    free(strtab);
+    fclose(fp);
+    return;
+  }
+
+  // 遍历符号表，搜集 Type == STT_FUNC 的符号信息
+  int symbol_count = symtab_hdr.sh_size / sizeof(Elf32_Sym);
+  for(int i = 0; i < symbol_count; i++) {
+    if (ELF32_ST_TYPE(symtab[i].st_info) == STT_FUNC) {
+      // 函数名
+      char *func_name = &strtab[symtab[i].st_name];
+      uint32_t func_addr = symtab[i].st_value;
+      uint32_t func_size = symtab[i].st_size;
+      if(nr_func < MAX_FUNC && func_size > 0) {
+        func_table[nr_func].start = func_addr;
+        func_table[nr_func].size  = func_size;
+        func_table[nr_func].name  = strdup(func_name); // 拷贝一份函数名
+        nr_func++;
+      }
+    }
+  }
+
+  printf("Found %d functions in ELF.\n", nr_func);
+
+  free(symtab);
+  free(strtab);
+  free(sh_table);
+  fclose(fp);
+
+  // ftrace_enabled = true;
+}
 
 static void welcome() {
   Log("Trace: %s", MUXDEF(CONFIG_TRACE, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
@@ -116,6 +251,12 @@ void init_monitor(int argc, char *argv[]) {
 
   /* Perform ISA dependent initialization. */
   init_isa();
+
+  // 在加载镜像之前(或之后)先解析 ELF 的符号表
+  // 因为加载镜像只需要把代码内容放到内存，而 ftrace 解析需要更完整的文件
+  if (img_file) {
+    parse_elf_symbols(img_file);
+  }
 
   /* Load the image to memory. This will overwrite the built-in image. */
   long img_size = load_img();
