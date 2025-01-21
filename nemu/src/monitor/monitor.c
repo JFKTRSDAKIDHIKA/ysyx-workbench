@@ -102,6 +102,7 @@ static void parse_elf_symbols(const char *elf_file) {
       // 注意有些 ELF 里不止一个 STRTAB（比如 .shstrtab），
       // 所以要排除 e_shstrndx 的那个（它是节名表，不是符号名表）。
       strtab_idx = i;
+      printf("Found .strtab at index %d\n", i);
     }
   }
 
