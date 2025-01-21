@@ -74,8 +74,6 @@ word_t paddr_read(paddr_t addr, int len) {
 
 #ifdef CONFIG_MTRACE
     if (need_mtrace(addr)) {
-      printf("Read  %d bytes at paddr 0x%08"PRIx64" (PC=0x%08"PRIx64"): 0x%016"PRIx64"\n",
-                len, (uint64_t)addr, (uint64_t)cpu.pc, (uint64_t)data);
       log_write("[MTRACE] Read  %d bytes at paddr 0x%08"PRIx64" (PC=0x%08"PRIx64"): 0x%016"PRIx64,
                 len, (uint64_t)addr, (uint64_t)cpu.pc, (uint64_t)data);
     }
