@@ -27,6 +27,7 @@ class Vysyx_24120009_core VL_NOT_FINAL : public VerilatedModel {
     // propagate new values into/out from the Verilated model.
     VL_IN8(&clk,0,0);
     VL_IN8(&rst,0,0);
+    VL_OUT8(&is_ebreak_debug,0,0);
     VL_OUT(&imem_addr,31,0);
     VL_IN(&imem_rdata,31,0);
     VL_OUT(&x1,31,0);
@@ -35,6 +36,8 @@ class Vysyx_24120009_core VL_NOT_FINAL : public VerilatedModel {
     VL_OUT(&pc_debug,31,0);
     VL_OUT(&Op1_debug,31,0);
     VL_OUT(&Op2_debug,31,0);
+    VL_OUT(&inst_debug,31,0);
+    VL_OUT(&reg_write_data_debug,31,0);
 
     // CELLS
     // Public to allow access to /* verilator public */ items.

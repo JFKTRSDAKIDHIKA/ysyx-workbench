@@ -19,15 +19,18 @@ module ysyx_24120009_ControlLogic (
 
     localparam DATA_LEN  = 17;  // Length of control signals
     localparam KEY_LEN   = 17;  // Length of inst key
-    localparam NR_KEY    = 24;  // Number of keys
+    localparam NR_KEY    = 25;  // Number of keys
 
     wire [6:0] opcode = inst[6:0];
     wire [2:0] funct3 = inst[14:12];
     wire [6:0] funct7 = inst[31:25];
 
     wire [KEY_LEN-1:0] inst_key;
-    assign inst_key = ({opcode, funct3} == 10'b0010011_101) ? {opcode, funct3, funct7} : {opcode, funct3, 7'b0};
-    // assign inst_key = ({opcode, funct3} == 10'b0110011_101) ? {opcode, funct3, funct7} : {opcode, funct3, 7'b0};
+    assign inst_key = ({opcode, funct3} == 10'b1100111_000) ? {opcode, funct3, 7'b0} : 
+                  (opcode == 7'b1101111) ? {opcode, 3'b0, 7'b0} : 
+                  ({opcode, funct3} == 10'b0010011_101) ? {opcode, funct3, funct7} : 
+                  {opcode, funct3, funct7};
+
     // remain tobe continued!
 
     wire [DATA_LEN-1:0] ctl_signals;
@@ -61,6 +64,8 @@ module ysyx_24120009_ControlLogic (
         17'b1100011_000_0000000, 17'b00000_00_00_000_0_0_0_00, // BEQ
         17'b1100011_100_0000000, 17'b00000_00_00_000_0_0_0_00, // BLT
         17'b1100011_110_0000000, 17'b00000_00_00_000_0_0_0_00, // BLTU
+        // J-type instructions(1)
+        17'b1101111_000_0000000, 17'b00000_00_00_011_1_0_0_01, // JAL
         // JALR instruction(1)
         17'b1100111_000_0000000, 17'b00000_00_01_001_1_0_0_01, // JALR
         // ebreak instruction(1)
@@ -68,7 +73,8 @@ module ysyx_24120009_ControlLogic (
         })
     );
 
-    wire is_ebreak_internal = (inst_key == 17'b1110011_000_0000000);
+    //wire is_ebreak_internal = (inst == 32'b00000000000100000000000001110011);
+    wire is_ebreak_internal = (inst == 32'h00100073);
     assign is_ebreak = is_ebreak_internal;
 
     // Decode control signals

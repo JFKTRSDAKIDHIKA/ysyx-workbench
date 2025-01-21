@@ -17,7 +17,7 @@ $(EXEC): $(TOP_MODULE) $(CSRC)
 # 运行仿真
 sim: $(EXEC)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
-	$(EXEC)
+	$(EXEC) $(IMG)
 
 # 清理生成文件
 clean:

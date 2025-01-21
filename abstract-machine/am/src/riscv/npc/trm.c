@@ -15,6 +15,7 @@ void putch(char ch) {
 }
 
 void halt(int code) {
+  __asm__ volatile("ebreak"); 
   while (1);
 }
 

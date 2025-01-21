@@ -12,13 +12,19 @@ module ysyx_24120009_core (
     output [`ysyx_24120009_DATA_WIDTH-1:0] x3,
     output [`ysyx_24120009_DATA_WIDTH-1:0] pc_debug,
     output [`ysyx_24120009_DATA_WIDTH-1:0] Op1_debug,
-    output [`ysyx_24120009_DATA_WIDTH-1:0] Op2_debug
+    output [`ysyx_24120009_DATA_WIDTH-1:0] Op2_debug,
+    output [31:0] inst_debug,
+    output [`ysyx_24120009_DATA_WIDTH-1:0] reg_write_data_debug,
+    output is_ebreak_debug
 );
 
     // Debug signal declaration
     assign pc_debug = pc;
     assign Op1_debug = Op1;
     assign Op2_debug = Op2;
+    assign inst_debug = inst;
+    assign reg_write_data_debug = reg_write_data;
+    assign is_ebreak_debug = is_ebreak;
 
     // Internal signals
     wire [`ysyx_24120009_DATA_WIDTH-1:0] pc;
@@ -90,7 +96,8 @@ module ysyx_24120009_core (
         .pc_wen(1'b1),
         .pc_o(pc),
         .inst_o(inst),
-        .inst_i(imem_rdata)
+        .inst_i(imem_rdata),
+        .pc_plus4_o(pc_plus4)
     );
     assign imem_addr = pc;
 

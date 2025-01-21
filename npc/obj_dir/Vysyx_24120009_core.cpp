@@ -13,6 +13,7 @@ Vysyx_24120009_core::Vysyx_24120009_core(VerilatedContext* _vcontextp__, const c
     , vlSymsp{new Vysyx_24120009_core__Syms(contextp(), _vcname__, this)}
     , clk{vlSymsp->TOP.clk}
     , rst{vlSymsp->TOP.rst}
+    , is_ebreak_debug{vlSymsp->TOP.is_ebreak_debug}
     , imem_addr{vlSymsp->TOP.imem_addr}
     , imem_rdata{vlSymsp->TOP.imem_rdata}
     , x1{vlSymsp->TOP.x1}
@@ -21,6 +22,8 @@ Vysyx_24120009_core::Vysyx_24120009_core(VerilatedContext* _vcontextp__, const c
     , pc_debug{vlSymsp->TOP.pc_debug}
     , Op1_debug{vlSymsp->TOP.Op1_debug}
     , Op2_debug{vlSymsp->TOP.Op2_debug}
+    , inst_debug{vlSymsp->TOP.inst_debug}
+    , reg_write_data_debug{vlSymsp->TOP.reg_write_data_debug}
     , rootp{&(vlSymsp->TOP)}
 {
     // Register model with the context
