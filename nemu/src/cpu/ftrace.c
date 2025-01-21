@@ -1,3 +1,7 @@
+#include <cpu/cpu.h>
+#include <cpu/ifetch.h>
+#include <cpu/decode.h>
+
 #ifdef CONFIG_FTRACE
 
 #include <stdio.h>
