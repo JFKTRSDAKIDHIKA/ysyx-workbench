@@ -260,6 +260,8 @@ void init_monitor(int argc, char *argv[]) {
     parse_elf_symbols(img_file);
   }
 
+  printf("img_file points to: %s\n", img_file);
+
   /* Initialize differential testing. */
   init_difftest(diff_so_file, img_size, difftest_port);
 
