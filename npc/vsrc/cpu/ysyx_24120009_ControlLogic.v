@@ -19,7 +19,7 @@ module ysyx_24120009_ControlLogic (
 
     localparam DATA_LEN  = 17;  // Length of control signals
     localparam KEY_LEN   = 17;  // Length of inst key
-    localparam NR_KEY    = 24;  // Number of keys
+    localparam NR_KEY    = 25;  // Number of keys
 
     wire [6:0] opcode = inst[6:0];
     wire [2:0] funct3 = inst[14:12];

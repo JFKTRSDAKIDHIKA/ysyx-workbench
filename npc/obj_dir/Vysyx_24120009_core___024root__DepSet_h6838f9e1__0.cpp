@@ -77,14 +77,11 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root___ico_sequent__TOP__0(Vysyx_241
         = vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf
         [(0x1fU & (vlSelf->imem_rdata >> 0x14U))];
     vlSelf->ysyx_24120009_core__DOT__control__DOT__inst_key 
-        = ((0x9dU == ((0x3f8U & (vlSelf->imem_rdata 
-                                 << 3U)) | (7U & (vlSelf->imem_rdata 
-                                                  >> 0xcU))))
-            ? ((0x1fc00U & (vlSelf->imem_rdata << 0xaU)) 
-               | ((0x380U & (vlSelf->imem_rdata >> 5U)) 
-                  | (vlSelf->imem_rdata >> 0x19U)))
+        = ((0x6fU == (0x7fU & vlSelf->imem_rdata)) ? 
+           (0x1fc00U & (vlSelf->imem_rdata << 0xaU))
             : ((0x1fc00U & (vlSelf->imem_rdata << 0xaU)) 
-               | (0x380U & (vlSelf->imem_rdata >> 5U))));
+               | ((0x380U & (vlSelf->imem_rdata >> 5U)) 
+                  | (vlSelf->imem_rdata >> 0x19U))));
     vlSelf->ysyx_24120009_core__DOT__ifu__DOT__mux_pc_sel__DOT__i0__DOT__data_list[3U] 
         = (vlSelf->ysyx_24120009_core__DOT__rdata1 
            + vlSelf->ysyx_24120009_core__DOT__idu__DOT__imm_i_sext);
@@ -231,6 +228,12 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root___ico_sequent__TOP__0(Vysyx_241
                           == vlSelf->ysyx_24120009_core__DOT__control__DOT__funct_mux__DOT__i0__DOT__key_list
                           [0x17U]))) & vlSelf->ysyx_24120009_core__DOT__control__DOT__funct_mux__DOT__i0__DOT__data_list
               [0x17U]));
+    vlSelf->ysyx_24120009_core__DOT__control__DOT__funct_mux__DOT__i0__DOT__lut_out 
+        = (vlSelf->ysyx_24120009_core__DOT__control__DOT__funct_mux__DOT__i0__DOT__lut_out 
+           | ((- (IData)((vlSelf->ysyx_24120009_core__DOT__control__DOT__inst_key 
+                          == vlSelf->ysyx_24120009_core__DOT__control__DOT__funct_mux__DOT__i0__DOT__key_list
+                          [0x18U]))) & vlSelf->ysyx_24120009_core__DOT__control__DOT__funct_mux__DOT__i0__DOT__data_list
+              [0x18U]));
     vlSelf->ysyx_24120009_core__DOT__control__DOT__ctl_signals 
         = vlSelf->ysyx_24120009_core__DOT__control__DOT__funct_mux__DOT__i0__DOT__lut_out;
     vlSelf->ysyx_24120009_core__DOT__ifu__DOT__mux_pc_sel__DOT__i0__DOT__lut_out 
