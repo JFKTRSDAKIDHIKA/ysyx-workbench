@@ -16,7 +16,7 @@ extern "C" {
 
 
     // DPI IMPORTS
-    // DPI import at vsrc/cpu/ysyx_24120009_core.v:53:34
+    // DPI import at vsrc/cpu/ysyx_24120009_core.v:55:34
     extern void simulation_exit();
 
 #ifdef __cplusplus
