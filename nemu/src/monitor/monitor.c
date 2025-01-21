@@ -273,12 +273,11 @@ void init_monitor(int argc, char *argv[]) {
   /* Load the image to memory. This will overwrite the built-in image. */
   long img_size = load_img();
 
-  if (img_file) {
-    parse_elf_symbols(img_file);
-  }
-
   set_elf_file_from_img_file();
   printf("elf_file points to: %s\n", elf_file);
+  if (elf_file != NULL) {
+    parse_elf_symbols(elf_file);
+  }
 
   /* Initialize differential testing. */
   init_difftest(diff_so_file, img_size, difftest_port);
