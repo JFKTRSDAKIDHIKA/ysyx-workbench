@@ -209,7 +209,7 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root___stl_sequent__TOP__0(Vysyx_2412
     vlSelf->x3 = vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf
         [3U];
     vlSelf->inst_debug = vlSelf->imem_rdata;
-    vlSelf->is_ebreak_debug = (0x1000073U == vlSelf->imem_rdata);
+    vlSelf->is_ebreak_debug = (0x100073U == vlSelf->imem_rdata);
     vlSelf->imem_addr = vlSelf->ysyx_24120009_core__DOT__pc;
     vlSelf->ysyx_24120009_core__DOT__ifu__DOT__mux_pc_sel__DOT__i0__DOT__data_list[4U] 
         = ((IData)(4U) + vlSelf->ysyx_24120009_core__DOT__pc);

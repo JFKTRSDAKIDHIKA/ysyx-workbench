@@ -84,7 +84,7 @@ int main(int argc, char **argv) {
                   << ", INST = " << std::hex << top->inst_debug
                   << std::endl;
         cycle++;
-    } while(!Verilated::gotFinish() && cycle <=50);
+    } while(!Verilated::gotFinish());
 
 
     delete top;

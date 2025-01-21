@@ -15,7 +15,7 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root___ico_sequent__TOP__0(Vysyx_241
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vysyx_24120009_core___024root___ico_sequent__TOP__0\n"); );
     // Body
     vlSelf->inst_debug = vlSelf->imem_rdata;
-    vlSelf->is_ebreak_debug = (0x1000073U == vlSelf->imem_rdata);
+    vlSelf->is_ebreak_debug = (0x100073U == vlSelf->imem_rdata);
     vlSelf->ysyx_24120009_core__DOT__ifu__DOT__mux_pc_sel__DOT__i0__DOT__data_list[1U] 
         = (vlSelf->ysyx_24120009_core__DOT__pc + ((
                                                    (- (IData)(
