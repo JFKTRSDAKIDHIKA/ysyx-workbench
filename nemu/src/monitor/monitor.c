@@ -96,6 +96,7 @@ static void parse_elf_symbols(const char *elf_file) {
     // 你也可以通过读取 e_shstrndx 对应的字符串表，再拿 sh_name 来真正比对名称
     if(sh_table[i].sh_type == SHT_SYMTAB) {
       symtab_idx = i;
+      printf("Found .symtab at index %d\n", i);
     }
     else if(sh_table[i].sh_type == SHT_STRTAB && i != ehdr.e_shstrndx) {
       // 注意有些 ELF 里不止一个 STRTAB（比如 .shstrtab），
