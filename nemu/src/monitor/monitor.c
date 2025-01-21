@@ -25,20 +25,20 @@ void init_device();
 void init_sdb(); // 初始化一个简单的调试器（Simple Debugger）。
 void init_disasm();
 
-#define MAX_FUNC 1000  
-
 static char *log_file = NULL;
 static char *diff_so_file = NULL;
 static char *img_file = NULL;
-static char *elf_file = NULL;
 static int difftest_port = 1234;
 
+
+#ifdef CONFIG_FTRACE
+#define MAX_FUNC 1000  
 typedef struct {
   uint32_t start;  
   uint32_t size;   
   char *name;      
 } FuncSymbol;
-
+static char *elf_file = NULL;
 static FuncSymbol func_table[MAX_FUNC];
 static int nr_func = 0;  
 
@@ -174,6 +174,7 @@ void set_elf_file_from_img_file() {
         printf("Error: img_file does not have the expected '.bin' extension.\n");
     }
 }
+#endif
 
 static void welcome() {
   Log("Trace: %s", MUXDEF(CONFIG_TRACE, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
@@ -266,11 +267,13 @@ void init_monitor(int argc, char *argv[]) {
   /* Load the image to memory. This will overwrite the built-in image. */
   long img_size = load_img();
 
+#ifdef CONFIG_FTRACE
   set_elf_file_from_img_file();
   printf("elf_file points to: %s\n", elf_file);
   if (elf_file != NULL) {
     parse_elf_symbols(elf_file);
   }
+#endif
 
   /* Initialize differential testing. */
   init_difftest(diff_so_file, img_size, difftest_port);

@@ -1,3 +1,5 @@
+#ifdef CONFIG_FTRACE
+
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
@@ -59,3 +61,5 @@ void ftrace_ret(uint32_t ret_site) {
   print_indent();
   printf("0x%08x: ret  [%s]\n", ret_site, popped);
 }
+
+#endif // CONFIG_FTRACE

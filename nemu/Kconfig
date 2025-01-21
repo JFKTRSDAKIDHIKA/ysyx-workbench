@@ -185,6 +185,10 @@ config MTRACE_END
   help
     Only log memory access below this address (exclusive).
 
+config FTRACE
+  bool "Enable fuction trace (ftrace)"
+  default y
+
 config DIFFTEST
   depends on TARGET_NATIVE_ELF
   bool "Enable differential testing"

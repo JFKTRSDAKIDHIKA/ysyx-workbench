@@ -100,16 +100,14 @@ static int decode_exec(Decode *s) {
        RISC-V 中常用 ret 的机器码是 jalr x0, x1, 0 
        即 rd=0, rs1=1, imm=0
     */
+#ifdef CONFIG_FTRACE
     if (rd == 0 && s->rs1 == 1 && imm == 0) {
-      // 这是 ret
       ftrace_ret(s->pc);
     }
     else if (rd == 1) {
-      // 这是 call (jalr x1, ...)
-      // 目标地址就是 src1 + imm
       ftrace_call(s->pc, src1 + imm);
     }
-    // 原先对寄存器的赋值与跳转保持不变
+#endif
     R(rd) = s->pc + 4;
     s->dnpc = src1 + imm;
   );
@@ -129,12 +127,12 @@ static int decode_exec(Decode *s) {
   INSTPAT("??????? ????? ????? 010 ????? 01000 11", sw     , S, Mw(src1 + imm, 4, src2));
   INSTPAT("??????? ????? ????? 001 ????? 01000 11", sh     , S, Mw(src1 + imm, 2, src2));
 
-  // 匹配 jal
   INSTPAT("??????? ????? ????? ??? ????? 11011 11", jal, J, 
-    // 若 rd == 1，则是 call
+#ifdef CONFIG_FTRACE
     if (rd == 1) {
       ftrace_call(s->pc, s->pc + imm);
     }
+#endif
     R(rd) = s->pc + 4;
     s->dnpc = s->pc + imm;
   );
