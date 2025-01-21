@@ -5,9 +5,9 @@
 #include <svdpi.h>
 #include <fstream>
 
-// 定义结束仿真的函数
+// define the DPI-C functions
 extern "C" void simulation_exit() {
-    Verilated::gotFinish(true); // 通知仿真器结束
+    Verilated::gotFinish(true); 
 }
 
 void pmem_write(uint32_t address, uint32_t data);
@@ -46,6 +46,11 @@ void reset(Vysyx_24120009_core* top, int cycles) {
 int main(int argc, char **argv) {
     Verilated::commandArgs(argc, argv);
     Vysyx_24120009_core* top = new Vysyx_24120009_core;
+
+    std::cout << "argc: " << argc << std::endl;
+    for (int i = 0; i < argc; ++i) {
+        std::cout << "argv[" << i << "]: " << argv[i] << std::endl;
+    }
 
     // 检查是否传入了程序路径
     if (argc < 2) {
