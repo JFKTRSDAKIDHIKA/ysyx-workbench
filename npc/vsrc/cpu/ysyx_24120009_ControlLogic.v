@@ -73,7 +73,7 @@ module ysyx_24120009_ControlLogic (
         })
     );
 
-    wire is_ebreak_internal = (inst == 32'h00100073);
+    wire is_ebreak_internal = (inst == 32'b000000000001_00000_000_000_00000_01110011);
     assign is_ebreak = is_ebreak_internal;
 
     // Decode control signals
