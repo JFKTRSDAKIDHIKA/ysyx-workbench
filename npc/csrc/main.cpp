@@ -3,6 +3,7 @@
 #include <ostream>
 #include <iostream>
 #include <svdpi.h>
+#include <fstream>
 
 // 定义结束仿真的函数
 extern "C" void simulation_exit() {
@@ -12,18 +13,21 @@ extern "C" void simulation_exit() {
 void pmem_write(uint32_t address, uint32_t data);
 uint32_t pmem_read(uint32_t address);
 
-void load_instructions() {
-    // Minimal test program using only x0, x1, x2, and x3
-    pmem_write(0, 0xfff00093); // addi x1, x0, -1   ; x1 = -1
-    pmem_write(4, 0x00208113); // addi x2, x1, 2    ; x2 = x1 + 2
-    pmem_write(8, 0x00310193); // addi x3, x2, 3    ; x3 = x2 + 3
-    pmem_write(12, 0x002182b3); // add x5, x3, x2   ; x3 = x3 + x2
-    pmem_write(16, 0x00100073); // ebreak           ; End simulation
+// 加载程序到存储器中
+void load_program(const char *program_path) {
+    std::ifstream program_file(program_path, std::ios::binary);
+    if (!program_file) {
+        std::cerr << "Error opening program file: " << program_path << std::endl;
+        return;
+    }
 
-    
+    uint32_t address = 0x80000000; // 从内存基地址开始加载
+    uint32_t data;
+    while (program_file.read(reinterpret_cast<char*>(&data), sizeof(data))) {
+        pmem_write(address, data);
+        address += sizeof(data); // 增加偏移量，写入下一条指令
+    }
 }
-
-
 
 void tick(Vysyx_24120009_core* top) {
     top->clk = 0; top->eval();
@@ -43,8 +47,14 @@ int main(int argc, char **argv) {
     Verilated::commandArgs(argc, argv);
     Vysyx_24120009_core* top = new Vysyx_24120009_core;
 
-    // 初始化存储器并加载指令
-    load_instructions();
+    // 检查是否传入了程序路径
+    if (argc < 2) {
+        std::cerr << "Program path not provided!" << std::endl;
+        return -1;
+    }
+
+    // 从命令行参数加载程序
+    load_program(argv[1]);
 
     // Reset
     reset(top, 10); // 复位保持 10 个周期
