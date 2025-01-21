@@ -68,8 +68,8 @@ static void parse_elf_symbols(const char *elf_file) {
   // check magic
   if (memcmp(ehdr.e_ident, ELFMAG, SELFMAG) != 0) {
     printf("Not a valid ELF file: %s\n", elf_file);
-    fclose(fp);
-    return;
+    //fclose(fp);
+    //return;
   }
 
   // 根据 ELF Header 找到 Section Header Table 的起始位置
