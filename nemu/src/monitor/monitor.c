@@ -89,18 +89,13 @@ static void parse_elf_symbols(const char *elf_file) {
     return;
   }
 
-  // 首先找 .symtab 和 .strtab 所在的下标及信息
   int symtab_idx = -1, strtab_idx = -1;
   for(int i = 0; i < ehdr.e_shnum; i++) {
-    // 这里需要先获取节名，但为了简化，这里只做一个“通过类型判断”的示例
-    // 你也可以通过读取 e_shstrndx 对应的字符串表，再拿 sh_name 来真正比对名称
     if(sh_table[i].sh_type == SHT_SYMTAB) {
       symtab_idx = i;
       printf("Found .symtab at index %d\n", i);
     }
     else if(sh_table[i].sh_type == SHT_STRTAB && i != ehdr.e_shstrndx) {
-      // 注意有些 ELF 里不止一个 STRTAB（比如 .shstrtab），
-      // 所以要排除 e_shstrndx 的那个（它是节名表，不是符号名表）。
       strtab_idx = i;
       printf("Found .strtab at index %d\n", i);
     }
@@ -113,10 +108,10 @@ static void parse_elf_symbols(const char *elf_file) {
     return;
   }
 
-  // 读取 .symtab
   Elf32_Shdr symtab_hdr = sh_table[symtab_idx];
   Elf32_Shdr strtab_hdr = sh_table[strtab_idx];
 
+  // Read Symbol Table
   Elf32_Sym *symtab = (Elf32_Sym *)malloc(symtab_hdr.sh_size);
   fseek(fp, symtab_hdr.sh_offset, SEEK_SET);
   if (fread(symtab, symtab_hdr.sh_size, 1, fp) != 1) {
@@ -127,7 +122,7 @@ static void parse_elf_symbols(const char *elf_file) {
     return;
   }
 
-  // 读取 .strtab
+  // Read String Table
   char *strtab = (char *)malloc(strtab_hdr.sh_size);
   fseek(fp, strtab_hdr.sh_offset, SEEK_SET);
   if (fread(strtab, strtab_hdr.sh_size, 1, fp) != 1) {
@@ -139,18 +134,18 @@ static void parse_elf_symbols(const char *elf_file) {
     return;
   }
 
-  // 遍历符号表，搜集 Type == STT_FUNC 的符号信息
+  // Iterate through symbol table to find functions
   int symbol_count = symtab_hdr.sh_size / sizeof(Elf32_Sym);
   for(int i = 0; i < symbol_count; i++) {
     if (ELF32_ST_TYPE(symtab[i].st_info) == STT_FUNC) {
-      // 函数名
       char *func_name = &strtab[symtab[i].st_name];
       uint32_t func_addr = symtab[i].st_value;
       uint32_t func_size = symtab[i].st_size;
+      printf("Found function: %s at 0x%08x, size = %d\n", func_name, func_addr, func_size);
       if(nr_func < MAX_FUNC && func_size > 0) {
         func_table[nr_func].start = func_addr;
         func_table[nr_func].size  = func_size;
-        func_table[nr_func].name  = strdup(func_name); // 拷贝一份函数名
+        func_table[nr_func].name  = strdup(func_name); 
         nr_func++;
       }
     }
@@ -162,8 +157,6 @@ static void parse_elf_symbols(const char *elf_file) {
   free(strtab);
   free(sh_table);
   fclose(fp);
-
-  // ftrace_enabled = true;
 }
 
 void set_elf_file_from_img_file() {
