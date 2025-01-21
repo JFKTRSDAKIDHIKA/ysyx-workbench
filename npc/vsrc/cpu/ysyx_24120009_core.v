@@ -94,7 +94,8 @@ module ysyx_24120009_core (
         .pc_wen(1'b1),
         .pc_o(pc),
         .inst_o(inst),
-        .inst_i(imem_rdata)
+        .inst_i(imem_rdata),
+        .pc_plus4_o(pc_plus4)
     );
     assign imem_addr = pc;
 

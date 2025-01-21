@@ -15,7 +15,8 @@ module ysyx_24120009_IFU (
   input                                pc_wen,
   // IFU output
   output     [`ysyx_24120009_DATA_WIDTH-1:0] pc_o,
-  output     [31:0]                          inst_o
+  output     [31:0]                          inst_o,
+  output     [`ysyx_24120009_DATA_WIDTH-1:0] pc_plus4_o
 );
 
   // -----------------------------
@@ -42,6 +43,7 @@ module ysyx_24120009_IFU (
   // 3) Calculate next PC
   // -----------------------------
   assign pc_plus4 = pc_o + `ysyx_24120009_PC_STEP;
+  assign pc_plus4_o = pc_plus4;
 
   ysyx_24120009_MuxKey #(5, 3, `ysyx_24120009_DATA_WIDTH) mux_pc_sel (pc_next, pc_sel, {
     3'b000, pc_plus4,

@@ -34,7 +34,6 @@ class Vysyx_24120009_core___024root final : public VerilatedModule {
     IData/*31:0*/ ysyx_24120009_core__DOT__reg_write_data;
     IData/*31:0*/ ysyx_24120009_core__DOT__Op1;
     IData/*31:0*/ ysyx_24120009_core__DOT__Op2;
-    IData/*31:0*/ ysyx_24120009_core__DOT__pc_plus4;
     IData/*31:0*/ ysyx_24120009_core__DOT__rdata1;
     IData/*31:0*/ ysyx_24120009_core__DOT__ifu__DOT__pc_next;
     IData/*31:0*/ ysyx_24120009_core__DOT__ifu__DOT__mux_pc_sel__DOT__i0__DOT__lut_out;

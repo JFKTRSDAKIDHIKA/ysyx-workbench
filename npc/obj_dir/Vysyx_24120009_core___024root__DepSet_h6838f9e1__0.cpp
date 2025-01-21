@@ -556,6 +556,8 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root___nba_sequent__TOP__0(Vysyx_241
                                                            | (0x1eU 
                                                               & (vlSelf->imem_rdata 
                                                                  >> 7U)))))));
+    vlSelf->ysyx_24120009_core__DOT__exu__DOT__wb_mux__DOT__i1__DOT__data_list[2U] 
+        = ((IData)(4U) + vlSelf->ysyx_24120009_core__DOT__pc);
     vlSelf->ysyx_24120009_core__DOT__idu__DOT__op2_sel_mux__DOT__i0__DOT__data_list[3U] 
         = vlSelf->ysyx_24120009_core__DOT__pc;
     vlSelf->pc_debug = vlSelf->imem_addr;
