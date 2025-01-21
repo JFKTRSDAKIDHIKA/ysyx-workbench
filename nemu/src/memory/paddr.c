@@ -53,17 +53,17 @@ void init_mem() {
   Log("physical memory area [" FMT_PADDR ", " FMT_PADDR "]", PMEM_LEFT, PMEM_RIGHT);
 }
 
-// 辅助函数：检查是否需要记录访问信息
+// Helper function: Check if access information needs to be recorded
 static inline bool need_mtrace(paddr_t addr) {
 #if defined(CONFIG_MTRACE)
-  // 如果超出范围，不记录
+  // If the address is out of range, do not record
   if (addr < MTRACE_START || addr >= MTRACE_END) {
     return false;
   }
-  // 如果在范围内，则返回 true 表示要记录
+  // If within range, return true to indicate that it should be recorded
   return true;
 #else
-  // 如果没有启用 MTRACE，直接返回 false
+  // If MTRACE is not enabled, return false directly
   return false;
 #endif
 }
@@ -74,8 +74,6 @@ word_t paddr_read(paddr_t addr, int len) {
 
 #ifdef CONFIG_MTRACE
     if (need_mtrace(addr)) {
-      // 这里可用 printf、log_write 或其他日志机制
-      // 假设我们使用 log_write 做简单输出
       log_write("[MTRACE] Read  %d bytes at paddr 0x%08"PRIx64" (PC=0x%08"PRIx64"): 0x%016"PRIx64,
                 len, (uint64_t)addr, (uint64_t)cpu.pc, (uint64_t)data);
     }
