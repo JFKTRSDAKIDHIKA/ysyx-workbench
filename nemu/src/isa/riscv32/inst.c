@@ -90,8 +90,14 @@ static int decode_exec(Decode *s) {
   INSTPAT("0000001 ????? ????? 101 ????? 01100 11", divu   , R, R(rd) = (uint32_t)src1 / (uint32_t)src2);
   INSTPAT("0000001 ????? ????? 100 ????? 01100 11", div    , R, R(rd) = src1 / src2);
   INSTPAT("0000001 ????? ????? 000 ????? 01100 11", mul    , R, R(rd) = (int32_t)src1 * (int32_t)src2);
+  // WARNING: Ensure correct sign extension for 'mulh' (High 32 Bits of Signed Multiplication) operation.
+  // This implementation uses (int64_t) to enforce correct sign extension during the multiplication of two 32-bit signed integers.
+  // The result is a 64-bit number, and we right-shift it by 32 to extract the high 32 bits. 
+  // If the multiplication of src1 and src2 involves negative values, we rely on sign extension 
+  // to ensure the correct behavior when extracting the high 32 bits of the signed product.
+  // Ensure the simulator correctly handles the sign extension and treats the operands as signed integers during multiplication.
+  // Without proper sign extension or handling of negative values, the result may be incorrect due to issues in the multiplication logic.
   INSTPAT("0000001 ????? ????? 001 ????? 01100 11", mulh   , R, R(rd) = ((int64_t)src1 * (int64_t)src2) >> 32);
-
 
   INSTPAT("??????? ????? ????? 010 ????? 00000 11", lw     , I, R(rd) = Mr(src1 + imm, 4));
   INSTPAT("??????? ????? ????? 100 ????? 00000 11", lbu    , I, R(rd) = Mr(src1 + imm, 1));

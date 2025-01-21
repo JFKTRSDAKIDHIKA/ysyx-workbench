@@ -19,6 +19,8 @@ void load_instructions() {
     pmem_write(8, 0x00310193); // addi x3, x2, 3    ; x3 = x2 + 3
     pmem_write(12, 0x002182b3); // add x5, x3, x2   ; x3 = x3 + x2
     pmem_write(16, 0x00100073); // ebreak           ; End simulation
+
+    
 }
 
 
