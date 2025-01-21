@@ -165,7 +165,7 @@ config IRINGBUF
   default y
 
 config MTRACE
-  bool "Enable memory trace (mtrace)"
+  bool "Enable memory trace"
   default n
   help
     Enable mtrace to log memory access behaviors. 
@@ -186,7 +186,7 @@ config MTRACE_END
     Only log memory access below this address (exclusive).
 
 config FTRACE
-  bool "Enable fuction trace (ftrace)"
+  bool "Enable fuction trace"
   default y
 
 config DIFFTEST
