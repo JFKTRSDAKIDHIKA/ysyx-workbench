@@ -47,18 +47,13 @@ int main(int argc, char **argv) {
     Verilated::commandArgs(argc, argv);
     Vysyx_24120009_core* top = new Vysyx_24120009_core;
 
+    // print the command line arguments
     std::cout << "argc: " << argc << std::endl;
     for (int i = 0; i < argc; ++i) {
         std::cout << "argv[" << i << "]: " << argv[i] << std::endl;
     }
 
-    // 检查是否传入了程序路径
-    if (argc < 2) {
-        std::cerr << "Program path not provided!" << std::endl;
-        return -1;
-    }
-
-    // 从命令行参数加载程序
+    // Load program
     load_program(argv[1]);
 
     // Reset

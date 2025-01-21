@@ -23,12 +23,13 @@ uint32_t pmem_read(uint32_t address) {
 
 // 写入数据的函数
 void pmem_write(uint32_t address, uint32_t data) {
-    if (address + 3 >= MEMORY_SIZE) {
+    uint32_t offset = address - BASE_ADDR; // 计算偏移量
+    if (offset + 3 >= MEMORY_SIZE) {
         std::cerr << "Memory write out of bounds at address: " << address << std::endl;
         return;
     }
-    memory[address] = data & 0xFF;
-    memory[address + 1] = (data >> 8) & 0xFF;
-    memory[address + 2] = (data >> 16) & 0xFF;
-    memory[address + 3] = (data >> 24) & 0xFF;
+    memory[offset] = data & 0xFF;
+    memory[offset + 1] = (data >> 8) & 0xFF;
+    memory[offset + 2] = (data >> 16) & 0xFF;
+    memory[offset + 3] = (data >> 24) & 0xFF;
 }
