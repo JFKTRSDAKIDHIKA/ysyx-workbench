@@ -82,7 +82,7 @@ int main(int argc, char **argv) {
                   << ", Op2 = " << std::hex << top->Op2_debug
                   << std::endl;
         cycle++;
-    } while(!Verilated::gotFinish() || cycle >=20);
+    } while(!Verilated::gotFinish() && cycle <=20);
 
 
     delete top;
