@@ -13,6 +13,7 @@ Vysyx_24120009_core::Vysyx_24120009_core(VerilatedContext* _vcontextp__, const c
     , vlSymsp{new Vysyx_24120009_core__Syms(contextp(), _vcname__, this)}
     , clk{vlSymsp->TOP.clk}
     , rst{vlSymsp->TOP.rst}
+    , is_ebreak_debug{vlSymsp->TOP.is_ebreak_debug}
     , imem_addr{vlSymsp->TOP.imem_addr}
     , imem_rdata{vlSymsp->TOP.imem_rdata}
     , x1{vlSymsp->TOP.x1}
