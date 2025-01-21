@@ -17,6 +17,9 @@
 #include <memory/paddr.h>
 #include <device/mmio.h>
 #include <isa.h>
+#include <cpu/cpu.h>
+#include <utils.h> 
+
 
 #if   defined(CONFIG_PMEM_MALLOC)
 static uint8_t *pmem = NULL;
@@ -50,15 +53,52 @@ void init_mem() {
   Log("physical memory area [" FMT_PADDR ", " FMT_PADDR "]", PMEM_LEFT, PMEM_RIGHT);
 }
 
+// Helper function: Check if access information needs to be recorded
+static inline bool need_mtrace(paddr_t addr) {
+#if defined(CONFIG_MTRACE)
+  // If the address is out of range, do not record
+  if (addr < MTRACE_START || addr >= MTRACE_END) {
+    return false;
+  }
+  // If within range, return true to indicate that it should be recorded
+  return true;
+#else
+  // If MTRACE is not enabled, return false directly
+  return false;
+#endif
+}
+
 word_t paddr_read(paddr_t addr, int len) {
-  if (likely(in_pmem(addr))) return pmem_read(addr, len);
+  if (likely(in_pmem(addr))) {
+    word_t data = pmem_read(addr, len);
+
+#ifdef CONFIG_MTRACE
+    if (need_mtrace(addr)) {
+      log_write("[MTRACE] Read  %d bytes at paddr 0x%08"PRIx64" (PC=0x%08"PRIx64"): 0x%016"PRIx64,
+                len, (uint64_t)addr, (uint64_t)cpu.pc, (uint64_t)data);
+    }
+#endif
+
+    return data;
+  }
   IFDEF(CONFIG_DEVICE, return mmio_read(addr, len));
   out_of_bound(addr);
   return 0;
 }
 
 void paddr_write(paddr_t addr, int len, word_t data) {
-  if (likely(in_pmem(addr))) { pmem_write(addr, len, data); return; }
+  if (likely(in_pmem(addr))) {
+    pmem_write(addr, len, data);
+
+#ifdef CONFIG_MTRACE
+    if (need_mtrace(addr)) {
+      log_write("[MTRACE] Write %d bytes at paddr 0x%08"PRIx64" (PC=0x%08"PRIx64"): 0x%016"PRIx64,
+                len, (uint64_t)addr, (uint64_t)cpu.pc, (uint64_t)data);
+    }
+#endif
+
+    return;
+  }
   IFDEF(CONFIG_DEVICE, mmio_write(addr, len, data); return);
   out_of_bound(addr);
 }

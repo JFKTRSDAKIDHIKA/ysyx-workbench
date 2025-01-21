@@ -160,6 +160,35 @@ config ITRACE_COND
   string "Only trace instructions when the condition is true"
   default "true"
 
+config IRINGBUF
+  bool "Enable instruction ring buffer"
+  default y
+
+config MTRACE
+  bool "Enable memory trace"
+  depends on TRACE
+  default n
+  help
+    Enable mtrace to log memory access behaviors. 
+    This may cause large amount of log output if enabled.
+
+config MTRACE_START
+  hex "mtrace start address"
+  default 0x0
+  depends on MTRACE && TRACE
+  help
+    Only log memory access starting from this address (inclusive).
+
+config MTRACE_END
+  hex "mtrace end address"
+  default 0xffffffff
+  depends on MTRACE && TRACE
+  help
+    Only log memory access below this address (exclusive).
+
+config FTRACE
+  bool "Enable fuction trace"
+  default y
 
 config DIFFTEST
   depends on TARGET_NATIVE_ELF
