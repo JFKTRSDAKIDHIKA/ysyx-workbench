@@ -93,11 +93,11 @@ static void parse_elf_symbols(const char *elf_file) {
   for(int i = 0; i < ehdr.e_shnum; i++) {
     if(sh_table[i].sh_type == SHT_SYMTAB) {
       symtab_idx = i;
-      printf("Found .symtab at index %d\n", i);
+      // printf("Found .symtab at index %d\n", i);
     }
     else if(sh_table[i].sh_type == SHT_STRTAB && i != ehdr.e_shstrndx) {
       strtab_idx = i;
-      printf("Found .strtab at index %d\n", i);
+      // printf("Found .strtab at index %d\n", i);
     }
   }
 
@@ -141,7 +141,7 @@ static void parse_elf_symbols(const char *elf_file) {
       char *func_name = &strtab[symtab[i].st_name];
       uint32_t func_addr = symtab[i].st_value;
       uint32_t func_size = symtab[i].st_size;
-      printf("Found function: %s at 0x%08x, size = %d\n", func_name, func_addr, func_size);
+      // printf("Found function: %s at 0x%08x, size = %d\n", func_name, func_addr, func_size);
       if(nr_func < MAX_FUNC && func_size > 0) {
         func_table[nr_func].start = func_addr;
         func_table[nr_func].size  = func_size;
