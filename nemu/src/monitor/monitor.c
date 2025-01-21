@@ -180,7 +180,7 @@ void set_elf_file_from_img_file() {
     // Check if img_file ends with ".bin"
     if (img_file != NULL && strlen(img_file) > 4 && strcmp(img_file + strlen(img_file) - 4, ".bin") == 0) {
         // Allocate memory for elf_file, the length of img_file minus 4 plus 4 for ".elf" and the null terminator
-        elf_file = (char *)malloc(strlen(img_file) - 3);
+        elf_file = (char *)malloc(strlen(img_file) - 3 + 4);
         if (elf_file != NULL) {
             // Copy img_file content up to the part before ".bin"
             strncpy(elf_file, img_file, strlen(img_file) - 4);
