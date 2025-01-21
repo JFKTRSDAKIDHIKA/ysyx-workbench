@@ -57,14 +57,15 @@ static void parse_elf_symbols(const char *elf_file) {
     return;
   }
 
-  // 读取 ELF Header
+  // Read ELF Header
   Elf32_Ehdr ehdr;
   if (fread(&ehdr, sizeof(Elf32_Ehdr), 1, fp) != 1) {
     fprintf(stderr, "Error reading ELF header\n");
     fclose(fp);
     return;
   }
-  // 检查 magic
+
+  // check magic
   if (memcmp(ehdr.e_ident, ELFMAG, SELFMAG) != 0) {
     printf("Not a valid ELF file: %s\n", elf_file);
     fclose(fp);
