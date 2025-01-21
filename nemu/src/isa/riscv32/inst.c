@@ -109,6 +109,9 @@ static int decode_exec(Decode *s) {
       // 目标地址就是 src1 + imm
       ftrace_call(s->pc, src1 + imm);
     }
+    // 原先对寄存器的赋值与跳转保持不变
+    R(rd) = s->pc + 4;
+    s->dnpc = src1 + imm;
   );
 
   INSTPAT("??????? ????? ????? 000 ????? 0010011", addi   , I, R(rd) = src1 + imm);
@@ -132,7 +135,8 @@ static int decode_exec(Decode *s) {
     if (rd == 1) {
       ftrace_call(s->pc, s->pc + imm);
     }
-
+    R(rd) = s->pc + 4;
+    s->dnpc = s->pc + imm;
   );
 
   INSTPAT("??????? ????? ????? 000 ????? 11000 11", beq    , B, if (src1 == src2) s->dnpc = s->pc + imm);
