@@ -68,8 +68,8 @@ static void parse_elf_symbols(const char *elf_file) {
   // check magic
   if (memcmp(ehdr.e_ident, ELFMAG, SELFMAG) != 0) {
     printf("Not a valid ELF file: %s\n", elf_file);
-    //fclose(fp);
-    //return;
+    fclose(fp);
+    return;
   }
 
   // 根据 ELF Header 找到 Section Header Table 的起始位置
@@ -253,14 +253,12 @@ void init_monitor(int argc, char *argv[]) {
   /* Perform ISA dependent initialization. */
   init_isa();
 
-  // 在加载镜像之前(或之后)先解析 ELF 的符号表
-  // 因为加载镜像只需要把代码内容放到内存，而 ftrace 解析需要更完整的文件
+  /* Load the image to memory. This will overwrite the built-in image. */
+  long img_size = load_img();
+
   if (img_file) {
     parse_elf_symbols(img_file);
   }
-
-  /* Load the image to memory. This will overwrite the built-in image. */
-  long img_size = load_img();
 
   /* Initialize differential testing. */
   init_difftest(diff_so_file, img_size, difftest_port);
