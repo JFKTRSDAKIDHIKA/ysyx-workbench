@@ -166,6 +166,7 @@ config IRINGBUF
 
 config MTRACE
   bool "Enable memory trace"
+  depends on TRACE
   default n
   help
     Enable mtrace to log memory access behaviors. 
@@ -174,14 +175,14 @@ config MTRACE
 config MTRACE_START
   hex "mtrace start address"
   default 0x0
-  depends on MTRACE
+  depends on MTRACE && TRACE
   help
     Only log memory access starting from this address (inclusive).
 
 config MTRACE_END
   hex "mtrace end address"
   default 0xffffffff
-  depends on MTRACE
+  depends on MTRACE && TRACE
   help
     Only log memory access below this address (exclusive).
 
