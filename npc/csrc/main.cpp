@@ -80,6 +80,7 @@ int main(int argc, char **argv) {
                   << ", x3 = " << std::hex << top->x3 
                   << ", Op1 = " << std::hex << top->Op1_debug
                   << ", Op2 = " << std::hex << top->Op2_debug
+                  << ", reg_write_data = " << std::hex << top->reg_write_data_debug
                   << ", INST = " << std::hex << top->inst_debug
                   << std::endl;
         cycle++;

@@ -216,8 +216,6 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root___stl_sequent__TOP__0(Vysyx_2412
     vlSelf->imem_addr = vlSelf->ysyx_24120009_core__DOT__pc;
     vlSelf->ysyx_24120009_core__DOT__ifu__DOT__mux_pc_sel__DOT__i0__DOT__data_list[4U] 
         = ((IData)(4U) + vlSelf->ysyx_24120009_core__DOT__pc);
-    vlSelf->ysyx_24120009_core__DOT__exu__DOT__wb_mux__DOT__i1__DOT__data_list[2U] 
-        = vlSelf->ysyx_24120009_core__DOT__pc_plus4;
     vlSelf->ysyx_24120009_core__DOT__ifu__DOT__mux_pc_sel__DOT__i0__DOT__data_list[1U] 
         = (vlSelf->ysyx_24120009_core__DOT__pc + ((
                                                    (- (IData)(
@@ -253,6 +251,8 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root___stl_sequent__TOP__0(Vysyx_2412
                                                            | (0x1eU 
                                                               & (vlSelf->imem_rdata 
                                                                  >> 7U)))))));
+    vlSelf->ysyx_24120009_core__DOT__exu__DOT__wb_mux__DOT__i1__DOT__data_list[2U] 
+        = vlSelf->ysyx_24120009_core__DOT__pc_plus4;
     vlSelf->ysyx_24120009_core__DOT__idu__DOT__imm_i_sext 
         = (((- (IData)((vlSelf->imem_rdata >> 0x1fU))) 
             << 0xcU) | (vlSelf->imem_rdata >> 0x14U));
@@ -657,6 +657,7 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root___stl_sequent__TOP__0(Vysyx_2412
         = ((IData)(vlSelf->ysyx_24120009_core__DOT__exu__DOT__wb_mux__DOT__i1__DOT__hit)
             ? vlSelf->ysyx_24120009_core__DOT__exu__DOT__wb_mux__DOT__i1__DOT__lut_out
             : 0U);
+    vlSelf->reg_write_data_debug = vlSelf->ysyx_24120009_core__DOT__reg_write_data;
 }
 
 VL_ATTR_COLD void Vysyx_24120009_core___024root___eval_stl(Vysyx_24120009_core___024root* vlSelf) {
@@ -730,6 +731,7 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root___ctor_var_reset(Vysyx_24120009_
     vlSelf->Op1_debug = VL_RAND_RESET_I(32);
     vlSelf->Op2_debug = VL_RAND_RESET_I(32);
     vlSelf->inst_debug = VL_RAND_RESET_I(32);
+    vlSelf->reg_write_data_debug = VL_RAND_RESET_I(32);
     vlSelf->ysyx_24120009_core__DOT__pc = VL_RAND_RESET_I(32);
     vlSelf->ysyx_24120009_core__DOT__reg_write_data = VL_RAND_RESET_I(32);
     vlSelf->ysyx_24120009_core__DOT__Op1 = VL_RAND_RESET_I(32);

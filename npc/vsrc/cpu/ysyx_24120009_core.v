@@ -13,7 +13,8 @@ module ysyx_24120009_core (
     output [`ysyx_24120009_DATA_WIDTH-1:0] pc_debug,
     output [`ysyx_24120009_DATA_WIDTH-1:0] Op1_debug,
     output [`ysyx_24120009_DATA_WIDTH-1:0] Op2_debug,
-    output [31:0] inst_debug
+    output [31:0] inst_debug,
+    output [`ysyx_24120009_DATA_WIDTH-1:0] reg_write_data_debug
 );
 
     // Debug signal declaration
@@ -21,6 +22,7 @@ module ysyx_24120009_core (
     assign Op1_debug = Op1;
     assign Op2_debug = Op2;
     assign inst_debug = inst;
+    assign reg_write_data_debug = reg_write_data;
 
     // Internal signals
     wire [`ysyx_24120009_DATA_WIDTH-1:0] pc;

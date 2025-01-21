@@ -22,6 +22,7 @@ Vysyx_24120009_core::Vysyx_24120009_core(VerilatedContext* _vcontextp__, const c
     , Op1_debug{vlSymsp->TOP.Op1_debug}
     , Op2_debug{vlSymsp->TOP.Op2_debug}
     , inst_debug{vlSymsp->TOP.inst_debug}
+    , reg_write_data_debug{vlSymsp->TOP.reg_write_data_debug}
     , rootp{&(vlSymsp->TOP)}
 {
     // Register model with the context
