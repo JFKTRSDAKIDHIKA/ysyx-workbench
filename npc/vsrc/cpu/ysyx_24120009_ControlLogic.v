@@ -26,8 +26,10 @@ module ysyx_24120009_ControlLogic (
     wire [6:0] funct7 = inst[31:25];
 
     wire [KEY_LEN-1:0] inst_key;
-    assign inst_key = ({opcode, funct3} == 10'b0010011_101) ? {opcode, funct3, funct7} : {opcode, funct3, 7'b0};
-    // assign inst_key = ({opcode, funct3} == 10'b0110011_101) ? {opcode, funct3, funct7} : {opcode, funct3, 7'b0};
+    assign inst_key = (opcode == 7'b1101111) ? {opcode, 3'b0, 7'b0} : 
+                  ({opcode, funct3} == 10'b0010011_101) ? {opcode, funct3, funct7} : 
+                  {opcode, funct3, funct7};
+
     // remain tobe continued!
 
     wire [DATA_LEN-1:0] ctl_signals;
@@ -61,6 +63,8 @@ module ysyx_24120009_ControlLogic (
         17'b1100011_000_0000000, 17'b00000_00_00_000_0_0_0_00, // BEQ
         17'b1100011_100_0000000, 17'b00000_00_00_000_0_0_0_00, // BLT
         17'b1100011_110_0000000, 17'b00000_00_00_000_0_0_0_00, // BLTU
+        // J-type instructions(1)
+        17'b1101111_000_0000000, 17'b00000_00_00_011_1_0_0_01, // JAL
         // JALR instruction(1)
         17'b1100111_000_0000000, 17'b00000_00_01_001_1_0_0_01, // JALR
         // ebreak instruction(1)
