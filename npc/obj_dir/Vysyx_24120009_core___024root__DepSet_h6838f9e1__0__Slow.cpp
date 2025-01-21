@@ -200,6 +200,10 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root___stl_sequent__TOP__0(Vysyx_2412
     Vysyx_24120009_core__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vysyx_24120009_core___024root___stl_sequent__TOP__0\n"); );
     // Body
+    if (VL_UNLIKELY((0x1000073U == vlSelf->imem_rdata))) {
+        VL_WRITEF("EBREAK: Simulation exiting...\n");
+        Vysyx_24120009_core___024root____Vdpiimwrap_ysyx_24120009_core__DOT__simulation_exit_TOP();
+    }
     vlSelf->x1 = vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf
         [1U];
     vlSelf->x2 = vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf
@@ -283,10 +287,6 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root___stl_sequent__TOP__0(Vysyx_2412
     vlSelf->ysyx_24120009_core__DOT__ifu__DOT__mux_pc_sel__DOT__i0__DOT__data_list[3U] 
         = (vlSelf->ysyx_24120009_core__DOT__rdata1 
            + vlSelf->ysyx_24120009_core__DOT__idu__DOT__imm_i_sext);
-    if (VL_UNLIKELY((0x1cc00U == vlSelf->ysyx_24120009_core__DOT__control__DOT__inst_key))) {
-        VL_WRITEF("EBREAK: Simulation exiting...\n");
-        Vysyx_24120009_core___024root____Vdpiimwrap_ysyx_24120009_core__DOT__simulation_exit_TOP();
-    }
     vlSelf->ysyx_24120009_core__DOT__control__DOT__funct_mux__DOT__i0__DOT__lut_out 
         = ((- (IData)((vlSelf->ysyx_24120009_core__DOT__control__DOT__inst_key 
                        == vlSelf->ysyx_24120009_core__DOT__control__DOT__funct_mux__DOT__i0__DOT__key_list

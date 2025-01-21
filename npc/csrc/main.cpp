@@ -81,7 +81,8 @@ int main(int argc, char **argv) {
                   << ", Op1 = " << std::hex << top->Op1_debug
                   << ", Op2 = " << std::hex << top->Op2_debug
                   << std::endl;
-    } while(!Verilated::gotFinish());
+        cycle++;
+    } while(!Verilated::gotFinish() || cycle >=20);
 
 
     delete top;
