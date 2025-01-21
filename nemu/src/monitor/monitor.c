@@ -27,6 +27,12 @@ void init_disasm();
 
 #define MAX_FUNC 1000  
 
+static char *log_file = NULL;
+static char *diff_so_file = NULL;
+static char *img_file = NULL;
+static char *elf_file = NULL;
+static int difftest_port = 1234;
+
 typedef struct {
   uint32_t start;  
   uint32_t size;   
@@ -170,15 +176,26 @@ static void welcome() {
   printf("For help, type \"help\"\n");
 }
 
+void set_elf_file_from_img_file() {
+    // Check if img_file ends with ".bin"
+    if (img_file != NULL && strlen(img_file) > 4 && strcmp(img_file + strlen(img_file) - 4, ".bin") == 0) {
+        // Allocate memory for elf_file, the length of img_file minus 4 plus 4 for ".elf" and the null terminator
+        elf_file = (char *)malloc(strlen(img_file) - 3);
+        if (elf_file != NULL) {
+            // Copy img_file content up to the part before ".bin"
+            strncpy(elf_file, img_file, strlen(img_file) - 4);
+            // Append ".elf" to elf_file
+            strcpy(elf_file + strlen(img_file) - 4, ".elf");
+        }
+    } else {
+        printf("Error: img_file does not have the expected '.bin' extension.\n");
+    }
+}
+
 #ifndef CONFIG_TARGET_AM
 #include <getopt.h>
 
 void sdb_set_batch_mode();
-
-static char *log_file = NULL;
-static char *diff_so_file = NULL;
-static char *img_file = NULL;
-static int difftest_port = 1234;
 
 static long load_img() {
   if (img_file == NULL) {
@@ -260,7 +277,8 @@ void init_monitor(int argc, char *argv[]) {
     parse_elf_symbols(img_file);
   }
 
-  printf("img_file points to: %s\n", img_file);
+  set_elf_file_from_img_file();
+  printf("elf_file points to: %s\n", elf_file);
 
   /* Initialize differential testing. */
   init_difftest(diff_so_file, img_size, difftest_port);
