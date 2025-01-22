@@ -110,8 +110,6 @@ int main(int argc, char **argv) {
         uint32_t pc = top->imem_addr;          
         top->imem_rdata = Memory::pmem_read(pc);     
 
-        std::cout<<"x2: "<<top->x2_debug<<std::endl;
-
         // dut execute one instruction
         tick(top, step_mode);  // 传入step_mode来决定是否启用单步模式
 
