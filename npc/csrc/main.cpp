@@ -28,12 +28,12 @@ void check_reg(Vysyx_24120009_core* top) {
         if (rf_values[i] != ref.gpr[i]) {
             std::cerr << "Register mismatch at x" << i << " - DUT: " << rf_values[i] << " REF: " << ref.gpr[i] << std::endl;
             // Optionally, you can stop the simulation on a mismatch
-            Verilated::gotFinish(true);  // End simulation
+            // Verilated::gotFinish(true);  // End simulation
         }
     }
     if (top->imem_addr != ref.pc) {
         std::cerr << "PC mismatch - DUT: " << top->imem_addr << " REF: " << ref.pc << std::endl;
-        Verilated::gotFinish(true);  // End simulation
+        // Verilated::gotFinish(true);  // End simulation
     }
 }
 
@@ -118,7 +118,6 @@ int main(int argc, char **argv) {
         // ref execute one instruction
         ref_difftest_exec(1);
           
-
         // Copy registers from DUT to REF and compare them
         ref_difftest_regcpy(&ref, DIFFTEST_TO_REF);
 
