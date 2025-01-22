@@ -4,6 +4,7 @@
 #include "registers.h"
 #include "program_loader.h"
 #include "memory.h"
+#include "difftest.h"
 #include <iostream>
 #include <svdpi.h>
 
@@ -14,6 +15,28 @@ extern "C" void simulation_exit() {
 extern "C" void get_register_values(int rf[32]) {
     set_register_values(rf);  // set the register values
 }
+
+typedef struct {
+  uint32_t gpr[32];
+  uint32_t pc;
+} riscv32_CPU_state;
+riscv32_CPU_state ref;
+
+void check_reg(Vysyx_24120009_core* top) {
+    // Compare DUT registers with REF registers
+    for (int i = 0; i < 32; i++) {
+        if (rf_values[i] != ref.gpr[i]) {
+            std::cerr << "Register mismatch at x" << i << " - DUT: " << rf_values[i] << " REF: " << ref.gpr[i] << std::endl;
+            // Optionally, you can stop the simulation on a mismatch
+            Verilated::gotFinish(true);  // End simulation
+        }
+    }
+    if (top->imem_addr != ref.pc) {
+        std::cerr << "PC mismatch - DUT: " << top->imem_addr << " REF: " << ref.pc << std::endl;
+        Verilated::gotFinish(true);  // End simulation
+    }
+}
+
 
 void tick(Vysyx_24120009_core* top, bool step_mode) {
     top->clk = 0;
@@ -74,6 +97,11 @@ int main(int argc, char **argv) {
     // Load program
     load_program(argv[1]);
 
+    // Initialize difftest
+    init_difftest("nemu/build/riscv32-nemu-interpreter-so", 0);
+    // Copy the program to the reference model
+    ref_difftest_memcpy(argv[1]);  
+
     // Reset
     reset(top, 10); // Reset for 10 cycles
 
@@ -84,8 +112,17 @@ int main(int argc, char **argv) {
 
         // difftest_step(top, pc);  // 比较寄存器和内存状态
 
-        // Tick 时钟
+        // dut execute one instruction
         tick(top, step_mode);  // 传入step_mode来决定是否启用单步模式
+        
+        // ref execute one instruction
+        ref_difftest_exec(1);  
+
+        // Copy registers from DUT to REF and compare them
+        ref_difftest_regcpy(&ref, DIFFTEST_TO_REF);
+
+        // Check if the registers are consistent
+        check_reg(top);
 
         // print the instruction whatever the mode is
         std::cout << "Instruction: 0x" << std::hex << top->inst_debug << std::endl;

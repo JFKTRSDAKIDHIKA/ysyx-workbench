@@ -15,20 +15,45 @@
 
 #include <isa.h>
 #include <cpu/cpu.h>
+#include <cpu/decode.h>
 #include <difftest-def.h>
 #include <memory/paddr.h>
 
 
-__EXPORT void difftest_memcpy(paddr_t addr, void *buf, size_t n, bool direction) {
-  assert(0);
+__EXPORT void difftest_memcpy(const char *img_file) {
+  FILE *fp = fopen(img_file, "rb");
+  Assert(fp, "Can not open '%s'", img_file);
+
+  fseek(fp, 0, SEEK_END);
+  long size = ftell(fp);
+
+  Log("The image is %s, size = %ld", img_file, size);
+
+  fseek(fp, 0, SEEK_SET);
+  int ret = fread(guest_to_host(RESET_VECTOR), size, 1, fp);
+  assert(ret == 1);
+
+  fclose(fp);
 }
 
 __EXPORT void difftest_regcpy(void *dut, bool direction) {
-  assert(0);
+  if (direction == DIFFTEST_TO_REF) {
+    // copy from DUT to REF
+    memcpy(dut, &cpu, sizeof(CPU_state));  
+  } else if (direction == DIFFTEST_TO_DUT) {
+    // copy from REF to DUT
+    memcpy(&cpu, dut, sizeof(CPU_state));  
+  } else {
+    assert(0);  
+  }
 }
 
 __EXPORT void difftest_exec(uint64_t n) {
-  assert(0);
+  for (uint64_t i = 0; i < n; i++) {
+    Decode s;
+    // call the ISA dependent instruction execution function
+    isa_exec_once(&s);
+  }
 }
 
 __EXPORT void difftest_raise_intr(word_t NO) {
