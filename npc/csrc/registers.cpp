@@ -6,7 +6,7 @@ uint32_t rf_values[32];  // define the register values array
 
 void set_register_values(uint32_t rf[32]) {
     for (int i = 0; i < 32; i = i + 1) {
-        rf_values[i] = rf[i];
+        rf_values[i/2] = rf[i];
         std::cout << "Register " << i << ": 0x" << std::hex << rf[i] << std::endl;  // 打印寄存器值
     }
 }
