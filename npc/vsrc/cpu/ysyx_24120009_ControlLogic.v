@@ -19,7 +19,7 @@ module ysyx_24120009_ControlLogic (
 
     localparam DATA_LEN  = 17;  // Length of control signals
     localparam KEY_LEN   = 17;  // Length of inst key
-    localparam NR_KEY    = 25;  // Number of keys
+    localparam NR_KEY    = 26;  // Number of keys
 
     wire [6:0] opcode = inst[6:0];
     wire [2:0] funct3 = inst[14:12];
@@ -66,6 +66,8 @@ module ysyx_24120009_ControlLogic (
         17'b1100011_110_0000000, 17'b00000_00_00_000_0_0_0_00, // BLTU
         // J-type instructions(1)
         17'b1101111_000_0000000, 17'b00000_00_00_011_1_0_0_01, // JAL
+        // U-type instructions(1)
+        17'b0111011_000_0000000, 17'b00000_01_11_000_1_0_0_10, // AUIPC
         // JALR instruction(1)
         17'b1100111_000_0000000, 17'b00000_00_01_001_1_0_0_01, // JALR
         // ebreak instruction(1)
