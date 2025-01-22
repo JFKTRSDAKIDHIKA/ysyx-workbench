@@ -1,10 +1,11 @@
 # 定义变量
 VERILATOR = verilator
 TOP_MODULE = vsrc/cpu/ysyx_24120009_core.v
-CSRC = csrc/main.cpp csrc/memory.cpp csrc/DiffTest.cpp
+CSRC = $(wildcard csrc/*.cpp)
 INCLUDE_DIRS = -Ivsrc/include -Ivsrc/common -Ivsrc/cpu
 OBJ_DIR = obj_dir
 EXEC = $(OBJ_DIR)/Vysyx_24120009_core
+STEP_MODE = step
 
 # 默认目标
 all: $(EXEC)
@@ -17,7 +18,7 @@ $(EXEC): $(TOP_MODULE) $(CSRC)
 # 运行仿真
 sim: $(EXEC)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
-	$(EXEC) $(IMG)
+	$(EXEC) $(IMG) $(STEP_MODE)
 
 # 清理生成文件
 clean:

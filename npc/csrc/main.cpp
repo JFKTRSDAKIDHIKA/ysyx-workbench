@@ -1,47 +1,18 @@
-#include "Vysyx_24120009_core.h" // 顶层模块的 Verilator 生成类
+#include "Vysyx_24120009_core.h"
 #include "verilated.h"
-#include <ostream>
 #include <iostream>
 #include <svdpi.h>
-#include <fstream>
-
-
-
+#include "difftest.h"
+#include "registers.h"
+#include "program_loader.h"
+#include "memory.h"
 
 // define the DPI-C functions
 extern "C" void simulation_exit() {
     Verilated::gotFinish(true); 
 }
-
-int rf_values[32];
-
 extern "C" void get_register_values(int rf[32]) {
-    // 将 Verilog 中的寄存器值复制到 C++ 数组中
-    for (int i = 0; i < 32; ++i) {
-        rf_values[i] = rf[i];
-    }
-}
-
-
-void pmem_write(uint32_t address, uint32_t data);
-uint32_t pmem_read(uint32_t address);
-void init_difftest(const char *ref_so_file, long img_size, int port);
-void difftest_step(Vysyx_24120009_core* top, uint32_t pc);
-
-// 加载程序到存储器中
-void load_program(const char *program_path) {
-    std::ifstream program_file(program_path, std::ios::binary);
-    if (!program_file) {
-        std::cerr << "Error opening program file: " << program_path << std::endl;
-        return;
-    }
-
-    uint32_t address = 0x80000000; // 从内存基地址开始加载
-    uint32_t data;
-    while (program_file.read(reinterpret_cast<char*>(&data), sizeof(data))) {
-        pmem_write(address, data);
-        address += sizeof(data); // 增加偏移量，写入下一条指令
-    }
+    set_register_values(rf);  // set the register values
 }
 
 void tick(Vysyx_24120009_core* top, bool step_mode) {
@@ -62,13 +33,7 @@ void tick(Vysyx_24120009_core* top, bool step_mode) {
             return;  // 返回以继续执行单步操作
         } 
         else if (input == "info r") {
-            // 输出所有寄存器信息
-            std::cout << "Register information:" << std::endl;
-            std::cout << "PC = 0x" << std::hex << top->pc_debug << std::endl;
-            // 打印寄存器内容
-            for (int i = 0; i < 32; ++i) {
-                std::cout << "x" << i << ": 0x" << std::hex << rf_values[i] << std::endl;
-            }
+            print_register_values();  // 打印寄存器信息
         } 
         else {
             std::cout << "Unknown command!" << std::endl;
@@ -76,11 +41,10 @@ void tick(Vysyx_24120009_core* top, bool step_mode) {
     }
 }
 
-
 void reset(Vysyx_24120009_core* top, int cycles) {
     top->rst = 1;
     for (int i = 0; i < cycles; ++i) {
-        tick(top, false);  // 不在复位期间启用单步
+        tick(top, false);  // forbidden single-step mode
     }
     top->rst = 0;
 }
@@ -89,35 +53,39 @@ int main(int argc, char **argv) {
     Verilated::commandArgs(argc, argv);
     Vysyx_24120009_core* top = new Vysyx_24120009_core;
 
-    // print the command line arguments
-    std::cout << "argc: " << argc << std::endl;
-    for (int i = 0; i < argc; ++i) {
-        std::cout << "argv[" << i << "]: " << argv[i] << std::endl;
+    // Default to single step mode (if no argument is provided)
+    bool step_mode = true;
+    if (argc > 2) {
+        std::string mode = argv[2];
+        if (mode == "step") {
+            step_mode = true; // Single-step mode
+        } else if (mode == "run") {
+            step_mode = false; // Run mode (continuous execution)
+        } else {
+            std::cerr << "Invalid step_mode argument. Use 'step' or 'run'." << std::endl;
+            return 1; // Exit with error code
+        }
     }
 
-    bool step_mode = true; // default to single step mode
-
-    init_difftest("nemu/build/riscv32-nemu-interpreter-so", 0x10000, 1234);
+    // init_difftest("nemu/build/riscv32-nemu-interpreter-so", 0x10000, 1234);
 
     // Load program
     load_program(argv[1]);
 
     // Reset
-    reset(top, 10); // 复位保持 10 个周期
+    reset(top, 10); // Reset for 10 cycles
 
     do {
         // Fetch 阶段
         uint32_t pc = top->imem_addr;          
-        top->imem_rdata = pmem_read(pc);     
+        top->imem_rdata = Memory::pmem_read(pc);     
 
-        difftest_step(top, pc);  // 比较寄存器和内存状态
+        // difftest_step(top, pc);  // 比较寄存器和内存状态
 
         // Tick 时钟
         tick(top, step_mode);  // 传入step_mode来决定是否启用单步模式
-        // 输出状态
     } while(!Verilated::gotFinish());
 
     delete top;
     return 0;
 }
-
