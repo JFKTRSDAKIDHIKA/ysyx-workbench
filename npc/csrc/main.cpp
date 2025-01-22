@@ -29,16 +29,24 @@ void load_program(const char *program_path) {
     }
 }
 
-void tick(Vysyx_24120009_core* top) {
-    top->clk = 0; top->eval();
-    top->clk = 1; top->eval();
+void tick(Vysyx_24120009_core* top, bool step_mode) {
+    top->clk = 0;
+    top->eval();
+    top->clk = 1;
+    top->eval();
     Verilated::timeInc(1); // 增加仿真时间
+
+    if (step_mode) {
+        std::string input;
+        std::cout << "Press Enter to continue to the next cycle..." << std::endl;
+        std::getline(std::cin, input);  // 等待用户输入，按下回车继续
+    }
 }
 
 void reset(Vysyx_24120009_core* top, int cycles) {
     top->rst = 1;
     for (int i = 0; i < cycles; ++i) {
-        tick(top);
+        tick(top, false);  // 不在复位期间启用单步
     }
     top->rst = 0;
 }
@@ -52,6 +60,8 @@ int main(int argc, char **argv) {
     for (int i = 0; i < argc; ++i) {
         std::cout << "argv[" << i << "]: " << argv[i] << std::endl;
     }
+
+    bool step_mode = true; // default to single step mode
 
     // Load program
     load_program(argv[1]);
@@ -71,7 +81,7 @@ int main(int argc, char **argv) {
         uint32_t pc = top->imem_addr;          
         top->imem_rdata = pmem_read(pc);       
         // Tick 时钟
-        tick(top);
+        tick(top, step_mode);  // 传入step_mode来决定是否启用单步模式
         // 输出状态
         std::cout << "Cycle: " << cycle
                   << ", PC = 0x" << std::hex << top->pc_debug
@@ -86,7 +96,7 @@ int main(int argc, char **argv) {
         cycle++;
     } while(!Verilated::gotFinish());
 
-
     delete top;
     return 0;
 }
+
