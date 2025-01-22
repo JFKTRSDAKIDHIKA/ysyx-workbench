@@ -5,12 +5,15 @@
 #include <svdpi.h>
 #include <fstream>
 
+
+
+
 // define the DPI-C functions
 extern "C" void simulation_exit() {
     Verilated::gotFinish(true); 
 }
 
-static int rf_values[32];
+int rf_values[32];
 
 extern "C" void get_register_values(int rf[32]) {
     // 将 Verilog 中的寄存器值复制到 C++ 数组中
@@ -22,6 +25,8 @@ extern "C" void get_register_values(int rf[32]) {
 
 void pmem_write(uint32_t address, uint32_t data);
 uint32_t pmem_read(uint32_t address);
+void init_difftest(const char *ref_so_file, long img_size, int port);
+void difftest_step(Vysyx_24120009_core* top, uint32_t pc);
 
 // 加载程序到存储器中
 void load_program(const char *program_path) {
@@ -92,6 +97,8 @@ int main(int argc, char **argv) {
 
     bool step_mode = true; // default to single step mode
 
+    init_difftest("nemu/build/riscv32-nemu-interpreter-so", 0x10000, 1234);
+
     // Load program
     load_program(argv[1]);
 
@@ -101,7 +108,10 @@ int main(int argc, char **argv) {
     do {
         // Fetch 阶段
         uint32_t pc = top->imem_addr;          
-        top->imem_rdata = pmem_read(pc);       
+        top->imem_rdata = pmem_read(pc);     
+
+        difftest_step(top, pc);  // 比较寄存器和内存状态
+
         // Tick 时钟
         tick(top, step_mode);  // 传入step_mode来决定是否启用单步模式
         // 输出状态

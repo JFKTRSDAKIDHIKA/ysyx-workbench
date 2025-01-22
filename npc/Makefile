@@ -1,7 +1,7 @@
 # 定义变量
 VERILATOR = verilator
 TOP_MODULE = vsrc/cpu/ysyx_24120009_core.v
-CSRC = csrc/main.cpp csrc/memory.cpp
+CSRC = csrc/main.cpp csrc/memory.cpp csrc/DiffTest.cpp
 INCLUDE_DIRS = -Ivsrc/include -Ivsrc/common -Ivsrc/cpu
 OBJ_DIR = obj_dir
 EXEC = $(OBJ_DIR)/Vysyx_24120009_core

@@ -31,6 +31,38 @@ void (*ref_difftest_raise_intr)(uint64_t NO) = NULL;
 static bool is_skip_ref = false;
 static int skip_dut_nr_inst = 0;
 
+void difftest_memcpy(paddr_t addr, void *buf, size_t n, bool direction) {
+  // 这里的 `direction` 可以是 DIFFTEST_TO_REF 或 DIFFTEST_TO_DUT，表示拷贝的方向
+  // 如果是从 DUT -> REF
+  if (direction == DIFFTEST_TO_REF) {
+    // 拷贝内存内容到 NEMU
+    memcpy(guest_to_host(addr), buf, n);
+  } else {
+    // 如果是从 REF -> DUT
+    memcpy(buf, host_to_guest(addr), n);
+  }
+}
+
+void difftest_regcpy(void *dut, bool direction) {
+  // 如果是从 DUT -> REF
+  if (direction == DIFFTEST_TO_REF) {
+    memcpy(dut, &cpu, sizeof(CPU_state));  // 拷贝 DUT 的 CPU 状态到 ref
+  } else {
+    memcpy(&cpu, dut, sizeof(CPU_state));  // 从 ref 拷贝状态到 DUT
+  }
+}
+
+void difftest_exec(uint64_t n) {
+  for (uint64_t i = 0; i < n; ++i) {
+    isa_exec_once();  // 执行一次指令
+  }
+}
+
+void difftest_raise_intr(uint64_t NO) {
+  // 暂不使用中断，所以不做任何处理
+}
+
+
 // this is used to let ref skip instructions which
 // can not produce consistent behavior with NEMU
 void difftest_skip_ref() {
