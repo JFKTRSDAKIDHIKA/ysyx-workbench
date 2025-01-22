@@ -114,11 +114,11 @@ int main(int argc, char **argv) {
 
         // dut execute one instruction
         tick(top, step_mode);  // 传入step_mode来决定是否启用单步模式
-        
+                printf("ok\n");
+
         // ref execute one instruction
         ref_difftest_exec(1);
           
-        printf("ok\n");
 
         // Copy registers from DUT to REF and compare them
         ref_difftest_regcpy(&ref, DIFFTEST_TO_REF);
