@@ -366,11 +366,9 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root___stl_sequent__TOP__0(Vysyx_2412
         [(0x1fU & (vlSelf->imem_rdata >> 0x14U))];
     vlSelf->waddr_debug = (0x1fU & (vlSelf->imem_rdata 
                                     >> 7U));
-    vlSelf->ysyx_24120009_core__DOT__control__DOT____VdfgExtracted_ha0a626ba__0 
-        = (0x6fU | ((0x1fc00U & (vlSelf->imem_rdata 
-                                 << 0xaU)) | (0x380U 
-                                              & (vlSelf->imem_rdata 
-                                                 >> 5U))));
+    vlSelf->ysyx_24120009_core__DOT__control__DOT____VdfgExtracted_ha098e26d__0 
+        = ((0x1fc00U & (vlSelf->imem_rdata << 0xaU)) 
+           | (0x380U & (vlSelf->imem_rdata >> 5U)));
     vlSelf->ysyx_24120009_core__DOT__control__DOT____VdfgExtracted_h90d7ab0b__0 
         = ((0x1fc00U & (vlSelf->imem_rdata << 0xaU)) 
            | ((0x380U & (vlSelf->imem_rdata >> 5U)) 
@@ -390,13 +388,15 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root___stl_sequent__TOP__0(Vysyx_2412
     vlSelf->ysyx_24120009_core__DOT__control__DOT__inst_key 
         = ((0x67U == (0x7fU & vlSelf->imem_rdata)) ? 
            ((0U == (7U & (vlSelf->imem_rdata >> 0xcU)))
-             ? ((0x1fc00U & (vlSelf->imem_rdata << 0xaU)) 
-                | (0x380U & (vlSelf->imem_rdata >> 5U)))
-             : vlSelf->ysyx_24120009_core__DOT__control__DOT____VdfgExtracted_ha0a626ba__0)
+             ? vlSelf->ysyx_24120009_core__DOT__control__DOT____VdfgExtracted_ha098e26d__0
+             : (0x6fU | ((0x1fc00U & (vlSelf->imem_rdata 
+                                      << 0xaU)) | (0x380U 
+                                                   & (vlSelf->imem_rdata 
+                                                      >> 5U)))))
             : ((0x13U == (0x7fU & vlSelf->imem_rdata))
                 ? ((5U == (7U & (vlSelf->imem_rdata 
                                  >> 0xcU))) ? vlSelf->ysyx_24120009_core__DOT__control__DOT____VdfgExtracted_h90d7ab0b__0
-                    : vlSelf->ysyx_24120009_core__DOT__control__DOT____VdfgExtracted_ha0a626ba__0)
+                    : vlSelf->ysyx_24120009_core__DOT__control__DOT____VdfgExtracted_ha098e26d__0)
                 : ((0x17U == (0x7fU & vlSelf->imem_rdata))
                     ? (0x1fc00U & (vlSelf->imem_rdata 
                                    << 0xaU)) : vlSelf->ysyx_24120009_core__DOT__control__DOT____VdfgExtracted_h90d7ab0b__0)));
@@ -879,7 +879,7 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root___ctor_var_reset(Vysyx_24120009_
     vlSelf->ysyx_24120009_core__DOT__idu__DOT__op2_sel_mux__DOT__i0__DOT__lut_out = VL_RAND_RESET_I(32);
     vlSelf->ysyx_24120009_core__DOT__control__DOT__inst_key = VL_RAND_RESET_I(17);
     vlSelf->ysyx_24120009_core__DOT__control__DOT__ctl_signals = VL_RAND_RESET_I(17);
-    vlSelf->ysyx_24120009_core__DOT__control__DOT____VdfgExtracted_ha0a626ba__0 = VL_RAND_RESET_I(17);
+    vlSelf->ysyx_24120009_core__DOT__control__DOT____VdfgExtracted_ha098e26d__0 = VL_RAND_RESET_I(17);
     vlSelf->ysyx_24120009_core__DOT__control__DOT____VdfgExtracted_h90d7ab0b__0 = VL_RAND_RESET_I(17);
     for (int __Vi0 = 0; __Vi0 < 26; ++__Vi0) {
         vlSelf->ysyx_24120009_core__DOT__control__DOT__funct_mux__DOT__i0__DOT__key_list[__Vi0] = VL_RAND_RESET_I(17);

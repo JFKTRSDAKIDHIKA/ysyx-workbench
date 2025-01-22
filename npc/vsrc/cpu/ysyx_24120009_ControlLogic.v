@@ -38,7 +38,7 @@ module ysyx_24120009_ControlLogic (
             7'b0010011: begin
                 case (funct3)
                     3'b101: inst_key = {opcode, funct3, funct7};  // opcode == 7'b0010011 && funct3 == 3'b101
-                    default: inst_key = {opcode, funct3, 7'b1101111};  // 默认处理其他 funct3
+                    default: inst_key = {opcode, funct3, 7'b0000000};  // 默认处理其他 funct3
                 endcase
             end
             7'b0010111: begin

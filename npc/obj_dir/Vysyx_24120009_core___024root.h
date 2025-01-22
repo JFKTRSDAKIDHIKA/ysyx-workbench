@@ -42,7 +42,7 @@ class Vysyx_24120009_core___024root final : public VerilatedModule {
     IData/*31:0*/ ysyx_24120009_core__DOT__idu__DOT__op2_sel_mux__DOT__i0__DOT__lut_out;
     IData/*16:0*/ ysyx_24120009_core__DOT__control__DOT__inst_key;
     IData/*16:0*/ ysyx_24120009_core__DOT__control__DOT__ctl_signals;
-    IData/*16:0*/ ysyx_24120009_core__DOT__control__DOT____VdfgExtracted_ha0a626ba__0;
+    IData/*16:0*/ ysyx_24120009_core__DOT__control__DOT____VdfgExtracted_ha098e26d__0;
     IData/*16:0*/ ysyx_24120009_core__DOT__control__DOT____VdfgExtracted_h90d7ab0b__0;
     IData/*16:0*/ ysyx_24120009_core__DOT__control__DOT__funct_mux__DOT__i0__DOT__lut_out;
     IData/*31:0*/ ysyx_24120009_core__DOT__exu__DOT__result;
