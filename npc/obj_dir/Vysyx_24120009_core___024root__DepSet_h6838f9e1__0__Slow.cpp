@@ -195,7 +195,6 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root___dump_triggers__stl(Vysyx_24120
 }
 #endif  // VL_DEBUG
 
-void Vysyx_24120009_core___024root____Vdpiimwrap_ysyx_24120009_core__DOT__u_RegisterFile__DOT__get_register_values_TOP(VlUnpacked<IData/*31:0*/, 32> rf);
 void Vysyx_24120009_core___024root____Vdpiimwrap_ysyx_24120009_core__DOT__simulation_exit_TOP();
 
 VL_ATTR_COLD void Vysyx_24120009_core___024root___stl_sequent__TOP__0(Vysyx_24120009_core___024root* vlSelf) {
@@ -203,8 +202,9 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root___stl_sequent__TOP__0(Vysyx_2412
     Vysyx_24120009_core__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vysyx_24120009_core___024root___stl_sequent__TOP__0\n"); );
     // Body
-    Vysyx_24120009_core___024root____Vdpiimwrap_ysyx_24120009_core__DOT__u_RegisterFile__DOT__get_register_values_TOP(vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf);
     vlSelf->inst_debug = vlSelf->imem_rdata;
+    vlSelf->x2_debug = vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf
+        [2U];
     vlSelf->is_ebreak_debug = (0x100073U == vlSelf->imem_rdata);
     vlSelf->imem_addr = vlSelf->ysyx_24120009_core__DOT__pc;
     vlSelf->ysyx_24120009_core__DOT__ifu__DOT__mux_pc_sel__DOT__i0__DOT__data_list[4U] 
@@ -727,6 +727,7 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root___ctor_var_reset(Vysyx_24120009_
     vlSelf->inst_debug = VL_RAND_RESET_I(32);
     vlSelf->reg_write_data_debug = VL_RAND_RESET_I(32);
     vlSelf->is_ebreak_debug = VL_RAND_RESET_I(1);
+    vlSelf->x2_debug = VL_RAND_RESET_I(32);
     vlSelf->ysyx_24120009_core__DOT__pc = VL_RAND_RESET_I(32);
     vlSelf->ysyx_24120009_core__DOT__reg_write_data = VL_RAND_RESET_I(32);
     vlSelf->ysyx_24120009_core__DOT__Op1 = VL_RAND_RESET_I(32);

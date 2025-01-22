@@ -28,6 +28,7 @@ class Vysyx_24120009_core___024root final : public VerilatedModule {
     VL_OUT(Op2_debug,31,0);
     VL_OUT(inst_debug,31,0);
     VL_OUT(reg_write_data_debug,31,0);
+    VL_OUT(x2_debug,31,0);
     IData/*31:0*/ ysyx_24120009_core__DOT__pc;
     IData/*31:0*/ ysyx_24120009_core__DOT__reg_write_data;
     IData/*31:0*/ ysyx_24120009_core__DOT__Op1;

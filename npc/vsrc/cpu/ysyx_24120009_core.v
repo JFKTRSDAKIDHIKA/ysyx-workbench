@@ -12,7 +12,8 @@ module ysyx_24120009_core (
     output [`ysyx_24120009_DATA_WIDTH-1:0] Op2_debug,
     output [31:0] inst_debug,
     output [`ysyx_24120009_DATA_WIDTH-1:0] reg_write_data_debug,
-    output is_ebreak_debug
+    output is_ebreak_debug,
+    output wire [`ysyx_24120009_DATA_WIDTH-1:0] x2_debug
 );
 
     // Debug signal declaration
@@ -75,7 +76,8 @@ module ysyx_24120009_core (
         .raddr1(rs1_addr),
         .raddr2(rs2_addr),
         .rdata1(rdata1),
-        .rdata2(rdata2)
+        .rdata2(rdata2),
+        .x2_debug(x2_debug)
     );
         
         
