@@ -22,7 +22,9 @@ void tick(Vysyx_24120009_core* top, bool step_mode) {
     top->eval();
     Verilated::timeInc(1); // 增加仿真时间
 
+    // print the instruction whatever the mode is
     std::cout << "Instruction: 0x" << std::hex << top->inst_debug << std::endl;
+    
     if (step_mode) {
         std::string input;
         std::cout << "(npc) : ";
