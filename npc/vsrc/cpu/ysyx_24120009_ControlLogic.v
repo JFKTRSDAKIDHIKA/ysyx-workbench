@@ -97,7 +97,7 @@ module ysyx_24120009_ControlLogic (
 
     // Decode control signals
     assign alu_op   = ctl_signals[16:12];
-    assign op1_sel  = ctl_signals[11:10];
+    assign op1_sel  = 2'b01;
     assign op2_sel  = ctl_signals[9:8];
     assign pc_sel   = ctl_signals[7:5];
     assign rf_we    = ctl_signals[4];
