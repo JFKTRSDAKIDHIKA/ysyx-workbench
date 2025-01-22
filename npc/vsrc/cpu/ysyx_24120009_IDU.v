@@ -81,7 +81,7 @@ module ysyx_24120009_IDU (
     assign rd_addr_o       = wb_addr;
     ysyx_24120009_MuxKey #(2, 2, `ysyx_24120009_DATA_WIDTH) op1_sel_mux (
         .out(Op1),
-        .key(Op1Sel),
+        .key(2'b01),
         .lut({
             2'b00, rs1_data_i,
             2'b01, imm_u_sext

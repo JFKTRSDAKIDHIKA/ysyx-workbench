@@ -41,16 +41,13 @@ module ysyx_24120009_ControlLogic (
                 endcase
             end
             7'b0111011: begin
-                inst_key = {opcode, 3'b0, 7'b0};  // 处理 opcode == 32'h1110011
+                inst_key = {opcode, 3'b0, 7'b0};  
             end
             default: begin
                 inst_key = {opcode, funct3, funct7};  // 默认处理其他 opcode 和 funct3 的组合
             end
         endcase
     end
-
-
-    // remain tobe continued!
 
     wire [DATA_LEN-1:0] ctl_signals;
     ysyx_24120009_MuxKey #(NR_KEY, KEY_LEN, DATA_LEN) funct_mux (
