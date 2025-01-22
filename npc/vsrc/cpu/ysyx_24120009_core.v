@@ -13,7 +13,8 @@ module ysyx_24120009_core (
     output [31:0] inst_debug,
     output [`ysyx_24120009_DATA_WIDTH-1:0] reg_write_data_debug,
     output is_ebreak_debug,
-    output wire [`ysyx_24120009_DATA_WIDTH-1:0] x2_debug
+    output wire [`ysyx_24120009_DATA_WIDTH-1:0] x2_debug,
+    output wire [`ysyx_24120009_REG_ADDR_WIDTH-1:0] waddr_debug
 );
 
     // Debug signal declaration
@@ -23,6 +24,8 @@ module ysyx_24120009_core (
     assign inst_debug = inst;
     assign reg_write_data_debug = reg_write_data;
     assign is_ebreak_debug = is_ebreak;
+    assign waddr_debug = waddr;
+
 
     // Internal signals
     wire [`ysyx_24120009_DATA_WIDTH-1:0] pc;

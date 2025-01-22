@@ -258,12 +258,6 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root___stl_sequent__TOP__0(Vysyx_2412
     vlSelf->ysyx_24120009_core__DOT__idu__DOT__op1_sel_mux__DOT__i0__DOT__data_list[1U] 
         = vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf
         [(0x1fU & (vlSelf->imem_rdata >> 0xfU))];
-    vlSelf->ysyx_24120009_core__DOT__idu__DOT__op2_sel_mux__DOT__i0__DOT__data_list[1U] 
-        = (((- (IData)((vlSelf->imem_rdata >> 0x1fU))) 
-            << 0xcU) | ((0xfe0U & (vlSelf->imem_rdata 
-                                   >> 0x14U)) | (0x1fU 
-                                                 & (vlSelf->imem_rdata 
-                                                    >> 7U))));
     vlSelf->ysyx_24120009_core__DOT__idu__DOT__op2_sel_mux__DOT__i0__DOT__data_list[2U] 
         = (((- (IData)((vlSelf->imem_rdata >> 0x1fU))) 
             << 0xcU) | (vlSelf->imem_rdata >> 0x14U));
@@ -272,6 +266,8 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root___stl_sequent__TOP__0(Vysyx_2412
     vlSelf->ysyx_24120009_core__DOT__idu__DOT__op2_sel_mux__DOT__i0__DOT__data_list[0U] 
         = vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf
         [(0x1fU & (vlSelf->imem_rdata >> 0x14U))];
+    vlSelf->waddr_debug = (0x1fU & (vlSelf->imem_rdata 
+                                    >> 7U));
     vlSelf->ysyx_24120009_core__DOT__control__DOT____VdfgExtracted_ha0a626ba__0 
         = (0x6fU | ((0x1fc00U & (vlSelf->imem_rdata 
                                  << 0xaU)) | (0x380U 
@@ -289,6 +285,10 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root___stl_sequent__TOP__0(Vysyx_2412
     vlSelf->ysyx_24120009_core__DOT__ifu__DOT__mux_pc_sel__DOT__i0__DOT__data_list[3U] 
         = (vlSelf->ysyx_24120009_core__DOT__rdata1 
            + vlSelf->ysyx_24120009_core__DOT__idu__DOT__imm_i_sext);
+    vlSelf->ysyx_24120009_core__DOT__idu__DOT__op2_sel_mux__DOT__i0__DOT__data_list[1U] 
+        = (((- (IData)((vlSelf->imem_rdata >> 0x1fU))) 
+            << 0xcU) | ((0xfe0U & (vlSelf->imem_rdata 
+                                   >> 0x14U)) | (IData)(vlSelf->waddr_debug)));
     vlSelf->ysyx_24120009_core__DOT__control__DOT__inst_key 
         = ((0x67U == (0x7fU & vlSelf->imem_rdata)) ? 
            ((0U == (7U & (vlSelf->imem_rdata >> 0xcU)))
@@ -744,6 +744,7 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root___ctor_var_reset(Vysyx_24120009_
     vlSelf->reg_write_data_debug = VL_RAND_RESET_I(32);
     vlSelf->is_ebreak_debug = VL_RAND_RESET_I(1);
     vlSelf->x2_debug = VL_RAND_RESET_I(32);
+    vlSelf->waddr_debug = VL_RAND_RESET_I(5);
     vlSelf->ysyx_24120009_core__DOT__pc = VL_RAND_RESET_I(32);
     vlSelf->ysyx_24120009_core__DOT__reg_write_data = VL_RAND_RESET_I(32);
     vlSelf->ysyx_24120009_core__DOT__Op1 = VL_RAND_RESET_I(32);
