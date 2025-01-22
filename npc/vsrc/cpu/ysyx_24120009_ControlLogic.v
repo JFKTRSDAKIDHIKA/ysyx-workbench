@@ -41,7 +41,7 @@ module ysyx_24120009_ControlLogic (
                     default: inst_key = {opcode, funct3, 7'b1101111};  // 默认处理其他 funct3
                 endcase
             end
-            7'h3B: begin
+            7'b0111011: begin
                 inst_key = {opcode, 3'b0, 7'b0};  
             end
             default: begin
@@ -84,7 +84,7 @@ module ysyx_24120009_ControlLogic (
         // J-type instructions(1)
         17'b1101111_000_0000000, 17'b00000_00_00_011_1_0_0_01, // JAL
         // U-type instructions(1)
-        17'hEC00, 17'h412, // AUIPC
+        17'b1001001_000_0000000, 17'b00000_01_00_000_1_0_0_10, // AUIPC
         // JALR instruction(1)
         17'b1100111_000_0000000, 17'b00000_00_01_001_1_0_0_01, // JALR
         // ebreak instruction(1)
