@@ -10,6 +10,14 @@ extern "C" void simulation_exit() {
     Verilated::gotFinish(true); 
 }
 
+extern "C" void get_register_values(int rf[32]) {
+    // 处理寄存器值
+    for (int i = 0; i < 32; ++i) {
+        std::cout << "x" << i << ": " << std::hex << rf[i] << std::endl;
+    }
+}
+
+
 void pmem_write(uint32_t address, uint32_t data);
 uint32_t pmem_read(uint32_t address);
 
@@ -38,10 +46,26 @@ void tick(Vysyx_24120009_core* top, bool step_mode) {
 
     if (step_mode) {
         std::string input;
-        std::cout << "Press Enter to continue to the next cycle..." << std::endl;
-        std::getline(std::cin, input);  // 等待用户输入，按下回车继续
+        std::cout << "Enter command : ";
+        std::getline(std::cin, input);  // 等待用户输入
+
+        if (input == "si") {
+            // 执行单步操作
+            std::cout << "Single-step execution..." << std::endl;
+            return;  // 返回以继续执行单步操作
+        } 
+        else if (input == "info r") {
+            // 输出所有寄存器信息
+            std::cout << "Register information:" << std::endl;
+            std::cout << "PC = 0x" << std::hex << top->pc_debug << std::endl;
+
+        } 
+        else {
+            std::cout << "Unknown command!" << std::endl;
+        }
     }
 }
+
 
 void reset(Vysyx_24120009_core* top, int cycles) {
     top->rst = 1;
@@ -69,13 +93,6 @@ int main(int argc, char **argv) {
     // Reset
     reset(top, 10); // 复位保持 10 个周期
 
-    std::cout << "AfterReset: "
-                  << "PC = 0x" << std::hex << top->pc_debug
-                  << ", x1 = " << std::hex << top->x1
-                  << ", x2 = " << std::hex << top->x2
-                  << ", x3 = " << std::hex << top->x3 << std::endl;
-
-    int cycle = 0;
     do {
         // Fetch 阶段
         uint32_t pc = top->imem_addr;          
@@ -83,17 +100,6 @@ int main(int argc, char **argv) {
         // Tick 时钟
         tick(top, step_mode);  // 传入step_mode来决定是否启用单步模式
         // 输出状态
-        std::cout << "Cycle: " << cycle
-                  << ", PC = 0x" << std::hex << top->pc_debug
-                  << ", x1 = " << std::hex << top->x1
-                  << ", x2 = " << std::hex << top->x2
-                  << ", x3 = " << std::hex << top->x3 
-                  << ", Op1 = " << std::hex << top->Op1_debug
-                  << ", Op2 = " << std::hex << top->Op2_debug
-                  << ", reg_write_data = " << std::hex << top->reg_write_data_debug
-                  << ", INST = " << std::hex << top->inst_debug
-                  << std::endl;
-        cycle++;
     } while(!Verilated::gotFinish());
 
     delete top;

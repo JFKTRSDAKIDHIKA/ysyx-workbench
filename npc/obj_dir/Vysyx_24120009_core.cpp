@@ -16,9 +16,6 @@ Vysyx_24120009_core::Vysyx_24120009_core(VerilatedContext* _vcontextp__, const c
     , is_ebreak_debug{vlSymsp->TOP.is_ebreak_debug}
     , imem_addr{vlSymsp->TOP.imem_addr}
     , imem_rdata{vlSymsp->TOP.imem_rdata}
-    , x1{vlSymsp->TOP.x1}
-    , x2{vlSymsp->TOP.x2}
-    , x3{vlSymsp->TOP.x3}
     , pc_debug{vlSymsp->TOP.pc_debug}
     , Op1_debug{vlSymsp->TOP.Op1_debug}
     , Op2_debug{vlSymsp->TOP.Op2_debug}

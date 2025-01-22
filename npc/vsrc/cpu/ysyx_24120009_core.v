@@ -7,9 +7,6 @@ module ysyx_24120009_core (
     output wire [31:0] imem_addr,
     input wire [`ysyx_24120009_DATA_WIDTH-1:0] imem_rdata,
     // For debug purpose
-    output [`ysyx_24120009_DATA_WIDTH-1:0] x1,
-    output [`ysyx_24120009_DATA_WIDTH-1:0] x2,
-    output [`ysyx_24120009_DATA_WIDTH-1:0] x3,
     output [`ysyx_24120009_DATA_WIDTH-1:0] pc_debug,
     output [`ysyx_24120009_DATA_WIDTH-1:0] Op1_debug,
     output [`ysyx_24120009_DATA_WIDTH-1:0] Op2_debug,
@@ -54,6 +51,7 @@ module ysyx_24120009_core (
     wire [`ysyx_24120009_DATA_WIDTH-1:0] rdata1;
     wire [`ysyx_24120009_DATA_WIDTH-1:0] rdata2;
 
+
     // handle ebreak signal
     wire is_ebreak;
     import "DPI-C" function void simulation_exit();
@@ -77,11 +75,7 @@ module ysyx_24120009_core (
         .raddr1(rs1_addr),
         .raddr2(rs2_addr),
         .rdata1(rdata1),
-        .rdata2(rdata2),
-        // For debug purpose
-        .x1(x1),
-        .x2(x2),
-        .x3(x3)
+        .rdata2(rdata2)
     );
         
         

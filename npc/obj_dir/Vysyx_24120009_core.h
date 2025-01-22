@@ -30,9 +30,6 @@ class Vysyx_24120009_core VL_NOT_FINAL : public VerilatedModel {
     VL_OUT8(&is_ebreak_debug,0,0);
     VL_OUT(&imem_addr,31,0);
     VL_IN(&imem_rdata,31,0);
-    VL_OUT(&x1,31,0);
-    VL_OUT(&x2,31,0);
-    VL_OUT(&x3,31,0);
     VL_OUT(&pc_debug,31,0);
     VL_OUT(&Op1_debug,31,0);
     VL_OUT(&Op2_debug,31,0);
