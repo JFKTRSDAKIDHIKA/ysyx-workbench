@@ -29,7 +29,6 @@ void tick(Vysyx_24120009_core* top, bool step_mode) {
 
         if (input == "si") {
             // 执行单步操作
-            std::cout << "Single-step execution..." << std::endl;
             std::cout << "Instruction: 0x" << std::hex << top->inst_debug << std::endl;
             return;  // 返回以继续执行单步操作
         } 
