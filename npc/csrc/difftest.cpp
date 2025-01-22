@@ -20,15 +20,10 @@ void init_difftest(const char *ref_so_file, int port) {
 
   // Get the function pointers
   ref_difftest_memcpy = (void (*)(const char *))dlsym(handle, "difftest_memcpy");
-  assert(ref_difftest_memcpy);
   ref_difftest_regcpy = (void (*)(void *, bool))dlsym(handle, "difftest_regcpy");
-  assert(ref_difftest_regcpy);
   ref_difftest_exec = (void (*)(uint64_t))dlsym(handle, "difftest_exec");
-  assert(ref_difftest_exec);
   ref_difftest_raise_intr = (void (*)(uint64_t))dlsym(handle, "difftest_raise_intr");
-  assert(ref_difftest_raise_intr);
   ref_difftest_init = (void (*)(int))dlsym(handle, "difftest_init");
-  assert(ref_difftest_init);
 
   // Check if all functions are successfully loaded
   assert(ref_difftest_memcpy != NULL && "Failed to get function difftest_memcpy!");
