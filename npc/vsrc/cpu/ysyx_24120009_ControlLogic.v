@@ -25,22 +25,30 @@ module ysyx_24120009_ControlLogic (
     wire [2:0] funct3 = inst[14:12];
     wire [6:0] funct7 = inst[31:25];
 
-    wire [KEY_LEN-1:0] inst_key;
-
+    reg [KEY_LEN-1:0] inst_key;
     always @(*) begin
-        case ({opcode, funct3})
-            10'b1100111_000: // opcode == 7'b1100111 && funct3 == 3'b000
-                inst_key = {opcode, funct3, 7'b0};
-            10'b0010011_101: // opcode == 7'b0010011 && funct3 == 3'b101
-                inst_key = {opcode, funct3, funct7};
-            default:
-                inst_key = {opcode, funct3, funct7};
+        case (opcode)  
+            7'b1100111: begin
+                case (funct3)
+                    3'b000: inst_key = {opcode, funct3, 7'b0};  // opcode == 7'b1100111 && funct3 == 3'b000
+                    default: inst_key = {opcode, funct3, 7'b1101111};  // 默认处理其他 funct3
+                endcase
+            end
+            7'b0010011: begin
+                case (funct3)
+                    3'b101: inst_key = {opcode, funct3, funct7};  // opcode == 7'b0010011 && funct3 == 3'b101
+                    default: inst_key = {opcode, funct3, 7'b1101111};  // 默认处理其他 funct3
+                endcase
+            end
+            7'b0111011: begin
+                inst_key = {opcode, 3'b0, 7'b0};  // 处理 opcode == 32'h1110011
+            end
+            default: begin
+                inst_key = {opcode, funct3, funct7};  // 默认处理其他 opcode 和 funct3 的组合
+            end
         endcase
-        
-        // Additional check for opcode == 32'h1110011
-        if (opcode == 7'h31)  // 32'h1110011 = 7'b1110011
-            inst_key = {opcode, 3'b0, 7'b0};
     end
+
 
     // remain tobe continued!
 
