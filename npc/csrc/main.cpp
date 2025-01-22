@@ -24,7 +24,7 @@ void tick(Vysyx_24120009_core* top, bool step_mode) {
 
     if (step_mode) {
         std::string input;
-        std::cout << "Enter command : ";
+        std::cout << "(npc) : ";
         std::getline(std::cin, input);  // 等待用户输入
 
         if (input == "si") {
