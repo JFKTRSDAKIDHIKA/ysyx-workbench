@@ -59,7 +59,7 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root___eval_initial__TOP(Vysyx_241200
     vlSelf->ysyx_24120009_core__DOT__exu__DOT__alu_instance__DOT__alu_mux__DOT__i0__DOT__key_list[9U] = 0U;
     vlSelf->ysyx_24120009_core__DOT__control__DOT__funct_mux__DOT__i0__DOT__key_list[0U] = 0x1cc00U;
     vlSelf->ysyx_24120009_core__DOT__control__DOT__funct_mux__DOT__i0__DOT__key_list[1U] = 0x19c00U;
-    vlSelf->ysyx_24120009_core__DOT__control__DOT__funct_mux__DOT__i0__DOT__key_list[2U] = 0x12400U;
+    vlSelf->ysyx_24120009_core__DOT__control__DOT__funct_mux__DOT__i0__DOT__key_list[2U] = 0x5c00U;
     vlSelf->ysyx_24120009_core__DOT__control__DOT__funct_mux__DOT__i0__DOT__key_list[3U] = 0x1bc00U;
     vlSelf->ysyx_24120009_core__DOT__control__DOT__funct_mux__DOT__i0__DOT__key_list[4U] = 0x18f00U;
     vlSelf->ysyx_24120009_core__DOT__control__DOT__funct_mux__DOT__i0__DOT__key_list[5U] = 0x18e00U;
@@ -299,7 +299,7 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root___stl_sequent__TOP__0(Vysyx_2412
                 ? ((5U == (7U & (vlSelf->imem_rdata 
                                  >> 0xcU))) ? vlSelf->ysyx_24120009_core__DOT__control__DOT____VdfgExtracted_h90d7ab0b__0
                     : vlSelf->ysyx_24120009_core__DOT__control__DOT____VdfgExtracted_ha0a626ba__0)
-                : ((0x3bU == (0x7fU & vlSelf->imem_rdata))
+                : ((0x17U == (0x7fU & vlSelf->imem_rdata))
                     ? (0x1fc00U & (vlSelf->imem_rdata 
                                    << 0xaU)) : vlSelf->ysyx_24120009_core__DOT__control__DOT____VdfgExtracted_h90d7ab0b__0)));
     vlSelf->ysyx_24120009_core__DOT__control__DOT__funct_mux__DOT__i0__DOT__lut_out 

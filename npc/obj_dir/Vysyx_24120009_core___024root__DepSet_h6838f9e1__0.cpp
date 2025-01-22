@@ -99,7 +99,7 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root___ico_sequent__TOP__0(Vysyx_241
                 ? ((5U == (7U & (vlSelf->imem_rdata 
                                  >> 0xcU))) ? vlSelf->ysyx_24120009_core__DOT__control__DOT____VdfgExtracted_h90d7ab0b__0
                     : vlSelf->ysyx_24120009_core__DOT__control__DOT____VdfgExtracted_ha0a626ba__0)
-                : ((0x3bU == (0x7fU & vlSelf->imem_rdata))
+                : ((0x17U == (0x7fU & vlSelf->imem_rdata))
                     ? (0x1fc00U & (vlSelf->imem_rdata 
                                    << 0xaU)) : vlSelf->ysyx_24120009_core__DOT__control__DOT____VdfgExtracted_h90d7ab0b__0)));
     vlSelf->ysyx_24120009_core__DOT__control__DOT__funct_mux__DOT__i0__DOT__lut_out 
