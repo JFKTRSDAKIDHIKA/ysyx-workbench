@@ -50,9 +50,8 @@ __EXPORT void difftest_regcpy(void *dut, bool direction) {
 
 __EXPORT void difftest_exec(uint64_t n) {
   for (uint64_t i = 0; i < n; i++) {
-    Decode s;
     // call the ISA dependent instruction execution function
-    isa_exec_once(&s);
+    cpu_exec(1);
   }
 }
 
