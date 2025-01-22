@@ -118,6 +118,8 @@ int main(int argc, char **argv) {
           << ", reg_write_data: 0x" << top->reg_write_data_debug 
           << std::dec << std::endl;  // 输出完十六进制后恢复为十进制
 
+        std::cout << "x0: 0x" << std::hex << top->x2_debug << std::endl;
+
         // ref execute one instruction
         ref_difftest_exec(1);
           
