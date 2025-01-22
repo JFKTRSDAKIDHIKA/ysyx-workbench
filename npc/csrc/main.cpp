@@ -12,7 +12,7 @@
 extern "C" void simulation_exit() {
     Verilated::gotFinish(true); 
 }
-extern "C" void get_register_values(int rf[32]) {
+extern "C" void get_register_values(uint32_t rf[32]) {
     set_register_values(rf);  // set the register values
 }
 
