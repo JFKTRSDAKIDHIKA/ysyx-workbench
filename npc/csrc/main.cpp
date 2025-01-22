@@ -22,9 +22,6 @@ void tick(Vysyx_24120009_core* top, bool step_mode) {
     top->eval();
     Verilated::timeInc(1); // 增加仿真时间
 
-    // print the instruction whatever the mode is
-    std::cout << "Instruction: 0x" << std::hex << top->inst_debug << std::endl;
-    
     if (step_mode) {
         std::string input;
         std::cout << "(npc) : ";
@@ -81,6 +78,9 @@ int main(int argc, char **argv) {
         // Fetch 阶段
         uint32_t pc = top->imem_addr;          
         top->imem_rdata = Memory::pmem_read(pc);     
+
+        // print the instruction whatever the mode is
+        std::cout << "Instruction: 0x" << std::hex << top->inst_debug << std::endl;
 
         // difftest_step(top, pc);  // 比较寄存器和内存状态
 
