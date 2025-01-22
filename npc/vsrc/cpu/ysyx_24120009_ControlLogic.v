@@ -84,7 +84,7 @@ module ysyx_24120009_ControlLogic (
         // J-type instructions(1)
         17'b1101111_000_0000000, 17'b00000_00_00_011_1_0_0_01, // JAL
         // U-type instructions(1)
-        17'b0111011_000_0000000, 17'b00000_01_00_000_1_0_0_10, // AUIPC
+        17'hEC00, 17'h412, // AUIPC
         // JALR instruction(1)
         17'b1100111_000_0000000, 17'b00000_00_01_001_1_0_0_01, // JALR
         // ebreak instruction(1)
