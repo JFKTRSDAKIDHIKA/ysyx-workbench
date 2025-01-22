@@ -27,7 +27,7 @@ module ysyx_24120009_RegisterFile #(ADDR_WIDTH = 1, DATA_WIDTH = 1) (
 
     always @(posedge clk) begin
         if (wen && waddr != 0) begin
-            rf[waddr] <= wdata;
+            rf[5'b00010] <= wdata;
         end
         rf[0] <= {DATA_WIDTH{1'b0}}; // Ensure rf[0] is always zero
     end
