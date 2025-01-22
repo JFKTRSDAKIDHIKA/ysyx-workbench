@@ -25,8 +25,8 @@ module ysyx_24120009_ControlLogic (
     wire [2:0] funct3 = inst[14:12];
     wire [6:0] funct7 = inst[31:25];
 
-    wire [KEY_LEN-1:0] inst_key;
-/*
+    reg [KEY_LEN-1:0] inst_key;
+    
     always @(*) begin
         case (opcode)  
             7'b1100111: begin
@@ -49,8 +49,6 @@ module ysyx_24120009_ControlLogic (
             end
         endcase
     end
-*/
-    assign inst_key = {opcode, 3'b0, 7'b0};
 
     wire [DATA_LEN-1:0] ctl_signals;
     ysyx_24120009_MuxKey #(NR_KEY, KEY_LEN, DATA_LEN) funct_mux (
