@@ -18,6 +18,7 @@
 #include <difftest-def.h>
 #include <memory/paddr.h>
 
+/*
 __EXPORT void difftest_memcpy(paddr_t addr, void *buf, size_t n, bool direction) {
   assert(0);
 }
@@ -37,6 +38,7 @@ __EXPORT void difftest_raise_intr(word_t NO) {
 __EXPORT void difftest_init(int port) {
   void init_mem();
   init_mem();
-  /* Perform ISA dependent initialization. */
+  //  Perform ISA dependent initialization. 
   init_isa();
 }
+*/
