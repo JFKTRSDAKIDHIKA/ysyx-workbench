@@ -1,11 +1,11 @@
 #include "Vysyx_24120009_core.h"
 #include "verilated.h"
-#include <iostream>
-#include <svdpi.h>
 #include "difftest.h"
 #include "registers.h"
 #include "program_loader.h"
 #include "memory.h"
+#include <iostream>
+#include <svdpi.h>
 
 // define the DPI-C functions
 extern "C" void simulation_exit() {
@@ -34,6 +34,9 @@ void tick(Vysyx_24120009_core* top, bool step_mode) {
         else if (input == "info r") {
             print_register_values();  // 打印寄存器信息
         } 
+        else if (input == "q") {
+            Verilated::gotFinish(true);  // 退出仿真
+        }
         else {
             std::cout << "Unknown command!" << std::endl;
         }
