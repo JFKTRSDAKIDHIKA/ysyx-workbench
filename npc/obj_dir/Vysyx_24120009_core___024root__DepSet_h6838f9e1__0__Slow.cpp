@@ -753,6 +753,9 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root___ctor_var_reset(Vysyx_24120009_
     for (int __Vi0 = 0; __Vi0 < 32; ++__Vi0) {
         vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf[__Vi0] = VL_RAND_RESET_I(32);
     }
+    for (int __Vi0 = 0; __Vi0 < 32; ++__Vi0) {
+        vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf_flat[__Vi0] = VL_RAND_RESET_I(32);
+    }
     vlSelf->ysyx_24120009_core__DOT__ifu__DOT__pc_next = VL_RAND_RESET_I(32);
     for (int __Vi0 = 0; __Vi0 < 5; ++__Vi0) {
         vlSelf->ysyx_24120009_core__DOT__ifu__DOT__mux_pc_sel__DOT__i0__DOT__key_list[__Vi0] = VL_RAND_RESET_I(3);
