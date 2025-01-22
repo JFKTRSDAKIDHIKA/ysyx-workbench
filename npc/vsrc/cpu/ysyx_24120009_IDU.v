@@ -88,11 +88,14 @@ module ysyx_24120009_IDU (
         })
     );
 
+    wire [`ysyx_24120009_DATA_WIDTH-1:0] pc_minus4;
+    assign pc_minus4 = pc_i - `ysyx_24120009_PC_STEP;
+
     ysyx_24120009_MuxKey #(4, 2, `ysyx_24120009_DATA_WIDTH) op2_sel_mux (
         .out(Op2),
         .key(Op2Sel),
         .lut({
-            2'b00, pc_i,
+            2'b00, pc_minus4,
             2'b01, imm_i_sext,
             2'b10, imm_s_sext,
             2'b11, rs2_data_i

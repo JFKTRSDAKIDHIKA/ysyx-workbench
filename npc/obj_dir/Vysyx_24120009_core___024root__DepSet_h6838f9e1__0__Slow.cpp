@@ -268,7 +268,7 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root___stl_sequent__TOP__0(Vysyx_2412
         = (((- (IData)((vlSelf->imem_rdata >> 0x1fU))) 
             << 0xcU) | (vlSelf->imem_rdata >> 0x14U));
     vlSelf->ysyx_24120009_core__DOT__idu__DOT__op2_sel_mux__DOT__i0__DOT__data_list[3U] 
-        = vlSelf->ysyx_24120009_core__DOT__pc;
+        = (vlSelf->ysyx_24120009_core__DOT__pc - (IData)(4U));
     vlSelf->ysyx_24120009_core__DOT__idu__DOT__op2_sel_mux__DOT__i0__DOT__data_list[0U] 
         = vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf
         [(0x1fU & (vlSelf->imem_rdata >> 0x14U))];
