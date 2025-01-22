@@ -8,6 +8,9 @@ void set_register_values(uint32_t rf[32]) {
     for (int i = 0; i < 64; i = i + 2) {
         rf_values[i/2] = rf[i];
     }
+    for (int i = 0; i < 64; i = i + 2) {
+        std::cout << "Register " << i << ": 0x" << std::hex << rf_values[i/2] << std::endl;  // 打印寄存器值
+    }
 }
 
 void print_register_values() {
