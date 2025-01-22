@@ -26,10 +26,21 @@ module ysyx_24120009_ControlLogic (
     wire [6:0] funct7 = inst[31:25];
 
     wire [KEY_LEN-1:0] inst_key;
-    assign inst_key = ({opcode, funct3} == 10'b1100111_000) ? {opcode, funct3, 7'b0} : 
-                  (opcode == 7'b1101111) ? {opcode, 3'b0, 7'b0} : 
-                  ({opcode, funct3} == 10'b0010011_101) ? {opcode, funct3, funct7} : 
-                  {opcode, funct3, funct7};
+
+    always @(*) begin
+        case ({opcode, funct3})
+            10'b1100111_000: // opcode == 7'b1100111 && funct3 == 3'b000
+                inst_key = {opcode, funct3, 7'b0};
+            10'b0010011_101: // opcode == 7'b0010011 && funct3 == 3'b101
+                inst_key = {opcode, funct3, funct7};
+            default:
+                inst_key = {opcode, funct3, funct7};
+        endcase
+        
+        // Additional check for opcode == 32'h1110011
+        if (opcode == 7'h31)  // 32'h1110011 = 7'b1110011
+            inst_key = {opcode, 3'b0, 7'b0};
+    end
 
     // remain tobe continued!
 
