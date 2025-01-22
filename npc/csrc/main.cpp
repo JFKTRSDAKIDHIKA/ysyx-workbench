@@ -79,13 +79,13 @@ int main(int argc, char **argv) {
         uint32_t pc = top->imem_addr;          
         top->imem_rdata = Memory::pmem_read(pc);     
 
-        // print the instruction whatever the mode is
-        std::cout << "Instruction: 0x" << std::hex << top->inst_debug << std::endl;
-
         // difftest_step(top, pc);  // 比较寄存器和内存状态
 
         // Tick 时钟
         tick(top, step_mode);  // 传入step_mode来决定是否启用单步模式
+
+        // print the instruction whatever the mode is
+        std::cout << "Instruction: 0x" << std::hex << top->inst_debug << std::endl;
     } while(!Verilated::gotFinish());
 
     delete top;
