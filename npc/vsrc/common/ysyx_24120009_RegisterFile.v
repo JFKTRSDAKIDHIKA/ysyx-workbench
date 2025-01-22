@@ -36,7 +36,7 @@ module ysyx_24120009_RegisterFile #(ADDR_WIDTH = 1, DATA_WIDTH = 1) (
     // Declare a flat array to pass register values to DPI-C function
     logic [DATA_WIDTH-1:0] rf_flat [2**ADDR_WIDTH-1:0];
 
-    always @(posedge clk) begin
+    always @(*) begin
         // 将原始多维数组的值展平到未打包的一维数组
         for (int i = 0; i < 2**ADDR_WIDTH; i = i + 1) begin
             rf_flat[i] = rf[i];  // 直接将每个寄存器的值存入一维数组

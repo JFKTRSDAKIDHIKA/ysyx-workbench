@@ -197,6 +197,7 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root___dump_triggers__stl(Vysyx_24120
 }
 #endif  // VL_DEBUG
 
+void Vysyx_24120009_core___024root____Vdpiimwrap_ysyx_24120009_core__DOT__u_RegisterFile__DOT__get_register_values_TOP(VlUnpacked<IData/*31:0*/, 32> rf);
 void Vysyx_24120009_core___024root____Vdpiimwrap_ysyx_24120009_core__DOT__simulation_exit_TOP();
 
 VL_ATTR_COLD void Vysyx_24120009_core___024root___stl_sequent__TOP__0(Vysyx_24120009_core___024root* vlSelf) {
@@ -204,6 +205,103 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root___stl_sequent__TOP__0(Vysyx_2412
     Vysyx_24120009_core__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vysyx_24120009_core___024root___stl_sequent__TOP__0\n"); );
     // Body
+    vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf_flat[0U] 
+        = vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf
+        [0U];
+    vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf_flat[1U] 
+        = vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf
+        [1U];
+    vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf_flat[2U] 
+        = vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf
+        [2U];
+    vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf_flat[3U] 
+        = vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf
+        [3U];
+    vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf_flat[4U] 
+        = vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf
+        [4U];
+    vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf_flat[5U] 
+        = vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf
+        [5U];
+    vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf_flat[6U] 
+        = vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf
+        [6U];
+    vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf_flat[7U] 
+        = vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf
+        [7U];
+    vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf_flat[8U] 
+        = vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf
+        [8U];
+    vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf_flat[9U] 
+        = vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf
+        [9U];
+    vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf_flat[0xaU] 
+        = vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf
+        [0xaU];
+    vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf_flat[0xbU] 
+        = vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf
+        [0xbU];
+    vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf_flat[0xcU] 
+        = vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf
+        [0xcU];
+    vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf_flat[0xdU] 
+        = vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf
+        [0xdU];
+    vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf_flat[0xeU] 
+        = vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf
+        [0xeU];
+    vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf_flat[0xfU] 
+        = vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf
+        [0xfU];
+    vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf_flat[0x10U] 
+        = vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf
+        [0x10U];
+    vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf_flat[0x11U] 
+        = vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf
+        [0x11U];
+    vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf_flat[0x12U] 
+        = vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf
+        [0x12U];
+    vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf_flat[0x13U] 
+        = vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf
+        [0x13U];
+    vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf_flat[0x14U] 
+        = vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf
+        [0x14U];
+    vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf_flat[0x15U] 
+        = vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf
+        [0x15U];
+    vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf_flat[0x16U] 
+        = vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf
+        [0x16U];
+    vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf_flat[0x17U] 
+        = vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf
+        [0x17U];
+    vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf_flat[0x18U] 
+        = vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf
+        [0x18U];
+    vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf_flat[0x19U] 
+        = vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf
+        [0x19U];
+    vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf_flat[0x1aU] 
+        = vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf
+        [0x1aU];
+    vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf_flat[0x1bU] 
+        = vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf
+        [0x1bU];
+    vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf_flat[0x1cU] 
+        = vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf
+        [0x1cU];
+    vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf_flat[0x1dU] 
+        = vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf
+        [0x1dU];
+    vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf_flat[0x1eU] 
+        = vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf
+        [0x1eU];
+    vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf_flat[0x1fU] 
+        = vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf
+        [0x1fU];
+    Vysyx_24120009_core___024root____Vdpiimwrap_ysyx_24120009_core__DOT__u_RegisterFile__DOT__get_register_values_TOP(vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf_flat);
     vlSelf->inst_debug = vlSelf->imem_rdata;
     vlSelf->x2_debug = vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf
         [2U];
