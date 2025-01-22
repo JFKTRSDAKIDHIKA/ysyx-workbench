@@ -6,11 +6,11 @@
 #include <stdint.h>
 #include "difftest.h"
 
-void (*ref_difftest_memcpy)(const char *img_file);
-void (*ref_difftest_exec)(uint64_t n);
-void (*ref_difftest_regcpy)(void *dut, bool direction);
-void (*ref_difftest_raise_intr)(uint64_t NO);
-void (*ref_difftest_init)(int port);
+void (*ref_difftest_memcpy)(const char *img_file) = NULL;
+void (*ref_difftest_exec)(uint64_t n) = NULL;
+void (*ref_difftest_regcpy)(void *dut, bool direction) = NULL;
+void (*ref_difftest_raise_intr)(uint64_t NO) = NULL;
+void (*ref_difftest_init)(int port) = NULL;
 
 // Function to initialize difftest
 void init_difftest(const char *ref_so_file, int port) {
