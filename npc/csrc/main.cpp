@@ -113,7 +113,7 @@ int main(int argc, char **argv) {
         // dut execute one instruction
         tick(top, step_mode);  // 传入step_mode来决定是否启用单步模式
 
-        std::cout << "Op1_debug: " << top->Op1_debug << ", Op2_debug: " << top->Op2_debug << "reg_write_data" << top->reg_write_data_debug << std::endl;
+        std::cout << "Op1_debug: " << top->Op1_debug << ", Op2_debug: " << top->Op2_debug << ", reg_write_data: " << top->reg_write_data_debug << std::endl;
 
         // ref execute one instruction
         ref_difftest_exec(1);
