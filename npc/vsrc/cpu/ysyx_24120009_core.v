@@ -74,7 +74,7 @@ module ysyx_24120009_core (
     ) u_RegisterFile (
         .clk(clk),
         .wdata(reg_write_data),
-        .waddr(5'b00010),
+        .waddr(waddr),
         .wen(rf_we),
         .raddr1(rs1_addr),
         .raddr2(rs2_addr),
