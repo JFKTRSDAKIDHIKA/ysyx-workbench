@@ -117,13 +117,6 @@ int main(int argc, char **argv) {
           << ", Op2_debug: 0x" << top->Op2_debug 
           << ", reg_write_data: 0x" << top->reg_write_data_debug 
           << std::dec << std::endl;  // 输出完十六进制后恢复为十进制
-        if (top->waddr_debug != 0) {
-    std::cout << "waddr: 0x" << std::hex << top->waddr_debug << std::endl;
-} else {
-    std::cout << "waddr is zero" << std::endl;
-}
-
-
 
         // ref execute one instruction
         ref_difftest_exec(1);
