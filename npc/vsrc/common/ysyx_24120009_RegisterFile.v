@@ -17,7 +17,7 @@ module ysyx_24120009_RegisterFile #(ADDR_WIDTH = 1, DATA_WIDTH = 1) (
     end
 
     import "DPI-C" function void get_register_values(input logic [31:0] rf[32]);
-    always @(*) begin
+    always @(posedge clk) begin
         get_register_values(rf);  // 调用 DPI-C 函数，传递整个寄存器文件
     end
 
