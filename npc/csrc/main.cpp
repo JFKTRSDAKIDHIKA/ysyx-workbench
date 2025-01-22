@@ -10,10 +10,12 @@ extern "C" void simulation_exit() {
     Verilated::gotFinish(true); 
 }
 
+static int rf_values[32];
+
 extern "C" void get_register_values(int rf[32]) {
-    // 处理寄存器值
+    // 将 Verilog 中的寄存器值复制到 C++ 数组中
     for (int i = 0; i < 32; ++i) {
-        std::cout << "x" << i << ": " << std::hex << rf[i] << std::endl;
+        rf_values[i] = rf[i];
     }
 }
 
@@ -58,7 +60,10 @@ void tick(Vysyx_24120009_core* top, bool step_mode) {
             // 输出所有寄存器信息
             std::cout << "Register information:" << std::endl;
             std::cout << "PC = 0x" << std::hex << top->pc_debug << std::endl;
-
+            // 打印寄存器内容
+            for (int i = 0; i < 32; ++i) {
+                std::cout << "x" << i << ": 0x" << std::hex << rf_values[i] << std::endl;
+            }
         } 
         else {
             std::cout << "Unknown command!" << std::endl;
