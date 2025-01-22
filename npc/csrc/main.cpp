@@ -98,7 +98,7 @@ int main(int argc, char **argv) {
     load_program(argv[1]);
 
     // Initialize difftest
-    init_difftest("nemu/build/riscv32-nemu-interpreter-so", 0);
+    init_difftest("/root/ysyx-workbench/nemu/build/riscv32-nemu-interpreter-so", 0);
     // Copy the program to the reference model
     ref_difftest_memcpy(argv[1]);  
 
