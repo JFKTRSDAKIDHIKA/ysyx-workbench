@@ -54,7 +54,7 @@ module ysyx_24120009_IDU (
     assign imm_i_sext = {{20{imm_i[11]}}, imm_i}; 
     assign imm_s_sext = {{20{imm_s[11]}}, imm_s}; 
     assign imm_b_sext = {{19{imm_b[11]}}, imm_b, 1'b0}; 
-    assign imm_u_sext = {imm_u, 12'b0}; 
+    assign imm_u_sext = {imm_u, 12'b000000000000}; 
     assign imm_j_sext = {{11{imm_j[19]}}, imm_j, 1'b0}; 
 
 
