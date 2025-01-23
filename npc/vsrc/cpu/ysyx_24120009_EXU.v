@@ -13,7 +13,7 @@ module ysyx_24120009_EXU (
     output wire [`ysyx_24120009_DATA_WIDTH-1:0] reg_write_data
 );
     wire [`ysyx_24120009_DATA_WIDTH-1:0] result;
-    assign dmem_addr = 32'h80008fe5;
+    assign dmem_addr = result;
 
     ysyx_24120009_ALU alu_instance (
        .A(Op1),
