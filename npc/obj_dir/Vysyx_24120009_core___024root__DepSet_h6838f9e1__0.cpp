@@ -700,6 +700,8 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root___nba_sequent__TOP__0(Vysyx_241
                                                  >> 5U)));
     vlSelf->mem_wen_debug = (1U & (vlSelf->ysyx_24120009_core__DOT__control__DOT__ctl_signals 
                                    >> 2U));
+    vlSelf->mem_en_debug = (1U & (vlSelf->ysyx_24120009_core__DOT__control__DOT__ctl_signals 
+                                  >> 3U));
     vlSelf->ysyx_24120009_core__DOT__idu__DOT__op1_sel_mux__DOT__i0__DOT__lut_out 
         = ((- (IData)(((3U & (vlSelf->ysyx_24120009_core__DOT__control__DOT__ctl_signals 
                               >> 0xaU)) == vlSelf->ysyx_24120009_core__DOT__idu__DOT__op1_sel_mux__DOT__i0__DOT__key_list
@@ -867,7 +869,7 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root___nba_sequent__TOP__0(Vysyx_241
     vlSelf->ysyx_24120009_core__DOT__exu__DOT__wb_mux__DOT__i1__DOT__data_list[1U] 
         = vlSelf->ysyx_24120009_core__DOT__exu__DOT__result;
     vlSelf->dmem_addr_debug = vlSelf->ysyx_24120009_core__DOT__exu__DOT__result;
-    if ((8U & vlSelf->ysyx_24120009_core__DOT__control__DOT__ctl_signals)) {
+    if (vlSelf->mem_en_debug) {
         Vysyx_24120009_core___024root____Vdpiimwrap_ysyx_24120009_core__DOT__pmem_read_TOP(vlSelf->dmem_addr_debug, vlSelf->__Vfunc_ysyx_24120009_core__DOT__pmem_read__0__Vfuncout);
         vlSelf->ysyx_24120009_core__DOT__dmem_rdata_raw 
             = vlSelf->__Vfunc_ysyx_24120009_core__DOT__pmem_read__0__Vfuncout;

@@ -14,6 +14,7 @@ module ysyx_24120009_core (
     output wire [`ysyx_24120009_REG_ADDR_WIDTH-1:0] waddr_debug,
     output wire [31:0] imem_addr_debug,
     output wire mem_wen_debug,
+    output wire mem_en_debug,
     output wire [`ysyx_24120009_DATA_WIDTH-1:0] dmem_addr_debug,
     output wire [`ysyx_24120009_DATA_WIDTH-1:0] dmem_wdata_debug
 );
@@ -30,6 +31,7 @@ module ysyx_24120009_core (
     assign mem_wen_debug = mem_wen;
     assign dmem_addr_debug = dmem_addr;
     assign dmem_wdata_debug = dmem_wdata;
+    assign mem_en_debug = mem_en;
 
 
     // Internal signals
