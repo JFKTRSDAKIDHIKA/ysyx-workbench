@@ -190,7 +190,7 @@ int main(int argc, char **argv) {
             int ret = check_reg(top);
             if (ret < 0) return -1;
             // Check memory consistency
-            // check_memory(0x80000000, 0x1000); 
+            check_memory(0x80000000, 0x1000); 
         }
     } 
 
