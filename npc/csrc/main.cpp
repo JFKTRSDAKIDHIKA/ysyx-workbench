@@ -78,6 +78,7 @@ int check_memory(paddr_t start_addr, size_t size) {
     } else {
         return 0;
     }
+    return 0;
 }
 
 void tick(Vysyx_24120009_core* top, bool step_mode, bool is_reset) {
