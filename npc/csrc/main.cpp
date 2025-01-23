@@ -64,6 +64,13 @@ void tick(Vysyx_24120009_core* top, bool step_mode, bool is_reset) {
             << std::dec << std::endl;
     }
 
+    // print some debug info of memory write
+    if (top->mem_wen_debug == 1) {  
+        std::cout << "Memory Write - Addr: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->dmem_addr_debug
+                    << ", Data: 0x" << std::setw(8) << std::setfill('0') << top->dmem_wdata_debug
+                    << std::dec << std::endl;
+    }
+
     top->clk = 1;
     top->eval();
     Verilated::timeInc(1); // 增加仿真时间

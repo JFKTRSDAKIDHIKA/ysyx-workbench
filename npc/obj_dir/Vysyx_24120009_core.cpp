@@ -15,6 +15,7 @@ Vysyx_24120009_core::Vysyx_24120009_core(VerilatedContext* _vcontextp__, const c
     , rst{vlSymsp->TOP.rst}
     , is_ebreak_debug{vlSymsp->TOP.is_ebreak_debug}
     , waddr_debug{vlSymsp->TOP.waddr_debug}
+    , mem_wen_debug{vlSymsp->TOP.mem_wen_debug}
     , pc_debug{vlSymsp->TOP.pc_debug}
     , Op1_debug{vlSymsp->TOP.Op1_debug}
     , Op2_debug{vlSymsp->TOP.Op2_debug}
@@ -22,6 +23,8 @@ Vysyx_24120009_core::Vysyx_24120009_core(VerilatedContext* _vcontextp__, const c
     , reg_write_data_debug{vlSymsp->TOP.reg_write_data_debug}
     , x2_debug{vlSymsp->TOP.x2_debug}
     , imem_addr_debug{vlSymsp->TOP.imem_addr_debug}
+    , dmem_addr_debug{vlSymsp->TOP.dmem_addr_debug}
+    , dmem_wdata_debug{vlSymsp->TOP.dmem_wdata_debug}
     , rootp{&(vlSymsp->TOP)}
 {
     // Register model with the context

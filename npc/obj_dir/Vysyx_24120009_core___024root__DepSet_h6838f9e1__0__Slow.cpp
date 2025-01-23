@@ -1231,6 +1231,9 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root___ctor_var_reset(Vysyx_24120009_
     vlSelf->x2_debug = VL_RAND_RESET_I(32);
     vlSelf->waddr_debug = VL_RAND_RESET_I(5);
     vlSelf->imem_addr_debug = VL_RAND_RESET_I(32);
+    vlSelf->mem_wen_debug = VL_RAND_RESET_I(1);
+    vlSelf->dmem_addr_debug = VL_RAND_RESET_I(32);
+    vlSelf->dmem_wdata_debug = VL_RAND_RESET_I(32);
     vlSelf->ysyx_24120009_core__DOT__pc = VL_RAND_RESET_I(32);
     vlSelf->ysyx_24120009_core__DOT__reg_write_data = VL_RAND_RESET_I(32);
     vlSelf->ysyx_24120009_core__DOT__pc_sel = VL_RAND_RESET_I(3);
