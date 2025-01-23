@@ -50,7 +50,7 @@ int check_reg(Vysyx_24120009_core* top) {
     return 0;
 }
 
-void check_memory(paddr_t start_addr, size_t size) {
+int check_memory(paddr_t start_addr, size_t size) {
     // Allocate buffers for memory comparison
     std::vector<uint8_t> ref_mem(size, 0); // Buffer to store memory from REF
     std::vector<uint8_t> dut_mem(size, 0); // Buffer to store memory from DUT
@@ -72,11 +72,11 @@ void check_memory(paddr_t start_addr, size_t size) {
                 std::cerr << "Address: 0x" << std::hex << (start_addr + i) << std::endl;
                 std::cerr << "REF: 0x" << std::hex << static_cast<int>(ref_mem[i]) << std::endl;
                 std::cerr << "DUT: 0x" << std::hex << static_cast<int>(dut_mem[i]) << std::endl;
-                assert(0); // Stop simulation
+                return -1;
             }
         }
     } else {
-        std::cout << "Memory check passed: no mismatch found!" << std::endl;
+        return 0;
     }
 }
 
@@ -166,7 +166,8 @@ int main(int argc, char **argv) {
                 int ret = check_reg(top);
                 if (ret < 0) return -1;                 
                 // Check memory consistency
-                check_memory(0x80000000, 0x1000); 
+                ret = check_memory(0x80000000, 0x1000); 
+                if (ret < 0) return -1;
             } 
             else if (input == "info r") {
                 // 打印寄存器信息，不进行 tick
@@ -190,7 +191,8 @@ int main(int argc, char **argv) {
             int ret = check_reg(top);
             if (ret < 0) return -1;
             // Check memory consistency
-            check_memory(0x80000000, 0x1000); 
+            ret = check_memory(0x80000000, 0x1000); 
+            if (ret < 0) return -1;
         }
     } 
 
