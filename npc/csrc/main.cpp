@@ -70,7 +70,7 @@ int check_reg(Vysyx_24120009_core* top) {
                       << " REF: 0x" << ref.gpr[i] 
                       << std::endl;
             // Optionally, you can stop the simulation on a mismatch
-            print_memory(0x80000000, 256);
+            print_memory(0x80008fd0, 256);
             return -1;  // End simulation
         }
     }
