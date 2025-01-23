@@ -9,11 +9,11 @@ module ysyx_24120009_ControlLogic (
     output [4:0]  alu_op,     // ALU operation type
     output [1:0]  op1_sel,    // ALU operand 1 selection
     output [1:0]  op2_sel,    // ALU operand 2 selection
-    output [2:0]  pc_sel,     // PC selection (next PC value)
+    output reg [2:0]  pc_sel,     // PC selection (next PC value)
     output        rf_we,      // Register file write enable
     output        mem_en,     // Memory enable 
     output        mem_wen,    // Memory write enable 
-    output reg [1:0]  wb_sel,     // Write-back source selection
+    output [1:0]  wb_sel,     // Write-back source selection
     output        is_ebreak   // Flag for ebreak instruction
 );
 
@@ -98,7 +98,7 @@ module ysyx_24120009_ControlLogic (
         17'b0000011_010_0000000, 17'b00000_00_01_000_1_1_0_11, // LW
         // B-type instructions(6)
         17'b1100011_000_0000000, 17'b00000_00_01_000_0_0_0_10, // BEQ
-        17'b1100011_001_0000000, 17'b00000_00_00_000_0_0_0_10, // BNE
+        17'b1100011_001_0000000, 17'b00000_00_01_000_0_0_0_10, // BNE
         17'b1100011_100_0000000, 17'b00000_00_00_000_0_0_0_10, // BLT
         17'b1100011_101_0000000, 17'b00000_00_00_000_0_0_0_10, // BGE
         17'b1100011_110_0000000, 17'b00000_00_00_000_0_0_0_10, // BLTU
@@ -124,26 +124,26 @@ module ysyx_24120009_ControlLogic (
     assign alu_op   = ctl_signals[16:12];
     assign op1_sel  = ctl_signals[11:10];
     assign op2_sel  = ctl_signals[9:8];
-    assign pc_sel   = ctl_signals[7:5];
     assign rf_we    = ctl_signals[4];
     assign mem_en   = ctl_signals[3];
     assign mem_wen  = ctl_signals[2];
+    assign wb_sel = ctl_signals[1:0];
 
     always @(*) begin
         if (opcode == 7'b1100011) begin
             // 分支指令处理逻辑
             case (funct3)
-                3'b000: wb_sel = br_eq ? 2'b10 : 2'b00;            // BEQ: rs1 == rs2
-                3'b001: wb_sel = ~br_eq ? 2'b10 : 2'b10;           // BNE: rs1 != rs2
-                3'b100: wb_sel = br_lt ? 2'b10 : 2'b00;            // BLT: rs1 < rs2 (signed)
-                3'b101: wb_sel = ~br_lt ? 2'b10 : 2'b00;           // BGE: rs1 >= rs2 (signed)
-                3'b110: wb_sel = br_ltu ? 2'b10 : 2'b00;           // BLTU: rs1 < rs2 (unsigned)
-                3'b111: wb_sel = ~br_ltu ? 2'b10 : 2'b00;          // BGEU: rs1 >= rs2 (unsigned)
-                default: wb_sel = 2'b00;                           // 默认不跳转
+                3'b000: pc_sel = br_eq ? 3'b010 : 3'b000;            // BEQ: rs1 == rs2
+                3'b001: pc_sel = ~br_eq ? 3'b010 : 3'b000;           // BNE: rs1 != rs2
+                3'b100: pc_sel = br_lt ? 3'b010 : 3'b000;            // BLT: rs1 < rs2 (signed)
+                3'b101: pc_sel = ~br_lt ? 3'b010 : 3'b000;           // BGE: rs1 >= rs2 (signed)
+                3'b110: pc_sel = br_ltu ? 3'b010 : 3'b000;           // BLTU: rs1 < rs2 (unsigned)
+                3'b111: pc_sel = ~br_ltu ? 3'b010 : 3'b000;          // BGEU: rs1 >= rs2 (unsigned)
+                default: pc_sel = 3'b000;                           // 默认不跳转
             endcase
         end else begin
             // 非分支指令的情况
-            wb_sel = ctl_signals[1:0];
+            pc_sel = ctl_signals[7:5];
         end
     end
 
