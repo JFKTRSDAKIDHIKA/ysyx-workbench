@@ -28,8 +28,8 @@ module ysyx_24120009_mem_access_read (
       3'b100, zero_ext_byte,    // LBU                       
       3'b101, zero_ext_half,    // LHU
       3'b010, data_in,          // LW
-      3'b000, sign_ext_byte,    // LB
-      3'b001, sign_ext_half     // LH                   
+      3'b000, zero_ext_byte,    // LB
+      3'b001, zero_ext_half     // LH                   
     })
   );
 
