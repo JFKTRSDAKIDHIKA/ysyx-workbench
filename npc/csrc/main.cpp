@@ -127,6 +127,10 @@ int main(int argc, char **argv) {
             // 退出仿真
             Verilated::gotFinish(true);  
         }
+        else if (input == "c") {
+            // continue exec
+            step_mode = false;
+        }
         else {
             std::cout << "Unknown command!" << std::endl;
         }
