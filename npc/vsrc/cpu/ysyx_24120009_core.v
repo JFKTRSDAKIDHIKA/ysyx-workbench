@@ -75,6 +75,8 @@ module ysyx_24120009_core (
     wire [`ysyx_24120009_DATA_WIDTH-1:0] dmem_addr;
     wire [`ysyx_24120009_DATA_WIDTH-1:0] dmem_wdata;
     wire [`ysyx_24120009_DATA_WIDTH-1:0] aligned_dmem_addr;
+    wire [7:0] wmask;
+    assign dmem_wdata = rdata2;
 
     import "DPI-C" function void pmem_write(input int waddr, input int wdata, input byte wmask);
     always @(*) begin
@@ -83,7 +85,7 @@ module ysyx_24120009_core (
             dmem_rdata_raw = pmem_read(aligned_dmem_addr);
             if (mem_wen) begin 
             // write data to data memory
-            pmem_write(aligned_dmem_addr, dmem_wdata, 8'hf);
+            pmem_write(aligned_dmem_addr, dmem_wdata, wmask);
             end
         end
         else begin
@@ -91,22 +93,21 @@ module ysyx_24120009_core (
         end
     end
 
-    ysyx_24120009_mem_access mem_access_0 (
+    ysyx_24120009_mem_access_read mem_access_read (
         .data_in(dmem_rdata_raw),
         .control(ctl_mem_access),
         .data_out(dmem_rdata)
-    );
-
-    ysyx_24120009_mem_access mem_access_1 (
-        .data_in(rdata2),
-        .control(ctl_mem_access),
-        .data_out(dmem_wdata)
     );
 
     ysyx_24120009_AddressAligner addr_aligner (
         .dmem_addr(dmem_addr),
         .ctrl(ctl_mem_access),
         .aligned_addr(aligned_dmem_addr)
+    );
+
+    ysyx_24120009_mem_access_write mem_access_write (
+        .control(ctl_mem_access),
+        .wmask(wmask)
     );
 
     // handle ebreak signal
