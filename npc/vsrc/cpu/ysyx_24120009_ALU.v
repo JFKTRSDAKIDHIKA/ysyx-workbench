@@ -15,8 +15,8 @@ module ysyx_24120009_ALU (
     wire [`ysyx_24120009_DATA_WIDTH-1:0] xor_result     = A ^ B;                  // Bitwise XOR
     wire [`ysyx_24120009_DATA_WIDTH-1:0] or_result      = A | B;                  // Bitwise OR
     wire [`ysyx_24120009_DATA_WIDTH-1:0] and_result     = A & B;                  // Bitwise AND
-    wire [`ysyx_24120009_DATA_WIDTH-1:0] sll_result     = A << B;                 // Logical shift left
-    wire [`ysyx_24120009_DATA_WIDTH-1:0] srl_result     = A >> B;                 // Logical shift right
+    wire [`ysyx_24120009_DATA_WIDTH-1:0] sll_result     = A << (B & 32'h1f);      // Logical shift left
+    wire [`ysyx_24120009_DATA_WIDTH-1:0] srl_result     = A >> (B & 32'h1f);      // Logical shift right
     wire [`ysyx_24120009_DATA_WIDTH-1:0] sra_result = $signed(A) >>> (B & 32'h1f); // Arithmetic shift right
 
     // Instantiate MuxKey module
