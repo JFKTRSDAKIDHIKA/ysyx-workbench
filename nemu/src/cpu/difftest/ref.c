@@ -19,6 +19,16 @@
 #include <difftest-def.h>
 #include <memory/paddr.h>
 
+__EXPORT void difftest_memcpy(paddr_t addr, void *buf, size_t n, bool direction) {
+  if (direction == DIFFTEST_TO_REF) {
+    memcpy(buf, guest_to_host(addr), n);  
+  } else if (direction == DIFFTEST_TO_DUT) {
+    memcpy(guest_to_host(addr), buf, n);  
+  } else {
+    assert(0);  
+  }
+}
+
 
 __EXPORT void difftest_meminit(const char *img_file) {
   FILE *fp = fopen(img_file, "rb");

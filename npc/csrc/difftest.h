@@ -16,6 +16,7 @@ enum { DIFFTEST_TO_DUT, DIFFTEST_TO_REF };
 #define RESET_VECTOR (PMEM_LEFT + CONFIG_PC_RESET_OFFSET)
 
 // Declare the function pointers for the reference model's dynamic library functions
+extern void (*ref_difftest_memcpy)(paddr_t dest, void *src, size_t n, bool direction);
 extern void (*ref_difftest_meminit)(const char *img_file);
 extern void (*ref_difftest_exec)(uint64_t n);
 extern void (*ref_difftest_regcpy)(void *dut, bool direction);
