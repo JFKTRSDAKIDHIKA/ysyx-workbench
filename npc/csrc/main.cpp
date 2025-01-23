@@ -58,26 +58,6 @@ void tick(Vysyx_24120009_core* top, bool step_mode) {
     top->clk = 1;
     top->eval();
     Verilated::timeInc(1); // 增加仿真时间
-
-    if (step_mode) {
-        std::string input;
-        std::cout << "(npc) : ";
-        std::getline(std::cin, input);  // 等待用户输入
-
-        if (input == "si") {
-            // 执行单步操作
-            return;  // 返回以继续执行单步操作
-        } 
-        else if (input == "info r") {
-            print_register_values();  // 打印寄存器信息
-        } 
-        else if (input == "q") {
-            Verilated::gotFinish(true);  // 退出仿真
-        }
-        else {
-            std::cout << "Unknown command!" << std::endl;
-        }
-    }
 }
 
 void reset(Vysyx_24120009_core* top, int cycles) {
@@ -106,8 +86,6 @@ int main(int argc, char **argv) {
         }
     }
 
-    // init_difftest("nemu/build/riscv32-nemu-interpreter-so", 0x10000, 1234);
-
     // Load program
     load_program(argv[1]);
 
@@ -124,17 +102,32 @@ int main(int argc, char **argv) {
         uint32_t pc = top->imem_addr;          
         top->imem_rdata = Memory::pmem_read(pc);  
 
-        // dut execute one instruction
-        tick(top, step_mode);  // 传入step_mode来决定是否启用单步模式
+        std::string input;
+        std::cout << "(npc) : ";
+        std::getline(std::cin, input);
 
-        // ref execute one instruction
-        ref_difftest_exec(1);
-          
-        // Copy registers from DUT to REF and compare them
-        ref_difftest_regcpy(&ref, DIFFTEST_TO_REF);
-
-        // Check if the registers are consistent
-        check_reg(top);
+        // 根据用户输入的命令来决定行为
+        if (input == "si") {
+            // 执行单步操作
+            tick(top, step_mode);  // 执行一次 tick
+            // ref execute one instruction
+            ref_difftest_exec(1);
+            // Copy registers from DUT to REF and compare them
+            ref_difftest_regcpy(&ref, DIFFTEST_TO_REF);
+            // Check if the registers are consistent
+            check_reg(top);
+        } 
+        else if (input == "info r") {
+            // 打印寄存器信息，不进行 tick
+            print_register_values();  // 打印寄存器
+        } 
+        else if (input == "q") {
+            // 退出仿真
+            Verilated::gotFinish(true);  
+        }
+        else {
+            std::cout << "Unknown command!" << std::endl;
+        }
     } 
 
     delete top;
