@@ -45,7 +45,7 @@ module ysyx_24120009_ControlLogic (
                 inst_key = {opcode, 3'b0, 7'b0};  
             end
             7'b1101111: begin
-                inst_key = {opcode, 3'b0, 7'b1};  
+                inst_key = {opcode, 3'b0, 7'b0};  
             end
             default: begin
                 inst_key = {opcode, funct3, funct7};  // 默认处理其他 opcode 和 funct3 的组合

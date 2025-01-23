@@ -105,10 +105,9 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root___ico_sequent__TOP__0(Vysyx_241
                                                      ((1U 
                                                        & vlSelf->imem_rdata)
                                                        ? 
-                                                      (1U 
-                                                       | (0x1fc00U 
-                                                          & (vlSelf->imem_rdata 
-                                                             << 0xaU)))
+                                                      (0x1fc00U 
+                                                       & (vlSelf->imem_rdata 
+                                                          << 0xaU))
                                                        : vlSelf->ysyx_24120009_core__DOT__control__DOT____VdfgExtracted_h90d7ab0b__0)
                                                       : vlSelf->ysyx_24120009_core__DOT__control__DOT____VdfgExtracted_h90d7ab0b__0)
                                                      : vlSelf->ysyx_24120009_core__DOT__control__DOT____VdfgExtracted_h90d7ab0b__0)
