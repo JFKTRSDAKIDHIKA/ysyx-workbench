@@ -14,12 +14,13 @@ module ysyx_24120009_ControlLogic (
     output        mem_en,     // Memory enable 
     output        mem_wen,    // Memory write enable 
     output [1:0]  wb_sel,     // Write-back source selection
-    output        is_ebreak   // Flag for ebreak instruction
+    output        is_ebreak,  // Flag for ebreak instruction
+    output [2:0]  ctl_mem_access 
 );
 
     localparam DATA_LEN  = 17;  // Length of control signals
     localparam KEY_LEN   = 17;  // Length of inst key
-    localparam NR_KEY    = 31;  // Number of keys
+    localparam NR_KEY    = 37;  // Number of keys
 
     wire [6:0] opcode = inst[6:0];
     wire [2:0] funct3 = inst[14:12];
@@ -85,7 +86,7 @@ module ysyx_24120009_ControlLogic (
         17'b0110011_101_0100000, 17'b01001_00_11_000_1_0_0_10, // SRA
         17'b0110011_110_0000000, 17'b00101_00_11_000_1_0_0_10, // OR
         17'b0110011_111_0000000, 17'b00110_00_11_000_1_0_0_10, // AND
-        // I-type instructions(10)
+        // I-type instructions(14)
         17'b0010011_000_0000000, 17'b00000_00_01_000_1_0_0_10, // ADDI
         17'b0010011_010_0000000, 17'b00010_00_01_000_1_0_0_10, // SLTI
         17'b0010011_011_0000000, 17'b00011_00_01_000_1_0_0_10, // SLTIU
@@ -96,6 +97,10 @@ module ysyx_24120009_ControlLogic (
         17'b0010011_101_0000000, 17'b00000_00_01_000_1_0_0_10, // SRLI
         17'b0010011_101_0100000, 17'b01001_00_01_000_1_0_0_10, // SRAI
         17'b0000011_010_0000000, 17'b00000_00_01_000_1_1_0_11, // LW
+        17'b0000011_000_0000000, 17'b00000_00_01_000_1_1_0_11, // LB
+        17'b0000011_100_0000000, 17'b00000_00_01_000_1_1_0_11, // LBU
+        17'b0000011_001_0000000, 17'b00000_00_01_000_1_1_0_11, // LH
+        17'b0000011_101_0000000, 17'b00000_00_01_000_1_1_0_11, // LHU
         // B-type instructions(6)
         17'b1100011_000_0000000, 17'b00000_00_01_000_0_0_0_10, // BEQ
         17'b1100011_001_0000000, 17'b00000_00_01_000_0_0_0_10, // BNE
@@ -107,8 +112,10 @@ module ysyx_24120009_ControlLogic (
         17'b1101111_000_0000000, 17'b00000_00_00_011_1_0_0_01, // JAL
         // U-type instructions(1)
         17'b0010111_000_0000000, 17'b00000_01_00_000_1_0_0_10, // AUIPC
-        // S-type instructions(1)
+        // S-type instructions(3)
         17'b0100011_010_0000000, 17'b00000_00_10_000_0_1_1_00, // SW
+        17'b0100011_000_0000000, 17'b00000_00_10_000_0_1_1_00, // SB
+        17'b0100011_001_0000000, 17'b00000_00_10_000_0_1_1_00, // SH
         // JALR instruction(1)
         17'b1100111_000_0000000, 17'b00000_00_01_001_1_0_0_01, // JALR
         // ebreak instruction(1)
@@ -147,6 +154,21 @@ module ysyx_24120009_ControlLogic (
         end
     end
 
+    ysyx_24120009_MuxKey #(8, 10, 3) mem_acces_ctl_mux (
+    .out(ctl_mem_access),
+    .key({opcode, funct3}),
+    .lut({
+        // opcode_func3 | {mem_val, mem_wen}
+        10'b0000011_010, 3'b010, // LW
+        10'b0000011_000, 3'b000, // LB
+        10'b0000011_100, 3'b100, // LBU
+        10'b0000011_001, 3'b001, // LH
+        10'b0000011_101, 3'b101, // LHU
+        10'b0100011_010, 3'b010, // SW
+        10'b0100011_000, 3'b000, // SB
+        10'b0100011_001, 3'b001  // SH
+    })
+    );
 
 endmodule
 

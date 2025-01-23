@@ -47,6 +47,7 @@ module ysyx_24120009_core (
     wire br_eq;
     wire br_lt;
     wire br_ltu;
+    wire [2:0] ctl_mem_access;
     //  Register file address
     wire [`ysyx_24120009_REG_ADDR_WIDTH-1:0] rs1_addr;
     wire [`ysyx_24120009_REG_ADDR_WIDTH-1:0] rs2_addr;
@@ -61,22 +62,32 @@ module ysyx_24120009_core (
         imem_rdata = pmem_read(imem_addr);
     end
     // Data Memory interface
-    wire [`ysyx_24120009_DATA_WIDTH-1:0] wdata = rdata2;
-    reg [`ysyx_24120009_DATA_WIDTH-1:0] dmem_rdata;
+    reg [`ysyx_24120009_DATA_WIDTH-1:0] dmem_rdata_raw;
+    wire [`ysyx_24120009_DATA_WIDTH-1:0] dmem_rdata;
     wire [`ysyx_24120009_DATA_WIDTH-1:0] dmem_addr;
+    wire [`ysyx_24120009_DATA_WIDTH-1:0] dmem_wdata;
     import "DPI-C" function void pmem_write(input int waddr, input int wdata, input byte wmask);
     always @(*) begin
         if (mem_en) begin 
-            dmem_rdata = pmem_read(dmem_addr);
+            dmem_rdata_raw = pmem_read(dmem_addr);
             if (mem_wen) begin 
-            pmem_write(dmem_addr, rdata2, 8'hf);
+            pmem_write(dmem_addr, dmem_wdata, 8'hf);
             end
         end
         else begin
-            dmem_rdata = 0;
+            dmem_rdata_raw = 0;
         end
     end
-
+    ysyx_24120009_mem_access mem_access_0 (
+        .data_in(dmem_rdata_raw),
+        .control(ctl_mem_access),
+        .data_out(dmem_rdata)
+    );
+    ysyx_24120009_mem_access mem_access_1 (
+        .data_in(rdata2),
+        .control(ctl_mem_access),
+        .data_out(dmem_wdata)
+    );
 
     // handle ebreak signal
     wire is_ebreak;
@@ -165,7 +176,8 @@ module ysyx_24120009_core (
         .mem_en(mem_en),
         .mem_wen(mem_wen),
         .wb_sel(wb_sel),
-        .is_ebreak(is_ebreak)
+        .is_ebreak(is_ebreak),
+        .ctl_mem_access(ctl_mem_access)
     );
 
     // Instantiate EXU
