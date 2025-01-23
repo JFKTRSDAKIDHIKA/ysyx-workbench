@@ -7,6 +7,7 @@
 #include "difftest.h"
 #include <iostream>
 #include <svdpi.h>
+#include <iomanip> 
 
 // define the DPI-C functions
 extern "C" void simulation_exit() {
@@ -116,12 +117,11 @@ int main(int argc, char **argv) {
         // dut execute one instruction
         tick(top, step_mode);  // 传入step_mode来决定是否启用单步模式
 
-        std::cout << "Op1_debug: 0x" << std::hex << top->Op1_debug 
-          << ", Op2_debug: 0x" << top->Op2_debug 
-          << ", reg_write_data: 0x" << top->reg_write_data_debug 
-          << std::dec << std::endl;  // 输出完十六进制后恢复为十进制
-
-        std::cout << "x2: 0x" << std::hex << top->x2_debug << std::endl;
+        
+        std::cout << "Op1: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->Op1_debug
+                << ", Op2: 0x" << std::setw(8) << std::setfill('0') << top->Op2_debug
+                << ", wb_data: 0x" << std::setw(8) << std::setfill('0') << top->reg_write_data_debug
+                << std::dec << std::endl;
 
         // ref execute one instruction
         ref_difftest_exec(1);
