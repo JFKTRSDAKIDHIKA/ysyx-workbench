@@ -47,14 +47,12 @@ void tick(Vysyx_24120009_core* top, bool step_mode) {
     top->clk = 0;
     top->eval();
     
-    if (step_mode) {
-        // print some debug info when registers have yet been updated!
-        std::cout << "Op1: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->Op1_debug
-            << ", Op2: 0x" << std::setw(8) << std::setfill('0') << top->Op2_debug
-            << ", wb_data: 0x" << std::setw(8) << std::setfill('0') << top->reg_write_data_debug
-            << ", Instruction: 0x" << std::setw(8) << std::setfill('0') << top->inst_debug
-            << std::dec << std::endl;
-    }
+    // print some debug info when registers have yet been updated!
+    std::cout << "Op1: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->Op1_debug
+        << ", Op2: 0x" << std::setw(8) << std::setfill('0') << top->Op2_debug
+        << ", wb_data: 0x" << std::setw(8) << std::setfill('0') << top->reg_write_data_debug
+        << ", Instruction: 0x" << std::setw(8) << std::setfill('0') << top->inst_debug
+        << std::dec << std::endl;
 
     top->clk = 1;
     top->eval();
@@ -83,7 +81,7 @@ int main(int argc, char **argv) {
             step_mode = false; // Run mode (continuous execution)
         } else {
             std::cerr << "Invalid step_mode argument. Use 'step' or 'run'." << std::endl;
-            return 1; // Exit with error code
+            return -1; // Exit with error code
         }
     }
 
