@@ -394,11 +394,7 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root___nba_sequent__TOP__0(Vysyx_241
                             ? vlSelf->ysyx_24120009_core__DOT__control__DOT____VdfgExtracted_h90d7ab0b__0
                             : ((2U & vlSelf->ysyx_24120009_core__DOT____VdfgExtracted_hd7155979__0)
                                 ? ((1U & vlSelf->ysyx_24120009_core__DOT____VdfgExtracted_hd7155979__0)
-                                    ? ((2U == (7U & 
-                                               (vlSelf->ysyx_24120009_core__DOT____VdfgExtracted_hd7155979__0 
-                                                >> 0xcU)))
-                                        ? vlSelf->ysyx_24120009_core__DOT__control__DOT____VdfgExtracted_ha098e26d__0
-                                        : vlSelf->ysyx_24120009_core__DOT__control__DOT____VdfgExtracted_h90d7ab0b__0)
+                                    ? vlSelf->ysyx_24120009_core__DOT__control__DOT____VdfgExtracted_ha098e26d__0
                                     : vlSelf->ysyx_24120009_core__DOT__control__DOT____VdfgExtracted_h90d7ab0b__0)
                                 : vlSelf->ysyx_24120009_core__DOT__control__DOT____VdfgExtracted_h90d7ab0b__0))))));
     vlSelf->ysyx_24120009_core__DOT__mem_access_1__DOT__mem_mux__DOT__i0__DOT__lut_out 

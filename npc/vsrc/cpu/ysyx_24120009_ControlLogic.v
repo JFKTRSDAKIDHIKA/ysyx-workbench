@@ -55,10 +55,7 @@ module ysyx_24120009_ControlLogic (
                 endcase
             end
             7'b0000011: begin
-                case (funct3)
-                    3'b010: inst_key = {opcode, funct3, 7'b0};  // opcode == 7'b1100111 && funct3 == 3'b000
-                    default: inst_key = {opcode, funct3, funct7};  // 默认处理其他 funct3
-                endcase
+                inst_key = {opcode, funct3, 7'b0};  
             end
             7'b1100011: begin
                 inst_key = {opcode, funct3, 7'b0};  
