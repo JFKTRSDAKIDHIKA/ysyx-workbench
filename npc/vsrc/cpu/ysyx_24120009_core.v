@@ -13,7 +13,6 @@ module ysyx_24120009_core (
     output wire [`ysyx_24120009_DATA_WIDTH-1:0] x2_debug,
     output wire [`ysyx_24120009_REG_ADDR_WIDTH-1:0] waddr_debug,
     output wire [31:0] imem_addr_debug
-    // output wire [`ysyx_24120009_DATA_WIDTH-1:0] imem_rdata
 );
 
     // Debug signal declaration
@@ -37,7 +36,7 @@ module ysyx_24120009_core (
     wire [2:0] pc_sel;
     wire rf_we;
     wire mem_en;
-    wire mem_wen_internal;
+    wire mem_wen;
     wire [1:0] wb_sel;
     wire [`ysyx_24120009_DATA_WIDTH-1:0] Op1;
     wire [`ysyx_24120009_DATA_WIDTH-1:0] Op2;
@@ -61,6 +60,23 @@ module ysyx_24120009_core (
     always @(*) begin
         imem_rdata = pmem_read(imem_addr);
     end
+    // Data Memory interface
+    wire [`ysyx_24120009_DATA_WIDTH-1:0] wdata = rdata2;
+    reg [`ysyx_24120009_DATA_WIDTH-1:0] dmem_rdata;
+    wire [`ysyx_24120009_DATA_WIDTH-1:0] dmem_addr;
+    import "DPI-C" function void pmem_write(input int waddr, input int wdata, input byte wmask);
+    always @(*) begin
+        if (mem_en) begin 
+            dmem_rdata = pmem_read(dmem_addr);
+            if (mem_wen) begin 
+            pmem_write(dmem_addr, rdata2, 8'hf);
+            end
+        end
+        else begin
+            dmem_rdata = 0;
+        end
+    end
+
 
     // handle ebreak signal
     wire is_ebreak;
@@ -147,7 +163,7 @@ module ysyx_24120009_core (
         .pc_sel(pc_sel),
         .rf_we(rf_we),
         .mem_en(mem_en),
-        .mem_wen(mem_wen_internal),
+        .mem_wen(mem_wen),
         .wb_sel(wb_sel),
         .is_ebreak(is_ebreak)
     );
@@ -161,7 +177,9 @@ module ysyx_24120009_core (
         .alu_op(alu_op),
         .wb_sel(wb_sel),
         .pc_plus4(pc_plus4),
-        .reg_write_data(reg_write_data)
+        .reg_write_data(reg_write_data),
+        .dmem_rdata(dmem_rdata),
+        .dmem_addr(dmem_addr)   
     );
 
 

@@ -58,7 +58,7 @@ module ysyx_24120009_ControlLogic (
         .out(ctl_signals),
         .key(inst_key),
         .lut({
-        // opcode_func3_func7 | {alu_op, op1_sel, op2_sel, pc_sel, rf_we, mem_en, mem_wen, wb_sel}
+        // opcode_func3_func7 | {alu_op, op1_sel, op2_sel, pc_sel, rf_we, mem_val, mem_wen, wb_sel}
         // R-type instructions(10)
         17'b0110011_000_0000000, 17'b00000_00_11_000_1_0_0_10, // ADD
         17'b0110011_000_0100000, 17'b00001_00_11_000_1_0_0_10, // SUB
