@@ -16,6 +16,14 @@ extern "C" void simulation_exit() {
 extern "C" void get_register_values(uint32_t rf[32]) {
     set_register_values(rf);  // set the register values
 }
+extern "C" int pmem_read(int raddr) {
+    raddr = raddr & ~0x3u;  // 清除低两位，确保按4字节对齐
+    return Memory::pmem_read(raddr);
+}
+extern "C" void pmem_write(int waddr, int wdata, char wmask) {
+    waddr = waddr & ~0x3u;  // 清除低两位，确保按4字节对齐
+    Memory::pmem_write(waddr, wdata, wmask);
+}
 
 typedef struct {
   uint32_t gpr[32];
@@ -35,8 +43,8 @@ int check_reg(Vysyx_24120009_core* top) {
             return -1;  // End simulation
         }
     }
-    if (top->imem_addr != ref.pc) {
-        std::cerr << "PC mismatch - DUT: 0x" << std::hex << top->imem_addr << " REF: 0x" << std::hex << ref.pc << std::endl;
+    if (top->imem_addr_debug != ref.pc) {
+        std::cerr << "PC mismatch - DUT: 0x" << std::hex << top->imem_addr_debug << " REF: 0x" << std::hex << ref.pc << std::endl;
         return -1;  // End simulation
     }
     return 0;
@@ -99,10 +107,6 @@ int main(int argc, char **argv) {
     reset(top, 10); // Reset for 10 cycles
 
     while(!Verilated::gotFinish()) {
-        // Fetch 阶段
-        uint32_t pc = top->imem_addr;          
-        top->imem_rdata = Memory::pmem_read(pc);  
-
         if (step_mode) {
             std::string input;
             std::cout << "(npc) : ";

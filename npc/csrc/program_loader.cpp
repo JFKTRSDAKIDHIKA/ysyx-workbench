@@ -13,7 +13,7 @@ void load_program(const char *program_path) {
     uint32_t address = 0x80000000; 
     uint32_t data;
     while (program_file.read(reinterpret_cast<char*>(&data), sizeof(data))) {
-        Memory::pmem_write(address, data);
+        Memory::pmem_write(address, data, 0xf);
         address += sizeof(data); 
     }
 }

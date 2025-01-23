@@ -23,7 +23,7 @@ uint32_t Memory::pmem_read(uint32_t address) {
 
 
 // Function to write data to memory
-void Memory::pmem_write(uint32_t address, uint32_t data) {
+void Memory::pmem_write(uint32_t address, uint32_t data, char wmask) {
     uint32_t offset = address - BASE_ADDR; // Calculate the offset
 
     // Check if the address is within the memory range
@@ -32,11 +32,19 @@ void Memory::pmem_write(uint32_t address, uint32_t data) {
         return; // Return if the address is out of bounds
     }
 
-    // Write 4 bytes of data in little-endian format
-    memory[offset] = data & 0xFF;
-    memory[offset + 1] = (data >> 8) & 0xFF;
-    memory[offset + 2] = (data >> 16) & 0xFF;
-    memory[offset + 3] = (data >> 24) & 0xFF;
+    // Write 4 bytes of data in little-endian format, based on wmask
+    if (wmask & 0x1) {
+        memory[offset] = data & 0xFF; // Write the least significant byte
+    }
+    if (wmask & 0x2) {
+        memory[offset + 1] = (data >> 8) & 0xFF; // Write the second byte
+    }
+    if (wmask & 0x4) {
+        memory[offset + 2] = (data >> 16) & 0xFF; // Write the third byte
+    }
+    if (wmask & 0x8) {
+        memory[offset + 3] = (data >> 24) & 0xFF; // Write the most significant byte
+    }
 }
 
 

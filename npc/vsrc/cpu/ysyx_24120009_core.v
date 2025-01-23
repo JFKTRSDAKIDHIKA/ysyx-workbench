@@ -3,9 +3,6 @@
 module ysyx_24120009_core (
     input wire clk,
     input wire rst,
-    // Memory interface
-    output wire [31:0] imem_addr,
-    input wire [`ysyx_24120009_DATA_WIDTH-1:0] imem_rdata,
     // For debug purpose
     output [`ysyx_24120009_DATA_WIDTH-1:0] pc_debug,
     output [`ysyx_24120009_DATA_WIDTH-1:0] Op1_debug,
@@ -14,7 +11,9 @@ module ysyx_24120009_core (
     output [`ysyx_24120009_DATA_WIDTH-1:0] reg_write_data_debug,
     output is_ebreak_debug,
     output wire [`ysyx_24120009_DATA_WIDTH-1:0] x2_debug,
-    output wire [`ysyx_24120009_REG_ADDR_WIDTH-1:0] waddr_debug
+    output wire [`ysyx_24120009_REG_ADDR_WIDTH-1:0] waddr_debug,
+    output wire [31:0] imem_addr_debug
+    // output wire [`ysyx_24120009_DATA_WIDTH-1:0] imem_rdata
 );
 
     // Debug signal declaration
@@ -25,6 +24,7 @@ module ysyx_24120009_core (
     assign reg_write_data_debug = reg_write_data;
     assign is_ebreak_debug = is_ebreak;
     assign waddr_debug = waddr;
+    assign imem_addr_debug = imem_addr;
 
 
     // Internal signals
@@ -54,7 +54,13 @@ module ysyx_24120009_core (
     wire [`ysyx_24120009_REG_ADDR_WIDTH-1:0] waddr;
     wire [`ysyx_24120009_DATA_WIDTH-1:0] rdata1;
     wire [`ysyx_24120009_DATA_WIDTH-1:0] rdata2;
-
+    // Instruction Memory interface
+    wire [31:0] imem_addr;
+    reg [`ysyx_24120009_DATA_WIDTH-1:0] imem_rdata;
+    import "DPI-C" function int pmem_read(input int raddr);
+    always @(*) begin
+        imem_rdata = pmem_read(imem_addr);
+    end
 
     // handle ebreak signal
     wire is_ebreak;
