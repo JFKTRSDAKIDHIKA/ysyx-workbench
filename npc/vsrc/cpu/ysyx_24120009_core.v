@@ -27,6 +27,9 @@ module ysyx_24120009_core (
     assign is_ebreak_debug = is_ebreak;
     assign waddr_debug = waddr;
     assign imem_addr_debug = imem_addr;
+    assign mem_wen_debug = mem_wen;
+    assign dmem_addr_debug = dmem_addr;
+    assign dmem_wdata_debug = dmem_wdata;
 
 
     // Internal signals
