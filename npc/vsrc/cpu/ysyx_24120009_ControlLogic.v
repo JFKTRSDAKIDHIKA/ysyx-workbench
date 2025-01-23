@@ -59,6 +59,9 @@ module ysyx_24120009_ControlLogic (
                     default: inst_key = {opcode, funct3, funct7};  // 默认处理其他 funct3
                 endcase
             end
+            7'b1100011: begin
+                inst_key = {opcode, funct3, 7'b0};  
+            end
             default: begin
                 inst_key = {opcode, funct3, funct7};  // 默认处理其他 opcode 和 funct3 的组合
             end
