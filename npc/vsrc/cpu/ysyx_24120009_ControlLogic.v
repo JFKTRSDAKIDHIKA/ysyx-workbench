@@ -19,7 +19,7 @@ module ysyx_24120009_ControlLogic (
 
     localparam DATA_LEN  = 17;  // Length of control signals
     localparam KEY_LEN   = 17;  // Length of inst key
-    localparam NR_KEY    = 27;  // Number of keys
+    localparam NR_KEY    = 28;  // Number of keys
 
     wire [6:0] opcode = inst[6:0];
     wire [2:0] funct3 = inst[14:12];
@@ -48,6 +48,12 @@ module ysyx_24120009_ControlLogic (
                 inst_key = {opcode, 3'b0, 7'b0};  
             end
             7'b0100011: begin
+                case (funct3)
+                    3'b010: inst_key = {opcode, funct3, 7'b0};  // opcode == 7'b1100111 && funct3 == 3'b000
+                    default: inst_key = {opcode, funct3, funct7};  // 默认处理其他 funct3
+                endcase
+            end
+            7'b0000011: begin
                 case (funct3)
                     3'b010: inst_key = {opcode, funct3, 7'b0};  // opcode == 7'b1100111 && funct3 == 3'b000
                     default: inst_key = {opcode, funct3, funct7};  // 默认处理其他 funct3
@@ -86,8 +92,9 @@ module ysyx_24120009_ControlLogic (
         17'b0010011_001_0000000, 17'b00111_00_01_000_1_0_0_10, // SLLI
         17'b0010011_101_0000000, 17'b00000_00_01_000_1_0_0_10, // SRLI
         17'b0010011_101_0100000, 17'b00001_00_01_000_1_0_0_10, // SRAI
+        17'b0000011_010_0000000, 17'b00000_00_00_000_0_0_0_00, // LW
         // B-type instructions(3)
-        17'b1100011_000_0000000, 17'b00000_00_00_000_0_0_0_00, // BEQ
+        17'b1100011_000_0000000, 17'b00000_00_01_000_1_1_0_11, // BEQ
         17'b1100011_100_0000000, 17'b00000_00_00_000_0_0_0_00, // BLT
         17'b1100011_110_0000000, 17'b00000_00_00_000_0_0_0_00, // BLTU
         // J-type instructions(1)
