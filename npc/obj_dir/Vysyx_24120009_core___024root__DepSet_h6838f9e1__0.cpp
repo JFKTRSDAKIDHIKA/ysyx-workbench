@@ -878,16 +878,23 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root___nba_sequent__TOP__0(Vysyx_241
     } else {
         vlSelf->ysyx_24120009_core__DOT__dmem_rdata_raw = 0U;
     }
-    vlSelf->ysyx_24120009_core__DOT__mem_access_read__DOT__mem_mux__DOT__i0__DOT__data_list[0U] 
-        = (0xffffU & vlSelf->ysyx_24120009_core__DOT__dmem_rdata_raw);
     vlSelf->ysyx_24120009_core__DOT__mem_access_read__DOT__mem_mux__DOT__i0__DOT__data_list[1U] 
-        = (0xffU & vlSelf->ysyx_24120009_core__DOT__dmem_rdata_raw);
+        = (((- (IData)((1U & (vlSelf->ysyx_24120009_core__DOT__dmem_rdata_raw 
+                              >> 7U)))) << 8U) | (0xffU 
+                                                  & vlSelf->ysyx_24120009_core__DOT__dmem_rdata_raw));
     vlSelf->ysyx_24120009_core__DOT__mem_access_read__DOT__mem_mux__DOT__i0__DOT__data_list[2U] 
         = vlSelf->ysyx_24120009_core__DOT__dmem_rdata_raw;
     vlSelf->ysyx_24120009_core__DOT__mem_access_read__DOT__mem_mux__DOT__i0__DOT__data_list[3U] 
         = (0xffffU & vlSelf->ysyx_24120009_core__DOT__dmem_rdata_raw);
     vlSelf->ysyx_24120009_core__DOT__mem_access_read__DOT__mem_mux__DOT__i0__DOT__data_list[4U] 
         = (0xffU & vlSelf->ysyx_24120009_core__DOT__dmem_rdata_raw);
+}
+
+VL_INLINE_OPT void Vysyx_24120009_core___024root___nba_sequent__TOP__1(Vysyx_24120009_core___024root* vlSelf) {
+    if (false && vlSelf) {}  // Prevent unused
+    Vysyx_24120009_core__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
+    VL_DEBUG_IF(VL_DBG_MSGF("+    Vysyx_24120009_core___024root___nba_sequent__TOP__1\n"); );
+    // Body
     vlSelf->ysyx_24120009_core__DOT__mem_access_read__DOT__mem_mux__DOT__i0__DOT__lut_out 
         = ((- (IData)(((IData)(vlSelf->ysyx_24120009_core__DOT__ctl_mem_access) 
                        == vlSelf->ysyx_24120009_core__DOT__mem_access_read__DOT__mem_mux__DOT__i0__DOT__key_list
@@ -976,6 +983,7 @@ void Vysyx_24120009_core___024root___eval_nba(Vysyx_24120009_core___024root* vlS
     // Body
     if (vlSelf->__VnbaTriggered.at(0U)) {
         Vysyx_24120009_core___024root___nba_sequent__TOP__0(vlSelf);
+        Vysyx_24120009_core___024root___nba_sequent__TOP__1(vlSelf);
     }
 }
 
