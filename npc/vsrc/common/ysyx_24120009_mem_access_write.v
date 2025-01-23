@@ -14,8 +14,8 @@ module ysyx_24120009_mem_access_write (
     .key(control), 
     .lut({              
       3'b010, 8'hf,    // SW                      
-      3'b101, 8'h3,    // SH
-      3'b110, 8'h1     // SB
+      3'b001, 8'h3,    // SH
+      3'b000, 8'h1     // SB
     })
   );
 
