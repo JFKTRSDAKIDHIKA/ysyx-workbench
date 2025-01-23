@@ -88,20 +88,94 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root___ico_sequent__TOP__0(Vysyx_241
             << 0xcU) | ((0xfe0U & (vlSelf->imem_rdata 
                                    >> 0x14U)) | (IData)(vlSelf->waddr_debug)));
     vlSelf->ysyx_24120009_core__DOT__control__DOT__inst_key 
-        = ((0x67U == (0x7fU & vlSelf->imem_rdata)) ? 
-           ((0U == (7U & (vlSelf->imem_rdata >> 0xcU)))
-             ? vlSelf->ysyx_24120009_core__DOT__control__DOT____VdfgExtracted_ha098e26d__0
-             : (0x6fU | ((0x1fc00U & (vlSelf->imem_rdata 
-                                      << 0xaU)) | (0x380U 
-                                                   & (vlSelf->imem_rdata 
-                                                      >> 5U)))))
-            : ((0x13U == (0x7fU & vlSelf->imem_rdata))
-                ? ((5U == (7U & (vlSelf->imem_rdata 
-                                 >> 0xcU))) ? vlSelf->ysyx_24120009_core__DOT__control__DOT____VdfgExtracted_h90d7ab0b__0
-                    : vlSelf->ysyx_24120009_core__DOT__control__DOT____VdfgExtracted_ha098e26d__0)
-                : ((0x17U == (0x7fU & vlSelf->imem_rdata))
-                    ? (0x1fc00U & (vlSelf->imem_rdata 
-                                   << 0xaU)) : vlSelf->ysyx_24120009_core__DOT__control__DOT____VdfgExtracted_h90d7ab0b__0)));
+        = ((0x40U & vlSelf->imem_rdata) ? ((0x20U & vlSelf->imem_rdata)
+                                            ? ((0x10U 
+                                                & vlSelf->imem_rdata)
+                                                ? vlSelf->ysyx_24120009_core__DOT__control__DOT____VdfgExtracted_h90d7ab0b__0
+                                                : (
+                                                   (8U 
+                                                    & vlSelf->imem_rdata)
+                                                    ? 
+                                                   ((4U 
+                                                     & vlSelf->imem_rdata)
+                                                     ? 
+                                                    ((2U 
+                                                      & vlSelf->imem_rdata)
+                                                      ? 
+                                                     ((1U 
+                                                       & vlSelf->imem_rdata)
+                                                       ? 
+                                                      (0x1fc00U 
+                                                       & (vlSelf->imem_rdata 
+                                                          << 0xaU))
+                                                       : vlSelf->ysyx_24120009_core__DOT__control__DOT____VdfgExtracted_h90d7ab0b__0)
+                                                      : vlSelf->ysyx_24120009_core__DOT__control__DOT____VdfgExtracted_h90d7ab0b__0)
+                                                     : vlSelf->ysyx_24120009_core__DOT__control__DOT____VdfgExtracted_h90d7ab0b__0)
+                                                    : 
+                                                   ((4U 
+                                                     & vlSelf->imem_rdata)
+                                                     ? 
+                                                    ((2U 
+                                                      & vlSelf->imem_rdata)
+                                                      ? 
+                                                     ((1U 
+                                                       & vlSelf->imem_rdata)
+                                                       ? 
+                                                      ((0U 
+                                                        == 
+                                                        (7U 
+                                                         & (vlSelf->imem_rdata 
+                                                            >> 0xcU)))
+                                                        ? vlSelf->ysyx_24120009_core__DOT__control__DOT____VdfgExtracted_ha098e26d__0
+                                                        : 
+                                                       (0x6fU 
+                                                        | ((0x1fc00U 
+                                                            & (vlSelf->imem_rdata 
+                                                               << 0xaU)) 
+                                                           | (0x380U 
+                                                              & (vlSelf->imem_rdata 
+                                                                 >> 5U)))))
+                                                       : vlSelf->ysyx_24120009_core__DOT__control__DOT____VdfgExtracted_h90d7ab0b__0)
+                                                      : vlSelf->ysyx_24120009_core__DOT__control__DOT____VdfgExtracted_h90d7ab0b__0)
+                                                     : vlSelf->ysyx_24120009_core__DOT__control__DOT____VdfgExtracted_h90d7ab0b__0)))
+                                            : vlSelf->ysyx_24120009_core__DOT__control__DOT____VdfgExtracted_h90d7ab0b__0)
+            : ((0x20U & vlSelf->imem_rdata) ? vlSelf->ysyx_24120009_core__DOT__control__DOT____VdfgExtracted_h90d7ab0b__0
+                : ((0x10U & vlSelf->imem_rdata) ? (
+                                                   (8U 
+                                                    & vlSelf->imem_rdata)
+                                                    ? vlSelf->ysyx_24120009_core__DOT__control__DOT____VdfgExtracted_h90d7ab0b__0
+                                                    : 
+                                                   ((4U 
+                                                     & vlSelf->imem_rdata)
+                                                     ? 
+                                                    ((2U 
+                                                      & vlSelf->imem_rdata)
+                                                      ? 
+                                                     ((1U 
+                                                       & vlSelf->imem_rdata)
+                                                       ? 
+                                                      (0x1fc00U 
+                                                       & (vlSelf->imem_rdata 
+                                                          << 0xaU))
+                                                       : vlSelf->ysyx_24120009_core__DOT__control__DOT____VdfgExtracted_h90d7ab0b__0)
+                                                      : vlSelf->ysyx_24120009_core__DOT__control__DOT____VdfgExtracted_h90d7ab0b__0)
+                                                     : 
+                                                    ((2U 
+                                                      & vlSelf->imem_rdata)
+                                                      ? 
+                                                     ((1U 
+                                                       & vlSelf->imem_rdata)
+                                                       ? 
+                                                      ((5U 
+                                                        == 
+                                                        (7U 
+                                                         & (vlSelf->imem_rdata 
+                                                            >> 0xcU)))
+                                                        ? vlSelf->ysyx_24120009_core__DOT__control__DOT____VdfgExtracted_h90d7ab0b__0
+                                                        : vlSelf->ysyx_24120009_core__DOT__control__DOT____VdfgExtracted_ha098e26d__0)
+                                                       : vlSelf->ysyx_24120009_core__DOT__control__DOT____VdfgExtracted_h90d7ab0b__0)
+                                                      : vlSelf->ysyx_24120009_core__DOT__control__DOT____VdfgExtracted_h90d7ab0b__0)))
+                    : vlSelf->ysyx_24120009_core__DOT__control__DOT____VdfgExtracted_h90d7ab0b__0)));
     vlSelf->ysyx_24120009_core__DOT__control__DOT__funct_mux__DOT__i0__DOT__lut_out 
         = ((- (IData)((vlSelf->ysyx_24120009_core__DOT__control__DOT__inst_key 
                        == vlSelf->ysyx_24120009_core__DOT__control__DOT__funct_mux__DOT__i0__DOT__key_list
