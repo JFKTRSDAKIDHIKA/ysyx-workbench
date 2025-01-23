@@ -62,7 +62,7 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root___eval_initial__TOP(Vysyx_241200
     vlSelf->ysyx_24120009_core__DOT__mem_access_write__DOT__mem_mux_write__DOT__i0__DOT__key_list[0U] = 0U;
     vlSelf->ysyx_24120009_core__DOT__mem_access_write__DOT__mem_mux_write__DOT__i0__DOT__key_list[1U] = 1U;
     vlSelf->ysyx_24120009_core__DOT__mem_access_write__DOT__mem_mux_write__DOT__i0__DOT__key_list[2U] = 2U;
-    vlSelf->ysyx_24120009_core__DOT__mem_access_write__DOT__mem_mux_write__DOT__i0__DOT__data_list[0U] = 0U;
+    vlSelf->ysyx_24120009_core__DOT__mem_access_write__DOT__mem_mux_write__DOT__i0__DOT__data_list[0U] = 1U;
     vlSelf->ysyx_24120009_core__DOT__mem_access_write__DOT__mem_mux_write__DOT__i0__DOT__data_list[1U] = 3U;
     vlSelf->ysyx_24120009_core__DOT__mem_access_write__DOT__mem_mux_write__DOT__i0__DOT__data_list[2U] = 0xfU;
     vlSelf->ysyx_24120009_core__DOT__control__DOT__funct_mux__DOT__i0__DOT__key_list[0U] = 0x1cc00U;

@@ -13,9 +13,9 @@ module ysyx_24120009_mem_access_write (
     .out(wmask),
     .key(control), 
     .lut({              
-      3'b010, 8'hf,    // SW                      
-      3'b001, 8'h3,    // SH
-      3'b000, 8'h0     // SB
+      3'b010, 8'b0000_1111,    // SW                      
+      3'b001, 8'b0000_0011,    // SH
+      3'b000, 8'b0000_0001     // SB
     })
   );
 
