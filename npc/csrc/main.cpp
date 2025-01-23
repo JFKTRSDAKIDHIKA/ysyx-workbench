@@ -106,7 +106,7 @@ int check_memory(paddr_t start_addr, size_t size) {
                 std::cerr << "Address: 0x" << std::hex << (start_addr + i) << std::endl;
                 std::cerr << "REF: 0x" << std::hex << static_cast<int>(ref_mem[i]) << std::endl;
                 std::cerr << "DUT: 0x" << std::hex << static_cast<int>(dut_mem[i]) << std::endl;
-                print_memory(0x80000000, 256);
+                print_memory(0x800001ac, 256);
                 return -1;
             }
         }
