@@ -36,7 +36,7 @@ void check_reg(Vysyx_24120009_core* top) {
     }
     if (top->imem_addr != ref.pc) {
         std::cerr << "PC mismatch - DUT: 0x" << std::hex << top->imem_addr << " REF: 0x" << std::hex << ref.pc << std::endl;
-        // Verilated::gotFinish(true);  // End simulation
+        Verilated::gotFinish(true);  // End simulation
     }
 }
 
