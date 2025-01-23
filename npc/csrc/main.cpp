@@ -112,16 +112,15 @@ int main(int argc, char **argv) {
     do {
         // Fetch 阶段
         uint32_t pc = top->imem_addr;          
-        top->imem_rdata = Memory::pmem_read(pc);     
+        top->imem_rdata = Memory::pmem_read(pc);  
+
+        std::cout << "Op1: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->Op1_debug
+        << ", Op2: 0x" << std::setw(8) << std::setfill('0') << top->Op2_debug
+        << ", wb_data: 0x" << std::setw(8) << std::setfill('0') << top->reg_write_data_debug
+        << std::dec << std::endl;   
 
         // dut execute one instruction
         tick(top, step_mode);  // 传入step_mode来决定是否启用单步模式
-
-        
-        std::cout << "Op1: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->Op1_debug
-                << ", Op2: 0x" << std::setw(8) << std::setfill('0') << top->Op2_debug
-                << ", wb_data: 0x" << std::setw(8) << std::setfill('0') << top->reg_write_data_debug
-                << std::dec << std::endl;
 
         // ref execute one instruction
         ref_difftest_exec(1);
