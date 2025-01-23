@@ -195,7 +195,6 @@ int main(int argc, char **argv) {
             // Check memory consistency
             ret = check_memory(0x80000000, 0x1000); 
             if (ret < 0) return -1;
-             printf("------------------------------------------------------------------------------\n");
         }
     } 
 
