@@ -131,7 +131,7 @@ module ysyx_24120009_ControlLogic (
     assign rf_we    = ctl_signals[4];
     assign mem_en   = ctl_signals[3];
     assign mem_wen  = ctl_signals[2];
-    assign wb_sel = ctl_signals[1:0];
+    assign wb_sel   = ctl_signals[1:0];
 
     always @(*) begin
         if (opcode == 7'b1100011) begin
@@ -155,7 +155,7 @@ module ysyx_24120009_ControlLogic (
     .out(ctl_mem_access),
     .key({opcode, funct3}),
     .lut({
-        // opcode_func3 | {mem_val, mem_wen}
+        // opcode_func3 | ctl_mem_access
         10'b0000011_010, 3'b010, // LW
         10'b0000011_000, 3'b000, // LB
         10'b0000011_100, 3'b100, // LBU
