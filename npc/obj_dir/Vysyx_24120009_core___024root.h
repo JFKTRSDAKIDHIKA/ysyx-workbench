@@ -70,8 +70,8 @@ class Vysyx_24120009_core___024root final : public VerilatedModule {
         IData/*31:0*/ __Vfunc_ysyx_24120009_core__DOT__pmem_read__3__Vfuncout;
         IData/*31:0*/ __VstlIterCount;
         IData/*31:0*/ __VactIterCount;
-        VlUnpacked<CData/*2:0*/, 2> ysyx_24120009_core__DOT__mem_access_read__DOT__mem_mux__DOT__i0__DOT__key_list;
-        VlUnpacked<IData/*31:0*/, 2> ysyx_24120009_core__DOT__mem_access_read__DOT__mem_mux__DOT__i0__DOT__data_list;
+        VlUnpacked<CData/*2:0*/, 5> ysyx_24120009_core__DOT__mem_access_read__DOT__mem_mux__DOT__i0__DOT__key_list;
+        VlUnpacked<IData/*31:0*/, 5> ysyx_24120009_core__DOT__mem_access_read__DOT__mem_mux__DOT__i0__DOT__data_list;
         VlUnpacked<CData/*2:0*/, 3> ysyx_24120009_core__DOT__mem_access_write__DOT__mem_mux_write__DOT__i0__DOT__key_list;
         VlUnpacked<CData/*7:0*/, 3> ysyx_24120009_core__DOT__mem_access_write__DOT__mem_mux_write__DOT__i0__DOT__data_list;
         VlUnpacked<IData/*31:0*/, 32> ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf;
