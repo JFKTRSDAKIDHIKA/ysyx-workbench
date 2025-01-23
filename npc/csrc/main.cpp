@@ -46,12 +46,14 @@ void tick(Vysyx_24120009_core* top, bool step_mode) {
     top->clk = 0;
     top->eval();
     
-    // print some debug info when registers have yet been updated!
-    std::cout << "Op1: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->Op1_debug
-        << ", Op2: 0x" << std::setw(8) << std::setfill('0') << top->Op2_debug
-        << ", wb_data: 0x" << std::setw(8) << std::setfill('0') << top->reg_write_data_debug
-        << ", Instruction: 0x" << std::setw(8) << std::setfill('0') << top->inst_debug
-        << std::dec << std::endl;
+    if (step_mode) {
+        // print some debug info when registers have yet been updated!
+        std::cout << "Op1: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->Op1_debug
+            << ", Op2: 0x" << std::setw(8) << std::setfill('0') << top->Op2_debug
+            << ", wb_data: 0x" << std::setw(8) << std::setfill('0') << top->reg_write_data_debug
+            << ", Instruction: 0x" << std::setw(8) << std::setfill('0') << top->inst_debug
+            << std::dec << std::endl;
+    }
 
     top->clk = 1;
     top->eval();
