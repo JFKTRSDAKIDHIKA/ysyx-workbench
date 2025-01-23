@@ -31,7 +31,6 @@ typedef struct {
 } riscv32_CPU_state;
 riscv32_CPU_state ref;
 
-// Function to print memory from REF and DUT
 void print_memory(paddr_t start_addr, size_t size) {
     // Allocate buffers for memory data
     std::vector<uint8_t> ref_mem(size, 0); // Buffer for REF memory
@@ -45,20 +44,27 @@ void print_memory(paddr_t start_addr, size_t size) {
         dut_mem[i] = Memory::pmem_read(start_addr + i) & 0xFF; // Read byte by byte
     }
 
-    // Print the memory in a readable format
-    std::cout << "Printing memory contents (start address: 0x" 
-              << std::hex << start_addr << ", size: " << std::dec << size << " bytes)" << std::endl;
-    std::cout << std::setw(12) << "Address"
-              << std::setw(16) << "REF"
-              << std::setw(16) << "DUT" << std::endl;
+    // Print the memory in a more readable format
+    std::cout << "\nMemory Dump (Start Address: 0x" << std::hex << start_addr << ", Size: " << std::dec << size << " bytes)" << std::endl;
+    std::cout << "-------------------------------------------------------------------------------" << std::endl;
+    std::cout << "| Address      | REF Value  | DUT Value  | Match |" << std::endl;
+    std::cout << "-------------------------------------------------------------------------------" << std::endl;
 
     for (size_t i = 0; i < size; ++i) {
         paddr_t addr = start_addr + i;
-        std::cout << std::setw(12) << std::hex << addr
-                  << std::setw(16) << std::hex << static_cast<int>(ref_mem[i])
-                  << std::setw(16) << std::hex << static_cast<int>(dut_mem[i]) << std::endl;
+        bool match = (ref_mem[i] == dut_mem[i]);
+
+        // Print memory content with formatting
+        std::cout << "| 0x" << std::setw(10) << std::setfill('0') << std::hex << addr
+                  << " | 0x" << std::setw(8) << std::setfill('0') << static_cast<int>(ref_mem[i])
+                  << " | 0x" << std::setw(8) << std::setfill('0') << static_cast<int>(dut_mem[i])
+                  << " |  " << (match ? "Yes" : "No ") << "  |" << std::endl;
     }
+
+    std::cout << "-------------------------------------------------------------------------------" << std::endl;
 }
+
+   
 
 
 int check_reg(Vysyx_24120009_core* top) {
