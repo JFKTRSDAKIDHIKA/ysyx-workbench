@@ -62,10 +62,6 @@ module ysyx_24120009_core (
     wire [`ysyx_24120009_REG_ADDR_WIDTH-1:0] waddr;
     wire [`ysyx_24120009_DATA_WIDTH-1:0] rdata1;
     wire [`ysyx_24120009_DATA_WIDTH-1:0] rdata2;
-<<<<<<< HEAD
-
-=======
->>>>>>> tracer-ysyx
     // Instruction Memory interface
     wire [31:0] imem_addr;
     reg [`ysyx_24120009_DATA_WIDTH-1:0] imem_rdata;
@@ -73,10 +69,6 @@ module ysyx_24120009_core (
     always @(*) begin
         imem_rdata = pmem_read(imem_addr);
     end
-<<<<<<< HEAD
-
-=======
->>>>>>> tracer-ysyx
     // Data Memory interface
     reg [`ysyx_24120009_DATA_WIDTH-1:0] dmem_rdata_raw;
     wire [`ysyx_24120009_DATA_WIDTH-1:0] dmem_rdata;

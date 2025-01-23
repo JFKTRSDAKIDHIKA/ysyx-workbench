@@ -22,7 +22,7 @@ extern "C" {
     extern int pmem_read(int raddr);
     // DPI import at vsrc/cpu/ysyx_24120009_core.v:81:34
     extern void pmem_write(int waddr, int wdata, char wmask);
-    // DPI import at vsrc/cpu/ysyx_24120009_core.v:115:34
+    // DPI import at vsrc/cpu/ysyx_24120009_core.v:116:34
     extern void simulation_exit();
 
 #ifdef __cplusplus
