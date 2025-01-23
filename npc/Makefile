@@ -5,7 +5,7 @@ CSRC = $(wildcard csrc/*.cpp)
 INCLUDE_DIRS = -Ivsrc/include -Ivsrc/common -Ivsrc/cpu
 OBJ_DIR = obj_dir
 EXEC = $(OBJ_DIR)/Vysyx_24120009_core
-STEP_MODE = step
+STEP_MODE = run
 
 # 默认目标
 all: $(EXEC)
