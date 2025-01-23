@@ -23,7 +23,7 @@ typedef struct {
 } riscv32_CPU_state;
 riscv32_CPU_state ref;
 
-void check_reg(Vysyx_24120009_core* top) {
+int check_reg(Vysyx_24120009_core* top) {
     // Compare DUT registers with REF registers
     for (int i = 0; i < 32; i++) {
         if (rf_values[i] != ref.gpr[i]) {
@@ -32,12 +32,12 @@ void check_reg(Vysyx_24120009_core* top) {
                       << " REF: 0x" << ref.gpr[i] 
                       << std::endl;
             // Optionally, you can stop the simulation on a mismatch
-            Verilated::gotFinish(true);  // End simulation
+            return -1;  // End simulation
         }
     }
     if (top->imem_addr != ref.pc) {
         std::cerr << "PC mismatch - DUT: 0x" << std::hex << top->imem_addr << " REF: 0x" << std::hex << ref.pc << std::endl;
-        Verilated::gotFinish(true);  // End simulation
+        return -1;  // End simulation
     }
 }
 
@@ -115,7 +115,8 @@ int main(int argc, char **argv) {
             // Copy registers from DUT to REF and compare them
             ref_difftest_regcpy(&ref, DIFFTEST_TO_REF);
             // Check if the registers are consistent
-            check_reg(top);
+            int ret = check_reg(top);
+            if (ret < 0) return -1;
         } 
         else if (input == "info r") {
             // 打印寄存器信息，不进行 tick
