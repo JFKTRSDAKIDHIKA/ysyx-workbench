@@ -181,6 +181,7 @@ int main(int argc, char **argv) {
                 std::cout << "Unknown command!" << std::endl;
             }
         } else {
+            printf("\n");
             // 执行单步操作
             tick(top, step_mode, false);  // 执行一次 tick
             // ref execute one instruction
