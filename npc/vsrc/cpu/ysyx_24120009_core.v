@@ -3,9 +3,6 @@
 module ysyx_24120009_core (
     input wire clk,
     input wire rst,
-    // Memory interface
-    output wire [31:0] imem_addr,
-    input wire [`ysyx_24120009_DATA_WIDTH-1:0] imem_rdata,
     // For debug purpose
     output [`ysyx_24120009_DATA_WIDTH-1:0] pc_debug,
     output [`ysyx_24120009_DATA_WIDTH-1:0] Op1_debug,
@@ -14,7 +11,12 @@ module ysyx_24120009_core (
     output [`ysyx_24120009_DATA_WIDTH-1:0] reg_write_data_debug,
     output is_ebreak_debug,
     output wire [`ysyx_24120009_DATA_WIDTH-1:0] x2_debug,
-    output wire [`ysyx_24120009_REG_ADDR_WIDTH-1:0] waddr_debug
+    output wire [`ysyx_24120009_REG_ADDR_WIDTH-1:0] waddr_debug,
+    output wire [31:0] imem_addr_debug,
+    output wire mem_wen_debug,
+    output wire mem_en_debug,
+    output wire [`ysyx_24120009_DATA_WIDTH-1:0] dmem_addr_debug,
+    output wire [`ysyx_24120009_DATA_WIDTH-1:0] dmem_wdata_debug
 );
 
     // Debug signal declaration
@@ -25,6 +27,11 @@ module ysyx_24120009_core (
     assign reg_write_data_debug = reg_write_data;
     assign is_ebreak_debug = is_ebreak;
     assign waddr_debug = waddr;
+    assign imem_addr_debug = imem_addr;
+    assign mem_wen_debug = mem_wen;
+    assign dmem_addr_debug = aligned_dmem_addr;
+    assign dmem_wdata_debug = dmem_wdata;
+    assign mem_en_debug = mem_en;
 
 
     // Internal signals
@@ -37,7 +44,7 @@ module ysyx_24120009_core (
     wire [2:0] pc_sel;
     wire rf_we;
     wire mem_en;
-    wire mem_wen_internal;
+    wire mem_wen;
     wire [1:0] wb_sel;
     wire [`ysyx_24120009_DATA_WIDTH-1:0] Op1;
     wire [`ysyx_24120009_DATA_WIDTH-1:0] Op2;
@@ -48,6 +55,7 @@ module ysyx_24120009_core (
     wire br_eq;
     wire br_lt;
     wire br_ltu;
+    wire [2:0] ctl_mem_access;
     //  Register file address
     wire [`ysyx_24120009_REG_ADDR_WIDTH-1:0] rs1_addr;
     wire [`ysyx_24120009_REG_ADDR_WIDTH-1:0] rs2_addr;
@@ -55,6 +63,55 @@ module ysyx_24120009_core (
     wire [`ysyx_24120009_DATA_WIDTH-1:0] rdata1;
     wire [`ysyx_24120009_DATA_WIDTH-1:0] rdata2;
 
+    // Instruction Memory interface
+    wire [31:0] imem_addr;
+    reg [`ysyx_24120009_DATA_WIDTH-1:0] imem_rdata;
+    import "DPI-C" function int pmem_read(input int raddr);
+    always @(*) begin
+        imem_rdata = pmem_read(imem_addr);
+    end
+
+    // Data Memory interface
+    reg [`ysyx_24120009_DATA_WIDTH-1:0] dmem_rdata_raw;
+    wire [`ysyx_24120009_DATA_WIDTH-1:0] dmem_rdata;
+    wire [`ysyx_24120009_DATA_WIDTH-1:0] dmem_addr;
+    wire [`ysyx_24120009_DATA_WIDTH-1:0] dmem_wdata;
+    wire [`ysyx_24120009_DATA_WIDTH-1:0] aligned_dmem_addr;
+    wire [7:0] wmask;
+    assign dmem_wdata = rdata2;
+
+    import "DPI-C" function void pmem_write(input int waddr, input int wdata, input byte wmask);
+    always @(*) begin
+        if (mem_en) begin 
+            // read data from data memory
+            dmem_rdata_raw = pmem_read(aligned_dmem_addr);
+            if (mem_wen) begin 
+            // write data to data memory
+            pmem_write(aligned_dmem_addr, dmem_wdata, wmask);
+            end
+        end
+        else begin
+            dmem_rdata_raw = 0;
+        end
+    end
+
+    // the above three modules may be merged!
+    ysyx_24120009_mem_access_read mem_access_read (
+        .data_in(dmem_rdata_raw),
+        .control(ctl_mem_access),
+        .data_out(dmem_rdata)
+    );
+
+    ysyx_24120009_AddressAligner addr_aligner (
+        .dmem_addr(dmem_addr),
+        .ctrl(ctl_mem_access),
+        .aligned_addr(aligned_dmem_addr)
+    );
+
+    ysyx_24120009_mem_access_write mem_access_write (
+        .control(ctl_mem_access),
+        .wmask(wmask)
+    );
 
     // handle ebreak signal
     wire is_ebreak;
@@ -141,9 +198,10 @@ module ysyx_24120009_core (
         .pc_sel(pc_sel),
         .rf_we(rf_we),
         .mem_en(mem_en),
-        .mem_wen(mem_wen_internal),
+        .mem_wen(mem_wen),
         .wb_sel(wb_sel),
-        .is_ebreak(is_ebreak)
+        .is_ebreak(is_ebreak),
+        .ctl_mem_access(ctl_mem_access)
     );
 
     // Instantiate EXU
@@ -155,7 +213,9 @@ module ysyx_24120009_core (
         .alu_op(alu_op),
         .wb_sel(wb_sel),
         .pc_plus4(pc_plus4),
-        .reg_write_data(reg_write_data)
+        .reg_write_data(reg_write_data),
+        .dmem_rdata(dmem_rdata),
+        .dmem_addr(dmem_addr)   
     );
 
 

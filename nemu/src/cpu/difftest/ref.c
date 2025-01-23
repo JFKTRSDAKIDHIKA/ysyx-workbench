@@ -19,8 +19,17 @@
 #include <difftest-def.h>
 #include <memory/paddr.h>
 
+__EXPORT void difftest_memcpy(paddr_t addr, void *buf, size_t n, bool direction) {
+  if (direction == DIFFTEST_TO_REF) {
+    memcpy(guest_to_host(addr), buf, n);  
+  } else if (direction == DIFFTEST_TO_DUT) {
+    memcpy(buf, guest_to_host(addr), n);    
+  } else {
+    assert(0);  
+  }
+}
 
-__EXPORT void difftest_memcpy(const char *img_file) {
+__EXPORT void difftest_meminit(const char *img_file) {
   FILE *fp = fopen(img_file, "rb");
   Assert(fp, "Can not open '%s'", img_file);
 

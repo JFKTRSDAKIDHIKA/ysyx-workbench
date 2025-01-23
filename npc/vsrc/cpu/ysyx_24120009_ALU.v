@@ -15,12 +15,13 @@ module ysyx_24120009_ALU (
     wire [`ysyx_24120009_DATA_WIDTH-1:0] xor_result     = A ^ B;                  // Bitwise XOR
     wire [`ysyx_24120009_DATA_WIDTH-1:0] or_result      = A | B;                  // Bitwise OR
     wire [`ysyx_24120009_DATA_WIDTH-1:0] and_result     = A & B;                  // Bitwise AND
-    wire [`ysyx_24120009_DATA_WIDTH-1:0] sll_result     = A << B;                 // Logical shift left
-    wire [`ysyx_24120009_DATA_WIDTH-1:0] srl_result     = A >> B;                 // Logical shift right
-    wire [`ysyx_24120009_DATA_WIDTH-1:0] sra_result     = $signed(A) >>> B;       // Arithmetic shift right
+    wire [`ysyx_24120009_DATA_WIDTH-1:0] sll_result     = A << (B & 32'h1f);      // Logical shift left
+    wire [`ysyx_24120009_DATA_WIDTH-1:0] srl_result     = A >> (B & 32'h1f);      // Logical shift right
+    wire [`ysyx_24120009_DATA_WIDTH-1:0] sra_result = $signed(A) >>> (B & 32'h1f); // Arithmetic shift right
+    wire [`ysyx_24120009_DATA_WIDTH-1:0] op1_result = A;                          // Pass A as result
 
     // Instantiate MuxKey module
-    ysyx_24120009_MuxKey #(10, 5, `ysyx_24120009_DATA_WIDTH) alu_mux (
+    ysyx_24120009_MuxKey #(11, 5, `ysyx_24120009_DATA_WIDTH) alu_mux (
         .out(Result),
         .key(ALUFun),
         .lut({
@@ -33,7 +34,8 @@ module ysyx_24120009_ALU (
             5'b00110, and_result,  // Bitwise AND
             5'b00111, sll_result,  // Logical shift left
             5'b01000, srl_result,  // Logical shift right
-            5'b01001, sra_result   // Arithmetic shift right
+            5'b01001, sra_result,  // Arithmetic shift right
+            5'b01010, op1_result   // Pass A as result
         })
     );
 
