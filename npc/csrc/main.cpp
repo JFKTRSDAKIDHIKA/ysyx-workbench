@@ -50,6 +50,35 @@ int check_reg(Vysyx_24120009_core* top) {
     return 0;
 }
 
+void check_memory(paddr_t start_addr, size_t size) {
+    // Allocate buffers for memory comparison
+    std::vector<uint8_t> ref_mem(size, 0); // Buffer to store memory from REF
+    std::vector<uint8_t> dut_mem(size, 0); // Buffer to store memory from DUT
+
+    // Copy memory from REF to ref_mem buffer
+    ref_difftest_memcpy(start_addr, ref_mem.data(), size, DIFFTEST_TO_DUT);
+
+    // Copy memory from DUT to dut_mem buffer
+    for (size_t i = 0; i < size; ++i) {
+        dut_mem[i] = Memory::pmem_read(start_addr + i) & 0xFF; // Read one byte at a time
+    }
+
+    // Compare REF memory and DUT memory
+    if (memcmp(ref_mem.data(), dut_mem.data(), size) != 0) {
+        // If there's a mismatch, find the first mismatched byte
+        for (size_t i = 0; i < size; ++i) {
+            if (ref_mem[i] != dut_mem[i]) {
+                std::cerr << "Memory mismatch detected!" << std::endl;
+                std::cerr << "Address: 0x" << std::hex << (start_addr + i) << std::endl;
+                std::cerr << "REF: 0x" << std::hex << static_cast<int>(ref_mem[i]) << std::endl;
+                std::cerr << "DUT: 0x" << std::hex << static_cast<int>(dut_mem[i]) << std::endl;
+                assert(0); // Stop simulation
+            }
+        }
+    } else {
+        std::cout << "Memory check passed: no mismatch found!" << std::endl;
+    }
+}
 
 void tick(Vysyx_24120009_core* top, bool step_mode, bool is_reset) {
     top->clk = 0;
@@ -135,7 +164,9 @@ int main(int argc, char **argv) {
                 ref_difftest_regcpy(&ref, DIFFTEST_TO_REF);
                 // Check if the registers are consistent
                 int ret = check_reg(top);
-                if (ret < 0) return -1;
+                if (ret < 0) return -1;                 
+                // Check memory consistency
+                check_memory(0x80000000, 0x1000); 
             } 
             else if (input == "info r") {
                 // 打印寄存器信息，不进行 tick
@@ -158,6 +189,8 @@ int main(int argc, char **argv) {
             // Check if the registers are consistent
             int ret = check_reg(top);
             if (ret < 0) return -1;
+            // Check memory consistency
+            check_memory(0x80000000, 0x1000); 
         }
     } 
 
