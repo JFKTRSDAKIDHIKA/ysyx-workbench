@@ -12,7 +12,7 @@ module ysyx_24120009_mem_access (
   wire [`ysyx_24120009_DATA_WIDTH-1:0] zero_ext_half;   
 
   assign sign_ext_byte = {{24{data_in[7]}}, data_in[7:0]};
-  assign zero_ext_byte = {24'b1, data_in[7:0]};
+  assign zero_ext_byte = {24'b0, data_in[7:0]};
   assign sign_ext_half = {{16{data_in[15]}}, data_in[15:0]};
   assign zero_ext_half = {16'b0, data_in[15:0]};
 
