@@ -43,16 +43,18 @@ int check_reg(Vysyx_24120009_core* top) {
 }
 
 
-void tick(Vysyx_24120009_core* top, bool step_mode) {
+void tick(Vysyx_24120009_core* top, bool step_mode, bool is_reset) {
     top->clk = 0;
     top->eval();
     
-    // print some debug info when registers have yet been updated!
-    std::cout << "Op1: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->Op1_debug
-        << ", Op2: 0x" << std::setw(8) << std::setfill('0') << top->Op2_debug
-        << ", wb_data: 0x" << std::setw(8) << std::setfill('0') << top->reg_write_data_debug
-        << ", Instruction: 0x" << std::setw(8) << std::setfill('0') << top->inst_debug
-        << std::dec << std::endl;
+    if (!is_reset) {
+        // print some debug info when registers have yet been updated!
+        std::cout << "Op1: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->Op1_debug
+            << ", Op2: 0x" << std::setw(8) << std::setfill('0') << top->Op2_debug
+            << ", wb_data: 0x" << std::setw(8) << std::setfill('0') << top->reg_write_data_debug
+            << ", Instruction: 0x" << std::setw(8) << std::setfill('0') << top->inst_debug
+            << std::dec << std::endl;
+    }
 
     top->clk = 1;
     top->eval();
@@ -62,7 +64,7 @@ void tick(Vysyx_24120009_core* top, bool step_mode) {
 void reset(Vysyx_24120009_core* top, int cycles) {
     top->rst = 1;
     for (int i = 0; i < cycles; ++i) {
-        tick(top, false);  // forbidden single-step mode
+        tick(top, false, true);  // forbidden single-step mode
     }
     top->rst = 0;
 }
@@ -109,7 +111,7 @@ int main(int argc, char **argv) {
             // 根据用户输入的命令来决定行为
             if (input == "si") {
                 // 执行单步操作
-                tick(top, step_mode);  // 执行一次 tick
+                tick(top, step_mode, false);  // 执行一次 tick
                 // ref execute one instruction
                 ref_difftest_exec(1);
                 // Copy registers from DUT to REF and compare them
@@ -131,7 +133,7 @@ int main(int argc, char **argv) {
             }
         } else {
             // 执行单步操作
-            tick(top, step_mode);  // 执行一次 tick
+            tick(top, step_mode, false);  // 执行一次 tick
             // ref execute one instruction
             ref_difftest_exec(1);
             // Copy registers from DUT to REF and compare them
