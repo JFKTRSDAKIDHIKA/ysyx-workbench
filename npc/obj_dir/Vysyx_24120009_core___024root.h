@@ -18,7 +18,6 @@ class Vysyx_24120009_core___024root final : public VerilatedModule {
     VL_OUT8(is_ebreak_debug,0,0);
     VL_OUT8(waddr_debug,4,0);
     CData/*1:0*/ ysyx_24120009_core__DOT__wb_sel;
-    CData/*0:0*/ ysyx_24120009_core__DOT__br_eq;
     CData/*0:0*/ ysyx_24120009_core__DOT__br_lt;
     CData/*0:0*/ ysyx_24120009_core__DOT__br_ltu;
     CData/*0:0*/ ysyx_24120009_core__DOT__exu__DOT__wb_mux__DOT__i1__DOT__hit;

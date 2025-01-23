@@ -133,7 +133,7 @@ module ysyx_24120009_ControlLogic (
         if (opcode == 7'b1100011) begin
             // 分支指令处理逻辑
             case (funct3)
-                3'b000: wb_sel = br_eq ? 2'b10 : 2'b00;            // BEQ: rs1 == rs2
+                3'b000: wb_sel = br_eq ? 2'b10 : 2'b10;            // BEQ: rs1 == rs2
                 3'b001: wb_sel = ~br_eq ? 2'b10 : 2'b00;           // BNE: rs1 != rs2
                 3'b100: wb_sel = br_lt ? 2'b10 : 2'b00;            // BLT: rs1 < rs2 (signed)
                 3'b101: wb_sel = ~br_lt ? 2'b10 : 2'b00;           // BGE: rs1 >= rs2 (signed)

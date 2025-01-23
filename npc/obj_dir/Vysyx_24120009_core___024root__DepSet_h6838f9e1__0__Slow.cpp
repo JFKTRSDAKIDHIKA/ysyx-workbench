@@ -406,8 +406,6 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root___stl_sequent__TOP__0(Vysyx_2412
     vlSelf->ysyx_24120009_core__DOT__ifu__DOT__mux_pc_sel__DOT__i0__DOT__data_list[3U] 
         = (vlSelf->ysyx_24120009_core__DOT__rdata1 
            + vlSelf->ysyx_24120009_core__DOT__idu__DOT__imm_i_sext);
-    vlSelf->ysyx_24120009_core__DOT__br_eq = (vlSelf->ysyx_24120009_core__DOT__rdata1 
-                                              == vlSelf->ysyx_24120009_core__DOT__rdata2);
     vlSelf->ysyx_24120009_core__DOT__br_lt = VL_LTS_III(32, vlSelf->ysyx_24120009_core__DOT__rdata1, vlSelf->ysyx_24120009_core__DOT__rdata2);
     vlSelf->ysyx_24120009_core__DOT__br_ltu = (vlSelf->ysyx_24120009_core__DOT__rdata1 
                                                < vlSelf->ysyx_24120009_core__DOT__rdata2);
@@ -760,13 +758,11 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root___stl_sequent__TOP__0(Vysyx_2412
                                                   ((0x1000U 
                                                     & vlSelf->ysyx_24120009_core__DOT____VdfgExtracted_hd7155979__0)
                                                     ? 
-                                                   ((IData)(vlSelf->ysyx_24120009_core__DOT__br_eq)
+                                                   ((vlSelf->ysyx_24120009_core__DOT__rdata1 
+                                                     == vlSelf->ysyx_24120009_core__DOT__rdata2)
                                                      ? 0U
                                                      : 2U)
-                                                    : 
-                                                   ((IData)(vlSelf->ysyx_24120009_core__DOT__br_eq)
-                                                     ? 2U
-                                                     : 0U))))
+                                                    : 2U)))
                                                  : vlSelf->ysyx_24120009_core__DOT__control__DOT__ctl_signals));
     vlSelf->ysyx_24120009_core__DOT__idu__DOT__op1_sel_mux__DOT__i0__DOT__lut_out 
         = ((- (IData)(((3U & (vlSelf->ysyx_24120009_core__DOT__control__DOT__ctl_signals 
@@ -1024,7 +1020,6 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root___ctor_var_reset(Vysyx_24120009_
     vlSelf->ysyx_24120009_core__DOT__wb_sel = VL_RAND_RESET_I(2);
     vlSelf->ysyx_24120009_core__DOT__Op1 = VL_RAND_RESET_I(32);
     vlSelf->ysyx_24120009_core__DOT__Op2 = VL_RAND_RESET_I(32);
-    vlSelf->ysyx_24120009_core__DOT__br_eq = VL_RAND_RESET_I(1);
     vlSelf->ysyx_24120009_core__DOT__br_lt = VL_RAND_RESET_I(1);
     vlSelf->ysyx_24120009_core__DOT__br_ltu = VL_RAND_RESET_I(1);
     vlSelf->ysyx_24120009_core__DOT__rdata1 = VL_RAND_RESET_I(32);

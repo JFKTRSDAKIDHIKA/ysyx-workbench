@@ -237,8 +237,6 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root___nba_sequent__TOP__0(Vysyx_241
     vlSelf->ysyx_24120009_core__DOT__ifu__DOT__mux_pc_sel__DOT__i0__DOT__data_list[3U] 
         = (vlSelf->ysyx_24120009_core__DOT__rdata1 
            + vlSelf->ysyx_24120009_core__DOT__idu__DOT__imm_i_sext);
-    vlSelf->ysyx_24120009_core__DOT__br_eq = (vlSelf->ysyx_24120009_core__DOT__rdata1 
-                                              == vlSelf->ysyx_24120009_core__DOT__rdata2);
     vlSelf->ysyx_24120009_core__DOT__br_lt = VL_LTS_III(32, vlSelf->ysyx_24120009_core__DOT__rdata1, vlSelf->ysyx_24120009_core__DOT__rdata2);
     vlSelf->ysyx_24120009_core__DOT__br_ltu = (vlSelf->ysyx_24120009_core__DOT__rdata1 
                                                < vlSelf->ysyx_24120009_core__DOT__rdata2);
@@ -591,13 +589,11 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root___nba_sequent__TOP__0(Vysyx_241
                                                   ((0x1000U 
                                                     & vlSelf->ysyx_24120009_core__DOT____VdfgExtracted_hd7155979__0)
                                                     ? 
-                                                   ((IData)(vlSelf->ysyx_24120009_core__DOT__br_eq)
+                                                   ((vlSelf->ysyx_24120009_core__DOT__rdata1 
+                                                     == vlSelf->ysyx_24120009_core__DOT__rdata2)
                                                      ? 0U
                                                      : 2U)
-                                                    : 
-                                                   ((IData)(vlSelf->ysyx_24120009_core__DOT__br_eq)
-                                                     ? 2U
-                                                     : 0U))))
+                                                    : 2U)))
                                                  : vlSelf->ysyx_24120009_core__DOT__control__DOT__ctl_signals));
     vlSelf->ysyx_24120009_core__DOT__idu__DOT__op1_sel_mux__DOT__i0__DOT__lut_out 
         = ((- (IData)(((3U & (vlSelf->ysyx_24120009_core__DOT__control__DOT__ctl_signals 
