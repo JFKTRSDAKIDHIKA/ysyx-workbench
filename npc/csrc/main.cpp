@@ -31,6 +31,36 @@ typedef struct {
 } riscv32_CPU_state;
 riscv32_CPU_state ref;
 
+// Function to print memory from REF and DUT
+void print_memory(paddr_t start_addr, size_t size) {
+    // Allocate buffers for memory data
+    std::vector<uint8_t> ref_mem(size, 0); // Buffer for REF memory
+    std::vector<uint8_t> dut_mem(size, 0); // Buffer for DUT memory
+
+    // Fetch memory data from REF
+    ref_difftest_memcpy(start_addr, ref_mem.data(), size, DIFFTEST_TO_DUT);
+
+    // Fetch memory data from DUT
+    for (size_t i = 0; i < size; ++i) {
+        dut_mem[i] = Memory::pmem_read(start_addr + i) & 0xFF; // Read byte by byte
+    }
+
+    // Print the memory in a readable format
+    std::cout << "Printing memory contents (start address: 0x" 
+              << std::hex << start_addr << ", size: " << std::dec << size << " bytes)" << std::endl;
+    std::cout << std::setw(12) << "Address"
+              << std::setw(16) << "REF"
+              << std::setw(16) << "DUT" << std::endl;
+
+    for (size_t i = 0; i < size; ++i) {
+        paddr_t addr = start_addr + i;
+        std::cout << std::setw(12) << std::hex << addr
+                  << std::setw(16) << std::hex << static_cast<int>(ref_mem[i])
+                  << std::setw(16) << std::hex << static_cast<int>(dut_mem[i]) << std::endl;
+    }
+}
+
+
 int check_reg(Vysyx_24120009_core* top) {
     // Compare DUT registers with REF registers
     for (int i = 0; i < 32; i++) {
@@ -72,6 +102,7 @@ int check_memory(paddr_t start_addr, size_t size) {
                 std::cerr << "Address: 0x" << std::hex << (start_addr + i) << std::endl;
                 std::cerr << "REF: 0x" << std::hex << static_cast<int>(ref_mem[i]) << std::endl;
                 std::cerr << "DUT: 0x" << std::hex << static_cast<int>(dut_mem[i]) << std::endl;
+                print_memory(0x80000000, 256);
                 return -1;
             }
         }
