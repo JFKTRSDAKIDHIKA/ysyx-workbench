@@ -20,7 +20,7 @@
 #include <memory/paddr.h>
 
 
-__EXPORT void difftest_memcpy(const char *img_file) {
+__EXPORT void difftest_meminit(const char *img_file) {
   FILE *fp = fopen(img_file, "rb");
   Assert(fp, "Can not open '%s'", img_file);
 
