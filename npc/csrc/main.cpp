@@ -46,11 +46,13 @@ void tick(Vysyx_24120009_core* top, bool step_mode) {
     top->clk = 0;
     top->eval();
     
-        std::cout << "Op1: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->Op1_debug
+    // print some debug info when registers have yet been updated!
+    std::cout << "Op1: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->Op1_debug
         << ", Op2: 0x" << std::setw(8) << std::setfill('0') << top->Op2_debug
         << ", wb_data: 0x" << std::setw(8) << std::setfill('0') << top->reg_write_data_debug
-        << std::dec << std::endl;   
-        
+        << ", Instruction: 0x" << std::setw(8) << std::setfill('0') << top->inst_debug
+        << std::dec << std::endl;
+
     top->clk = 1;
     top->eval();
     Verilated::timeInc(1); // 增加仿真时间
@@ -131,9 +133,6 @@ int main(int argc, char **argv) {
 
         // Check if the registers are consistent
         check_reg(top);
-
-        // print the instruction whatever the mode is
-        std::cout << "Instruction: 0x" << std::hex << top->inst_debug << std::endl;
     } while(!Verilated::gotFinish());
 
     delete top;
