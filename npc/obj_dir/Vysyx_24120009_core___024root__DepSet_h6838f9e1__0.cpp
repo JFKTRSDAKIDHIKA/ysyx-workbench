@@ -588,12 +588,12 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root___nba_sequent__TOP__0(Vysyx_241
                                                    : 
                                                   ((0x1000U 
                                                     & vlSelf->ysyx_24120009_core__DOT____VdfgExtracted_hd7155979__0)
-                                                    ? 
+                                                    ? 2U
+                                                    : 
                                                    ((vlSelf->ysyx_24120009_core__DOT__rdata1 
                                                      == vlSelf->ysyx_24120009_core__DOT__rdata2)
-                                                     ? 0U
-                                                     : 2U)
-                                                    : 2U)))
+                                                     ? 2U
+                                                     : 0U))))
                                                  : vlSelf->ysyx_24120009_core__DOT__control__DOT__ctl_signals));
     vlSelf->ysyx_24120009_core__DOT__idu__DOT__op1_sel_mux__DOT__i0__DOT__lut_out 
         = ((- (IData)(((3U & (vlSelf->ysyx_24120009_core__DOT__control__DOT__ctl_signals 
