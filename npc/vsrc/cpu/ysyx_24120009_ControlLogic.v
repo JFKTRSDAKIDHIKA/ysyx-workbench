@@ -19,19 +19,39 @@ module ysyx_24120009_ControlLogic (
 
     localparam DATA_LEN  = 17;  // Length of control signals
     localparam KEY_LEN   = 17;  // Length of inst key
-    localparam NR_KEY    = 25;  // Number of keys
+    localparam NR_KEY    = 26;  // Number of keys
 
     wire [6:0] opcode = inst[6:0];
     wire [2:0] funct3 = inst[14:12];
     wire [6:0] funct7 = inst[31:25];
 
-    wire [KEY_LEN-1:0] inst_key;
-    assign inst_key = ({opcode, funct3} == 10'b1100111_000) ? {opcode, funct3, 7'b0} : 
-                  (opcode == 7'b1101111) ? {opcode, 3'b0, 7'b0} : 
-                  ({opcode, funct3} == 10'b0010011_101) ? {opcode, funct3, funct7} : 
-                  {opcode, funct3, funct7};
-
-    // remain tobe continued!
+    reg [KEY_LEN-1:0] inst_key;
+    
+    always @(*) begin
+        case (opcode)  
+            7'b1100111: begin
+                case (funct3)
+                    3'b000: inst_key = {opcode, funct3, 7'b0};  // opcode == 7'b1100111 && funct3 == 3'b000
+                    default: inst_key = {opcode, funct3, 7'b1101111};  // 默认处理其他 funct3
+                endcase
+            end
+            7'b0010011: begin
+                case (funct3)
+                    3'b101: inst_key = {opcode, funct3, funct7};  // opcode == 7'b0010011 && funct3 == 3'b101
+                    default: inst_key = {opcode, funct3, 7'b0000000};  // 默认处理其他 funct3
+                endcase
+            end
+            7'b0010111: begin
+                inst_key = {opcode, 3'b0, 7'b0};  
+            end
+            7'b1101111: begin
+                inst_key = {opcode, 3'b0, 7'b0};  
+            end
+            default: begin
+                inst_key = {opcode, funct3, funct7};  // 默认处理其他 opcode 和 funct3 的组合
+            end
+        endcase
+    end
 
     wire [DATA_LEN-1:0] ctl_signals;
     ysyx_24120009_MuxKey #(NR_KEY, KEY_LEN, DATA_LEN) funct_mux (
@@ -66,6 +86,8 @@ module ysyx_24120009_ControlLogic (
         17'b1100011_110_0000000, 17'b00000_00_00_000_0_0_0_00, // BLTU
         // J-type instructions(1)
         17'b1101111_000_0000000, 17'b00000_00_00_011_1_0_0_01, // JAL
+        // U-type instructions(1)
+        17'b0010111_000_0000000, 17'b00000_01_00_000_1_0_0_10, // AUIPC
         // JALR instruction(1)
         17'b1100111_000_0000000, 17'b00000_00_01_001_1_0_0_01, // JALR
         // ebreak instruction(1)

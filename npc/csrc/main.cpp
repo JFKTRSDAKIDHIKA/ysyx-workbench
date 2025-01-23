@@ -1,44 +1,70 @@
-#include "Vysyx_24120009_core.h" // 顶层模块的 Verilator 生成类
+#include "Vysyx_24120009_core.h"
 #include "verilated.h"
-#include <ostream>
+#include "difftest.h"
+#include "registers.h"
+#include "program_loader.h"
+#include "memory.h"
+#include "difftest.h"
 #include <iostream>
 #include <svdpi.h>
-#include <fstream>
+#include <iomanip> 
 
 // define the DPI-C functions
 extern "C" void simulation_exit() {
     Verilated::gotFinish(true); 
 }
-
-void pmem_write(uint32_t address, uint32_t data);
-uint32_t pmem_read(uint32_t address);
-
-// 加载程序到存储器中
-void load_program(const char *program_path) {
-    std::ifstream program_file(program_path, std::ios::binary);
-    if (!program_file) {
-        std::cerr << "Error opening program file: " << program_path << std::endl;
-        return;
-    }
-
-    uint32_t address = 0x80000000; // 从内存基地址开始加载
-    uint32_t data;
-    while (program_file.read(reinterpret_cast<char*>(&data), sizeof(data))) {
-        pmem_write(address, data);
-        address += sizeof(data); // 增加偏移量，写入下一条指令
-    }
+extern "C" void get_register_values(uint32_t rf[32]) {
+    set_register_values(rf);  // set the register values
 }
 
-void tick(Vysyx_24120009_core* top) {
-    top->clk = 0; top->eval();
-    top->clk = 1; top->eval();
+typedef struct {
+  uint32_t gpr[32];
+  uint32_t pc;
+} riscv32_CPU_state;
+riscv32_CPU_state ref;
+
+int check_reg(Vysyx_24120009_core* top) {
+    // Compare DUT registers with REF registers
+    for (int i = 0; i < 32; i++) {
+        if (rf_values[i] != ref.gpr[i]) {
+            std::cerr << "Register mismatch at x" << i 
+                      << " - DUT: 0x" << std::hex << rf_values[i] 
+                      << " REF: 0x" << ref.gpr[i] 
+                      << std::endl;
+            // Optionally, you can stop the simulation on a mismatch
+            return -1;  // End simulation
+        }
+    }
+    if (top->imem_addr != ref.pc) {
+        std::cerr << "PC mismatch - DUT: 0x" << std::hex << top->imem_addr << " REF: 0x" << std::hex << ref.pc << std::endl;
+        return -1;  // End simulation
+    }
+    return 0;
+}
+
+
+void tick(Vysyx_24120009_core* top, bool step_mode, bool is_reset) {
+    top->clk = 0;
+    top->eval();
+    
+    if (!is_reset) {
+        // print some debug info when registers have yet been updated!
+        std::cout << "Op1: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->Op1_debug
+            << ", Op2: 0x" << std::setw(8) << std::setfill('0') << top->Op2_debug
+            << ", wb_data: 0x" << std::setw(8) << std::setfill('0') << top->reg_write_data_debug
+            << ", Instruction: 0x" << std::setw(8) << std::setfill('0') << top->inst_debug
+            << std::dec << std::endl;
+    }
+
+    top->clk = 1;
+    top->eval();
     Verilated::timeInc(1); // 增加仿真时间
 }
 
 void reset(Vysyx_24120009_core* top, int cycles) {
     top->rst = 1;
     for (int i = 0; i < cycles; ++i) {
-        tick(top);
+        tick(top, false, true);  // forbidden single-step mode
     }
     top->rst = 0;
 }
@@ -47,45 +73,76 @@ int main(int argc, char **argv) {
     Verilated::commandArgs(argc, argv);
     Vysyx_24120009_core* top = new Vysyx_24120009_core;
 
-    // print the command line arguments
-    std::cout << "argc: " << argc << std::endl;
-    for (int i = 0; i < argc; ++i) {
-        std::cout << "argv[" << i << "]: " << argv[i] << std::endl;
+    // Default to single step mode (if no argument is provided)
+    bool step_mode = true;
+    if (argc > 2) {
+        std::string mode = argv[2];
+        if (mode == "step") {
+            step_mode = true; // Single-step mode
+        } else if (mode == "run") {
+            step_mode = false; // Run mode (continuous execution)
+        } else {
+            std::cerr << "Invalid step_mode argument. Use 'step' or 'run'." << std::endl;
+            return -1; // Exit with error code
+        }
     }
 
     // Load program
     load_program(argv[1]);
 
+    // Initialize difftest
+    init_difftest("/root/ysyx-workbench/nemu/build/riscv32-nemu-interpreter-so", 0);
+    // Copy the program to the reference model
+    ref_difftest_memcpy(argv[1]);  
+
     // Reset
-    reset(top, 10); // 复位保持 10 个周期
+    reset(top, 10); // Reset for 10 cycles
 
-    std::cout << "AfterReset: "
-                  << "PC = 0x" << std::hex << top->pc_debug
-                  << ", x1 = " << std::hex << top->x1
-                  << ", x2 = " << std::hex << top->x2
-                  << ", x3 = " << std::hex << top->x3 << std::endl;
-
-    int cycle = 0;
-    do {
+    while(!Verilated::gotFinish()) {
         // Fetch 阶段
         uint32_t pc = top->imem_addr;          
-        top->imem_rdata = pmem_read(pc);       
-        // Tick 时钟
-        tick(top);
-        // 输出状态
-        std::cout << "Cycle: " << cycle
-                  << ", PC = 0x" << std::hex << top->pc_debug
-                  << ", x1 = " << std::hex << top->x1
-                  << ", x2 = " << std::hex << top->x2
-                  << ", x3 = " << std::hex << top->x3 
-                  << ", Op1 = " << std::hex << top->Op1_debug
-                  << ", Op2 = " << std::hex << top->Op2_debug
-                  << ", reg_write_data = " << std::hex << top->reg_write_data_debug
-                  << ", INST = " << std::hex << top->inst_debug
-                  << std::endl;
-        cycle++;
-    } while(!Verilated::gotFinish());
+        top->imem_rdata = Memory::pmem_read(pc);  
 
+        if (step_mode) {
+            std::string input;
+            std::cout << "(npc) : ";
+            std::getline(std::cin, input);
+
+            // 根据用户输入的命令来决定行为
+            if (input == "si") {
+                // 执行单步操作
+                tick(top, step_mode, false);  // 执行一次 tick
+                // ref execute one instruction
+                ref_difftest_exec(1);
+                // Copy registers from DUT to REF and compare them
+                ref_difftest_regcpy(&ref, DIFFTEST_TO_REF);
+                // Check if the registers are consistent
+                int ret = check_reg(top);
+                if (ret < 0) return -1;
+            } 
+            else if (input == "info r") {
+                // 打印寄存器信息，不进行 tick
+                print_register_values();  // 打印寄存器
+            } 
+            else if (input == "q") {
+                // 退出仿真
+                Verilated::gotFinish(true);  
+            }
+            else {
+                std::cout << "Unknown command!" << std::endl;
+            }
+        } else {
+            // 执行单步操作
+            tick(top, step_mode, false);  // 执行一次 tick
+            // ref execute one instruction
+            ref_difftest_exec(1);
+            // Copy registers from DUT to REF and compare them
+            ref_difftest_regcpy(&ref, DIFFTEST_TO_REF);
+            // Check if the registers are consistent
+            int ret = check_reg(top);
+            if (ret < 0) return -1;
+        }
+    } 
 
     delete top;
     return 0;

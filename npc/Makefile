@@ -1,23 +1,25 @@
 # 定义变量
 VERILATOR = verilator
 TOP_MODULE = vsrc/cpu/ysyx_24120009_core.v
-CSRC = csrc/main.cpp csrc/memory.cpp
+CSRC = $(wildcard csrc/*.cpp)
+VSRC = $(wildcard vsrc/**/*.v)
 INCLUDE_DIRS = -Ivsrc/include -Ivsrc/common -Ivsrc/cpu
 OBJ_DIR = obj_dir
 EXEC = $(OBJ_DIR)/Vysyx_24120009_core
+STEP_MODE = run
 
 # 默认目标
 all: $(EXEC)
 
 # 编译 Verilator 模型并生成可执行文件
-$(EXEC): $(TOP_MODULE) $(CSRC)
+$(EXEC): $(TOP_MODULE) $(CSRC) $(VSRC)
 	$(VERILATOR) --cc $(TOP_MODULE) --exe $(CSRC) $(INCLUDE_DIRS)
 	make -C $(OBJ_DIR) -f Vysyx_24120009_core.mk
 
 # 运行仿真
 sim: $(EXEC)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
-	$(EXEC) $(IMG)
+	$(EXEC) $(IMG) $(STEP_MODE)
 
 # 清理生成文件
 clean:
