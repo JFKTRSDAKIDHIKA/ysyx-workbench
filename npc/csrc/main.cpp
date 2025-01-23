@@ -119,7 +119,7 @@ int main(int argc, char **argv) {
     // Reset
     reset(top, 10); // Reset for 10 cycles
 
-    do {
+    while(!Verilated::gotFinish()) {
         // Fetch 阶段
         uint32_t pc = top->imem_addr;          
         top->imem_rdata = Memory::pmem_read(pc);  
@@ -135,7 +135,7 @@ int main(int argc, char **argv) {
 
         // Check if the registers are consistent
         check_reg(top);
-    } while(!Verilated::gotFinish());
+    } 
 
     delete top;
     return 0;
