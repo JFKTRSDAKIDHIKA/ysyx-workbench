@@ -2,6 +2,7 @@
 VERILATOR = verilator
 TOP_MODULE = vsrc/cpu/ysyx_24120009_core.v
 CSRC = $(wildcard csrc/*.cpp)
+VSRC = $(wildcard vsrc/**/*.v)
 INCLUDE_DIRS = -Ivsrc/include -Ivsrc/common -Ivsrc/cpu
 OBJ_DIR = obj_dir
 EXEC = $(OBJ_DIR)/Vysyx_24120009_core
