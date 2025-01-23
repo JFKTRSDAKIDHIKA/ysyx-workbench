@@ -12,7 +12,7 @@ STEP_MODE = run
 all: $(EXEC)
 
 # 编译 Verilator 模型并生成可执行文件
-$(EXEC): $(TOP_MODULE) $(CSRC)
+$(EXEC): $(TOP_MODULE) $(CSRC) $(VSRC)
 	$(VERILATOR) --cc $(TOP_MODULE) --exe $(CSRC) $(INCLUDE_DIRS)
 	make -C $(OBJ_DIR) -f Vysyx_24120009_core.mk
 
