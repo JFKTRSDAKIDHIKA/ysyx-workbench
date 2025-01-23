@@ -1090,9 +1090,13 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root___stl_sequent__TOP__0(Vysyx_2412
         vlSelf->ysyx_24120009_core__DOT__dmem_rdata_raw = 0U;
     }
     vlSelf->ysyx_24120009_core__DOT__mem_access_read__DOT__mem_mux__DOT__i0__DOT__data_list[0U] 
-        = (0xffffU & vlSelf->ysyx_24120009_core__DOT__dmem_rdata_raw);
+        = (((- (IData)((1U & (vlSelf->ysyx_24120009_core__DOT__dmem_rdata_raw 
+                              >> 0xfU)))) << 0x10U) 
+           | (0xffffU & vlSelf->ysyx_24120009_core__DOT__dmem_rdata_raw));
     vlSelf->ysyx_24120009_core__DOT__mem_access_read__DOT__mem_mux__DOT__i0__DOT__data_list[1U] 
-        = (0xffU & vlSelf->ysyx_24120009_core__DOT__dmem_rdata_raw);
+        = (((- (IData)((1U & (vlSelf->ysyx_24120009_core__DOT__dmem_rdata_raw 
+                              >> 7U)))) << 8U) | (0xffU 
+                                                  & vlSelf->ysyx_24120009_core__DOT__dmem_rdata_raw));
     vlSelf->ysyx_24120009_core__DOT__mem_access_read__DOT__mem_mux__DOT__i0__DOT__data_list[2U] 
         = vlSelf->ysyx_24120009_core__DOT__dmem_rdata_raw;
     vlSelf->ysyx_24120009_core__DOT__mem_access_read__DOT__mem_mux__DOT__i0__DOT__data_list[3U] 
