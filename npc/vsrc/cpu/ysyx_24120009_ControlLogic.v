@@ -13,13 +13,13 @@ module ysyx_24120009_ControlLogic (
     output        rf_we,      // Register file write enable
     output        mem_en,     // Memory enable 
     output        mem_wen,    // Memory write enable 
-    output [1:0]  wb_sel,     // Write-back source selection
+    output reg [1:0]  wb_sel,     // Write-back source selection
     output        is_ebreak   // Flag for ebreak instruction
 );
 
     localparam DATA_LEN  = 17;  // Length of control signals
     localparam KEY_LEN   = 17;  // Length of inst key
-    localparam NR_KEY    = 28;  // Number of keys
+    localparam NR_KEY    = 31;  // Number of keys
 
     wire [6:0] opcode = inst[6:0];
     wire [2:0] funct3 = inst[14:12];
@@ -95,8 +95,11 @@ module ysyx_24120009_ControlLogic (
         17'b0000011_010_0000000, 17'b00000_00_01_000_1_1_0_11, // LW
         // B-type instructions(3)
         17'b1100011_000_0000000, 17'b00000_00_01_000_0_0_0_10, // BEQ
-        17'b1100011_100_0000000, 17'b00000_00_00_000_0_0_0_00, // BLT
-        17'b1100011_110_0000000, 17'b00000_00_00_000_0_0_0_00, // BLTU
+        17'b1100011_001_0000000, 17'b00000_00_01_000_0_0_0_10, // BNE
+        17'b1100011_100_0000000, 17'b00000_00_00_000_0_0_0_10, // BLT
+        17'b1100011_101_0000000, 17'b00000_00_00_000_0_0_0_10, // BGE
+        17'b1100011_110_0000000, 17'b00000_00_00_000_0_0_0_10, // BLTU
+        17'b1100011_111_0000000, 17'b00000_00_00_000_0_0_0_10, // BGEU
         // J-type instructions(1)
         17'b1101111_000_0000000, 17'b00000_00_00_011_1_0_0_01, // JAL
         // U-type instructions(1)
@@ -122,7 +125,25 @@ module ysyx_24120009_ControlLogic (
     assign rf_we    = ctl_signals[4];
     assign mem_en   = ctl_signals[3];
     assign mem_wen  = ctl_signals[2];
-    assign wb_sel   = ctl_signals[1:0];
+
+    always @(*) begin
+        if (opcode == 7'b1100011) begin
+            // 分支指令处理逻辑
+            case (funct3)
+                3'b000: wb_sel = br_eq ? 2'b10 : 2'b00;            // BEQ: rs1 == rs2
+                3'b001: wb_sel = ~br_eq ? 2'b10 : 2'b00;           // BNE: rs1 != rs2
+                3'b100: wb_sel = br_lt ? 2'b10 : 2'b00;            // BLT: rs1 < rs2 (signed)
+                3'b101: wb_sel = ~br_lt ? 2'b10 : 2'b00;           // BGE: rs1 >= rs2 (signed)
+                3'b110: wb_sel = br_ltu ? 2'b10 : 2'b00;           // BLTU: rs1 < rs2 (unsigned)
+                3'b111: wb_sel = ~br_ltu ? 2'b10 : 2'b00;          // BGEU: rs1 >= rs2 (unsigned)
+                default: wb_sel = 2'b00;                           // 默认不跳转
+            endcase
+        end else begin
+            // 非分支指令的情况
+            wb_sel = ctl_signals[1:0];
+        end
+    end
+
 
 endmodule
 
