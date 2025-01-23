@@ -72,7 +72,7 @@ void check_memory(paddr_t start_addr, size_t size) {
                 std::cerr << "Address: 0x" << std::hex << (start_addr + i) << std::endl;
                 std::cerr << "REF: 0x" << std::hex << static_cast<int>(ref_mem[i]) << std::endl;
                 std::cerr << "DUT: 0x" << std::hex << static_cast<int>(dut_mem[i]) << std::endl;
-                // assert(0); // Stop simulation
+                assert(0); // Stop simulation
             }
         }
     } else {
