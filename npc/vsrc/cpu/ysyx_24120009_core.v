@@ -82,6 +82,7 @@ module ysyx_24120009_core (
     wire [7:0] wmask;
     assign dmem_wdata = rdata2;
 
+    // Data memeory access
     always @(*) begin
         if (mem_en) begin 
             // read data from data memory
@@ -103,8 +104,9 @@ module ysyx_24120009_core (
         .data_out(dmem_rdata)
     );
 
-    ysyx_24120009_mem_access_write mem_access_write (
+    ysyx_24120009_wmask_gen wmask_gen (
         .control(ctl_mem_access),
+        .dmem_addr(dmem_addr),
         .wmask(wmask)
     );
 
