@@ -28,6 +28,6 @@ module ysyx_24120009_wmask_gen (
 
   assign shifted_mask = base_mask << shift_amount;
   assign wmask = shifted_mask & 8'hFF;
-  assign dmem_wdata = dmem_wdata_raw << shift_amount;
+  assign dmem_wdata = dmem_wdata_raw << (shift_amount * 8);
 
 endmodule
