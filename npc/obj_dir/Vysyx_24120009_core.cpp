@@ -17,6 +17,7 @@ Vysyx_24120009_core::Vysyx_24120009_core(VerilatedContext* _vcontextp__, const c
     , waddr_debug{vlSymsp->TOP.waddr_debug}
     , mem_wen_debug{vlSymsp->TOP.mem_wen_debug}
     , mem_en_debug{vlSymsp->TOP.mem_en_debug}
+    , wmask_debug{vlSymsp->TOP.wmask_debug}
     , pc_debug{vlSymsp->TOP.pc_debug}
     , Op1_debug{vlSymsp->TOP.Op1_debug}
     , Op2_debug{vlSymsp->TOP.Op2_debug}

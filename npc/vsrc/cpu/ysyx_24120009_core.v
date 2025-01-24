@@ -16,7 +16,8 @@ module ysyx_24120009_core (
     output wire mem_wen_debug,
     output wire mem_en_debug,
     output wire [`ysyx_24120009_DATA_WIDTH-1:0] dmem_addr_debug,
-    output wire [`ysyx_24120009_DATA_WIDTH-1:0] dmem_wdata_debug
+    output wire [`ysyx_24120009_DATA_WIDTH-1:0] dmem_wdata_debug,
+    output wire [7:0] wmask_debug
 );
 
     // direct programing interface --- C
@@ -36,6 +37,7 @@ module ysyx_24120009_core (
     assign dmem_addr_debug = dmem_addr;
     assign dmem_wdata_debug = dmem_wdata;
     assign mem_en_debug = mem_en;
+    assign wmask_debug = wmask;
 
     // Internal signals
     wire [`ysyx_24120009_DATA_WIDTH-1:0] pc;

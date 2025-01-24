@@ -25,7 +25,6 @@ module ysyx_24120009_wmask_gen (
   );
 
   assign shifted_mask = base_mask << (shift_amount * 1);
-  //assign wmask = shifted_mask & 8'hFF;
-  assign wmask = 8'b0000_1111;
+  assign wmask = shifted_mask & 8'hFF;
 
 endmodule
