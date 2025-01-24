@@ -26,8 +26,9 @@ module ysyx_24120009_wmask_gen (
     })
   );
 
-  assign shifted_mask = base_mask << shift_amount;
+  assign shifted_mask = base_mask << (shift_amount * 1);
   assign wmask = shifted_mask & 8'hFF;
+  // Addressing is in bytes, so multiply by 8
   assign dmem_wdata = dmem_wdata_raw << (shift_amount * 8);
 
 endmodule
