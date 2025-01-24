@@ -19,6 +19,10 @@ module ysyx_24120009_core (
     output wire [`ysyx_24120009_DATA_WIDTH-1:0] dmem_wdata_debug
 );
 
+    // direct programing interface --- C
+    import "DPI-C" function int pmem_read(input int raddr);
+    import "DPI-C" function void pmem_write(input int waddr, input int wdata, input byte wmask);
+
     // Debug signal declaration
     assign pc_debug = pc;
     assign Op1_debug = Op1;
@@ -29,10 +33,9 @@ module ysyx_24120009_core (
     assign waddr_debug = waddr;
     assign imem_addr_debug = imem_addr;
     assign mem_wen_debug = mem_wen;
-    assign dmem_addr_debug = aligned_dmem_addr;
+    assign dmem_addr_debug = dmem_addr;
     assign dmem_wdata_debug = dmem_wdata;
     assign mem_en_debug = mem_en;
-
 
     // Internal signals
     wire [`ysyx_24120009_DATA_WIDTH-1:0] pc;
@@ -62,30 +65,30 @@ module ysyx_24120009_core (
     wire [`ysyx_24120009_REG_ADDR_WIDTH-1:0] waddr;
     wire [`ysyx_24120009_DATA_WIDTH-1:0] rdata1;
     wire [`ysyx_24120009_DATA_WIDTH-1:0] rdata2;
+
     // Instruction Memory interface
     wire [31:0] imem_addr;
     reg [`ysyx_24120009_DATA_WIDTH-1:0] imem_rdata;
-    import "DPI-C" function int pmem_read(input int raddr);
+    // Instruction Memory access
     always @(*) begin
         imem_rdata = pmem_read(imem_addr);
     end
+    
     // Data Memory interface
     reg [`ysyx_24120009_DATA_WIDTH-1:0] dmem_rdata_raw;
     wire [`ysyx_24120009_DATA_WIDTH-1:0] dmem_rdata;
     wire [`ysyx_24120009_DATA_WIDTH-1:0] dmem_addr;
     wire [`ysyx_24120009_DATA_WIDTH-1:0] dmem_wdata;
-    wire [`ysyx_24120009_DATA_WIDTH-1:0] aligned_dmem_addr;
     wire [7:0] wmask;
     assign dmem_wdata = rdata2;
 
-    import "DPI-C" function void pmem_write(input int waddr, input int wdata, input byte wmask);
     always @(*) begin
         if (mem_en) begin 
             // read data from data memory
-            dmem_rdata_raw = pmem_read(aligned_dmem_addr);
+            dmem_rdata_raw = pmem_read(dmem_addr);
             if (mem_wen) begin 
             // write data to data memory
-            pmem_write(aligned_dmem_addr, dmem_wdata, wmask);
+            pmem_write(dmem_addr, dmem_wdata, wmask);
             end
         end
         else begin
@@ -93,17 +96,11 @@ module ysyx_24120009_core (
         end
     end
 
-    // the above three modules may be merged!
-    ysyx_24120009_mem_access_read mem_access_read (
+    ysyx_24120009_alignment_network alignment_network (
         .data_in(dmem_rdata_raw),
         .control(ctl_mem_access),
-        .data_out(dmem_rdata)
-    );
-
-    ysyx_24120009_AddressAligner addr_aligner (
         .dmem_addr(dmem_addr),
-        .ctrl(ctl_mem_access),
-        .aligned_addr(aligned_dmem_addr)
+        .data_out(dmem_rdata)
     );
 
     ysyx_24120009_mem_access_write mem_access_write (

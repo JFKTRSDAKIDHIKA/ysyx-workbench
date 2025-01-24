@@ -13,15 +13,19 @@
 extern "C" void simulation_exit() {
     Verilated::gotFinish(true); 
 }
+
 extern "C" void get_register_values(uint32_t rf[32]) {
     set_register_values(rf);  // set the register values
 }
+
+// fundamental memory access unit is 4 bytes, and the address is aligned to 4 bytes
 extern "C" int pmem_read(int raddr) {
-    // raddr = raddr & ~0x3u;  // 清除低两位，确保按4字节对齐
+    raddr = raddr & ~0x3u;  // 清除低两位，确保按4字节对齐
     return Memory::pmem_read(raddr);
 }
+
 extern "C" void pmem_write(int waddr, int wdata, char wmask) {
-    //waddr = waddr & ~0x3u;  // 清除低两位，确保按4字节对齐
+    waddr = waddr & ~0x3u;  // 清除低两位，确保按4字节对齐
     Memory::pmem_write(waddr, wdata, wmask);
 }
 
