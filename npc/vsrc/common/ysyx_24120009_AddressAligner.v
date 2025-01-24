@@ -1,4 +1,4 @@
-// this module is unused!
+// warning: this module is unused!
 
 `include "vsrc/include/ysyx_24120009_defs.vh"
 
