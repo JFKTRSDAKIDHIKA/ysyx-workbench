@@ -13,15 +13,19 @@
 extern "C" void simulation_exit() {
     Verilated::gotFinish(true); 
 }
+
 extern "C" void get_register_values(uint32_t rf[32]) {
     set_register_values(rf);  // set the register values
 }
+
+// fundamental memory access unit is 4 bytes, and the address is aligned to 4 bytes
 extern "C" int pmem_read(int raddr) {
-    // raddr = raddr & ~0x3u;  // 清除低两位，确保按4字节对齐
+    raddr = raddr & ~0x3u;  // 清除低两位，确保按4字节对齐
     return Memory::pmem_read(raddr);
 }
+
 extern "C" void pmem_write(int waddr, int wdata, char wmask) {
-    //waddr = waddr & ~0x3u;  // 清除低两位，确保按4字节对齐
+    waddr = waddr & ~0x3u;  // 清除低两位，确保按4字节对齐
     Memory::pmem_write(waddr, wdata, wmask);
 }
 
@@ -73,7 +77,7 @@ int check_reg(Vysyx_24120009_core* top) {
                       << " REF: 0x" << ref.gpr[i] 
                       << std::endl;
             // Optionally, you can stop the simulation on a mismatch
-            print_memory(0x800001ac, 256);
+            print_memory(0x80008fe4, 256);
             return -1;  // End simulation
         }
     }
@@ -132,8 +136,9 @@ void tick(Vysyx_24120009_core* top, bool step_mode, bool is_reset) {
     // print some debug info of memory write
     if (top->mem_wen_debug == 1) {  
         std::cout << "Memory Write - Addr: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->dmem_addr_debug
-                    << ", Data: 0x" << std::setw(8) << std::setfill('0') << top->dmem_wdata_debug
-                    << std::dec << std::endl;
+                << ", Data: 0x" << std::setw(8) << std::setfill('0') << top->dmem_wdata_debug
+                << ", Mask: 0x" << std::setw(2) << static_cast<unsigned>(top->wmask_debug) 
+                << std::dec << std::endl;
     }
 
     // print some debug info of memory read

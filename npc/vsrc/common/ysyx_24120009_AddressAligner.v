@@ -1,3 +1,5 @@
+// this module is unused!
+
 `include "vsrc/include/ysyx_24120009_defs.vh"
 
 module ysyx_24120009_AddressAligner (
