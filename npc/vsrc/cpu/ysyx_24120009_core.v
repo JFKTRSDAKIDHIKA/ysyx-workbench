@@ -81,8 +81,9 @@ module ysyx_24120009_core (
     wire [`ysyx_24120009_DATA_WIDTH-1:0] dmem_rdata;
     wire [`ysyx_24120009_DATA_WIDTH-1:0] dmem_addr;
     wire [`ysyx_24120009_DATA_WIDTH-1:0] dmem_wdata;
+    wire [`ysyx_24120009_DATA_WIDTH-1:0] dmem_wdata_raw;
     wire [7:0] wmask;
-    assign dmem_wdata = rdata2;
+    assign dmem_wdata_raw = rdata2;
 
     // Data memeory access
     always @(*) begin
@@ -109,7 +110,9 @@ module ysyx_24120009_core (
     ysyx_24120009_wmask_gen wmask_gen (
         .control(ctl_mem_access),
         .dmem_addr(dmem_addr),
-        .wmask(wmask)
+        .wmask(wmask),
+        .dmem_wdata_raw(dmem_wdata_raw),
+        .dmem_wdata(dmem_wdata)
     );
 
     // handle ebreak signal

@@ -2,7 +2,9 @@
 
 module ysyx_24120009_wmask_gen (
   input  [2:0]  control,   
-  input  [`ysyx_24120009_DATA_WIDTH-1:0] dmem_addr,      
+  input  [`ysyx_24120009_DATA_WIDTH-1:0] dmem_addr,     
+  input  [`ysyx_24120009_DATA_WIDTH-1:0] dmem_wdata_raw,  
+  output  [`ysyx_24120009_DATA_WIDTH-1:0] dmem_wdata,   
   output [7:0] wmask       
 );
 
@@ -24,7 +26,8 @@ module ysyx_24120009_wmask_gen (
     })
   );
 
-  assign shifted_mask = base_mask << (shift_amount * 1);
+  assign shifted_mask = base_mask << shift_amount;
   assign wmask = shifted_mask & 8'hFF;
+  assign dmem_wdata = dmem_wdata_raw << shift_amount;
 
 endmodule
