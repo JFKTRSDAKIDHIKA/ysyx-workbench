@@ -30,33 +30,41 @@ module ysyx_24120009_ControlLogic (
     
     always @(*) begin
         case (opcode)  
+            // JALR instruction
             7'b1100111: begin
                 case (funct3)
                     3'b000: inst_key = {opcode, funct3, 7'b0};  // opcode == 7'b1100111 && funct3 == 3'b000
-                    default: inst_key = {opcode, funct3, 7'b1101111};  // 默认处理其他 funct3
+                    default: inst_key = {opcode, funct3, funct7};  // 默认处理其他 funct3
                 endcase
             end
+            // ALU immediate
             7'b0010011: begin
                 case (funct3)
-                    3'b101: inst_key = {opcode, funct3, funct7};  // opcode == 7'b0010011 && funct3 == 3'b101
-                    default: inst_key = {opcode, funct3, 7'b0000000};  // 默认处理其他 funct3
+                    3'b101: inst_key = {opcode, funct3, funct7};  
+                    default: inst_key = {opcode, funct3, 7'b0000000};  
                 endcase
             end
+            // U-type instructions
             7'b0010111: begin
                 inst_key = {opcode, 3'b0, 7'b0};  
             end
+            // J-type instructions
             7'b1101111: begin
                 inst_key = {opcode, 3'b0, 7'b0};  
             end
+            // U-type instructions
             7'b0110111: begin
                 inst_key = {opcode, 3'b0, 7'b0};  
             end
+            // S-type instructions
             7'b0100011: begin
                 inst_key = {opcode, funct3, 7'b0}; 
             end
+            // Load
             7'b0000011: begin
                 inst_key = {opcode, funct3, 7'b0};  
             end
+            // B-type instructions
             7'b1100011: begin
                 inst_key = {opcode, funct3, 7'b0};  
             end
@@ -72,7 +80,7 @@ module ysyx_24120009_ControlLogic (
         .key(inst_key),
         .lut({
         // opcode_func3_func7 | {alu_op, op1_sel, op2_sel, pc_sel, rf_we, mem_val, mem_wen, wb_sel}
-        // R-type instructions(10)
+        // R-type instructions(10) （opcode ,funct3, funct7 are completely specified!）
         17'b0110011_000_0000000, 17'b00000_00_11_000_1_0_0_10, // ADD
         17'b0110011_000_0100000, 17'b00001_00_11_000_1_0_0_10, // SUB
         17'b0110011_001_0000000, 17'b00111_00_11_000_1_0_0_10, // SLL
@@ -83,38 +91,41 @@ module ysyx_24120009_ControlLogic (
         17'b0110011_101_0100000, 17'b01001_00_11_000_1_0_0_10, // SRA
         17'b0110011_110_0000000, 17'b00101_00_11_000_1_0_0_10, // OR
         17'b0110011_111_0000000, 17'b00110_00_11_000_1_0_0_10, // AND
-        // I-type instructions(14)
+        // I-type instructions(14) 
+        // ALU immediate (func7 is not specified)
         17'b0010011_000_0000000, 17'b00000_00_01_000_1_0_0_10, // ADDI
         17'b0010011_010_0000000, 17'b00010_00_01_000_1_0_0_10, // SLTI
         17'b0010011_011_0000000, 17'b00011_00_01_000_1_0_0_10, // SLTIU
         17'b0010011_100_0000000, 17'b00100_00_01_000_1_0_0_10, // XORI
         17'b0010011_110_0000000, 17'b00101_00_01_000_1_0_0_10, // ORI
         17'b0010011_111_0000000, 17'b00110_00_01_000_1_0_0_10, // ANDI
+        // ALU immediate (func7 is specified)
         17'b0010011_001_0000000, 17'b00111_00_01_000_1_0_0_10, // SLLI
         17'b0010011_101_0000000, 17'b01000_00_01_000_1_0_0_10, // SRLI
         17'b0010011_101_0100000, 17'b01001_00_01_000_1_0_0_10, // SRAI
+        // Load (func7 is not specified)
         17'b0000011_010_0000000, 17'b00000_00_01_000_1_1_0_11, // LW
         17'b0000011_000_0000000, 17'b00000_00_01_000_1_1_0_11, // LB
         17'b0000011_100_0000000, 17'b00000_00_01_000_1_1_0_11, // LBU
         17'b0000011_001_0000000, 17'b00000_00_01_000_1_1_0_11, // LH
         17'b0000011_101_0000000, 17'b00000_00_01_000_1_1_0_11, // LHU
-        // B-type instructions(6)
+        // B-type instructions(6) (func7 is not specified)
         17'b1100011_000_0000000, 17'b00000_00_00_000_0_0_0_10, // BEQ
         17'b1100011_001_0000000, 17'b00000_00_00_000_0_0_0_10, // BNE
         17'b1100011_100_0000000, 17'b00000_00_00_000_0_0_0_10, // BLT
         17'b1100011_101_0000000, 17'b00000_00_00_000_0_0_0_10, // BGE
         17'b1100011_110_0000000, 17'b00000_00_00_000_0_0_0_10, // BLTU
         17'b1100011_111_0000000, 17'b00000_00_00_000_0_0_0_10, // BGEU
-        // J-type instructions(1)
+        // J-type instructions(1) (func7 and funct3 are not specified)
         17'b1101111_000_0000000, 17'b00000_00_00_011_1_0_0_01, // JAL
-        // U-type instructions(2)
+        // U-type instructions(2) (func7 and funct3 are not specified)
         17'b0010111_000_0000000, 17'b00000_01_00_000_1_0_0_10, // AUIPC
         17'b0110111_000_0000000, 17'b01010_01_00_000_1_0_0_10, // LUI
-        // S-type instructions(3)
+        // S-type instructions(3) (func7 is not specified)
         17'b0100011_010_0000000, 17'b00000_00_10_000_0_1_1_00, // SW
         17'b0100011_000_0000000, 17'b00000_00_10_000_0_1_1_00, // SB
         17'b0100011_001_0000000, 17'b00000_00_10_000_0_1_1_00, // SH
-        // JALR instruction(1)
+        // JALR instruction(1) (func7 is not specified)
         17'b1100111_000_0000000, 17'b00000_00_01_001_1_0_0_01, // JALR
         // ebreak instruction(1)
         17'b1110011_000_0000000, 17'b00000_00_00_000_0_0_0_00  // EBREAK
@@ -134,9 +145,10 @@ module ysyx_24120009_ControlLogic (
     assign mem_wen  = ctl_signals[2];
     assign wb_sel   = ctl_signals[1:0];
 
+    // generate pc_sel control signal
     always @(*) begin
         if (opcode == 7'b1100011) begin
-            // 分支指令处理逻辑
+            // branch instructions decode
             case (funct3)
                 3'b000: pc_sel = br_eq ? 3'b010 : 3'b000;            // BEQ: rs1 == rs2
                 3'b001: pc_sel = ~br_eq ? 3'b010 : 3'b000;           // BNE: rs1 != rs2
@@ -144,10 +156,10 @@ module ysyx_24120009_ControlLogic (
                 3'b101: pc_sel = ~br_lt ? 3'b010 : 3'b000;           // BGE: rs1 >= rs2 (signed)
                 3'b110: pc_sel = br_ltu ? 3'b010 : 3'b000;           // BLTU: rs1 < rs2 (unsigned)
                 3'b111: pc_sel = ~br_ltu ? 3'b010 : 3'b000;          // BGEU: rs1 >= rs2 (unsigned)
-                default: pc_sel = 3'b000;                           // 默认不跳转
+                default: pc_sel = 3'b000;                            // default: no branch
             endcase
         end else begin
-            // 非分支指令的情况
+            // non-branch instructions decode
             pc_sel = ctl_signals[7:5];
         end
     end

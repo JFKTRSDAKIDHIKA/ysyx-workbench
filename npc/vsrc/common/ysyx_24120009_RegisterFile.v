@@ -33,16 +33,14 @@ module ysyx_24120009_RegisterFile #(ADDR_WIDTH = 1, DATA_WIDTH = 1) (
     assign x2_debug = rf[2];
 
     import "DPI-C" function void get_register_values(input logic [31:0] rf[32]);
-    // Declare a flat array to pass register values to DPI-C function
+    // Declare an array to pass register values to DPI-C function
     logic [DATA_WIDTH-1:0] rf_flat [2**ADDR_WIDTH-1:0];
 
     always @(*) begin
-        // 将原始多维数组的值展平到未打包的一维数组
         for (int i = 0; i < 2**ADDR_WIDTH; i = i + 1) begin
-            rf_flat[i] = rf[i];  // 直接将每个寄存器的值存入一维数组
+            rf_flat[i] = rf[i];  
         end
 
-        // 调用 DPI-C 函数传递展平后的数组
-        get_register_values(rf_flat);
+        get_register_values(rf);
     end
 endmodule
