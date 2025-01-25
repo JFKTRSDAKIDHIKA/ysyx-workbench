@@ -100,7 +100,7 @@ int check_memory(paddr_t start_addr, size_t size) {
     for (size_t i = 0; i < size; ++i) {
         dut_mem[i] = Memory::pmem_read(start_addr + i) & 0xFF; // Read one byte at a time
     }
-    print_memory(0x800001ac, 20);
+
     // Compare REF memory and DUT memory
     if (memcmp(ref_mem.data(), dut_mem.data(), size) != 0) {
         // If there's a mismatch, find the first mismatched byte
@@ -110,7 +110,7 @@ int check_memory(paddr_t start_addr, size_t size) {
                 std::cerr << "Address: 0x" << std::hex << (start_addr + i) << std::endl;
                 std::cerr << "REF: 0x" << std::hex << static_cast<int>(ref_mem[i]) << std::endl;
                 std::cerr << "DUT: 0x" << std::hex << static_cast<int>(dut_mem[i]) << std::endl;
-                //(0x800001ac, 20);
+                print_memory(0x800001ac, 20);
                 return -1;
             }
         }
