@@ -33,14 +33,8 @@ module ysyx_24120009_RegisterFile #(ADDR_WIDTH = 1, DATA_WIDTH = 1) (
     assign x2_debug = rf[2];
 
     import "DPI-C" function void get_register_values(input logic [31:0] rf[32]);
-    // Declare an array to pass register values to DPI-C function
-    logic [DATA_WIDTH-1:0] rf_flat [2**ADDR_WIDTH-1:0];
-
     always @(*) begin
-        for (int i = 0; i < 2**ADDR_WIDTH; i = i + 1) begin
-            rf_flat[i] = rf[i];  
-        end
-
         get_register_values(rf);
     end
+    
 endmodule

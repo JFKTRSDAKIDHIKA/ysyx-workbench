@@ -9,7 +9,6 @@ module ysyx_24120009_core (
     output [`ysyx_24120009_DATA_WIDTH-1:0] Op2_debug,
     output [31:0] inst_debug,
     output [`ysyx_24120009_DATA_WIDTH-1:0] reg_write_data_debug,
-    output is_ebreak_debug,
     output wire [`ysyx_24120009_DATA_WIDTH-1:0] x2_debug,
     output wire [`ysyx_24120009_REG_ADDR_WIDTH-1:0] waddr_debug,
     output wire [31:0] imem_addr_debug,
@@ -30,7 +29,6 @@ module ysyx_24120009_core (
     assign Op2_debug = Op2;
     assign inst_debug = inst;
     assign reg_write_data_debug = reg_write_data;
-    assign is_ebreak_debug = is_ebreak;
     assign waddr_debug = waddr;
     assign imem_addr_debug = imem_addr;
     assign mem_wen_debug = mem_wen;
@@ -115,17 +113,6 @@ module ysyx_24120009_core (
         .dmem_wdata(dmem_wdata)
     );
 
-    // handle ebreak signal
-    wire is_ebreak;
-    import "DPI-C" function void simulation_exit();
-    always @(*) begin
-        if (is_ebreak) begin
-           $display("EBREAK: Simulation exiting...");
-           simulation_exit(); // 通知仿真环境结束
-        end
-    end
-
-
     // Register File
     ysyx_24120009_RegisterFile #(
         .ADDR_WIDTH(`ysyx_24120009_REG_ADDR_WIDTH),
@@ -202,7 +189,6 @@ module ysyx_24120009_core (
         .mem_en(mem_en),
         .mem_wen(mem_wen),
         .wb_sel(wb_sel),
-        .is_ebreak(is_ebreak),
         .ctl_mem_access(ctl_mem_access)
     );
 

@@ -13,7 +13,6 @@ Vysyx_24120009_core::Vysyx_24120009_core(VerilatedContext* _vcontextp__, const c
     , vlSymsp{new Vysyx_24120009_core__Syms(contextp(), _vcname__, this)}
     , clk{vlSymsp->TOP.clk}
     , rst{vlSymsp->TOP.rst}
-    , is_ebreak_debug{vlSymsp->TOP.is_ebreak_debug}
     , waddr_debug{vlSymsp->TOP.waddr_debug}
     , mem_wen_debug{vlSymsp->TOP.mem_wen_debug}
     , mem_en_debug{vlSymsp->TOP.mem_en_debug}

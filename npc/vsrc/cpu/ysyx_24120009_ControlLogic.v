@@ -14,18 +14,17 @@ module ysyx_24120009_ControlLogic (
     output        mem_en,     // Memory enable 
     output        mem_wen,    // Memory write enable 
     output [1:0]  wb_sel,     // Write-back source selection
-    output        is_ebreak,  // Flag for ebreak instruction
     output [2:0]  ctl_mem_access 
 );
+    import "DPI-C" function void simulation_exit();
 
     localparam DATA_LEN  = 17;  // Length of control signals
     localparam KEY_LEN   = 17;  // Length of inst key
-    localparam NR_KEY    = 38;  // Number of keys
+    localparam NR_KEY    = 37;  // Number of keys
 
     wire [6:0] opcode = inst[6:0];
     wire [2:0] funct3 = inst[14:12];
     wire [6:0] funct7 = inst[31:25];
-
     reg [KEY_LEN-1:0] inst_key;
     
     always @(*) begin
@@ -126,15 +125,19 @@ module ysyx_24120009_ControlLogic (
         17'b0100011_000_0000000, 17'b00000_00_10_000_0_1_1_00, // SB
         17'b0100011_001_0000000, 17'b00000_00_10_000_0_1_1_00, // SH
         // JALR instruction(1) (func7 is not specified)
-        17'b1100111_000_0000000, 17'b00000_00_01_001_1_0_0_01, // JALR
-        // ebreak instruction(1)
-        17'b1110011_000_0000000, 17'b00000_00_00_000_0_0_0_00  // EBREAK
+        17'b1100111_000_0000000, 17'b00000_00_01_001_1_0_0_01  // JALR
         })
     );
 
-    //wire is_ebreak_internal = (inst == 32'b00000000000100000000000001110011);
-    wire is_ebreak_internal = (inst == 32'h00100073);
-    assign is_ebreak = is_ebreak_internal;
+    //wire is_ebreak = (inst == 32'h00100073);
+    wire is_ebreak = (inst == 32'h00100073);
+
+    always @(*) begin
+        if (is_ebreak) begin
+           $display("EBREAK: Simulation exiting...");
+           simulation_exit(); // 通知仿真环境结束
+        end
+    end
 
     // Decode control signals
     assign alu_op   = ctl_signals[16:12];
