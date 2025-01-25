@@ -134,7 +134,7 @@ void tick(Vysyx_24120009_core* top, bool step_mode, bool is_reset) {
     }
 
     // print some debug info of memory write
-    if (top->mem_wen_debug == 1) {  
+    if (top->mem_wen_debug == 1 && !is_reset) {  
         std::cout << "Memory Write - Addr: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->dmem_addr_debug
                 << ", Data: 0x" << std::setw(8) << std::setfill('0') << top->dmem_wdata_debug
                 << ", Mask: 0x" << std::setw(2) << static_cast<unsigned>(top->wmask_debug) 
@@ -142,7 +142,7 @@ void tick(Vysyx_24120009_core* top, bool step_mode, bool is_reset) {
     }
 
     // print some debug info of memory read
-    if (top->mem_en_debug == 1 && top->mem_wen_debug != 1) {  
+    if (top->mem_en_debug == 1 && top->mem_wen_debug != 1 && !is_reset) {  
             std::cout << "Memory Read  - Addr: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->dmem_addr_debug
                       << std::dec << std::endl;
     }
@@ -198,7 +198,7 @@ int main(int argc, char **argv) {
             // 根据用户输入的命令来决定行为
             if (input == "si") {
                 // 执行单步操作
-                tick(top, step_mode, false);  // 执行一次 tick
+                tick(top, step_mode, true);  // 执行一次 tick
                 // ref execute one instruction
                 ref_difftest_exec(1);
                 // Copy registers from DUT to REF and compare them
@@ -224,7 +224,7 @@ int main(int argc, char **argv) {
         } else {
             printf("------------------------------------------------------------------------------\n");
             // 执行单步操作
-            tick(top, step_mode, false);  // 执行一次 tick
+            tick(top, step_mode, true);  // 执行一次 tick
             // ref execute one instruction
             ref_difftest_exec(1);
             // Copy registers from DUT to REF and compare them
