@@ -199,7 +199,7 @@ int main(int argc, char **argv) {
             // 根据用户输入的命令来决定行为
             if (input == "si") {
                 // 执行单步操作
-                tick(top, step_mode, true);  // 执行一次 tick
+                tick(top, step_mode, false);  // 执行一次 tick
                 // ref execute one instruction
                 ref_difftest_exec(1);
                 // Copy registers from DUT to REF and compare them
@@ -224,7 +224,7 @@ int main(int argc, char **argv) {
             }
         } else {
             // 执行单步操作
-            tick(top, step_mode, true);  // 执行一次 tick
+            tick(top, step_mode, false);  // 执行一次 tick
             // ref execute one instruction
             ref_difftest_exec(1);
             // Copy registers from DUT to REF and compare them
@@ -233,8 +233,8 @@ int main(int argc, char **argv) {
             int ret = check_reg(top);
             if (ret < 0) return -1;
             // Check memory consistency
-            /*ret = check_memory(0x80000000, 0x1000); 
-            if (ret < 0) return -1;*/
+            ret = check_memory(0x80000000, 0x1000); 
+            if (ret < 0) return -1;
         }
     } 
 
