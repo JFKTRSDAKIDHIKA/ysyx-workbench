@@ -126,6 +126,7 @@ void tick(Vysyx_24120009_core* top, bool step_mode, bool is_reset) {
     
     if (!is_reset) {
         // print some debug info when registers have yet been updated!
+        printf("------------------------------------------------------------------------------\n");
         std::cout << "Op1: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->Op1_debug
             << ", Op2: 0x" << std::setw(8) << std::setfill('0') << top->Op2_debug
             << ", wb_data: 0x" << std::setw(8) << std::setfill('0') << top->reg_write_data_debug
@@ -222,7 +223,6 @@ int main(int argc, char **argv) {
                 std::cout << "Unknown command!" << std::endl;
             }
         } else {
-            printf("------------------------------------------------------------------------------\n");
             // 执行单步操作
             tick(top, step_mode, true);  // 执行一次 tick
             // ref execute one instruction
