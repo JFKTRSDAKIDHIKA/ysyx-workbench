@@ -171,7 +171,12 @@ static int cmd_w(char* args) {
   WP* wp = new_wp();
   wp->exp = (char*)malloc(strlen(arg0) + 1);
   strcpy(wp->exp, arg0);
-  wp->val = expr(wp->exp, NULL);
+  bool success;
+  wp->val = expr(wp->exp, &success);
+  if (success == false){
+    printf("Invalid expression\n");
+    return 0;
+  }
   
   return 0;
 }
