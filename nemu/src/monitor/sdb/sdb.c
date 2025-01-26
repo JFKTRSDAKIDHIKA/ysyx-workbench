@@ -161,7 +161,7 @@ static int cmd_x(char* args){
   }
   vaddr_t addr = starting_addr;
   for (; addr < starting_addr + len; addr = addr + 4){
-    if (addr < 0x80000000 || addr > CONFIG_MBASE + CONFIG_MSIZE){
+    if (addr < 0x80000000){
       printf("0x%x is out of bound\n", addr);
       return 0;
     }
