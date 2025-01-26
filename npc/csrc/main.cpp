@@ -140,6 +140,7 @@ void tick(Vysyx_24120009_core* top, bool step_mode, bool is_reset) {
                 << ", Data: 0x" << std::setw(8) << std::setfill('0') << top->dmem_wdata_debug
                 << ", Mask: 0x" << std::setw(2) << static_cast<unsigned>(top->wmask_debug) 
                 << std::dec << std::endl;
+        print_memory(top->dmem_addr_debug, 20);
     }
 
     // print some debug info of memory read
@@ -209,7 +210,7 @@ int main(int argc, char **argv) {
                 if (ret < 0) return -1;                 
                 // Check memory consistency
                 ret = check_memory(0x80000000, 0x1000); 
-                //if (ret < 0) return -1;
+                if (ret < 0) return -1;
             } 
             else if (input == "info r") {
                 // 打印寄存器信息，不进行 tick
@@ -224,7 +225,7 @@ int main(int argc, char **argv) {
             }
         } else {
             // 执行单步操作
-            tick(top, step_mode, true);  // 执行一次 tick
+            tick(top, step_mode, false);  // 执行一次 tick
             // ref execute one instruction
             ref_difftest_exec(1);
             // Copy registers from DUT to REF and compare them
@@ -234,7 +235,7 @@ int main(int argc, char **argv) {
             if (ret < 0) return -1;
             // Check memory consistency
             ret = check_memory(0x80000000, 0x1000); 
-            //if (ret < 0) return -1;
+            if (ret < 0) return -1;
         }
     } 
 
