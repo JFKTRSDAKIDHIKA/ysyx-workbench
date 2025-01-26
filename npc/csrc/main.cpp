@@ -123,7 +123,6 @@ int check_memory(paddr_t start_addr, size_t size) {
 void tick(Vysyx_24120009_core* top, bool step_mode, bool is_reset) {
     top->clk = 0;
     top->eval();
-                print_memory(0x800001a8, 40);
     
     if (!is_reset) {
         // print some debug info when registers have yet been updated!
