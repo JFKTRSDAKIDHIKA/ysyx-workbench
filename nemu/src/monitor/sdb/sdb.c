@@ -157,7 +157,7 @@ static int cmd_x(char* args){
   vaddr_t starting_addr = expr(arg1, &success);
   if (success == false){
     printf("Invalid expression\n");
-    return 0;
+    //return 0;
   }
   vaddr_t addr = starting_addr;
   for (; addr < starting_addr + len; addr = addr + 4){
