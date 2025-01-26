@@ -153,7 +153,12 @@ static int cmd_x(char* args){
   
   // arg0:读取的内存行数;len:读取的内存Byte数
   int len = 4 * arg0;
-  vaddr_t starting_addr = expr(arg1, NULL);
+  bool success;
+  vaddr_t starting_addr = expr(arg1, &success);
+  if (success == false){
+    printf("Invalid expression\n");
+    return 0;
+  }
   vaddr_t addr = starting_addr;
   for (; addr < starting_addr + len; addr = addr + 4){
     if (addr <= 0x80000000 || addr >= CONFIG_MBASE + CONFIG_MSIZE){
