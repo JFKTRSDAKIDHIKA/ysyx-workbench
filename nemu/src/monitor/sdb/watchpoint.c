@@ -48,6 +48,7 @@ bool check_watchpoint() {
   int trigger_count = 0;
   while (wp != NULL) {
     uint32_t nval = expr(wp->exp, NULL); 
+    printf("ok\n");
     if (nval != wp->val) {
         printf("============= 监视表达式变化! =============\n");
         printf("表达式：%s, 监视点编号：%d\n", wp->exp, wp->NO);
