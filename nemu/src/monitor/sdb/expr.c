@@ -168,6 +168,7 @@ tokens[i - 1].type != TK_RPAREN))) {
     }
   }
 
+  *success = true;
   return eval(0, nr_token - 1);
 }
 
