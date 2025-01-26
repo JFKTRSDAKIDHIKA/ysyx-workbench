@@ -77,7 +77,7 @@ int check_reg(Vysyx_24120009_core* top) {
                       << " REF: 0x" << ref.gpr[i] 
                       << std::endl;
             // Optionally, you can stop the simulation on a mismatch
-            print_memory(0x80008fe4, 256);
+            print_memory(0x800001ac, 20);
             return -1;  // End simulation
         }
     }
@@ -110,7 +110,7 @@ int check_memory(paddr_t start_addr, size_t size) {
                 std::cerr << "Address: 0x" << std::hex << (start_addr + i) << std::endl;
                 std::cerr << "REF: 0x" << std::hex << static_cast<int>(ref_mem[i]) << std::endl;
                 std::cerr << "DUT: 0x" << std::hex << static_cast<int>(dut_mem[i]) << std::endl;
-                print_memory(0x800001ac, 256);
+                print_memory(0x800001a8, 40);
                 return -1;
             }
         }
@@ -126,6 +126,7 @@ void tick(Vysyx_24120009_core* top, bool step_mode, bool is_reset) {
     
     if (!is_reset) {
         // print some debug info when registers have yet been updated!
+        printf("------------------------------------------------------------------------------\n");
         std::cout << "Op1: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->Op1_debug
             << ", Op2: 0x" << std::setw(8) << std::setfill('0') << top->Op2_debug
             << ", wb_data: 0x" << std::setw(8) << std::setfill('0') << top->reg_write_data_debug
@@ -134,15 +135,16 @@ void tick(Vysyx_24120009_core* top, bool step_mode, bool is_reset) {
     }
 
     // print some debug info of memory write
-    if (top->mem_wen_debug == 1) {  
+    if (top->mem_wen_debug == 1 && !is_reset) {  
         std::cout << "Memory Write - Addr: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->dmem_addr_debug
                 << ", Data: 0x" << std::setw(8) << std::setfill('0') << top->dmem_wdata_debug
                 << ", Mask: 0x" << std::setw(2) << static_cast<unsigned>(top->wmask_debug) 
                 << std::dec << std::endl;
+        print_memory(top->dmem_addr_debug, 20);
     }
 
     // print some debug info of memory read
-    if (top->mem_en_debug == 1 && top->mem_wen_debug != 1) {  
+    if (top->mem_en_debug == 1 && top->mem_wen_debug != 1 && !is_reset) {  
             std::cout << "Memory Read  - Addr: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->dmem_addr_debug
                       << std::dec << std::endl;
     }
@@ -207,8 +209,8 @@ int main(int argc, char **argv) {
                 int ret = check_reg(top);
                 if (ret < 0) return -1;                 
                 // Check memory consistency
-                /*ret = check_memory(0x80000000, 0x1000); 
-                if (ret < 0) return -1;*/
+                ret = check_memory(0x80000000, 0x1000); 
+                if (ret < 0) return -1;
             } 
             else if (input == "info r") {
                 // 打印寄存器信息，不进行 tick
@@ -222,7 +224,6 @@ int main(int argc, char **argv) {
                 std::cout << "Unknown command!" << std::endl;
             }
         } else {
-            printf("------------------------------------------------------------------------------\n");
             // 执行单步操作
             tick(top, step_mode, false);  // 执行一次 tick
             // ref execute one instruction
@@ -233,8 +234,8 @@ int main(int argc, char **argv) {
             int ret = check_reg(top);
             if (ret < 0) return -1;
             // Check memory consistency
-            /*ret = check_memory(0x80000000, 0x1000); 
-            if (ret < 0) return -1;*/
+            ret = check_memory(0x80000000, 0x1000); 
+            if (ret < 0) return -1;
         }
     } 
 

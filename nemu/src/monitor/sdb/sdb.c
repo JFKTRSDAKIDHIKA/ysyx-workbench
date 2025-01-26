@@ -20,6 +20,8 @@
 #include "sdb.h"
 #include <memory/paddr.h>
 #include "watchpoint.h"
+#include "generated/autoconf.h"
+
 static int is_batch_mode = false;
 
 void init_regex();
@@ -75,11 +77,11 @@ static struct {
   { "help", "Display information about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
-  { "si", "让程序单步执行N条指令后暂停执行,当N没有给出时, 缺省为1", cmd_si },
-  { "info", "打印寄存器状态和监视点", cmd_info},
-  { "x", "求出表达式EXPR的值, 将结果作为起始内存地址, 以十六进制形式输出连续的N个4字节", cmd_x},
-  { "w", "当表达式EXPR的值发生变化时, 暂停程序执行", cmd_w},
-  { "d", "删除序号为N的监视点", cmd_d}
+  { "si", "Single-step execute N instructions and then pause. If N is not provided, default to 1", cmd_si },
+  { "info", "Print register status and watchpoints", cmd_info},
+  { "x", "Evaluate expression EXPR, use the result as the starting memory address, and output N consecutive 4-byte blocks in hexadecimal", cmd_x},
+  { "w", "Pause program execution when the value of expression EXPR changes", cmd_w},
+  { "d", "Delete the watchpoint with serial number N", cmd_d}
 };
 
 
@@ -151,12 +153,45 @@ static int cmd_x(char* args){
   
   // arg0:读取的内存行数;len:读取的内存Byte数
   int len = 4 * arg0;
-  vaddr_t starting_addr = expr(arg1, NULL);
-  vaddr_t addr = starting_addr;
-  for (; addr < starting_addr + len; addr = addr + 4){
-    word_t data = vaddr_read(addr, 4); // 每次读取一行内存的数据
-    printf("Data read from 0x%x (length %d): 0x%x\n", addr, 4, data);
+  bool success;
+  vaddr_t starting_addr = expr(arg1, &success);
+  if (!success) {
+    printf("Invalid expression\n");
+    return 0;
   }
+
+  // Pre-check all addresses first
+  for (vaddr_t addr = starting_addr; addr < starting_addr + len; addr += 4) {
+    if (addr < 0x80000000) {
+      printf("\n0x%08x is out of bound\n", addr);
+      return 0;
+    }
+  }
+
+  printf("Address      | Data\n");
+  printf("----------------------------\n");
+
+  int items_per_line = 4;
+  for (vaddr_t addr = starting_addr; addr < starting_addr + len; addr += 4) {
+    // Print address at the start of each line
+    if ((addr - starting_addr) % (items_per_line * 4) == 0) {
+      printf("0x%08x | ", addr);
+    }
+
+    word_t data = vaddr_read(addr, 4);
+    printf("0x%08x ", data);
+
+    // New line after 4 items
+    if ((addr - starting_addr + 4) % (items_per_line * 4) == 0) {
+      printf("\n");
+    }
+  }
+
+  // Add final newline if not already added
+  if (len % (items_per_line * 4) != 0) {
+    printf("\n");
+  }
+
   return 0;
 }
 
@@ -171,7 +206,12 @@ static int cmd_w(char* args) {
   WP* wp = new_wp();
   wp->exp = (char*)malloc(strlen(arg0) + 1);
   strcpy(wp->exp, arg0);
-  wp->val = expr(wp->exp, NULL);
+  bool success;
+  wp->val = expr(wp->exp, &success);
+  if (success == false){
+    printf("Invalid expression\n");
+    return 0;
+  }
   
   return 0;
 }
