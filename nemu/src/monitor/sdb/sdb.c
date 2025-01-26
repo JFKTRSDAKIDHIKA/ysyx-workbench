@@ -159,7 +159,7 @@ static int cmd_x(char* args){
     printf("Invalid expression\n");
     return 0;
   }
-  printf("ok\n");
+  printf("Starting address: 0x%x\n", starting_addr);
   vaddr_t addr = starting_addr;
   for (; addr < starting_addr + len; addr = addr + 4){
     if (addr < 0x80000000 || addr >= 0x80000000 + CONFIG_MSIZE){
