@@ -155,19 +155,43 @@ static int cmd_x(char* args){
   int len = 4 * arg0;
   bool success;
   vaddr_t starting_addr = expr(arg1, &success);
-  if (success == false){
+  if (!success) {
     printf("Invalid expression\n");
     return 0;
   }
-  vaddr_t addr = starting_addr;
-  for (; addr < starting_addr + len; addr = addr + 4){
-    if (addr < 0x80000000){
-      printf("0x%x is out of bound\n", addr);
+
+  // Pre-check all addresses first
+  for (vaddr_t addr = starting_addr; addr < starting_addr + len; addr += 4) {
+    if (addr < 0x80000000) {
+      printf("\n0x%08x is out of bound\n", addr);
       return 0;
     }
-    word_t data = vaddr_read(addr, 4); 
-    printf("Data read from 0x%x (length %d): 0x%x\n", addr, 4, data);
   }
+
+  printf("Address      | Data\n");
+  printf("----------------------------\n");
+
+  int items_per_line = 4;
+  for (vaddr_t addr = starting_addr; addr < starting_addr + len; addr += 4) {
+    // Print address at the start of each line
+    if ((addr - starting_addr) % (items_per_line * 4) == 0) {
+      printf("0x%08x | ", addr);
+    }
+
+    word_t data = vaddr_read(addr, 4);
+    printf("0x%08x ", data);
+
+    // New line after 4 items
+    if ((addr - starting_addr + 4) % (items_per_line * 4) == 0) {
+      printf("\n");
+    }
+  }
+
+  // Add final newline if not already added
+  if (len % (items_per_line * 4) != 0) {
+    printf("\n");
+  }
+
   return 0;
 }
 
