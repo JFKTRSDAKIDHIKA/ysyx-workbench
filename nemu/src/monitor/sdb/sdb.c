@@ -159,13 +159,13 @@ static int cmd_x(char* args){
     printf("Invalid expression\n");
     return 0;
   }
-  vaddr_t addr = starting_addr;
-  for (; addr < starting_addr + len; addr = addr + 4){
+  vaddr_t addr = starting_addr + len;
+  for (; addr >= starting_addr; addr = addr - 4){
     if (addr < 0x80000000 || addr + len >= 0x80000000 + CONFIG_MSIZE){
       printf("0x%x is out of bound\n", addr);
       return 0;
     }
-    word_t data = vaddr_read(addr, 4); // 每次读取一行内存的数据
+    word_t data = vaddr_read(addr, 4); 
     printf("Data read from 0x%x (length %d): 0x%x\n", addr, 4, data);
   }
   return 0;
