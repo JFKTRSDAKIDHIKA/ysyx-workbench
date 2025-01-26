@@ -20,6 +20,8 @@
 #include "sdb.h"
 #include <memory/paddr.h>
 #include "watchpoint.h"
+#include "generated/autoconf.h"
+
 static int is_batch_mode = false;
 
 void init_regex();
@@ -154,7 +156,7 @@ static int cmd_x(char* args){
   vaddr_t starting_addr = expr(arg1, NULL);
   vaddr_t addr = starting_addr;
   for (; addr < starting_addr + len; addr = addr + 4){
-    if (addr <= 0x80000000 || addr >= 0xffffffff){
+    if (addr <= 0x80000000 || addr >= CONFIG_MBASE + CONFIG_MSIZE){
       printf("0x%x is out of bound\n", addr);
       return 0;
     }
