@@ -41,7 +41,9 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 #endif
 
 #ifdef CONFIG_WATCHPOINT
+printf("ok\n");
   if (check_watchpoint()) {
+printf("ok\n");
     // 检查是否有监视点相应表达式的值发生变化
     // 20241211修改：当程序执行结束以后，不能再把nemu_state.state改为暂停（stop状态）
     if (nemu_state.state != NEMU_END && nemu_state.state != NEMU_ABORT && nemu_state.state != NEMU_QUIT)
