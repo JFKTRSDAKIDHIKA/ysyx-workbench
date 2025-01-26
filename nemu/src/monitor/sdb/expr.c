@@ -175,7 +175,7 @@ tokens[i - 1].type != TK_RPAREN))) {
 uint32_t eval(int p, int q){
   if (p > q){
     printf("Bad expression! Starting from %d, ending in %d.\n",p ,q);
-    return 0;
+    return -1;
   }else if (p == q){
     if (tokens[p].type == TK_NUM)
       return (uint32_t)(atoi(tokens[p].str)); 

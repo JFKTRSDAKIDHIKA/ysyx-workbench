@@ -165,7 +165,6 @@ static int cmd_x(char* args){
       printf("0x%x is out of bound\n", addr);
       return 0;
     }
-    printf("ok\n");
     word_t data = vaddr_read(addr, 4); // 每次读取一行内存的数据
     printf("Data read from 0x%x (length %d): 0x%x\n", addr, 4, data);
   }
