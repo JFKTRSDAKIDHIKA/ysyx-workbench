@@ -52,7 +52,7 @@ bool check_watchpoint() {
         printf("============= 监视表达式变化! =============\n");
         printf("表达式：%s, 监视点编号：%d\n", wp->exp, wp->NO);
         printf("旧值: %-10d 新值: %-10d\n", wp->val, nval);   
- 	printf("===========================================\n");
+ 	      printf("===========================================\n");
         wp->val = nval;
         trigger_count++;
     } else {
