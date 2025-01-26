@@ -225,7 +225,7 @@ int main(int argc, char **argv) {
             }
         } else {
             // 执行单步操作
-            tick(top, step_mode, false);  // 执行一次 tick
+            tick(top, step_mode, true);  // 执行一次 tick
             // ref execute one instruction
             ref_difftest_exec(1);
             // Copy registers from DUT to REF and compare them
