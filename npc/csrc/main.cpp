@@ -209,8 +209,8 @@ int main(int argc, char **argv) {
                 int ret = check_reg(top);
                 if (ret < 0) return -1;                 
                 // Check memory consistency
-                //ret = check_memory(0x80000000, 0x1000); 
-                //if (ret < 0) return -1;
+                ret = check_memory(0x80000000, 0x1000); 
+                if (ret < 0) return -1;
             } 
             else if (input == "info r") {
                 // 打印寄存器信息，不进行 tick
@@ -234,8 +234,8 @@ int main(int argc, char **argv) {
             int ret = check_reg(top);
             if (ret < 0) return -1;
             // Check memory consistency
-            //ret = check_memory(0x80000000, 0x1000); 
-            //if (ret < 0) return -1;
+            ret = check_memory(0x80000000, 0x1000); 
+            if (ret < 0) return -1;
         }
     } 
 
