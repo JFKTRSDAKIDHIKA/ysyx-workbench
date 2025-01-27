@@ -106,7 +106,7 @@ static int decode_exec(Decode *s) {
       printf("  src2 (int64_t):  转换后 = %ld (十六进制: 0x%016lx)\n", (int64_t)src2, (int64_t)src2);
 
       // 执行原操作
-      R(rd) = ((int64_t)src1 * (int64_t)src2) >> 32;
+      R(rd) = ((int64_t)(int32_t)src1 * (int64_t)(int32_t)src2) >> 32;
   });
   INSTPAT("??????? ????? ????? 010 ????? 00000 11", lw     , I, R(rd) = Mr(src1 + imm, 4));
   INSTPAT("??????? ????? ????? 100 ????? 00000 11", lbu    , I, R(rd) = Mr(src1 + imm, 1));
