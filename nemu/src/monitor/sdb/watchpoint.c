@@ -47,7 +47,6 @@ bool check_watchpoint() {
   WP* wp = head;
   int trigger_count = 0;
   while (wp != NULL) {
-    printf("ok\n");
     uint32_t nval = expr(wp->exp, NULL); 
     printf("ok\n");
     if (nval != wp->val) {
