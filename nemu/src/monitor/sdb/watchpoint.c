@@ -37,12 +37,12 @@ WP* find_NO(int NO){
 void print_watchpoint() {
   WP* wp = head;
   while (wp != NULL) {
-    printf("监视点编号: %d，表达式：%s, 值：%d\n", wp->NO, wp->exp, wp->val);
+    printf("Watchpoint ID: %d，Expression：%s, value：%d\n", wp->NO, wp->exp, wp->val);
     wp = wp->next;
   }
 }
 
-// 如果监视点的表达式变化，则返回1，否则返回0
+// Returns 1 if any watchpoint expression changes, otherwise returns 0
 bool check_watchpoint() {
   WP* wp = head;
   int trigger_count = 0;
@@ -50,14 +50,14 @@ bool check_watchpoint() {
     bool success;
     uint32_t nval = expr(wp->exp, &success); 
     if (!success) {
-      printf("表达式求值失败！\n");
+      printf("Expression evaluation failed!\n");
       return 0;
     }
     if (nval != wp->val) {
-        printf("============= 监视表达式变化! =============\n");
-        printf("表达式：%s, 监视点编号：%d\n", wp->exp, wp->NO);
-        printf("旧值: %-10d 新值: %-10d\n", wp->val, nval);   
- 	      printf("===========================================\n");
+        printf("============= Watchpoint expression changed! =============\n");
+        printf("Expression: %s, Watchpoint ID: %d\n", wp->exp, wp->NO);
+        printf("Old value: %-10d New value: %-10d\n", wp->val, nval);
+        printf("===========================================================\n");
         wp->val = nval;
         trigger_count++;
     } else {
