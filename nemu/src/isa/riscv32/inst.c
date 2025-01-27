@@ -97,8 +97,17 @@ static int decode_exec(Decode *s) {
   // to ensure the correct behavior when extracting the high 32 bits of the signed product.
   // Ensure the simulator correctly handles the sign extension and treats the operands as signed integers during multiplication.
   // Without proper sign extension or handling of negative values, the result may be incorrect due to issues in the multiplication logic.
-  INSTPAT("0000001 ????? ????? 001 ????? 01100 11", mulh   , R, R(rd) = ((int64_t)src1 * (int64_t)src2) >> 32);
+  INSTPAT("0000001 ????? ????? 001 ????? 01100 11", mulh, R, {
+      // 添加调试打印
+      printf("[DEBUG] mulh 指令执行:\n");
+      printf("  src1 (uint32_t): 原始值 = %u (十六进制: 0x%08x)\n", src1, src1);
+      printf("  src1 (int64_t):  转换后 = %ld (十六进制: 0x%016lx)\n", (int64_t)src1, (int64_t)src1);
+      printf("  src2 (uint32_t): 原始值 = %u (十六进制: 0x%08x)\n", src2, src2);
+      printf("  src2 (int64_t):  转换后 = %ld (十六进制: 0x%016lx)\n", (int64_t)src2, (int64_t)src2);
 
+      // 执行原操作
+      R(rd) = ((int64_t)src1 * (int64_t)src2) >> 32;
+  });
   INSTPAT("??????? ????? ????? 010 ????? 00000 11", lw     , I, R(rd) = Mr(src1 + imm, 4));
   INSTPAT("??????? ????? ????? 100 ????? 00000 11", lbu    , I, R(rd) = Mr(src1 + imm, 1));
   INSTPAT("??????? ????? ????? 000 ????? 00000 11", lb     , I, R(rd) = SEXT(Mr(src1 + imm, 1), 8));
