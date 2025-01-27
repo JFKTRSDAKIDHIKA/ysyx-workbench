@@ -151,9 +151,9 @@ config TRACE_END
   default 10000
 
 config ITRACE_COND
-  depends on ITRACE
+  depends on TRACE
   string "Only trace instructions when the condition is true"
-  default "true"
+  default "true" 
 
 config IRINGBUF
   bool "Enable instruction ring buffer"
