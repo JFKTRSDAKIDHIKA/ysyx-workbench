@@ -15,7 +15,6 @@ typedef struct {
 } IRingBufItem;
 
 // 环形缓冲区定义
-#define IRINGBUF_SIZE 16  // 或从其他配置头文件引入
 static IRingBufItem iringbuf[IRINGBUF_SIZE] = {0};
 static int iringbuf_index = 0;
 static bool iringbuf_full = false;
