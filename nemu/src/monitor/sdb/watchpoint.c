@@ -37,7 +37,7 @@ WP* find_NO(int NO){
 void print_watchpoint() {
   WP* wp = head;
   while (wp != NULL) {
-    printf("Watchpoint ID: %d，Expression：%s, value：%d\n", wp->NO, wp->exp, wp->val);
+    printf("Watchpoint ID: %d，Expression：%s, value：0x%-10x\n", wp->NO, wp->exp, wp->val);
     wp = wp->next;
   }
 }
@@ -56,7 +56,7 @@ bool check_watchpoint() {
     if (nval != wp->val) {
         printf("============= Watchpoint expression changed! =============\n");
         printf("Expression: %s, Watchpoint ID: %d\n", wp->exp, wp->NO);
-        printf("Old value: %-10d New value: %-10d\n", wp->val, nval);
+        printf("Old value: 0x%-10x New value: 0x%-10x\n", wp->val, nval);
         printf("===========================================================\n");
         wp->val = nval;
         trigger_count++;
