@@ -18,6 +18,7 @@
 #include <cpu/difftest.h>
 #include <locale.h>
 #include "../monitor/sdb/watchpoint.h"
+#include "cpu/iringbuf.h"
 
 /* The assembly code of instructions executed is only output to the screen
  * when the number of instructions executed is less than this value.
@@ -30,9 +31,6 @@ CPU_state cpu = {};
 uint64_t g_nr_guest_inst = 0;
 static uint64_t g_timer = 0; // unit: us
 static bool g_print_step = false;
-#ifdef CONFIG_IRINGBUF
-static void iringbuf_push(Decode *s);
-#endif
 void device_update();
 
 static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
@@ -42,7 +40,6 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 
 #ifdef CONFIG_WATCHPOINT
   if (check_watchpoint()) {
-printf("ok\n");
     // 检查是否有监视点相应表达式的值发生变化
     // 20241211修改：当程序执行结束以后，不能再把nemu_state.state改为暂停（stop状态）
     if (nemu_state.state != NEMU_END && nemu_state.state != NEMU_ABORT && nemu_state.state != NEMU_QUIT)
@@ -109,57 +106,6 @@ static void statistic() {
   if (g_timer > 0) Log("simulation frequency = " NUMBERIC_FMT " inst/s", g_nr_guest_inst * 1000000 / g_timer);
   else Log("Finish running in less than 1 us and can not calculate the simulation frequency");
 }
-
-#ifdef CONFIG_IRINGBUF
-
-// Ring buffer element, used to store key information of an instruction
-typedef struct {
-  vaddr_t pc;           // The PC of the instruction
-  char logbuf[128];     // Used to store disassembly results or debugging logs
-} IRingBufItem;
-
-// Define a ring buffer array
-static IRingBufItem iringbuf[IRINGBUF_SIZE] = {0};
-static int iringbuf_index = 0;  // Current write position in the circular buffer
-static bool iringbuf_full = false; // Flag indicating whether a full round of writes has occurred
-
-static void iringbuf_push(Decode *s) {
-  // Write the current instruction information to the circular buffer
-  IRingBufItem *slot = &iringbuf[iringbuf_index];
-  slot->pc = s->pc;
-  // Copy s->logbuf (which contains: PC, machine code, disassembly, etc.) into the buffer
-  // s->logbuf is assembled in exec_once()
-  strncpy(slot->logbuf, s->logbuf, sizeof(slot->logbuf) - 1);
-  slot->logbuf[sizeof(slot->logbuf) - 1] = '\0';
-
-  // Update the index
-  iringbuf_index = (iringbuf_index + 1) % IRINGBUF_SIZE;
-  if (iringbuf_index == 0) {
-    iringbuf_full = true;
-  }
-}
-
-// Helper function: Print the contents of the circular buffer
-static void iringbuf_print() {
-  printf("\n================ IRINGBUF DUMP ================\n");
-
-  // If the buffer hasn't been filled, it means the content only exists from 0 to iringbuf_index-1
-  // If it has been filled, it means the buffer has looped once, and we need to start printing from iringbuf_index
-  int start = iringbuf_full ? iringbuf_index : 0;
-  int count = iringbuf_full ? IRINGBUF_SIZE : iringbuf_index;
-
-  // Print each instruction's information in order from the first written to the last written
-  for (int i = 0; i < count; i++) {
-    int idx = (start + i) % IRINGBUF_SIZE;
-    IRingBufItem *slot = &iringbuf[idx];
-    printf("%2d: %s\n", i, slot->logbuf);
-  }
-
-  printf("================ IRINGBUF END ================\n\n");
-}
-
-#endif // CONFIG_IRINGBUF
-
 
 void assert_fail_msg() {
   isa_reg_display();

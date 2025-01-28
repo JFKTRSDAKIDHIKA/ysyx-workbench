@@ -26,11 +26,11 @@ const char *regs[] = {
 void isa_reg_display() {
   int num_regs = MUXDEF(CONFIG_RVE, 16, 32);
   
-  for (int i = 0; i < num_regs; i++){
-    printf("%s = %ld\n", regs[i], (long)cpu.gpr[i]); 
+  for (int i = 0; i < num_regs; i++) {
+    printf("%s = 0x%lx\n", regs[i], (long)cpu.gpr[i]); 
   }
   
-  printf("PC = 0x%lx\n", (long)cpu.pc);
+  printf("PC = 0x%lx\n", (long)cpu.pc); 
 }
 
 word_t isa_reg_str2val(const char *s, bool *success) { 
