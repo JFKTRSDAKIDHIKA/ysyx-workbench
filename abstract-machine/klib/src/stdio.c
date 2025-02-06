@@ -100,12 +100,18 @@ int sprintf(char *out, const char *fmt, ...) {
   return ret;
 }
 
-// 由于只需要通过 hello-str 测试，你也可以暂时不实现以下函数
-// 或者简单地调用 panic("Not implemented") 
 int printf(const char *fmt, ...) {
-  panic("Not implemented");
-  return 0;
+  char buf[1024];  
+  va_list ap;
+  va_start(ap, fmt);
+  int ret = vsprintf(buf, fmt, ap);
+  va_end(ap);
+  for (int i = 0; buf[i] != '\0'; i++) {
+    putch(buf[i]);
+  }
+  return ret;
 }
+
 
 int snprintf(char *out, size_t n, const char *fmt, ...) {
   panic("Not implemented");
