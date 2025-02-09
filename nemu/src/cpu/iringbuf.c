@@ -22,7 +22,6 @@ static bool iringbuf_full = false;
 // push instruction infomation into the ring buffer
 void iringbuf_push(Decode *s) {
   IRingBufItem *slot = &iringbuf[iringbuf_index];
-  printf("[debug: ]%s\n", s->logbuf);
   slot->pc = s->pc;
   snprintf(slot->logbuf, sizeof(slot->logbuf), "%s", s->logbuf);
 
@@ -41,7 +40,7 @@ void iringbuf_print() {
   for (int i = 0; i < count; i++) {
     int idx = (start + i) % IRINGBUF_SIZE;
     IRingBufItem *slot = &iringbuf[idx];
-    printf("%2d: %s\n", i, slot->logbuf);
+    printf("%2d: PC = 0x%lx, Log: %s\n", i, (unsigned long)slot->pc, slot->logbuf);
   }
   printf("================ IRINGBUF END ================\n\n");
 }
