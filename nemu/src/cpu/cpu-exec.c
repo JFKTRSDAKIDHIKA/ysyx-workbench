@@ -40,8 +40,6 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 
 #ifdef CONFIG_WATCHPOINT
   if (check_watchpoint()) {
-    // 检查是否有监视点相应表达式的值发生变化
-    // 20241211修改：当程序执行结束以后，不能再把nemu_state.state改为暂停（stop状态）
     if (nemu_state.state != NEMU_END && nemu_state.state != NEMU_ABORT && nemu_state.state != NEMU_QUIT)
       nemu_state.state = NEMU_STOP;
   }  
@@ -134,7 +132,7 @@ void cpu_exec(uint64_t n) {
     
     case NEMU_STOP: break;
 
-    case NEMU_END: case NEMU_ABORT:
+    case NEMU_ABORT:
 #ifdef CONFIG_IRINGBUF
       iringbuf_print(); 
 #endif
@@ -144,6 +142,14 @@ void cpu_exec(uint64_t n) {
             ANSI_FMT("HIT BAD TRAP", ANSI_FG_RED))),
           nemu_state.halt_pc);
       // fall through
+      
+    case NEMU_END: 
+      Log("nemu: %s at pc = " FMT_WORD,
+        (nemu_state.state == NEMU_ABORT ? ANSI_FMT("ABORT", ANSI_FG_RED) :
+        (nemu_state.halt_ret == 0 ? ANSI_FMT("HIT GOOD TRAP", ANSI_FG_GREEN) :
+          ANSI_FMT("HIT BAD TRAP", ANSI_FG_RED))),
+        nemu_state.halt_pc);
+
     case NEMU_QUIT: statistic();
   }
 }

@@ -14,17 +14,16 @@ typedef struct {
   char logbuf[128];
 } IRingBufItem;
 
-// 环形缓冲区定义
+// Ring buffer declaration
 static IRingBufItem iringbuf[IRINGBUF_SIZE] = {0};
 static int iringbuf_index = 0;
 static bool iringbuf_full = false;
 
-// 将指令信息推入缓冲区
+// push instruction infomation into the ring buffer
 void iringbuf_push(Decode *s) {
   IRingBufItem *slot = &iringbuf[iringbuf_index];
   slot->pc = s->pc;
   snprintf(slot->logbuf, sizeof(slot->logbuf), "%s", s->logbuf);
-
 
   iringbuf_index = (iringbuf_index + 1) % IRINGBUF_SIZE;
   if (iringbuf_index == 0) {
