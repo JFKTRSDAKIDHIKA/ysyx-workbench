@@ -54,6 +54,7 @@ const char* find_func(uint32_t addr) {
   return "???";
 }
 
+// Read the symbol table and string table from the ELF file for later use.
 static void parse_elf_symbols(const char *elf_file) {
   FILE *fp = fopen(elf_file, "rb");
   if (!fp) {
@@ -159,7 +160,9 @@ static void parse_elf_symbols(const char *elf_file) {
   fclose(fp);
 }
 
-void set_elf_file_from_img_file() {
+// The ELF file and the BIN file are in the same directory, but only the file extensions differ. 
+// This function changes the extension from .bin to .elf.
+static void set_elf_file_from_img_file() {
     // Check if img_file ends with ".bin"
     if (img_file != NULL && strlen(img_file) > 4 && strcmp(img_file + strlen(img_file) - 4, ".bin") == 0) {
         // Allocate memory for elf_file, the length of img_file minus 4 plus 4 for ".elf" and the null terminator
@@ -268,7 +271,10 @@ void init_monitor(int argc, char *argv[]) {
   long img_size = load_img();
 
 #ifdef CONFIG_FTRACE
+  // The ELF file and the BIN file are in the same directory, but only the file extensions differ. 
+  // This function changes the extension from .bin to .elf.
   set_elf_file_from_img_file();
+  // Read the symbol table and string table from the ELF file for later use.
   if (elf_file != NULL) {
     parse_elf_symbols(elf_file);
   }
