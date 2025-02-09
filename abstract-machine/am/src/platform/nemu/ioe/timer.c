@@ -1,6 +1,5 @@
 #include <am.h>
 #include <nemu.h>
-#include <sys/time.h>
 
 static uint64_t start_time = 0;
 
