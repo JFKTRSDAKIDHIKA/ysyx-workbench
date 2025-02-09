@@ -150,6 +150,11 @@ config TRACE_END
   int "When tracing is disabled (unit: number of instructions)"
   default 10000
 
+config ITRACE
+  depends on TRACE 
+  bool "Enable basic instruction trace"
+  default y
+
 config ITRACE_COND
   depends on TRACE
   string "Only trace instructions when the condition is true"
