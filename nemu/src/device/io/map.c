@@ -54,8 +54,6 @@ void init_map() {
 
 word_t map_read(paddr_t addr, int len, IOMap *map) {
   assert(len >= 1 && len <= 8);
-  printf("[DEBUG] Checking address: " FMT_PADDR " in range {%s} [" FMT_PADDR ", " FMT_PADDR "]\n",
-    addr, map->name, map->low, map->high);
   check_bound(map, addr);
   paddr_t offset = addr - map->low;
   invoke_callback(map->callback, offset, len, false); // prepare data to read
