@@ -85,5 +85,5 @@ void mmio_write(paddr_t addr, int len, word_t data) {
   
   map_write(addr, len, data, map);
 
-  map_write(addr, len, data, map);
+  dtrace_log("Write", addr, len, data, map->name);
 }
