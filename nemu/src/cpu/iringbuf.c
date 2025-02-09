@@ -23,8 +23,8 @@ static bool iringbuf_full = false;
 void iringbuf_push(Decode *s) {
   IRingBufItem *slot = &iringbuf[iringbuf_index];
   slot->pc = s->pc;
-  strncpy(slot->logbuf, s->logbuf, sizeof(slot->logbuf) - 1);
-  slot->logbuf[sizeof(slot->logbuf) - 1] = '\0';
+  snprintf(slot->logbuf, sizeof(slot->logbuf), "%s", s->logbuf);
+
 
   iringbuf_index = (iringbuf_index + 1) % IRINGBUF_SIZE;
   if (iringbuf_index == 0) {
