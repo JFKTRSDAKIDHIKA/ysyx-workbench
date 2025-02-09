@@ -27,6 +27,21 @@ static uint8_t *pmem = NULL;
 static uint8_t pmem[CONFIG_MSIZE] PG_ALIGN = {};
 #endif
 
+// Helper function: Check if access information needs to be recorded
+static inline bool need_mtrace(paddr_t addr) {
+  #if defined(CONFIG_MTRACE)
+    // If the address is out of range, do not record
+    if (addr < MTRACE_START || addr >= MTRACE_END) {
+      return false;
+    }
+    // If within range, return true to indicate that it should be recorded
+    return true;
+  #else
+    // If MTRACE is not enabled, return false directly
+    return false;
+  #endif
+  }
+  
 uint8_t* guest_to_host(paddr_t paddr) { return pmem + paddr - CONFIG_MBASE; }
 paddr_t host_to_guest(uint8_t *haddr) { return haddr - pmem + CONFIG_MBASE; }
 
@@ -51,21 +66,6 @@ void init_mem() {
 #endif
   IFDEF(CONFIG_MEM_RANDOM, memset(pmem, rand(), CONFIG_MSIZE));
   Log("physical memory area [" FMT_PADDR ", " FMT_PADDR "]", PMEM_LEFT, PMEM_RIGHT);
-}
-
-// Helper function: Check if access information needs to be recorded
-static inline bool need_mtrace(paddr_t addr) {
-#if defined(CONFIG_MTRACE)
-  // If the address is out of range, do not record
-  if (addr < MTRACE_START || addr >= MTRACE_END) {
-    return false;
-  }
-  // If within range, return true to indicate that it should be recorded
-  return true;
-#else
-  // If MTRACE is not enabled, return false directly
-  return false;
-#endif
 }
 
 word_t paddr_read(paddr_t addr, int len) {
