@@ -3,14 +3,8 @@
 #include <klib-macros.h>
 #include <stdarg.h>
 
-#if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
-
-// 工具函数：将整型转换成字符串
+// 工具函数：将整型转换成字符串（已有实现）
 static void int_to_str(int value, char *buf) {
-  // 这里采用简单的方式，将整数转换成字符串并写入buf中
-  // 不考虑 64 位长整型；若有需要再自行扩展
-  // 也没有考虑进制转换需求（比如 %x），如有需要再自行实现
-
   char temp[32]; // 暂存反转前的数字字符
   int pos = 0;
   bool neg = false;
@@ -36,8 +30,7 @@ static void int_to_str(int value, char *buf) {
     temp[pos++] = '-';
   }
 
-  // 现在 temp 中是逆序存放的数字字符（最后一位是正负号或数字）
-  // 将其反转到 buf 中
+  // 将 temp 中的字符逆序复制到 buf 中
   int i = 0;
   while (pos > 0) {
     buf[i++] = temp[--pos];
@@ -45,7 +38,7 @@ static void int_to_str(int value, char *buf) {
   buf[i] = '\0';
 }
 
-// vsprintf 函数负责根据可变参数列表将结果写到 out 中
+// vsprintf 实现（已有实现）
 int vsprintf(char *out, const char *fmt, va_list ap) {
   char *str = out;
   const char *p = fmt;
@@ -57,7 +50,6 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
           int val = va_arg(ap, int);
           char buf[32];
           int_to_str(val, buf);
-          // 将 buf 中的内容复制到 str
           char *b = buf;
           while (*b) {
             *str++ = *b++;
@@ -72,26 +64,22 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
           }
           break;
         }
-        // 如果有需要支持更多的格式，例如 %c、%x、%f 等
-        // 可以在这里添加对应的逻辑
         default: {
-          // 遇到未知的格式化符号，直接原样输出
           *str++ = '%';
           *str++ = *p;
           break;
         }
       }
     } else {
-      // 普通字符，直接输出
       *str++ = *p;
     }
     p++;
   }
-  *str = '\0';              // 在末尾补上 '\0'
-  return (int)(str - out);  // 返回输出的字符数，不包括末尾的 '\0'
+  *str = '\0';
+  return (int)(str - out);
 }
 
-// sprintf 函数：先启动可变参数，然后调用 vsprintf
+// sprintf 实现（已有实现）
 int sprintf(char *out, const char *fmt, ...) {
   va_list ap;
   va_start(ap, fmt);
@@ -100,8 +88,9 @@ int sprintf(char *out, const char *fmt, ...) {
   return ret;
 }
 
+// printf 实现（已有实现）
 int printf(const char *fmt, ...) {
-  char buf[1024];  
+  char buf[1024];
   va_list ap;
   va_start(ap, fmt);
   int ret = vsprintf(buf, fmt, ap);
@@ -112,15 +101,87 @@ int printf(const char *fmt, ...) {
   return ret;
 }
 
+// 下面我们来实现 vsnprintf 和 snprintf
 
-int snprintf(char *out, size_t n, const char *fmt, ...) {
-  panic("Not implemented");
-  return 0;
-}
-
+// vsnprintf 实现：将格式化字符串写入 out 中，但最多写入 n 个字符（包括结尾的 '\0'）
+// 返回值是“如果 n 足够大，最终写入的字符数（不含 '\0'）；否则返回本来需要写入的字符数”。
 int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
-  panic("Not implemented");
-  return 0;
+  int pos = 0;   // 记录实际写入到 out 的字符数量
+  int total = 0; // 记录应写入的字符总数（不受 n 限制）
+  const char *p = fmt;
+  
+  while (*p) {
+    if (*p == '%') {
+      p++;  // 跳过 '%'
+      switch (*p) {
+        case 'd': {  // 处理整型格式 %d
+          int val = va_arg(ap, int);
+          char buf[32];
+          int_to_str(val, buf);
+          char *b = buf;
+          while (*b) {
+            // 每个字符写入前都要判断是否还有空间写入（保留一个字节给 '\0'）
+            if (n > 0 && pos < (int)(n - 1)) {
+              out[pos] = *b;
+              pos++;
+            }
+            total++;
+            b++;
+          }
+          break;
+        }
+        case 's': {  // 处理字符串格式 %s
+          char *s = va_arg(ap, char *);
+          if (s == NULL) s = "(null)";
+          while (*s) {
+            if (n > 0 && pos < (int)(n - 1)) {
+              out[pos] = *s;
+              pos++;
+            }
+            total++;
+            s++;
+          }
+          break;
+        }
+        default: {   // 遇到未知的格式符，直接输出 '%' 和后面的字符
+          if (n > 0 && pos < (int)(n - 1)) {
+            out[pos] = '%';
+            pos++;
+          }
+          total++;
+          // 输出未知格式符本身
+          if (*p) {
+            if (n > 0 && pos < (int)(n - 1)) {
+              out[pos] = *p;
+              pos++;
+            }
+            total++;
+          }
+          break;
+        }
+      }
+    } else {
+      // 普通字符处理
+      if (n > 0 && pos < (int)(n - 1)) {
+        out[pos] = *p;
+        pos++;
+      }
+      total++;
+    }
+    p++;  // 处理完当前字符或格式符后，继续前进
+  }
+  // 写入终止的空字符，注意只有当 n > 0 时才需要写入
+  if (n > 0) {
+    out[pos] = '\0';
+  }
+  return total;
 }
 
-#endif
+// snprintf 实现：调用 vsnprintf 完成实际工作
+int snprintf(char *out, size_t n, const char *fmt, ...) {
+  va_list ap;
+  va_start(ap, fmt);
+  int ret = vsnprintf(out, n, fmt, ap);
+  va_end(ap);
+  return ret;
+}

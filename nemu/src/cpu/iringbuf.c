@@ -31,7 +31,7 @@ void iringbuf_push(Decode *s) {
   }
 }
 
-// 打印缓冲区内容
+// print the content of the ring buffer
 void iringbuf_print() {
   printf("\n================ IRINGBUF DUMP ================\n");
   int start = iringbuf_full ? iringbuf_index : 0;
