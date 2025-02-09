@@ -269,7 +269,6 @@ void init_monitor(int argc, char *argv[]) {
 
 #ifdef CONFIG_FTRACE
   set_elf_file_from_img_file();
-  // printf("elf_file points to: %s\n", elf_file);
   if (elf_file != NULL) {
     parse_elf_symbols(elf_file);
   }

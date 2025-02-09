@@ -174,6 +174,7 @@ config MTRACE
   help
     Enable mtrace to log memory access behaviors. 
     This may cause large amount of log output if enabled.
+    The mtrace information will be recorded in `build/nemu-log.txt`.
 
 config MTRACE_START
   hex "mtrace start address"

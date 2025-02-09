@@ -17,9 +17,8 @@
 #include <cpu/cpu.h>
 #include <cpu/ifetch.h>
 #include <cpu/decode.h>
+#include <cpu/ftrace.h>
 
-extern void ftrace_call(vaddr_t call_site, vaddr_t target);
-extern void ftrace_ret(vaddr_t ret_site);
 
 #define R(i) gpr(i)
 #define Mr vaddr_read
