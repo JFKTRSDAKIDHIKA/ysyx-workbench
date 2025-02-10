@@ -94,4 +94,11 @@ void init_vga() {
   add_mmio_map("vmem", CONFIG_FB_ADDR, vmem, screen_size(), NULL);
   IFDEF(CONFIG_VGA_SHOW_SCREEN, init_screen());
   IFDEF(CONFIG_VGA_SHOW_SCREEN, memset(vmem, 100, screen_size()));
+
+  uint32_t red = 0xFF0000;
+  for (int i = 0; i < screen_width() * screen_height(); i++) {
+    ((uint32_t *)vmem)[i] = red;  // 填充每个像素为红色
+  }
+
+  IFDEF(CONFIG_VGA_SHOW_SCREEN, update_screen());
 }
