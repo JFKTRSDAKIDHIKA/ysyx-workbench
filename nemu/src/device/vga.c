@@ -75,11 +75,9 @@ static inline void update_screen() {
 #endif
 
 void vga_update_screen(uint32_t offset, int len, bool is_write) {
-  if (vgactl_port_base[1] != 0) {
-    printf("[debug]: vga_update_screen");
+
     update_screen();
-    vgactl_port_base[1] = 0;
-  }
+
 }
 
 void init_vga() {
