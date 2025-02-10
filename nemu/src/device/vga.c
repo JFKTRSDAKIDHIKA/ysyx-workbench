@@ -75,10 +75,17 @@ static inline void update_screen() {
 #endif
 
 void vga_update_screen(uint32_t offset, int len, bool is_write) {
-
+  // 打印 vgactl_port_base 的内容
+  printf("vgactl_port_base[0] = %u\n", vgactl_port_base[0]);
+  printf("vgactl_port_base[1] = %u\n", vgactl_port_base[1]);
+  
+  // 检查 vgactl_port_base[1] 是否为 0，不为 0 时更新屏幕
+  if (vgactl_port_base[1] != 0) {
     update_screen();
-
+    vgactl_port_base[1] = 0;
+  }
 }
+
 
 void init_vga() {
   vgactl_port_base = (uint32_t *)new_space(8);
