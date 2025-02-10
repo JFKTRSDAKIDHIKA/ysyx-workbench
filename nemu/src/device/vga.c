@@ -97,8 +97,11 @@ void init_vga() {
 
   uint32_t red = 0xFF0000;
   for (int i = 0; i < screen_width() * screen_height(); i++) {
-    ((uint32_t *)vmem)[i] = red;  // 填充每个像素为红色
+    ((uint32_t *)vmem)[i] = red;  
   }
 
+  printf("First pixel: 0x%08x\n", ((uint32_t *)vmem)[0]);
+
+  vgactl_port_base[1] = 1;
   IFDEF(CONFIG_VGA_SHOW_SCREEN, update_screen());
 }
