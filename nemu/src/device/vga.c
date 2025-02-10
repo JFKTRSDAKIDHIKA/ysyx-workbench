@@ -71,6 +71,7 @@ static inline void update_screen() {
 #endif
 #endif
 
+/*
 static void test_vga() {
   uint32_t red = 0x00FFFFFF;
   for (int i = 0; i < screen_width() * screen_height(); i++) {
@@ -79,6 +80,7 @@ static void test_vga() {
   vgactl_port_base[1] = 1;
   IFDEF(CONFIG_VGA_SHOW_SCREEN, update_screen());
 }
+*/
 
 void vga_update_screen(uint32_t offset, int len, bool is_write) {
   if (vgactl_port_base[1] != 0) {
@@ -102,5 +104,5 @@ void init_vga() {
   IFDEF(CONFIG_VGA_SHOW_SCREEN, memset(vmem, 0, screen_size()));
 
   // test code
-  test_vga();
+  // test_vga();
 }
