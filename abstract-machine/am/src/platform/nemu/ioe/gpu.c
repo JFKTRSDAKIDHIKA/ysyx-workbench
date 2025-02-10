@@ -4,15 +4,7 @@
 #define SYNC_ADDR (VGACTL_ADDR + 4)
 
 void __am_gpu_init() {
-  int i;
 
-  uint32_t vga_ctl = inl(VGACTL_ADDR);
-  int w = (vga_ctl >> 16) & 0xFFFF; 
-  int h = vga_ctl & 0xFFFF; 
-
-  uint32_t *fb = (uint32_t *)(uintptr_t)FB_ADDR;
-  for (i = 0; i < w * h; i++) fb[i] = 100;
-  outl(SYNC_ADDR, 1);
 }
 
 void __am_gpu_config(AM_GPU_CONFIG_T *cfg) {
@@ -39,7 +31,6 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
   int h = ctl->h;
   if (w <= 0 || h <= 0) return;
 
-  // 单次读取获取屏幕尺寸
   uint32_t vga_ctl = inl(VGACTL_ADDR);
   uint32_t screen_w = (vga_ctl >> 16) & 0xFFFF;
   uint32_t screen_h = vga_ctl & 0xFFFF;
@@ -55,13 +46,12 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
       int current_x = x + col;
       if (current_x >= screen_w) break;
       
-      // 直接内存写入显存
       fb[current_y * screen_w + current_x] = pixels[row * w + col];
     }
   }
 
   if (ctl->sync) {
-    outl(SYNC_ADDR, 1); // 同步刷新
+    outl(SYNC_ADDR, 1); 
   }
 }
 
