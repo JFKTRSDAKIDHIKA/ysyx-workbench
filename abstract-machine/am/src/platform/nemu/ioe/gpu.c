@@ -57,8 +57,6 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
     }
   }
 
-  printf("ctl->sync = %d\n", ctl->sync);
-  outl(SYNC_ADDR, 1); 
   if (ctl->sync) {
     outl(SYNC_ADDR, 1); 
   }
