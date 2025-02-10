@@ -72,66 +72,37 @@ static inline void update_screen() {
 #endif
 #endif
 
+static void test_vga() {
+  uint32_t red = 0x00FF0000;
+  for (int i = 0; i < screen_width() * screen_height(); i++) {
+    ((uint32_t *)vmem)[i] = red;
+  }
+  vgactl_port_base[1] = 1;
+  IFDEF(CONFIG_VGA_SHOW_SCREEN, update_screen());
+}
+
 void vga_update_screen(uint32_t offset, int len, bool is_write) {
   if (vgactl_port_base[1] != 0) {
-    printf("vga_update_screen\n");
     update_screen();
     vgactl_port_base[1] = 0;
   }
 }
 
 void init_vga() {
-  // 创建 vgactl_port_base 并检查是否成功
   vgactl_port_base = (uint32_t *)new_space(8);
-  if (!vgactl_port_base) {
-    printf("Failed to allocate memory for vgactl_port_base!\n");
-  } else {
-    printf("vgactl_port_base allocated at address: %p\n", vgactl_port_base);
-  }
-  
-  // 初始化 vgactl_port_base[0] 和 vgactl_port_base[1]
   vgactl_port_base[0] = (screen_width() << 16) | screen_height();
   vgactl_port_base[1] = 1;
-  printf("Initialized vgactl_port_base[0] = 0x%08x, vgactl_port_base[1] = 0x%08x\n", vgactl_port_base[0], vgactl_port_base[1]);
-
 #ifdef CONFIG_HAS_PORT_IO
-  add_pio_map("vgactl", CONFIG_VGA_CTL_PORT, vgactl_port_base, 8, NULL);
+  add_pio_map ("vgactl", CONFIG_VGA_CTL_PORT, vgactl_port_base, 8, NULL);
 #else
   add_mmio_map("vgactl", CONFIG_VGA_CTL_MMIO, vgactl_port_base, 8, vga_update_screen);
 #endif
 
-  // 创建 vmem 并检查是否成功
   vmem = new_space(screen_size());
-  if (!vmem) {
-    printf("Failed to allocate memory for vmem!\n");
-  } else {
-    printf("vmem allocated at address: %p\n", vmem);
-  }
-
-  // 映射显存
   add_mmio_map("vmem", CONFIG_FB_ADDR, vmem, screen_size(), NULL);
-
-  // 如果启用了 VGA 显示，初始化屏幕并填充内存
   IFDEF(CONFIG_VGA_SHOW_SCREEN, init_screen());
   IFDEF(CONFIG_VGA_SHOW_SCREEN, memset(vmem, 100, screen_size()));
 
-  // 填充显存为红色并检查填充情况
-  uint32_t red = 0xFF0000;
-  for (int i = 0; i < screen_width() * screen_height(); i++) {
-    ((uint32_t *)vmem)[i] = red;
-  }
-
-  // 打印第一个像素，确认填充是否正确
-  printf("First pixel: 0x%08x\n", ((uint32_t *)vmem)[0]);
-
-  // 修改 vgactl_port_base[1] 触发屏幕更新
-  vgactl_port_base[1] = 1;
-  printf("Set vgactl_port_base[1] to 0x%08x to trigger screen update\n", vgactl_port_base[1]);
-
-  // 如果启用了 VGA 显示，更新屏幕
-  IFDEF(CONFIG_VGA_SHOW_SCREEN, update_screen());
-
-  // 打印屏幕宽高
-  printf("Screen width: %u, Screen height: %u\n", screen_width(), screen_height());
+  // test code
+  test_vga();
 }
-
