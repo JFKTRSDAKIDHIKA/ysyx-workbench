@@ -57,9 +57,8 @@ static void init_screen() {
 }
 
 static inline void update_screen() {
-  printf("update_screen\n");
   SDL_UpdateTexture(texture, NULL, vmem, SCREEN_W * sizeof(uint32_t));
-  SDL_RenderClear(renderer);
+  // SDL_RenderClear(renderer);
   SDL_RenderCopy(renderer, texture, NULL, NULL);
   SDL_RenderPresent(renderer);
 }
@@ -73,7 +72,7 @@ static inline void update_screen() {
 #endif
 
 static void test_vga() {
-  uint32_t red = 0x00FF0000;
+  uint32_t red = 0x00FFFFFF;
   for (int i = 0; i < screen_width() * screen_height(); i++) {
     ((uint32_t *)vmem)[i] = red;
   }
@@ -91,17 +90,16 @@ void vga_update_screen(uint32_t offset, int len, bool is_write) {
 void init_vga() {
   vgactl_port_base = (uint32_t *)new_space(8);
   vgactl_port_base[0] = (screen_width() << 16) | screen_height();
-  vgactl_port_base[1] = 1;
 #ifdef CONFIG_HAS_PORT_IO
   add_pio_map ("vgactl", CONFIG_VGA_CTL_PORT, vgactl_port_base, 8, NULL);
 #else
-  add_mmio_map("vgactl", CONFIG_VGA_CTL_MMIO, vgactl_port_base, 8, vga_update_screen);
+  add_mmio_map("vgactl", CONFIG_VGA_CTL_MMIO, vgactl_port_base, 8, NULL);
 #endif
 
   vmem = new_space(screen_size());
   add_mmio_map("vmem", CONFIG_FB_ADDR, vmem, screen_size(), NULL);
   IFDEF(CONFIG_VGA_SHOW_SCREEN, init_screen());
-  IFDEF(CONFIG_VGA_SHOW_SCREEN, memset(vmem, 100, screen_size()));
+  IFDEF(CONFIG_VGA_SHOW_SCREEN, memset(vmem, 0, screen_size()));
 
   // test code
   test_vga();
