@@ -36,7 +36,7 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
   int y = ctl->y;
   int w = ctl->w;
   int h = ctl->h;
-  if (w <= 0 || h <= 0) return;
+  // if (w <= 0 || h <= 0) return;
 
   uint32_t vga_ctl = inl(VGACTL_ADDR);
   uint32_t screen_w = (vga_ctl >> 16) & 0xFFFF;
