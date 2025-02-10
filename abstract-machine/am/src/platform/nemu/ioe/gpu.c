@@ -5,17 +5,16 @@
 #define SYNC_ADDR (VGACTL_ADDR + 4)
 
 void __am_gpu_init() {
-  // initialize the GPU
-  printf("initlizing gpu\n");
   uint32_t vga_ctl = inl(VGACTL_ADDR);
   int w = (vga_ctl >> 16) & 0xFFFF; 
   int h = vga_ctl & 0xFFFF; 
-  printf("w = %d, h = %d\n", w, h);
+  printf("[DEBUG] Screen: %dx%d, FB_ADDR = 0x%08x\n", w, h, FB_ADDR);
 
-  // clear the screen
-  int i;
   uint32_t *fb = (uint32_t *)(uintptr_t)FB_ADDR;
-  for (i = 0; i < w * h; i++) fb[i] = 0x00FF0000;
+  for (int i = 0; i < w * h; i++) {
+    fb[i] = 0x00FF0000; // 红色填充
+    if (i < 10) printf("fb[%d] = 0x%08x\n", i, fb[i]); 
+  }
   outl(SYNC_ADDR, 1);
 }
 

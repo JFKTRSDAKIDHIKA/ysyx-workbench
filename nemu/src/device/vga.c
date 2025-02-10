@@ -46,10 +46,13 @@ static void init_screen() {
   char title[128];
   sprintf(title, "%s-NEMU", str(__GUEST_ISA__));
   SDL_Init(SDL_INIT_VIDEO);
+  SDL_CreateWindowAndRenderer(SCREEN_W, SCREEN_H, 0, &window, &renderer);
+  /*
   SDL_CreateWindowAndRenderer(
       SCREEN_W * (MUXDEF(CONFIG_VGA_SIZE_400x300, 2, 1)),
       SCREEN_H * (MUXDEF(CONFIG_VGA_SIZE_400x300, 2, 1)),
       0, &window, &renderer);
+      */
   SDL_SetWindowTitle(window, title);
   texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888,
       SDL_TEXTUREACCESS_STATIC, SCREEN_W, SCREEN_H);
@@ -71,17 +74,6 @@ static inline void update_screen() {
 #endif
 #endif
 
-/*
-static void test_vga() {
-  uint32_t red = 0x00FFFFFF;
-  for (int i = 0; i < screen_width() * screen_height(); i++) {
-    ((uint32_t *)vmem)[i] = red;
-  }
-  vgactl_port_base[1] = 1;
-  IFDEF(CONFIG_VGA_SHOW_SCREEN, update_screen());
-}
-*/
-
 void vga_update_screen(uint32_t offset, int len, bool is_write) {
   if (vgactl_port_base[1] != 0) {
     update_screen();
@@ -101,8 +93,6 @@ void init_vga() {
   vmem = new_space(screen_size());
   add_mmio_map("vmem", CONFIG_FB_ADDR, vmem, screen_size(), NULL);
   IFDEF(CONFIG_VGA_SHOW_SCREEN, init_screen());
-  IFDEF(CONFIG_VGA_SHOW_SCREEN, memset(vmem, 0, screen_size()));
+  // IFDEF(CONFIG_VGA_SHOW_SCREEN, memset(vmem, 0, screen_size()));
 
-  // test code
-  // test_vga();
 }
