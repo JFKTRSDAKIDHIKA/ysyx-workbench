@@ -8,7 +8,7 @@ static unsigned long int next = 1;
 
 extern Area heap;
 
-static uintptr_t cur_addr ALIGN(8) = 0;
+static uintptr_t cur_addr ALIGN(4) = 0;
 
 int rand(void) {
   // RAND_MAX assumed to be 32767
