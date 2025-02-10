@@ -5,8 +5,11 @@
 
 void __am_gpu_init() {
   int i;
-  int w = 400;  
-  int h = 300; 
+
+  uint32_t vga_ctl = inl(VGACTL_ADDR);
+  int w = (vga_ctl >> 16) & 0xFFFF; 
+  int h = vga_ctl & 0xFFFF; 
+
   uint32_t *fb = (uint32_t *)(uintptr_t)FB_ADDR;
   for (i = 0; i < w * h; i++) fb[i] = 100;
   outl(SYNC_ADDR, 1);
@@ -34,24 +37,31 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
   int y = ctl->y;
   int w = ctl->w;
   int h = ctl->h;
-  uint32_t *pixels = (uint32_t *)ctl->pixels;
-
   if (w <= 0 || h <= 0) return;
 
-  uint32_t screen_w = inl(VGACTL_ADDR) >> 16;  
-  uint32_t screen_h = inl(VGACTL_ADDR) & 0xFFFF;  
+  // 单次读取获取屏幕尺寸
+  uint32_t vga_ctl = inl(VGACTL_ADDR);
+  uint32_t screen_w = (vga_ctl >> 16) & 0xFFFF;
+  uint32_t screen_h = vga_ctl & 0xFFFF;
+  
+  uint32_t *fb = (uint32_t *)(uintptr_t)FB_ADDR;
+  uint32_t *pixels = (uint32_t *)ctl->pixels;
 
   for (int row = 0; row < h; row++) {
-    if (y + row >= screen_h) break; 
+    int current_y = y + row;
+    if (current_y >= screen_h) break;
+    
     for (int col = 0; col < w; col++) {
-      if (x + col >= screen_w) break; 
-      uintptr_t pixel_addr = FB_ADDR + ((y + row) * screen_w + (x + col)) * 4;
-      outl(pixel_addr, pixels[row * w + col]);  
+      int current_x = x + col;
+      if (current_x >= screen_w) break;
+      
+      // 直接内存写入显存
+      fb[current_y * screen_w + current_x] = pixels[row * w + col];
     }
   }
 
   if (ctl->sync) {
-    outl(SYNC_ADDR, 1);
+    outl(SYNC_ADDR, 1); // 同步刷新
   }
 }
 
