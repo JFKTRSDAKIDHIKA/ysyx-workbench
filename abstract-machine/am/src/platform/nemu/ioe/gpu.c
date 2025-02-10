@@ -12,7 +12,7 @@ void __am_gpu_init() {
 
   uint32_t *fb = (uint32_t *)(uintptr_t)FB_ADDR;
   for (int i = 0; i < w * h; i++) {
-    fb[i] = 0x00FF0000; // 红色填充
+    fb[i] = i; // 红色填充
     if (i < 10) printf("fb[%d] = 0x%08x\n", i, fb[i]); 
   }
   outl(SYNC_ADDR, 1);
