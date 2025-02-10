@@ -74,13 +74,12 @@ static inline void update_screen() {
 #endif
 #endif
 
-void vga_update_screen(uint32_t offset, int len, bool is_write) {
+void vga_update_screen() {
   if (vgactl_port_base[1] != 0) {
     update_screen();
     vgactl_port_base[1] = 0;
   }
 }
-
 
 void init_vga() {
   vgactl_port_base = (uint32_t *)new_space(8);
