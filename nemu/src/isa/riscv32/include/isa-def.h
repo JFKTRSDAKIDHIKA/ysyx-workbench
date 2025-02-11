@@ -25,6 +25,7 @@ typedef struct {
     uint32_t mtvec;
     uint32_t mepc;
     uint32_t mcause;
+    uint32_t mstatus;
   } csr; 
 } MUXDEF(CONFIG_RV64, riscv64_CPU_state, riscv32_CPU_state);
 
