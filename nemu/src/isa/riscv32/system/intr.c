@@ -14,17 +14,18 @@
 ***************************************************************************************/
 
 #include <isa.h>
-#include <stdio.h>
+#include <debug.h>  
 
 word_t isa_raise_intr(word_t NO, vaddr_t epc) {
   cpu.csr.mcause = NO;
   cpu.csr.mepc = epc;
 
-  printf("[INTR] Exception NO: 0x%x, EPC: 0x%08x → Trap Vector: 0x%08x\n",
-         NO, epc, cpu.csr.mtvec);
+  Log("[INTR] Exception NO: 0x%x, EPC: 0x%08x → Trap Vector: 0x%08x",
+      NO, epc, cpu.csr.mtvec);
 
   return cpu.csr.mtvec;
 }
+
 
 
 word_t isa_query_intr() {
