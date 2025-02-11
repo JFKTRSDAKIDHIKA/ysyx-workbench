@@ -146,7 +146,6 @@ static int decode_exec(Decode *s) {
       default: INV(s->pc);
     }
   );
-  
   INSTPAT("??????? ????? ????? 001 ????? 1110011", csrrw  , I, 
     switch (imm) {
       case 0x300: R(rd) = cpu.csr.mstatus; cpu.csr.mstatus = src1; break;
