@@ -1,17 +1,13 @@
 #include <cpu/cpu.h>
 #include <cpu/ifetch.h>
 #include <cpu/decode.h>
-
-#ifdef CONFIG_FTRACE
-
+#include <cpu/ftrace.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
 #include <assert.h>
-#include <stdint.h>
 
-// extern bool ftrace_enabled;
-extern const char* find_func(uint32_t addr);
+#ifdef CONFIG_FTRACE
 
 // simple call stack
 #define CALL_STACK_SIZE 1024
@@ -44,7 +40,6 @@ static void print_indent() {
   }
 }
 
-// 对外暴露的钩子，用于 jal/jalr 指令发现要跳转时调用
 void ftrace_call(uint32_t call_site, uint32_t target) {
   const char *callee = find_func(target);
   
@@ -56,7 +51,6 @@ void ftrace_call(uint32_t call_site, uint32_t target) {
   push_func(callee);
 }
 
-// 对外暴露的钩子，用于函数返回时的处理
 void ftrace_ret(uint32_t ret_site) {
   // Pop the current function from the call stack
   const char *popped = pop_func();
@@ -67,3 +61,4 @@ void ftrace_ret(uint32_t ret_site) {
 }
 
 #endif
+

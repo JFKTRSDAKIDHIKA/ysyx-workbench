@@ -6,12 +6,14 @@
 
 #ifdef CONFIG_IRINGBUF
 
-// 声明环形缓冲区操作接口
+#define IRINGBUF_SIZE 16  // size of instruction ring buffer
+
+// declare inst ring buffer API
 void iringbuf_push(Decode *s);
 void iringbuf_print();
 
 #else
-// 空实现（当 CONFIG_IRINGBUF 未定义时）
+// empty function
 static inline void iringbuf_push(Decode *s) {}
 static inline void iringbuf_print() {}
 #endif

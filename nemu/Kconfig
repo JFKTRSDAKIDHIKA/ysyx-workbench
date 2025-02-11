@@ -150,6 +150,13 @@ config TRACE_END
   int "When tracing is disabled (unit: number of instructions)"
   default 10000
 
+config ITRACE
+  depends on TRACE 
+  bool "Enable basic instruction trace"
+  default y
+  help
+    The instructions executed by the client program will be recorded in `build/nemu-log.txt`.
+
 config ITRACE_COND
   depends on TRACE
   string "Only trace instructions when the condition is true"
@@ -157,7 +164,7 @@ config ITRACE_COND
 
 config IRINGBUF
   bool "Enable instruction ring buffer"
-  depends on TRACE
+  depends on TRACE && ITRACE
   default y
 
 config MTRACE
@@ -167,6 +174,7 @@ config MTRACE
   help
     Enable mtrace to log memory access behaviors. 
     This may cause large amount of log output if enabled.
+    The mtrace information will be recorded in `build/nemu-log.txt`.
 
 config MTRACE_START
   hex "mtrace start address"
@@ -184,6 +192,10 @@ config MTRACE_END
 
 config FTRACE
   bool "Enable fuction trace"
+  default y
+
+config DTRACE
+  bool "Enable device trace"
   default y
 
 config DIFFTEST

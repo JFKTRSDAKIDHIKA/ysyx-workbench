@@ -2,8 +2,13 @@
 #include <klib.h>
 #include <klib-macros.h>
 
+#define ALIGN(x) __attribute__((aligned(x)))
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 static unsigned long int next = 1;
+
+extern Area heap;
+
+static uintptr_t cur_addr ALIGN(4) = 0;
 
 int rand(void) {
   // RAND_MAX assumed to be 32767
@@ -30,13 +35,21 @@ int atoi(const char* nptr) {
 }
 
 void *malloc(size_t size) {
-  // On native, malloc() will be called during initializaion of C runtime.
-  // Therefore do not call panic() here, else it will yield a dead recursion:
-  //   panic() -> putchar() -> (glibc) -> malloc() -> panic()
-#if !(defined(__ISA_NATIVE__) && defined(__NATIVE_USE_KLIB__))
-  panic("Not implemented");
-#endif
-  return NULL;
+  if (size == 0) return NULL;
+
+  if (cur_addr == 0) {
+    cur_addr = (uintptr_t)heap.start;
+  }
+
+  size = (size + 7) & ~7;
+
+  if (cur_addr + size > (uintptr_t)heap.end) {
+    return NULL;
+  }
+
+  void *ret = (void *)cur_addr;
+  cur_addr += size;
+  return ret;
 }
 
 void free(void *ptr) {

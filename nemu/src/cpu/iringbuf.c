@@ -14,17 +14,16 @@ typedef struct {
   char logbuf[128];
 } IRingBufItem;
 
-// 环形缓冲区定义
+// Ring buffer declaration
 static IRingBufItem iringbuf[IRINGBUF_SIZE] = {0};
 static int iringbuf_index = 0;
 static bool iringbuf_full = false;
 
-// 将指令信息推入缓冲区
+// push instruction infomation into the ring buffer
 void iringbuf_push(Decode *s) {
   IRingBufItem *slot = &iringbuf[iringbuf_index];
   slot->pc = s->pc;
-  strncpy(slot->logbuf, s->logbuf, sizeof(slot->logbuf) - 1);
-  slot->logbuf[sizeof(slot->logbuf) - 1] = '\0';
+  snprintf(slot->logbuf, sizeof(slot->logbuf), "%s", s->logbuf);
 
   iringbuf_index = (iringbuf_index + 1) % IRINGBUF_SIZE;
   if (iringbuf_index == 0) {
@@ -32,7 +31,7 @@ void iringbuf_push(Decode *s) {
   }
 }
 
-// 打印缓冲区内容
+// print the content of the ring buffer
 void iringbuf_print() {
   printf("\n================ IRINGBUF DUMP ================\n");
   int start = iringbuf_full ? iringbuf_index : 0;
@@ -41,7 +40,7 @@ void iringbuf_print() {
   for (int i = 0; i < count; i++) {
     int idx = (start + i) % IRINGBUF_SIZE;
     IRingBufItem *slot = &iringbuf[idx];
-    printf("%2d: %s\n", i, slot->logbuf);
+    printf("%2d: PC = 0x%lx, Log: %s\n", i, (unsigned long)slot->pc, slot->logbuf);
   }
   printf("================ IRINGBUF END ================\n\n");
 }

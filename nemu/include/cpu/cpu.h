@@ -26,8 +26,4 @@ void invalid_inst(vaddr_t thispc);
 #define NEMUTRAP(thispc, code) set_nemu_state(NEMU_END, thispc, code)
 #define INV(thispc) invalid_inst(thispc)
 
-#ifdef CONFIG_IRINGBUF
-  #define IRINGBUF_SIZE 16  // size of instruction ring buffer
-#endif
-
 #endif

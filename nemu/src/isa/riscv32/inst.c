@@ -17,9 +17,8 @@
 #include <cpu/cpu.h>
 #include <cpu/ifetch.h>
 #include <cpu/decode.h>
+#include <cpu/ftrace.h>
 
-extern void ftrace_call(vaddr_t call_site, vaddr_t target);
-extern void ftrace_ret(vaddr_t ret_site);
 
 #define R(i) gpr(i)
 #define Mr vaddr_read
@@ -100,7 +99,8 @@ static int decode_exec(Decode *s) {
   //    leading to incorrect results when multiplying negative values.
   // 2. Ensure the simulator treats src1 and src2 as signed integers during multiplication.
   // 3. Verify the behavior with both positive and negative operands to confirm correct sign handling.
-  INSTPAT("0000001 ????? ????? 001 ????? 01100 11", mulh, R, R(rd) = ((int64_t)(int32_t)src1 * (int64_t)(int32_t)src2) >> 32);
+  INSTPAT("0000001 ????? ????? 001 ????? 01100 11", mulh   , R, R(rd) = ((int64_t)(int32_t)src1 * (int64_t)(int32_t)src2) >> 32);
+  INSTPAT("0000001 ????? ????? 011 ????? 01100 11", mulhu  , R, R(rd) = ((uint64_t)(uint32_t)src1 * (uint64_t)(uint32_t)src2) >> 32);
   INSTPAT("??????? ????? ????? 010 ????? 00000 11", lw     , I, R(rd) = Mr(src1 + imm, 4));
   INSTPAT("??????? ????? ????? 100 ????? 00000 11", lbu    , I, R(rd) = Mr(src1 + imm, 1));
   INSTPAT("??????? ????? ????? 000 ????? 00000 11", lb     , I, R(rd) = SEXT(Mr(src1 + imm, 1), 8));
