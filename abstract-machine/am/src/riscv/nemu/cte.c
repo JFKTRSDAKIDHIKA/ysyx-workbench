@@ -11,7 +11,6 @@ Context* __am_irq_handle(Context *c) {
       default: ev.event = EVENT_ERROR; break;
     }
 
-    ev.event = EVENT_IRQ_TIMER;
     c = user_handler(ev, c);
     assert(c != NULL);
   }
