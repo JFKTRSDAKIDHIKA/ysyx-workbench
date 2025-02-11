@@ -17,6 +17,7 @@
 #define __CPU_CPU_H__
 
 #include <common.h>
+#include <isa-def.h>
 
 void cpu_exec(uint64_t n);
 
