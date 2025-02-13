@@ -17,7 +17,6 @@ static void print_context(struct Context *ctx) {
 */
 Context* __am_irq_handle(Context *c) {
   //print_context(c);
-
   if (user_handler) {
     Event ev = {0};
     switch (c->mcause) {
