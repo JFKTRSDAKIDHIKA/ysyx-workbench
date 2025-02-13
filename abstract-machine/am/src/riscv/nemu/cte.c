@@ -11,12 +11,9 @@ static void print_context(struct Context *ctx) {
   }
 
   printf("mcause: 0x%x\n", ctx->mcause);
-
   printf("mstatus: 0x%x\n", ctx->mstatus);
-
   printf("mepc: 0x%x\n", ctx->mepc);
-
-  printf("pdir: %p\n", ctx->pdir);
+  printf("pdir: %d\n", ctx->pdir);
 }
 
 Context* __am_irq_handle(Context *c) {
