@@ -136,13 +136,12 @@ static int decode_exec(Decode *s) {
   INSTPAT("??????? ????? ????? 010 ????? 0010011", slti   , I, R(rd) = ((int32_t)src1 < (int32_t)imm) ? 1 : 0);
   INSTPAT("??????? ????? ????? 011 ????? 0010011", sltiu  , I, R(rd) = ((uint32_t)src1 < (uint32_t)imm) ? 1 : 0);
   // I-type Control and Status Register Instructions
-  INSTPAT("??????? ????? ????? 001 ????? 1110011", csrw   , I, cpu.csr.mtvec = src1);
-  INSTPAT("??????? ????? ????? 010 ????? 1110011", csrs   , I, 
+  INSTPAT("??????? ????? ????? 010 ????? 1110011", csrrs   , I, 
     switch (imm) {
-      case 0x300: cpu.csr.mstatus |= src1; break;
-      case 0x305: cpu.csr.mtvec   |= src1; break;
-      case 0x341: cpu.csr.mepc    |= src1; break;
-      case 0x342: cpu.csr.mcause  |= src1; break;
+      case 0x300: R(rd) = cpu.csr.mstatus; cpu.csr.mstatus |= src1; break;
+      case 0x305: R(rd) = cpu.csr.mtvec;   cpu.csr.mtvec   |= src1; break;
+      case 0x341: R(rd) = cpu.csr.mtvec;   cpu.csr.mepc    |= src1; break;
+      case 0x342: R(rd) = cpu.csr.mcause;  cpu.csr.mcause  |= src1; break;
       default: INV(s->pc);
     }
   );
