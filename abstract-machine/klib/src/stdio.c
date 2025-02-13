@@ -88,7 +88,6 @@ int sprintf(char *out, const char *fmt, ...) {
   return ret;
 }
 
-// printf 实现（已有实现）
 int printf(const char *fmt, ...) {
   char buf[1024];
   va_list ap;
