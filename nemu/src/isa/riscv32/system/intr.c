@@ -20,8 +20,10 @@ word_t isa_raise_intr(word_t NO, vaddr_t epc) {
   cpu.csr.mcause = NO;
   cpu.csr.mepc = epc;
 
+#ifdef CONFIG_ETRACE
   Log("[INTR] Exception NO: 0x%x, EPC: 0x%08x → Trap Vector: 0x%08x",
       NO, epc, cpu.csr.mtvec);
+#endif
 
   return cpu.csr.mtvec;
 }

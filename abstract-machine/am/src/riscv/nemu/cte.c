@@ -2,6 +2,7 @@
 #include <riscv/riscv.h>
 #include <klib.h>
 static Context* (*user_handler)(Event, Context*) = NULL;
+
 /*
 static void print_context(struct Context *ctx) {
   printf("General Purpose Registers (GPR):\n");
@@ -15,11 +16,13 @@ static void print_context(struct Context *ctx) {
   printf("pdir: %d\n", ctx->pdir);
 }
 */
+
 Context* __am_irq_handle(Context *c) {
   //print_context(c);
   if (user_handler) {
     Event ev = {0};
     switch (c->mcause) {
+      // value in mcause is not standard 
       case 0x8: ev.event = EVENT_YIELD; break;
       default: ev.event = EVENT_ERROR; break;
     }
