@@ -7,14 +7,14 @@ static Context* (*user_handler)(Event, Context*) = NULL;
 static void print_context(struct Context *ctx) {
   printf("General Purpose Registers (GPR):\n");
   for (int i = 0; i < NR_REGS; i++) {
-      printf("  x%d = 0x%d\n", i, ctx->gpr[i]);
+      printf("  x%d = 0x%x\n", i, ctx->gpr[i]);
   }
 
-  printf("mcause: 0x%d\n", ctx->mcause);
+  printf("mcause: 0x%x\n", ctx->mcause);
 
-  printf("mstatus: 0x%d\n", ctx->mstatus);
+  printf("mstatus: 0x%x\n", ctx->mstatus);
 
-  printf("mepc: 0x%d\n", ctx->mepc);
+  printf("mepc: 0x%x\n", ctx->mepc);
 
   printf("pdir: %p\n", ctx->pdir);
 }
