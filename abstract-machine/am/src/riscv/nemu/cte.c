@@ -1,9 +1,8 @@
 #include <am.h>
 #include <riscv/riscv.h>
 #include <klib.h>
-
 static Context* (*user_handler)(Event, Context*) = NULL;
-
+/*
 static void print_context(struct Context *ctx) {
   printf("General Purpose Registers (GPR):\n");
   for (int i = 0; i < NR_REGS; i++) {
@@ -15,9 +14,9 @@ static void print_context(struct Context *ctx) {
   printf("mepc: 0x%x\n", ctx->mepc);
   printf("pdir: %d\n", ctx->pdir);
 }
-
+*/
 Context* __am_irq_handle(Context *c) {
-  print_context(c);
+  //print_context(c);
 
   if (user_handler) {
     Event ev = {0};
