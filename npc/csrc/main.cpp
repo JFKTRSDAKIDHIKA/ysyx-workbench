@@ -30,11 +30,7 @@ extern "C" void pmem_write(int waddr, int wdata, char wmask) {
     Memory::pmem_write(waddr, wdata, wmask);
 }
 
-typedef struct {
-  uint32_t gpr[32];
-  uint32_t pc;
-} riscv32_CPU_state;
-riscv32_CPU_state ref;
+static riscv32_CPU_state ref;
 
 void print_memory(paddr_t start_addr, size_t size) {
     // Allocate buffers for memory data
@@ -77,9 +73,8 @@ int check_reg(Vysyx_24120009_core* top) {
                       << " - DUT: 0x" << std::hex << rf_values[i] 
                       << " REF: 0x" << ref.gpr[i] 
                       << std::endl;
-            // Optionally, you can stop the simulation on a mismatch
-            print_memory(0x800001ac, 20);
-            return -1;  // End simulation
+            // Stop the simulation on a mismatch
+            return -1;  
         }
     }
     if (top->imem_addr_debug != ref.pc) {

@@ -3,9 +3,9 @@
 
 #include <cstdint>
 
-extern uint32_t rf_values[32];  // 声明寄存器值数组
+extern uint32_t rf_values[32]; 
 
-void set_register_values(uint32_t rf[32]);  // 设置寄存器值
-void print_register_values();  // 打印寄存器值
+void set_register_values(uint32_t rf[32]);  
+void print_register_values();  
 
 #endif // REGISTERS_H
