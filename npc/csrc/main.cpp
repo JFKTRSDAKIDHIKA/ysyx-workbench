@@ -10,6 +10,7 @@
 #include <iomanip> 
 
 // define the DPI-C functions
+// note: extern "C" 是 C++ 中的一个声明方式，用来告诉编译器，函数使用 C 的链接方式，而不是 C++ 默认的链接方式。
 extern "C" void simulation_exit() {
     Verilated::gotFinish(true); 
 }
