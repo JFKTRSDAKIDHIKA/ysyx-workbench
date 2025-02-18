@@ -8,6 +8,12 @@
 #include <iostream>
 #include <svdpi.h>
 #include <iomanip> 
+#include <readline/readline.h>
+#include <readline/history.h>
+
+// Declare global variables
+Vysyx_24120009_core* top;  // Top module (global)
+bool step_mode;  // Step mode flag (global)
 
 // define the DPI-C functions
 // note: extern "C" 是 C++ 中的一个声明方式，用来告诉编译器，函数使用 C 的链接方式，而不是 C++ 默认的链接方式。
@@ -185,12 +191,143 @@ void reset(Vysyx_24120009_core* top, int cycles) {
     top->rst = 0;
 }
 
+
+/* We use the `readline' library to provide more flexibility to read from stdin. */
+static char* rl_gets() {
+    static char *line_read = NULL;
+  
+    if (line_read) {
+      free(line_read);
+      line_read = NULL;
+    }
+  
+    line_read = readline("(npc) ");
+  
+    if (line_read && *line_read) {
+      add_history(line_read);
+    }
+  
+    return line_read;
+  }
+  
+  static int cmd_c(char *args) {
+
+    return 0;
+  }
+
+  static int cmd_q(char *args) {
+    return -1;
+  }
+
+  static int cmd_si(char* args);
+
+  static int cmd_x(char* args);
+
+  static int cmd_info(char* args);
+
+  static struct {
+    const char *name;
+    const char *description;
+    int (*handler) (char *);
+  } cmd_table [] = {
+    { "c", "Continue the execution of the program", cmd_c },
+    { "q", "Exit NPC", cmd_q },
+    { "si", "Single-step execute N instructions and then pause. If N is not provided, default to 1", cmd_si },
+    { "info", "Print registers", cmd_info},
+    { "x", "Use the expression as the starting memory address, and output N consecutive 4-byte blocks in hexadecimal", cmd_x}
+  };
+
+  #define NR_CMD 5
+
+  static int cmd_si(char* args){
+    char *arg = strtok(NULL, "");
+  
+    if (arg == NULL) {
+      tick(top, step_mode, true);  
+      ref_difftest_exec(1);
+      ref_difftest_regcpy(&ref, DIFFTEST_TO_REF);
+      int ret = check_reg(top);
+      if (ret < 0) return -1;
+    } else {
+      for (int i = 0; i < atoi(arg); i++) {
+        tick(top, step_mode, true);  
+        ref_difftest_exec(1);
+        ref_difftest_regcpy(&ref, DIFFTEST_TO_REF);
+        int ret = check_reg(top);
+        if (ret < 0) return -1;
+      }
+    }
+    return 0;
+  }
+
+  static int cmd_info(char* args){
+    char *arg = strtok(NULL, "");
+  
+    if (arg == NULL){
+      printf("info r : 打印寄存器状态\n");
+    } else if (strcmp(arg, "r") == 0) {
+      print_register_values();
+    } else {
+      printf("Unknown arg '%s'\n", arg);
+    }
+    return 0;
+  }
+
+  static int cmd_x(char* args){
+    int arg0;
+    char arg1[100]; 
+  
+    if (args == NULL){
+       printf("Lack args\n");
+       return 0;
+    }
+       
+    if (sscanf(args, "%d %[^\n]", &arg0, arg1) != 2) {
+       printf("Invalid args\n");
+       return 0;
+     }
+    
+    int len = 4 * arg0;
+
+    // print_memory((paddr_t)arg1, len);
+  
+    return 0;
+  }
+
+  void sdb_mainloop() {
+    for (char *str; (str = rl_gets()) != NULL && !Verilated::gotFinish(); ) {
+      char *str_end = str + strlen(str);
+  
+      /* extract the first token as the command */
+      char *cmd = strtok(str, " ");
+      if (cmd == NULL) { continue; }
+  
+      /* treat the remaining string as the arguments,
+       * which may need further parsing
+       */
+      char *args = cmd + strlen(cmd) + 1;
+      if (args >= str_end) {
+        args = NULL;
+      }
+  
+      int i;
+      for (i = 0; i < NR_CMD; i ++) {
+        if (strcmp(cmd, cmd_table[i].name) == 0) {
+          if (cmd_table[i].handler(args) < 0) { return; }
+          break;
+        }
+      }
+  
+      if (i == NR_CMD) { printf("Unknown command '%s'\n", cmd); }
+    }
+  }
+  
 int main(int argc, char **argv) {
     Verilated::commandArgs(argc, argv);
-    Vysyx_24120009_core* top = new Vysyx_24120009_core;
+    top = new Vysyx_24120009_core;
 
     // Default to single step mode (if no argument is provided)
-    bool step_mode = true;
+    step_mode = true;
     if (argc > 2) {
         std::string mode = argv[2];
         if (mode == "step") {
@@ -214,6 +351,8 @@ int main(int argc, char **argv) {
     // Reset
     reset(top, 10); // Reset for 10 cycles
 
+    sdb_mainloop();
+/*
     while(!Verilated::gotFinish()) {
         if (step_mode) {
             std::string input;
@@ -232,8 +371,8 @@ int main(int argc, char **argv) {
                 int ret = check_reg(top);
                 if (ret < 0) return -1;                 
                 // Check memory consistency
-                /*ret = check_memory(0x80000000, 0x1000); 
-                if (ret < 0) return -1;*/
+                ret = check_memory(0x80000000, 0x1000); 
+                if (ret < 0) return -1;
             } 
             else if (input == "info r") {
                 // 打印寄存器信息，不进行 tick
@@ -256,11 +395,14 @@ int main(int argc, char **argv) {
             int ret = check_reg(top);
             if (ret < 0) return -1;
             // Check memory consistency
-            /*ret = check_memory(0x80000000, 0x1000); 
-            if (ret < 0) return -1;*/
+            ret = check_memory(0x80000000, 0x1000); 
+            if (ret < 0) return -1;
         }
     } 
-
+*/
     delete top;
     return 0;
 }
+
+
+  
