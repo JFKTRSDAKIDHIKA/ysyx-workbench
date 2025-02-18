@@ -29,12 +29,11 @@ module ysyx_24120009_RegisterFile #(ADDR_WIDTH = 1, DATA_WIDTH = 1) (
         if (wen && waddr != 0) begin
             rf[waddr] <= wdata;
         end
-        get_register_values(rf);
     end
 
-    /*always @(*) begin
+    always @(*) begin
         get_register_values(rf);
-    end*/
+    end
 
     // signal assignments
     assign rdata1 = rf[raddr1];

@@ -111,7 +111,6 @@ int check_reg(Vysyx_24120009_core* top) {
     return 0;
 }
 
-
 int check_memory(paddr_t start_addr, size_t size) {
     // Allocate buffers for memory comparison
     std::vector<uint8_t> ref_mem(size, 0); // Buffer to store memory from REF
