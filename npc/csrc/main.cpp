@@ -73,16 +73,44 @@ int check_reg(Vysyx_24120009_core* top) {
                       << " - DUT: 0x" << std::hex << rf_values[i] 
                       << " REF: 0x" << ref.gpr[i] 
                       << std::endl;
+            
+            // Print all registers of DUT (rf_values) and REF (ref.gpr)
+            std::cerr << "DUT Registers (rf_values):" << std::endl;
+            for (int j = 0; j < 32; j++) {
+                std::cerr << "x" << j << ": 0x" << std::hex << rf_values[j] << std::endl;
+            }
+            std::cerr << "REF Registers (ref.gpr):" << std::endl;
+            for (int j = 0; j < 32; j++) {
+                std::cerr << "x" << j << ": 0x" << std::hex << ref.gpr[j] << std::endl;
+            }
+
             // Stop the simulation on a mismatch
             return -1;  
         }
     }
+
+    // Compare program counter (PC) between DUT and REF
     if (top->imem_addr_debug != ref.pc) {
-        std::cerr << "PC mismatch - DUT: 0x" << std::hex << top->imem_addr_debug << " REF: 0x" << std::hex << ref.pc << std::endl;
+        std::cerr << "PC mismatch - DUT: 0x" << std::hex << top->imem_addr_debug 
+                  << " REF: 0x" << std::hex << ref.pc << std::endl;
+        
+        // Print DUT and REF register values (optional)
+        std::cerr << "DUT Registers (rf_values):" << std::endl;
+        for (int j = 0; j < 32; j++) {
+            std::cerr << "x" << j << ": 0x" << std::hex << rf_values[j] << std::endl;
+        }
+        std::cerr << "REF Registers (ref.gpr):" << std::endl;
+        for (int j = 0; j < 32; j++) {
+            std::cerr << "x" << j << ": 0x" << std::hex << ref.gpr[j] << std::endl;
+        }
+
         return -1;  // End simulation
     }
+
+    // If no mismatches, return 0
     return 0;
 }
+
 
 int check_memory(paddr_t start_addr, size_t size) {
     // Allocate buffers for memory comparison
