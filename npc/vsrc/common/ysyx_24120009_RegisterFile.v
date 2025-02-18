@@ -13,10 +13,6 @@ module ysyx_24120009_RegisterFile #(ADDR_WIDTH = 1, DATA_WIDTH = 1) (
     // DPI-C function to get the register values
     import "DPI-C" function void get_register_values(input logic [31:0] rf[31:0]);
 
-    always @(*) begin
-        get_register_values(rf);
-    end
-
     // initialize the register file 
     initial begin
         integer i;
@@ -36,6 +32,10 @@ module ysyx_24120009_RegisterFile #(ADDR_WIDTH = 1, DATA_WIDTH = 1) (
         // get_register_values(rf);
     end
 
+    always @(*) begin
+        get_register_values(rf);
+    end
+    
     // signal assignments
     assign rdata1 = rf[raddr1];
     assign rdata2 = rf[raddr2];
