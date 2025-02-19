@@ -12,7 +12,7 @@ uint32_t Memory::pmem_read(uint32_t address) {
 
     // Check if the address is within the memory range
     if (offset + 3 >= MEMORY_SIZE) {
-        std::cerr << "Memory read out of bounds at address: " << address << std::endl;
+        // std::cerr << "Memory read out of bounds at address: " << address << std::endl;
         return 0; // Return 0 if the address is out of bounds
     }
 
