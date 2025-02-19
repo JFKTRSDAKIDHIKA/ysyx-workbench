@@ -358,8 +358,12 @@ int main(int argc, char **argv) {
 
     // Reset
     reset(top, 10); // Reset for 10 cycles
-
-    sdb_mainloop();
+    
+    if (step_mode) {
+     sdb_mainloop();
+    } else {
+      cmd_c(NULL);
+    }
 /*
     while(!Verilated::gotFinish()) {
         if (step_mode) {
