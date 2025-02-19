@@ -47,10 +47,10 @@ extern "C" int pmem_read(int raddr) {
 extern "C" void pmem_write(int waddr, int wdata, char wmask) {
     waddr = waddr & ~0x3u;  // 清除低两位，确保按4字节对齐
 
-    /*if (waddr >= UART_BASE_ADDR && waddr < UART_BASE_ADDR + UART_ADDR_LEN) {
+    if (waddr >= UART_BASE_ADDR && waddr < UART_BASE_ADDR + UART_ADDR_LEN) {
       putchar(static_cast<char>(wdata & 0xFF));  
       return;  
-    }*/
+    }
 
     Memory::pmem_write(waddr, wdata, wmask);
 }
