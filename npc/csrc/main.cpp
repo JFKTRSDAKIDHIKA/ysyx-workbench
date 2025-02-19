@@ -10,7 +10,7 @@
 #include <iomanip> 
 #include <readline/readline.h>
 #include <readline/history.h>
-#include <time.h>
+#include <sys/time.h> // 包含 gettimeofday
 
 #define CLOCK_ADDRESS 0xa0000048 
 #define UART_BASE_ADDR 0xa00003F8  
@@ -40,8 +40,10 @@ extern "C" int pmem_read(int raddr) {
 
     // 时钟
     if (raddr >= CLOCK_ADDRESS && raddr < CLOCK_ADDRESS + CLOCK_ADDR_LEN ) {
-      time_t current_time = time(NULL);
-      return static_cast<int>(current_time); 
+      struct timeval tv;
+      gettimeofday(&tv, NULL); 
+      int microseconds = static_cast<int>(tv.tv_sec) * 1000000 + tv.tv_usec;
+      return microseconds; 
     }
 
     // 串口
