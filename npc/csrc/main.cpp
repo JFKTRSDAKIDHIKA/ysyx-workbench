@@ -56,7 +56,12 @@ extern "C" int pmem_read(int raddr) {
     // 时钟
     if (raddr >= CLOCK_ADDRESS && raddr < CLOCK_ADDRESS + CLOCK_ADDR_LEN ) {
       uint64_t us = get_time();
-      return us;
+      
+      if (raddr == CLOCK_ADDRESS) {
+        return (uint32_t)(us & 0xFFFFFFFF); // 返回低 32 位
+      } else if (raddr == CLOCK_ADDRESS + 4) {
+        return (uint32_t)((us >> 32) & 0xFFFFFFFF); // 返回高 32 位
+      }
     }
 
     // 串口
