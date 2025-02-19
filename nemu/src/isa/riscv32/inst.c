@@ -19,7 +19,6 @@
 #include <cpu/decode.h>
 #include <cpu/ftrace.h>
 
-
 #define R(i) gpr(i)
 #define Mr vaddr_read
 #define Mw vaddr_write
@@ -136,8 +135,7 @@ static int decode_exec(Decode *s) {
   INSTPAT("0100000 ????? ????? 101 ????? 0010011", srai   , I, R(rd) = (int32_t)src1 >> (imm & 0x1f));
   INSTPAT("??????? ????? ????? 010 ????? 0010011", slti   , I, R(rd) = ((int32_t)src1 < (int32_t)imm) ? 1 : 0);
   INSTPAT("??????? ????? ????? 011 ????? 0010011", sltiu  , I, R(rd) = ((uint32_t)src1 < (uint32_t)imm) ? 1 : 0);
-
-
+  
   INSTPAT("??????? ????? ????? 000 ????? 01000 11", sb     , S, Mw(src1 + imm, 1, src2));
   INSTPAT("??????? ????? ????? 010 ????? 01000 11", sw     , S, Mw(src1 + imm, 4, src2));
   INSTPAT("??????? ????? ????? 001 ????? 01000 11", sh     , S, Mw(src1 + imm, 2, src2));
@@ -159,8 +157,31 @@ static int decode_exec(Decode *s) {
   INSTPAT("??????? ????? ????? 110 ????? 11000 11", bltu   , B, if ((uint32_t)src1 < (uint32_t)src2) s->dnpc = s->pc + imm);
   INSTPAT("??????? ????? ????? 111 ????? 11000 11", bgeu   , B, if ((uint32_t)src1 >= (uint32_t)src2) s->dnpc = s->pc + imm);
 
+  // I-type Control and Status Register Instructions
+  INSTPAT("??????? ????? ????? 010 ????? 1110011", csrrs   , I, 
+    switch (imm) {
+      case 0x300: R(rd) = cpu.csr.mstatus; cpu.csr.mstatus |= src1; break;
+      case 0x305: R(rd) = cpu.csr.mtvec;   cpu.csr.mtvec   |= src1; break;
+      case 0x341: R(rd) = cpu.csr.mtvec;   cpu.csr.mepc    |= src1; break;
+      case 0x342: R(rd) = cpu.csr.mcause;  cpu.csr.mcause  |= src1; break;
+      default: INV(s->pc);
+    }
+  );
+  INSTPAT("??????? ????? ????? 001 ????? 1110011", csrrw  , I, 
+    switch (imm) {
+      case 0x300: R(rd) = cpu.csr.mstatus; cpu.csr.mstatus = src1; break;
+      case 0x305: R(rd) = cpu.csr.mtvec;   cpu.csr.mtvec = src1; break;
+      case 0x341: R(rd) = cpu.csr.mepc;    cpu.csr.mepc = src1; break;
+      case 0x342: R(rd) = cpu.csr.mcause;  cpu.csr.mcause = src1; break;
+      default: INV(s->pc);
+    }
+  );
   INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak , N, NEMUTRAP(s->pc, R(10))); // R(10) is $a0
+  INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall  , N, s->dnpc = cpu.csr.mtvec; isa_raise_intr(8, s->pc));
+  INSTPAT("0011000 00010 00000 000 00000 11100 11", mret   , N, s->dnpc = cpu.csr.mepc); 
+  
   INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv    , N, INV(s->pc));
+
   INSTPAT_END();
 
   R(0) = 0; // reset $zero to 0

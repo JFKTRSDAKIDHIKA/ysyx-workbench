@@ -3,7 +3,7 @@
 #include <klib-macros.h>
 #include <stdarg.h>
 
-// 工具函数：将整型转换成字符串（已有实现）
+// helper function
 static void int_to_str(int value, char *buf) {
   char temp[32]; // 暂存反转前的数字字符
   int pos = 0;
@@ -38,7 +38,27 @@ static void int_to_str(int value, char *buf) {
   buf[i] = '\0';
 }
 
-// vsprintf 实现（已有实现）
+static void int_to_hex(unsigned int value, char *buf) {
+  char temp[32]; 
+  int pos = 0;
+
+  if (value == 0) {
+    temp[pos++] = '0';
+  } else {
+    while (value > 0) {
+      int digit = value % 16;
+      temp[pos++] = (digit < 10) ? ('0' + digit) : ('a' + (digit - 10));
+      value /= 16;
+    }
+  }
+
+  int i = 0;
+  while (pos > 0) {
+    buf[i++] = temp[--pos];
+  }
+  buf[i] = '\0';
+}
+
 int vsprintf(char *out, const char *fmt, va_list ap) {
   char *str = out;
   const char *p = fmt;
@@ -64,6 +84,16 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
           }
           break;
         }
+        case 'x' : {
+          unsigned int val = va_arg(ap, unsigned int);
+          char buf[32];
+          int_to_hex(val, buf);
+          char *b = buf;
+          while (*b) {
+            *str++ = *b++;
+          }
+          break;
+        }
         default: {
           *str++ = '%';
           *str++ = *p;
@@ -79,7 +109,6 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
   return (int)(str - out);
 }
 
-// sprintf 实现（已有实现）
 int sprintf(char *out, const char *fmt, ...) {
   va_list ap;
   va_start(ap, fmt);
@@ -88,7 +117,6 @@ int sprintf(char *out, const char *fmt, ...) {
   return ret;
 }
 
-// printf 实现（已有实现）
 int printf(const char *fmt, ...) {
   char buf[1024];
   va_list ap;
@@ -101,10 +129,6 @@ int printf(const char *fmt, ...) {
   return ret;
 }
 
-// 下面我们来实现 vsnprintf 和 snprintf
-
-// vsnprintf 实现：将格式化字符串写入 out 中，但最多写入 n 个字符（包括结尾的 '\0'）
-// 返回值是“如果 n 足够大，最终写入的字符数（不含 '\0'）；否则返回本来需要写入的字符数”。
 int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
   int pos = 0;   // 记录实际写入到 out 的字符数量
   int total = 0; // 记录应写入的字符总数（不受 n 限制）
@@ -177,7 +201,6 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
   return total;
 }
 
-// snprintf 实现：调用 vsnprintf 完成实际工作
 int snprintf(char *out, size_t n, const char *fmt, ...) {
   va_list ap;
   va_start(ap, fmt);

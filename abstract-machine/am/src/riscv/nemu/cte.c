@@ -1,13 +1,29 @@
 #include <am.h>
 #include <riscv/riscv.h>
 #include <klib.h>
-
 static Context* (*user_handler)(Event, Context*) = NULL;
 
+/*
+static void print_context(struct Context *ctx) {
+  printf("General Purpose Registers (GPR):\n");
+  for (int i = 0; i < NR_REGS; i++) {
+      printf("  x%d = 0x%x\n", i, ctx->gpr[i]);
+  }
+
+  printf("mcause: 0x%x\n", ctx->mcause);
+  printf("mstatus: 0x%x\n", ctx->mstatus);
+  printf("mepc: 0x%x\n", ctx->mepc);
+  printf("pdir: %d\n", ctx->pdir);
+}
+*/
+
 Context* __am_irq_handle(Context *c) {
+  //print_context(c);
   if (user_handler) {
     Event ev = {0};
     switch (c->mcause) {
+      // value in mcause is not standard 
+      case 0x8: ev.event = EVENT_YIELD; break;
       default: ev.event = EVENT_ERROR; break;
     }
 
