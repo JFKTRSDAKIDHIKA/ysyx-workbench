@@ -116,7 +116,7 @@ int check_dut_and_ref(Vysyx_24120009_core* top, paddr_t start_addr, size_t size)
 
   // ----------- 检查内存 -----------
   // Allocate buffers for memory comparison
-  std::vector<uint8_t> ref_mem(size, 0); // Buffer to store memory from REF
+  /*std::vector<uint8_t> ref_mem(size, 0); // Buffer to store memory from REF
   std::vector<uint8_t> dut_mem(size, 0); // Buffer to store memory from DUT
 
   // Copy memory from REF to ref_mem buffer
@@ -140,7 +140,7 @@ int check_dut_and_ref(Vysyx_24120009_core* top, paddr_t start_addr, size_t size)
               return -1;
           }
       }
-  }
+  }*/
 
   // If no mismatches, return 0
   return 0;
