@@ -40,10 +40,10 @@ extern "C" int pmem_read(int raddr) {
 
     // 时钟
     if (raddr >= CLOCK_ADDRESS && raddr < CLOCK_ADDRESS + CLOCK_ADDR_LEN ) {
-      struct timeval tv;
-      gettimeofday(&tv, NULL); 
-      int microseconds = static_cast<int>(tv.tv_sec) * 1000000 + tv.tv_usec;
-      return microseconds; 
+      struct timeval now;
+      gettimeofday(&now, NULL);
+      uint64_t us = now.tv_sec * 1000000 + now.tv_usec;
+      return us;
     }
 
     // 串口
