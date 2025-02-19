@@ -37,7 +37,6 @@ extern "C" int pmem_read(int raddr) {
     raddr = raddr & ~0x3u;  // 清除低两位，确保按4字节对齐
 
     if (raddr >= CLOCK_ADDRESS && raddr < CLOCK_ADDRESS + UART_ADDR_LEN ) {
-      printf("Read from clock address\n");
       time_t current_time = time(NULL);
       return static_cast<int>(current_time); 
     }
