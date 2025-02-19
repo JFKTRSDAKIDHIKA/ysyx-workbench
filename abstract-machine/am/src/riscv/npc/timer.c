@@ -1,10 +1,28 @@
 #include <am.h>
+#include </root/ysyx-workbench/abstract-machine/am/src/riscv/riscv.h>
+static uint64_t start_time = 0;
+#define DEVICE_BASE     0xa0000000
+#define RTC_ADDR        (DEVICE_BASE + 0x0000048)
 
 void __am_timer_init() {
+  uint32_t hi, lo, hi2;
+  do {
+    hi = inl(RTC_ADDR + 4);  
+    lo = inl(RTC_ADDR);       
+    hi2 = inl(RTC_ADDR + 4);  
+  } while (hi != hi2);       
+  start_time = ((uint64_t)hi << 32) | lo;
 }
 
 void __am_timer_uptime(AM_TIMER_UPTIME_T *uptime) {
-  uptime->us = 0;
+  uint32_t hi, lo, hi2;
+  do {
+    hi = inl(RTC_ADDR + 4);  
+    lo = inl(RTC_ADDR);       
+    hi2 = inl(RTC_ADDR + 4);  
+  } while (hi != hi2);        
+  uint64_t current_time = ((uint64_t)hi << 32) | lo;
+  uptime->us = current_time - start_time;
 }
 
 void __am_timer_rtc(AM_TIMER_RTC_T *rtc) {
@@ -15,3 +33,4 @@ void __am_timer_rtc(AM_TIMER_RTC_T *rtc) {
   rtc->month  = 0;
   rtc->year   = 1900;
 }
+
