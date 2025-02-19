@@ -2,7 +2,7 @@
 #include <klib-macros.h>
 #include </root/ysyx-workbench/abstract-machine/am/src/riscv/riscv.h>
 
-# define DEVICE_BASE 0xa0000000
+#define DEVICE_BASE 0xa0000000
 #define SERIAL_PORT     (DEVICE_BASE + 0x00003f8)
 
 extern char _heap_start;
