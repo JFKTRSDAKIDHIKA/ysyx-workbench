@@ -17,7 +17,7 @@ $(EXEC): $(TOP_MODULE) $(CSRC) $(VSRC)
 	$(VERILATOR) --cc $(TOP_MODULE) --exe $(CSRC) $(INCLUDE_DIRS) \
 					--build -j 0 --top-module ysyx_24120009_core \
 					--Mdir $(OBJ_DIR) --trace\
-					-LDFLAGS "-lreadline"
+					-LDFLAGS $(LDFLAGS)
 	make -C $(OBJ_DIR) -f Vysyx_24120009_core.mk 
 
 # 运行仿真
