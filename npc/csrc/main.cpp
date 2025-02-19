@@ -210,8 +210,18 @@ static char* rl_gets() {
     return line_read;
   }
   
+  static int execute_single_step() {
+    tick(top, false);  
+    ref_difftest_exec(1);
+    ref_difftest_regcpy(&ref, DIFFTEST_TO_REF);
+    return check_reg(top);
+  }
+  
   static int cmd_c(char *args) {
-
+    while(!Verilated::gotFinish()) {
+      int ret = execute_single_step();
+      if (ret < 0) return -1;
+    }
     return 0;
   }
 
@@ -238,13 +248,6 @@ static char* rl_gets() {
   };
 
   #define NR_CMD 5
-
-  static int execute_single_step() {
-    tick(top, false);  
-    ref_difftest_exec(1);
-    ref_difftest_regcpy(&ref, DIFFTEST_TO_REF);
-    return check_reg(top);
-  }
 
   static int cmd_si(char* args) {
     char *arg = strtok(NULL, "");
