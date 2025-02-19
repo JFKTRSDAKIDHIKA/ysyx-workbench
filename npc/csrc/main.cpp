@@ -297,7 +297,7 @@ static int cmd_x(char* args){
   
   int len = 4 * arg0;
 
-  // print_memory((paddr_t)arg1, len);
+  print_memory((paddr_t)((uintptr_t)arg1 & 0xFFFFFFFF), len);
 
   return 0;
 }
