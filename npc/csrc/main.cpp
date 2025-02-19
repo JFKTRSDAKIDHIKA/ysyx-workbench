@@ -10,6 +10,10 @@
 #include <iomanip> 
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <time.h>
+#define CLOCK_ADDRESS 0xa0000048 
+#define UART_BASE_ADDR 0xa00003f8  
+#define UART_ADDR_LEN  8          
 
 // #define ENABLE_MEMORY_CHECK 1
 
@@ -30,11 +34,23 @@ extern "C" void get_register_values(uint32_t rf[32]) {
 // fundamental memory access unit is 4 bytes, and the address is aligned to 4 bytes
 extern "C" int pmem_read(int raddr) {
     raddr = raddr & ~0x3u;  // 清除低两位，确保按4字节对齐
+
+    if (raddr == CLOCK_ADDRESS) {
+      time_t current_time = time(NULL);
+      return static_cast<int>(current_time); 
+    }
+
     return Memory::pmem_read(raddr);
 }
 
 extern "C" void pmem_write(int waddr, int wdata, char wmask) {
     waddr = waddr & ~0x3u;  // 清除低两位，确保按4字节对齐
+
+    if (waddr >= UART_BASE_ADDR && waddr < UART_BASE_ADDR + UART_ADDR_LEN) {
+      putchar(static_cast<char>(wdata & 0xFF));  
+      return;  
+    }
+
     Memory::pmem_write(waddr, wdata, wmask);
 }
 
