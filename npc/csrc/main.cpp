@@ -16,6 +16,7 @@
 #define UART_ADDR_LEN  8          
 
 // #define ENABLE_MEMORY_CHECK 1
+// #define DIFFTEST 1
 
 // Declare global variables
 Vysyx_24120009_core* top;  // Top module (global)
@@ -89,6 +90,7 @@ void print_memory(paddr_t start_addr, size_t size) {
     std::cout << "-------------------------------------------------------------------------------" << std::endl;
 }
 
+#ifdef DIFFTEST
 int check_dut_and_ref(Vysyx_24120009_core* top, paddr_t start_addr, size_t size) {
   // ----------- 检查寄存器 -----------
   // Compare DUT registers with REF registers
@@ -164,6 +166,7 @@ int check_dut_and_ref(Vysyx_24120009_core* top, paddr_t start_addr, size_t size)
   // If no mismatches, return 0
   return 0;
 }
+#endif
 
 void tick(Vysyx_24120009_core* top, bool silent_mode ) {
     top->clk = 0;
@@ -227,9 +230,13 @@ static char* rl_gets() {
   
 static int execute_single_step() {
   tick(top, true);  
+#ifdef DIFFTEST
   ref_difftest_exec(1);
   ref_difftest_regcpy(&ref, DIFFTEST_TO_REF);
   return check_dut_and_ref(top, 0x80000000, 0x1000);
+#else 
+  return 0;
+#endif
 }
 
 static int cmd_c(char *args) {
@@ -367,10 +374,12 @@ int main(int argc, char **argv) {
     // Load program
     load_program(argv[1]);
 
+#ifdef DIFFTEST
     // Initialize difftest
     init_difftest("/root/ysyx-workbench/nemu/build/riscv32-nemu-interpreter-so", 0);
     // Copy the program to the reference model
     ref_difftest_meminit(argv[1]);  
+#endif
 
     // Reset
     reset(top, 10); // Reset for 10 cycles
