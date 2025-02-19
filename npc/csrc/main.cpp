@@ -149,11 +149,11 @@ int check_memory(paddr_t start_addr, size_t size) {
     return 0;
 }
 
-void tick(Vysyx_24120009_core* top, bool step_mode, bool is_reset) {
+void tick(Vysyx_24120009_core* top, bool silent_mode ) {
     top->clk = 0;
     top->eval();
     
-    if (!is_reset) {
+    if (!silent_mode ) {
         // print some debug info when registers have yet been updated!
         printf("------------------------------------------------------------------------------\n");
         std::cout << "Op1: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->Op1_debug
@@ -164,7 +164,7 @@ void tick(Vysyx_24120009_core* top, bool step_mode, bool is_reset) {
     }
 
     // print some debug info of memory write
-    if (top->mem_wen_debug == 1 && !is_reset) {  
+    if (top->mem_wen_debug == 1 && !silent_mode ) {  
         std::cout << "Memory Write - Addr: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->dmem_addr_debug
                 << ", Data: 0x" << std::setw(8) << std::setfill('0') << top->dmem_wdata_debug
                 << ", Mask: 0x" << std::setw(2) << static_cast<unsigned>(top->wmask_debug) 
@@ -173,7 +173,7 @@ void tick(Vysyx_24120009_core* top, bool step_mode, bool is_reset) {
     }
 
     // print some debug info of memory read
-    if (top->mem_en_debug == 1 && top->mem_wen_debug != 1 && !is_reset) {  
+    if (top->mem_en_debug == 1 && top->mem_wen_debug != 1 && !silent_mode ) {  
             std::cout << "Memory Read  - Addr: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->dmem_addr_debug
                       << std::dec << std::endl;
     }
@@ -186,7 +186,7 @@ void tick(Vysyx_24120009_core* top, bool step_mode, bool is_reset) {
 void reset(Vysyx_24120009_core* top, int cycles) {
     top->rst = 1;
     for (int i = 0; i < cycles; ++i) {
-        tick(top, false, true);  // forbidden single-step mode
+        tick(top, true);  // forbidden single-step mode
     }
     top->rst = 0;
 }
@@ -239,24 +239,29 @@ static char* rl_gets() {
 
   #define NR_CMD 5
 
-  static int cmd_si(char* args){
+  static int execute_single_step() {
+    tick(top, false);  
+    ref_difftest_exec(1);
+    ref_difftest_regcpy(&ref, DIFFTEST_TO_REF);
+    return check_reg(top);
+  }
+
+  static int cmd_si(char* args) {
     char *arg = strtok(NULL, "");
-  
+
     if (arg == NULL) {
-      tick(top, step_mode, true);  
-      ref_difftest_exec(1);
-      ref_difftest_regcpy(&ref, DIFFTEST_TO_REF);
-      int ret = check_reg(top);
-      if (ret < 0) return -1;
-    } else {
-      for (int i = 0; i < atoi(arg); i++) {
-        tick(top, step_mode, true);  
-        ref_difftest_exec(1);
-        ref_difftest_regcpy(&ref, DIFFTEST_TO_REF);
-        int ret = check_reg(top);
+        // 单步执行
+        int ret = execute_single_step();
         if (ret < 0) return -1;
-      }
+    } else {
+        // 多步执行
+        int steps = atoi(arg);
+        for (int i = 0; i < steps; i++) {
+            int ret = execute_single_step();
+            if (ret < 0) return -1;
+        }
     }
+
     return 0;
   }
 
