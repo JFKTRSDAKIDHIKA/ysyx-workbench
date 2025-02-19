@@ -71,82 +71,79 @@ void print_memory(paddr_t start_addr, size_t size) {
     std::cout << "-------------------------------------------------------------------------------" << std::endl;
 }
 
-int check_reg(Vysyx_24120009_core* top) {
-    // Compare DUT registers with REF registers
-    for (int i = 0; i < 32; i++) {
-        if (rf_values[i] != ref.gpr[i]) {
-            std::cerr << "Register mismatch at x" << i 
-                      << " - DUT: 0x" << std::hex << rf_values[i] 
-                      << " REF: 0x" << ref.gpr[i] 
-                      << std::endl;
-            
-            // Print all registers of DUT (rf_values) and REF (ref.gpr)
-            std::cerr << "DUT Registers (rf_values):" << std::endl;
-            for (int j = 0; j < 32; j++) {
-                std::cerr << "x" << j << ": 0x" << std::hex << rf_values[j] << std::endl;
-            }
-            std::cerr << "REF Registers (ref.gpr):" << std::endl;
-            for (int j = 0; j < 32; j++) {
-                std::cerr << "x" << j << ": 0x" << std::hex << ref.gpr[j] << std::endl;
-            }
+int check_dut_and_ref(Vysyx_24120009_core* top, paddr_t start_addr, size_t size) {
+  // ----------- 检查寄存器 -----------
+  // Compare DUT registers with REF registers
+  for (int i = 0; i < 32; i++) {
+      if (rf_values[i] != ref.gpr[i]) {
+          std::cerr << "Register mismatch at x" << i 
+                    << " - DUT: 0x" << std::hex << rf_values[i] 
+                    << " REF: 0x" << ref.gpr[i] 
+                    << std::endl;
+          
+          // Print all registers of DUT (rf_values) and REF (ref.gpr)
+          std::cerr << "DUT Registers (rf_values):" << std::endl;
+          for (int j = 0; j < 32; j++) {
+              std::cerr << "x" << j << ": 0x" << std::hex << rf_values[j] << std::endl;
+          }
+          std::cerr << "REF Registers (ref.gpr):" << std::endl;
+          for (int j = 0; j < 32; j++) {
+              std::cerr << "x" << j << ": 0x" << std::hex << ref.gpr[j] << std::endl;
+          }
 
-            // Stop the simulation on a mismatch
-            return -1;  
-        }
-    }
+          // Stop the simulation on a mismatch
+          return -1;  
+      }
+  }
 
-    // Compare program counter (PC) between DUT and REF
-    if (top->imem_addr_debug != ref.pc) {
-        std::cerr << "PC mismatch - DUT: 0x" << std::hex << top->imem_addr_debug 
-                  << " REF: 0x" << std::hex << ref.pc << std::endl;
-        
-        // Print DUT and REF register values (optional)
-        std::cerr << "DUT Registers (rf_values):" << std::endl;
-        for (int j = 0; j < 32; j++) {
-            std::cerr << "x" << j << ": 0x" << std::hex << rf_values[j] << std::endl;
-        }
-        std::cerr << "REF Registers (ref.gpr):" << std::endl;
-        for (int j = 0; j < 32; j++) {
-            std::cerr << "x" << j << ": 0x" << std::hex << ref.gpr[j] << std::endl;
-        }
+  // Compare program counter (PC) between DUT and REF
+  if (top->imem_addr_debug != ref.pc) {
+      std::cerr << "PC mismatch - DUT: 0x" << std::hex << top->imem_addr_debug 
+                << " REF: 0x" << std::hex << ref.pc << std::endl;
+      
+      // Print DUT and REF register values (optional)
+      std::cerr << "DUT Registers (rf_values):" << std::endl;
+      for (int j = 0; j < 32; j++) {
+          std::cerr << "x" << j << ": 0x" << std::hex << rf_values[j] << std::endl;
+      }
+      std::cerr << "REF Registers (ref.gpr):" << std::endl;
+      for (int j = 0; j < 32; j++) {
+          std::cerr << "x" << j << ": 0x" << std::hex << ref.gpr[j] << std::endl;
+      }
 
-        return -1;  // End simulation
-    }
+      return -1;  // End simulation
+  }
 
-    // If no mismatches, return 0
-    return 0;
-}
+  // ----------- 检查内存 -----------
+  // Allocate buffers for memory comparison
+  std::vector<uint8_t> ref_mem(size, 0); // Buffer to store memory from REF
+  std::vector<uint8_t> dut_mem(size, 0); // Buffer to store memory from DUT
 
-int check_memory(paddr_t start_addr, size_t size) {
-    // Allocate buffers for memory comparison
-    std::vector<uint8_t> ref_mem(size, 0); // Buffer to store memory from REF
-    std::vector<uint8_t> dut_mem(size, 0); // Buffer to store memory from DUT
+  // Copy memory from REF to ref_mem buffer
+  ref_difftest_memcpy(start_addr, ref_mem.data(), size, DIFFTEST_TO_DUT);
 
-    // Copy memory from REF to ref_mem buffer
-    ref_difftest_memcpy(start_addr, ref_mem.data(), size, DIFFTEST_TO_DUT);
+  // Copy memory from DUT to dut_mem buffer
+  for (size_t i = 0; i < size; ++i) {
+      dut_mem[i] = Memory::pmem_read(start_addr + i) & 0xFF; // Read one byte at a time
+  }
 
-    // Copy memory from DUT to dut_mem buffer
-    for (size_t i = 0; i < size; ++i) {
-        dut_mem[i] = Memory::pmem_read(start_addr + i) & 0xFF; // Read one byte at a time
-    }
+  // Compare REF memory and DUT memory
+  if (memcmp(ref_mem.data(), dut_mem.data(), size) != 0) {
+      // If there's a mismatch, find the first mismatched byte
+      for (size_t i = 0; i < size; ++i) {
+          if (ref_mem[i] != dut_mem[i]) {
+              std::cerr << "Memory mismatch detected!" << std::endl;
+              std::cerr << "Address: 0x" << std::hex << (start_addr + i) << std::endl;
+              std::cerr << "REF: 0x" << std::hex << static_cast<int>(ref_mem[i]) << std::endl;
+              std::cerr << "DUT: 0x" << std::hex << static_cast<int>(dut_mem[i]) << std::endl;
+              print_memory(0x800001a8, 40); // Optional memory dump
+              return -1;
+          }
+      }
+  }
 
-    // Compare REF memory and DUT memory
-    if (memcmp(ref_mem.data(), dut_mem.data(), size) != 0) {
-        // If there's a mismatch, find the first mismatched byte
-        for (size_t i = 0; i < size; ++i) {
-            if (ref_mem[i] != dut_mem[i]) {
-                std::cerr << "Memory mismatch detected!" << std::endl;
-                std::cerr << "Address: 0x" << std::hex << (start_addr + i) << std::endl;
-                std::cerr << "REF: 0x" << std::hex << static_cast<int>(ref_mem[i]) << std::endl;
-                std::cerr << "DUT: 0x" << std::hex << static_cast<int>(dut_mem[i]) << std::endl;
-                print_memory(0x800001a8, 40);
-                return -1;
-            }
-        }
-    } else {
-        return 0;
-    }
-    return 0;
+  // If no mismatches, return 0
+  return 0;
 }
 
 void tick(Vysyx_24120009_core* top, bool silent_mode ) {
@@ -214,7 +211,7 @@ static int execute_single_step() {
   tick(top, false);  
   ref_difftest_exec(1);
   ref_difftest_regcpy(&ref, DIFFTEST_TO_REF);
-  return check_reg(top);
+  return check_dut_and_ref(top, 0x80000000, 0x1000);
 }
 
 static int cmd_c(char *args) {
