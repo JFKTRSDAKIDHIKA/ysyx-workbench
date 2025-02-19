@@ -34,15 +34,28 @@ extern "C" void get_register_values(uint32_t rf[32]) {
     set_register_values(rf);  // set the register values
 }
 
+static uint64_t boot_time = 0;
+
+static uint64_t get_time_internal() {
+  struct timeval now;
+  gettimeofday(&now, NULL);
+  uint64_t us = now.tv_sec * 1000000 + now.tv_usec;
+  return us;
+}
+
+static uint64_t get_time() {
+  if (boot_time == 0) boot_time = get_time_internal();
+  uint64_t now = get_time_internal();
+  return now - boot_time;
+}
+
 // fundamental memory access unit is 4 bytes, and the address is aligned to 4 bytes
 extern "C" int pmem_read(int raddr) {
     raddr = raddr & ~0x3u;  // 清除低两位，确保按4字节对齐
 
     // 时钟
     if (raddr >= CLOCK_ADDRESS && raddr < CLOCK_ADDRESS + CLOCK_ADDR_LEN ) {
-      struct timeval now;
-      gettimeofday(&now, NULL);
-      uint64_t us = now.tv_sec * 1000000 + now.tv_usec;
+      uint64_t us = get_time();
       return us;
     }
 
