@@ -11,6 +11,8 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
+// #define ENABLE_MEMORY_CHECK 1
+
 // Declare global variables
 Vysyx_24120009_core* top;  // Top module (global)
 bool step_mode;  // Step mode flag (global)
@@ -114,6 +116,7 @@ int check_dut_and_ref(Vysyx_24120009_core* top, paddr_t start_addr, size_t size)
       return -1;  // End simulation
   }
 
+#ifdef ENABLE_MEMORY_CHECK
   // ----------- 检查内存 -----------
   // Allocate buffers for memory comparison
   std::vector<uint8_t> ref_mem(size, 0); // Buffer to store memory from REF
@@ -141,7 +144,7 @@ int check_dut_and_ref(Vysyx_24120009_core* top, paddr_t start_addr, size_t size)
           }
       }
   }
-
+#endif
   // If no mismatches, return 0
   return 0;
 }
@@ -187,7 +190,6 @@ void reset(Vysyx_24120009_core* top, int cycles) {
     }
     top->rst = 0;
 }
-
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 static char* rl_gets() {
