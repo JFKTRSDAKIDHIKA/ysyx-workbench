@@ -76,6 +76,7 @@ module ysyx_24120009_core (
         imem_rdata = pmem_read(imem_addr);
     end
     
+
     // Data Memory interface
     reg [`ysyx_24120009_DATA_WIDTH-1:0] dmem_rdata_raw;
     wire [`ysyx_24120009_DATA_WIDTH-1:0] dmem_rdata;
@@ -99,7 +100,7 @@ module ysyx_24120009_core (
             dmem_rdata_raw = 0;
         end
     end
-
+    
     ysyx_24120009_alignment_network alignment_network (
         .data_in(dmem_rdata_raw),
         .control(ctl_mem_access),
