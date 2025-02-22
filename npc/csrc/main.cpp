@@ -202,15 +202,17 @@ void tick(Vysyx_24120009_core* top, bool silent_mode ) {
     top->eval();
     
     if (!silent_mode ) {
-        // print some debug info when registers have yet been updated!
-        printf("------------------------------------------------------------------------------\n");
-        std::cout << "Op1: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->Op1_debug
-            << ", Op2: 0x" << std::setw(8) << std::setfill('0') << top->Op2_debug
-            << ", wb_data: 0x" << std::setw(8) << std::setfill('0') << top->reg_write_data_debug
-            << ", Instruction: 0x" << std::setw(8) << std::setfill('0') << top->inst_debug
-            << std::dec << std::endl;
+      // print some debug info when registers have yet been updated!
+      printf("------------------------------------------------------------------------------\n");
+      std::cout << "Op1: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->Op1_debug
+                << ", Op2: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->Op2_debug
+                << ", wb_data: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->reg_write_data_debug
+                << ", Instruction: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->inst_debug
+                << ", rf_we_debug: 0x" << std::hex << static_cast<int>(top->rf_we_debug) // Cast to int for proper printing
+                << std::dec << std::endl;
     }
-    
+  
+  
 /*
     // print some debug info of memory write
     if (top->mem_wen_debug == 1 && !silent_mode ) {  
@@ -260,7 +262,7 @@ static char* rl_gets() {
   }
   
 static int execute_single_step() {
-  tick(top, true);  
+  tick(top, false);  
 #ifdef DIFFTEST
   ref_difftest_exec(1);
   ref_difftest_regcpy(&ref, DIFFTEST_TO_REF);
