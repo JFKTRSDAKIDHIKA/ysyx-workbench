@@ -27,6 +27,7 @@ class Vysyx_24120009_core___024root final : public VerilatedModule {
         CData/*0:0*/ ysyx_24120009_core__DOT__mem_en;
         CData/*0:0*/ ysyx_24120009_core__DOT__mem_wen;
         CData/*1:0*/ ysyx_24120009_core__DOT__wb_sel;
+        CData/*0:0*/ ysyx_24120009_core__DOT__pc_wen;
         CData/*4:0*/ ysyx_24120009_core__DOT__rd_addr_from_EXU_to_MEM;
         CData/*4:0*/ ysyx_24120009_core__DOT__rd_addr_from_MEM_to_WBU;
         CData/*4:0*/ ysyx_24120009_core__DOT__waddr;
@@ -55,7 +56,7 @@ class Vysyx_24120009_core___024root final : public VerilatedModule {
         CData/*0:0*/ __VdfgTmp_h9d12977d__0;
         CData/*0:0*/ __VdfgTmp_h9d0653ad__0;
         CData/*6:0*/ __Vtableidx1;
-        CData/*6:0*/ __Vtableidx2;
+        CData/*7:0*/ __Vtableidx2;
         CData/*6:0*/ __Vtableidx3;
         CData/*0:0*/ __Vtrigrprev__TOP__clk;
         CData/*0:0*/ __VactContinue;
@@ -78,9 +79,9 @@ class Vysyx_24120009_core___024root final : public VerilatedModule {
         IData/*31:0*/ ysyx_24120009_core__DOT__inst_from_IDU_to_EXU;
         IData/*31:0*/ ysyx_24120009_core__DOT__rdata2_from_IDU_to_EXU;
         IData/*31:0*/ ysyx_24120009_core__DOT__pc_from_EXU_to_MEM;
-        IData/*31:0*/ ysyx_24120009_core__DOT__inst_from_EXU_to_MEM;
     };
     struct {
+        IData/*31:0*/ ysyx_24120009_core__DOT__inst_from_EXU_to_MEM;
         IData/*31:0*/ ysyx_24120009_core__DOT__result_from_EXU_to_MEM;
         IData/*31:0*/ ysyx_24120009_core__DOT__rdata2_from_EXU_to_MEM;
         IData/*31:0*/ ysyx_24120009_core__DOT__dmem_rdata_from_MEM_to_WBU;

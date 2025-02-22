@@ -603,6 +603,7 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root__trace_init_sub__TOP__0(Vysyx_24
     tracep->declBus(c+411,"dmem_addr_o", false,-1, 31,0);
     tracep->declBus(c+334,"dmem_rdata_o", false,-1, 31,0);
     tracep->declBus(c+335,"wb_sel", false,-1, 1,0);
+    tracep->declBit(c+80,"wbu_active", false,-1);
     tracep->declBus(c+336,"funct3", false,-1, 2,0);
     tracep->declBus(c+337,"funct7", false,-1, 6,0);
     tracep->declBus(c+338,"opcode", false,-1, 6,0);
@@ -810,8 +811,7 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root__trace_full_sub_0(Vysyx_24120009
     bufp->fullIData(oldp+77,(vlSelf->ysyx_24120009_core__DOT__jump_reg_target),32);
     bufp->fullIData(oldp+78,(vlSelf->ysyx_24120009_core__DOT__br_target),32);
     bufp->fullIData(oldp+79,(vlSelf->ysyx_24120009_core__DOT__jmp_target),32);
-    bufp->fullBit(oldp+80,((vlSelf->ysyx_24120009_core__DOT__ifu__DOT__inst 
-                            == vlSelf->ysyx_24120009_core__DOT__wbu__DOT__inst_o)));
+    bufp->fullBit(oldp+80,(vlSelf->ysyx_24120009_core__DOT__pc_wen));
     bufp->fullIData(oldp+81,(vlSelf->ysyx_24120009_core__DOT__pc_from_IDU_to_EXU),32);
     bufp->fullIData(oldp+82,(vlSelf->ysyx_24120009_core__DOT__inst_from_IDU_to_EXU),32);
     bufp->fullIData(oldp+83,(vlSelf->ysyx_24120009_core__DOT__rdata2_from_IDU_to_EXU),32);

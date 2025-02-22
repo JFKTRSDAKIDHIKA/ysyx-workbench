@@ -85,6 +85,7 @@ module ysyx_24120009_WBU (
     wire    [`ysyx_24120009_DATA_WIDTH-1:0] dmem_addr_o;
     wire     [`ysyx_24120009_DATA_WIDTH-1:0] dmem_rdata_o;
     reg [1:0] wb_sel;
+    wire wbu_active;
 
     // reg_write_data signal generation
     ysyx_24120009_MuxKeyWithDefault #(
@@ -104,7 +105,8 @@ module ysyx_24120009_WBU (
     );
 
     // pc_wen  signal generation
-    assign pc_wen  = inst_from_IFU == inst_o;
+    assign wbu_active  = inst_from_IFU == inst_o;
+    assign pc_wen = wbu_active;
 
     // Control unit for WBU
     wire [2:0] funct3 = inst_o[14:12];
@@ -113,18 +115,22 @@ module ysyx_24120009_WBU (
 
     // rf_we signal generation
     always @(*) begin
-        case (opcode)
-            `ysyx_24120009_OPCODE_AUIPC: rf_we = 1'b1;
-            `ysyx_24120009_OPCODE_LUI:   rf_we = 1'b1;
-            `ysyx_24120009_OPCODE_R:     rf_we = 1'b1;
-            `ysyx_24120009_OPCODE_I:     rf_we = 1'b1;
-            `ysyx_24120009_OPCODE_S:     rf_we = 1'b0;
-            `ysyx_24120009_OPCODE_B:     rf_we = 1'b0;
-            `ysyx_24120009_OPCODE_CSR:   rf_we = 1'b0;
-            `ysyx_24120009_OPCODE_J:     rf_we = 1'b1;
-            `ysyx_24120009_OPCODE_JALR:  rf_we = 1'b1;
-            default:                     rf_we = 1'b0;
-        endcase
+        if (wbu_active) begin
+            case (opcode)
+                `ysyx_24120009_OPCODE_AUIPC: rf_we = 1'b1;
+                `ysyx_24120009_OPCODE_LUI:   rf_we = 1'b1;
+                `ysyx_24120009_OPCODE_R:     rf_we = 1'b1;
+                `ysyx_24120009_OPCODE_I:     rf_we = 1'b1;
+                `ysyx_24120009_OPCODE_S:     rf_we = 1'b0;
+                `ysyx_24120009_OPCODE_B:     rf_we = 1'b0;
+                `ysyx_24120009_OPCODE_CSR:   rf_we = 1'b0;
+                `ysyx_24120009_OPCODE_J:     rf_we = 1'b1;
+                `ysyx_24120009_OPCODE_JALR:  rf_we = 1'b1;
+                default:                     rf_we = 1'b0;
+            endcase
+        end else begin
+            rf_we = 1'b0;  // 当 wbu_active == 0 时，rf_we 始终为 0
+        end
     end
 
     // wb_sel signal generation
