@@ -196,7 +196,7 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root___dump_triggers__stl(Vysyx_24120
 
 void Vysyx_24120009_core___024root____Vdpiimwrap_ysyx_24120009_core__DOT__u_RegisterFile__DOT__get_register_values_TOP(VlUnpacked<IData/*31:0*/, 32> rf);
 void Vysyx_24120009_core___024root____Vdpiimwrap_ysyx_24120009_core__DOT__ifu__DOT__pmem_read_TOP(IData/*31:0*/ raddr, IData/*31:0*/ &pmem_read__Vfuncrtn);
-extern const VlUnpacked<CData/*0:0*/, 128> Vysyx_24120009_core__ConstPool__TABLE_h6ee5e86f_0;
+extern const VlUnpacked<CData/*0:0*/, 128> Vysyx_24120009_core__ConstPool__TABLE_hb976d313_0;
 extern const VlUnpacked<CData/*1:0*/, 128> Vysyx_24120009_core__ConstPool__TABLE_hd37b394f_0;
 extern const VlUnpacked<CData/*1:0*/, 128> Vysyx_24120009_core__ConstPool__TABLE_h757d5658_0;
 extern const VlUnpacked<CData/*1:0*/, 128> Vysyx_24120009_core__ConstPool__TABLE_h68f45f92_0;
@@ -262,7 +262,7 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root___stl_sequent__TOP__0(Vysyx_2412
     vlSelf->ysyx_24120009_core__DOT__ifu__DOT__inst 
         = vlSelf->__Vfunc_ysyx_24120009_core__DOT__ifu__DOT__pmem_read__1__Vfuncout;
     vlSelf->__Vtableidx2 = (0x7fU & vlSelf->ysyx_24120009_core__DOT__wbu__DOT__inst_o);
-    vlSelf->ysyx_24120009_core__DOT__rf_we = Vysyx_24120009_core__ConstPool__TABLE_h6ee5e86f_0
+    vlSelf->ysyx_24120009_core__DOT__rf_we = Vysyx_24120009_core__ConstPool__TABLE_hb976d313_0
         [vlSelf->__Vtableidx2];
     vlSelf->ysyx_24120009_core__DOT__ifu__DOT__mux_pc_sel__DOT__i0__DOT__data_list[4U] 
         = ((IData)(4U) + vlSelf->ysyx_24120009_core__DOT__ifu__DOT__pc);
