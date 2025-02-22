@@ -102,7 +102,7 @@ module ysyx_24120009_WBU (
     );
 
     // pc_wen signal generation
-    assign pc_wen = 1'b0;
+    assign pc_wen = 1'b1;
 
 
     // Control unit for WBU
