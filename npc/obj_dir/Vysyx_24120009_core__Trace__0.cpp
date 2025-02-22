@@ -637,6 +637,8 @@ void Vysyx_24120009_core___024root__trace_chg_sub_0(Vysyx_24120009_core___024roo
     bufp->chgCData(oldp+362,(vlSelf->waddr_debug),5);
     bufp->chgBit(oldp+363,(vlSelf->mem_wen_debug));
     bufp->chgBit(oldp+364,(vlSelf->mem_en_debug));
+    bufp->chgIData(oldp+365,(vlSelf->Op1_debug),32);
+    bufp->chgIData(oldp+366,(vlSelf->Op2_debug),32);
 }
 
 void Vysyx_24120009_core___024root__trace_cleanup(void* voidSelf, VerilatedVcd* /*unused*/) {
