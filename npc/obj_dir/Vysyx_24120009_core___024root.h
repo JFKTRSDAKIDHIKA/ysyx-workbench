@@ -86,7 +86,6 @@ class Vysyx_24120009_core___024root final : public VerilatedModule {
         IData/*31:0*/ ysyx_24120009_core__DOT__result_from_MEM_to_WBU;
         IData/*31:0*/ ysyx_24120009_core__DOT__pc_from_MEM_to_WBU;
         IData/*31:0*/ ysyx_24120009_core__DOT__inst_from_MEM_to_WBU;
-        IData/*31:0*/ ysyx_24120009_core__DOT__inst_from_IFU_to_WBU;
         IData/*31:0*/ ysyx_24120009_core__DOT__rdata1;
         IData/*31:0*/ ysyx_24120009_core__DOT__u_RegisterFile__DOT__unnamedblk1__DOT__i;
         IData/*31:0*/ ysyx_24120009_core__DOT__ifu__DOT__pc;
