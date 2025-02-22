@@ -19,6 +19,7 @@ module ysyx_24120009_IFU (
 
   // direct programing interface --- C
   import "DPI-C" function int pmem_read(input int raddr);
+  import "DPI-C" function void simulation_exit();
 
   // Internal signals declaration
   wire  [`ysyx_24120009_DATA_WIDTH-1:0] pc;
@@ -54,6 +55,14 @@ module ysyx_24120009_IFU (
   // Read instruction from instruction memory
   always @(*) begin
         inst = pmem_read(pc);
+  end
+
+  // handle ebreak instruction
+  always @(*) begin
+      if (inst == 32'h00100073) begin
+          $display("EBREAK: Simulation exiting...");
+          simulation_exit(); // 通知仿真环境结束
+      end
   end
 
   // Assign output signals

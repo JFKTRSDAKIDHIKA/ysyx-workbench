@@ -200,7 +200,7 @@ void Vysyx_24120009_core___024root____Vdpiimwrap_ysyx_24120009_core__DOT__ifu__D
 extern const VlUnpacked<CData/*1:0*/, 128> Vysyx_24120009_core__ConstPool__TABLE_hd37b394f_0;
 extern const VlUnpacked<CData/*1:0*/, 128> Vysyx_24120009_core__ConstPool__TABLE_h757d5658_0;
 extern const VlUnpacked<CData/*1:0*/, 128> Vysyx_24120009_core__ConstPool__TABLE_h68f45f92_0;
-void Vysyx_24120009_core___024root____Vdpiimwrap_ysyx_24120009_core__DOT__idu__DOT__simulation_exit_TOP();
+void Vysyx_24120009_core___024root____Vdpiimwrap_ysyx_24120009_core__DOT__ifu__DOT__simulation_exit_TOP();
 void Vysyx_24120009_core___024root____Vdpiimwrap_ysyx_24120009_core__DOT__mem__DOT__pmem_write_TOP(IData/*31:0*/ waddr, IData/*31:0*/ wdata, CData/*7:0*/ wmask);
 
 VL_ATTR_COLD void Vysyx_24120009_core___024root___stl_sequent__TOP__0(Vysyx_24120009_core___024root* vlSelf) {
@@ -482,6 +482,10 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root___stl_sequent__TOP__0(Vysyx_2412
     vlSelf->ysyx_24120009_core__DOT__idu__DOT__Op2Sel 
         = Vysyx_24120009_core__ConstPool__TABLE_h68f45f92_0
         [vlSelf->__Vtableidx1];
+    if (VL_UNLIKELY((0x100073U == vlSelf->ysyx_24120009_core__DOT__ifu__DOT__inst))) {
+        VL_WRITEF("EBREAK: Simulation exiting...\n");
+        Vysyx_24120009_core___024root____Vdpiimwrap_ysyx_24120009_core__DOT__ifu__DOT__simulation_exit_TOP();
+    }
     vlSelf->inst_debug = vlSelf->ysyx_24120009_core__DOT__ifu__DOT__inst;
     vlSelf->ysyx_24120009_core__DOT__exu__DOT__alu_instance__DOT__alu_mux__DOT__i0__DOT__hit 
         = ((IData)(vlSelf->ysyx_24120009_core__DOT__exu__DOT__alu_op) 
@@ -758,10 +762,6 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root___stl_sequent__TOP__0(Vysyx_2412
                           [1U]))) & vlSelf->ysyx_24120009_core__DOT__idu__DOT__op1_sel_mux__DOT__i0__DOT__data_list
               [1U]));
     vlSelf->ysyx_24120009_core__DOT__Op1 = vlSelf->ysyx_24120009_core__DOT__idu__DOT__op1_sel_mux__DOT__i0__DOT__lut_out;
-    if (VL_UNLIKELY((0x100073U == vlSelf->inst_debug))) {
-        VL_WRITEF("EBREAK: Simulation exiting...\n");
-        Vysyx_24120009_core___024root____Vdpiimwrap_ysyx_24120009_core__DOT__idu__DOT__simulation_exit_TOP();
-    }
     vlSelf->reg_write_data_debug = vlSelf->ysyx_24120009_core__DOT__reg_write_data;
     vlSelf->ysyx_24120009_core__DOT__ifu__DOT__mux_pc_sel__DOT__i0__DOT__pair_list[2U] 
         = (0x200000000ULL | (QData)((IData)(vlSelf->ysyx_24120009_core__DOT__br_target)));

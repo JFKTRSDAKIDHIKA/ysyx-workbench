@@ -32,8 +32,8 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root____Vdpiimwrap_ysyx_24120009_cor
 
 extern "C" void simulation_exit();
 
-VL_INLINE_OPT void Vysyx_24120009_core___024root____Vdpiimwrap_ysyx_24120009_core__DOT__idu__DOT__simulation_exit_TOP() {
-    VL_DEBUG_IF(VL_DBG_MSGF("+    Vysyx_24120009_core___024root____Vdpiimwrap_ysyx_24120009_core__DOT__idu__DOT__simulation_exit_TOP\n"); );
+VL_INLINE_OPT void Vysyx_24120009_core___024root____Vdpiimwrap_ysyx_24120009_core__DOT__ifu__DOT__simulation_exit_TOP() {
+    VL_DEBUG_IF(VL_DBG_MSGF("+    Vysyx_24120009_core___024root____Vdpiimwrap_ysyx_24120009_core__DOT__ifu__DOT__simulation_exit_TOP\n"); );
     // Body
     simulation_exit();
 }
