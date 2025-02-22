@@ -210,7 +210,8 @@ void tick(Vysyx_24120009_core* top, bool silent_mode ) {
             << ", Instruction: 0x" << std::setw(8) << std::setfill('0') << top->inst_debug
             << std::dec << std::endl;
     }
-
+    
+/*
     // print some debug info of memory write
     if (top->mem_wen_debug == 1 && !silent_mode ) {  
         std::cout << "Memory Write - Addr: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->dmem_addr_debug
@@ -225,6 +226,7 @@ void tick(Vysyx_24120009_core* top, bool silent_mode ) {
             std::cout << "Memory Read  - Addr: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->dmem_addr_debug
                       << std::dec << std::endl;
     }
+*/
 
     top->clk = 1;
     top->eval();
