@@ -260,7 +260,7 @@ static char* rl_gets() {
   }
   
 static int execute_single_step() {
-  tick(top, true);  
+  tick(top, false);  
 #ifdef DIFFTEST
   ref_difftest_exec(1);
   ref_difftest_regcpy(&ref, DIFFTEST_TO_REF);
