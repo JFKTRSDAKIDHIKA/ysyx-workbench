@@ -14,20 +14,13 @@ Vysyx_24120009_core::Vysyx_24120009_core(VerilatedContext* _vcontextp__, const c
     , vlSymsp{new Vysyx_24120009_core__Syms(contextp(), _vcname__, this)}
     , clk{vlSymsp->TOP.clk}
     , rst{vlSymsp->TOP.rst}
-    , is_ebreak_debug{vlSymsp->TOP.is_ebreak_debug}
     , waddr_debug{vlSymsp->TOP.waddr_debug}
     , mem_wen_debug{vlSymsp->TOP.mem_wen_debug}
     , mem_en_debug{vlSymsp->TOP.mem_en_debug}
-    , wmask_debug{vlSymsp->TOP.wmask_debug}
     , pc_debug{vlSymsp->TOP.pc_debug}
-    , Op1_debug{vlSymsp->TOP.Op1_debug}
-    , Op2_debug{vlSymsp->TOP.Op2_debug}
     , inst_debug{vlSymsp->TOP.inst_debug}
     , reg_write_data_debug{vlSymsp->TOP.reg_write_data_debug}
     , x2_debug{vlSymsp->TOP.x2_debug}
-    , imem_addr_debug{vlSymsp->TOP.imem_addr_debug}
-    , dmem_addr_debug{vlSymsp->TOP.dmem_addr_debug}
-    , dmem_wdata_debug{vlSymsp->TOP.dmem_wdata_debug}
     , rootp{&(vlSymsp->TOP)}
 {
     // Register model with the context

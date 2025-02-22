@@ -8,40 +8,6 @@
 #include "Vysyx_24120009_core__Syms.h"
 #include "Vysyx_24120009_core___024root.h"
 
-extern "C" int pmem_read(int raddr);
-
-VL_INLINE_OPT void Vysyx_24120009_core___024root____Vdpiimwrap_ysyx_24120009_core__DOT__pmem_read_TOP(IData/*31:0*/ raddr, IData/*31:0*/ &pmem_read__Vfuncrtn) {
-    VL_DEBUG_IF(VL_DBG_MSGF("+    Vysyx_24120009_core___024root____Vdpiimwrap_ysyx_24120009_core__DOT__pmem_read_TOP\n"); );
-    // Body
-    int raddr__Vcvt;
-    for (size_t raddr__Vidx = 0; raddr__Vidx < 1; ++raddr__Vidx) raddr__Vcvt = raddr;
-    int pmem_read__Vfuncrtn__Vcvt;
-    pmem_read__Vfuncrtn__Vcvt = pmem_read(raddr__Vcvt);
-    pmem_read__Vfuncrtn = pmem_read__Vfuncrtn__Vcvt;
-}
-
-extern "C" void pmem_write(int waddr, int wdata, char wmask);
-
-VL_INLINE_OPT void Vysyx_24120009_core___024root____Vdpiimwrap_ysyx_24120009_core__DOT__pmem_write_TOP(IData/*31:0*/ waddr, IData/*31:0*/ wdata, CData/*7:0*/ wmask) {
-    VL_DEBUG_IF(VL_DBG_MSGF("+    Vysyx_24120009_core___024root____Vdpiimwrap_ysyx_24120009_core__DOT__pmem_write_TOP\n"); );
-    // Body
-    int waddr__Vcvt;
-    for (size_t waddr__Vidx = 0; waddr__Vidx < 1; ++waddr__Vidx) waddr__Vcvt = waddr;
-    int wdata__Vcvt;
-    for (size_t wdata__Vidx = 0; wdata__Vidx < 1; ++wdata__Vidx) wdata__Vcvt = wdata;
-    char wmask__Vcvt;
-    for (size_t wmask__Vidx = 0; wmask__Vidx < 1; ++wmask__Vidx) wmask__Vcvt = wmask;
-    pmem_write(waddr__Vcvt, wdata__Vcvt, wmask__Vcvt);
-}
-
-extern "C" void simulation_exit();
-
-VL_INLINE_OPT void Vysyx_24120009_core___024root____Vdpiimwrap_ysyx_24120009_core__DOT__simulation_exit_TOP() {
-    VL_DEBUG_IF(VL_DBG_MSGF("+    Vysyx_24120009_core___024root____Vdpiimwrap_ysyx_24120009_core__DOT__simulation_exit_TOP\n"); );
-    // Body
-    simulation_exit();
-}
-
 extern "C" void get_register_values(const svLogicVecVal* rf);
 
 VL_INLINE_OPT void Vysyx_24120009_core___024root____Vdpiimwrap_ysyx_24120009_core__DOT__u_RegisterFile__DOT__get_register_values_TOP(VlUnpacked<IData/*31:0*/, 32> rf) {
@@ -50,6 +16,40 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root____Vdpiimwrap_ysyx_24120009_cor
     svLogicVecVal rf__Vcvt[32];
     for (size_t rf__Vidx = 0; rf__Vidx < 32; ++rf__Vidx) VL_SET_SVLV_I(32, rf__Vcvt + 1 * rf__Vidx, (&rf[0])[rf__Vidx]);
     get_register_values(rf__Vcvt);
+}
+
+extern "C" int pmem_read(int raddr);
+
+VL_INLINE_OPT void Vysyx_24120009_core___024root____Vdpiimwrap_ysyx_24120009_core__DOT__ifu__DOT__pmem_read_TOP(IData/*31:0*/ raddr, IData/*31:0*/ &pmem_read__Vfuncrtn) {
+    VL_DEBUG_IF(VL_DBG_MSGF("+    Vysyx_24120009_core___024root____Vdpiimwrap_ysyx_24120009_core__DOT__ifu__DOT__pmem_read_TOP\n"); );
+    // Body
+    int raddr__Vcvt;
+    for (size_t raddr__Vidx = 0; raddr__Vidx < 1; ++raddr__Vidx) raddr__Vcvt = raddr;
+    int pmem_read__Vfuncrtn__Vcvt;
+    pmem_read__Vfuncrtn__Vcvt = pmem_read(raddr__Vcvt);
+    pmem_read__Vfuncrtn = pmem_read__Vfuncrtn__Vcvt;
+}
+
+extern "C" void simulation_exit();
+
+VL_INLINE_OPT void Vysyx_24120009_core___024root____Vdpiimwrap_ysyx_24120009_core__DOT__idu__DOT__simulation_exit_TOP() {
+    VL_DEBUG_IF(VL_DBG_MSGF("+    Vysyx_24120009_core___024root____Vdpiimwrap_ysyx_24120009_core__DOT__idu__DOT__simulation_exit_TOP\n"); );
+    // Body
+    simulation_exit();
+}
+
+extern "C" void pmem_write(int waddr, int wdata, char wmask);
+
+VL_INLINE_OPT void Vysyx_24120009_core___024root____Vdpiimwrap_ysyx_24120009_core__DOT__mem__DOT__pmem_write_TOP(IData/*31:0*/ waddr, IData/*31:0*/ wdata, CData/*7:0*/ wmask) {
+    VL_DEBUG_IF(VL_DBG_MSGF("+    Vysyx_24120009_core___024root____Vdpiimwrap_ysyx_24120009_core__DOT__mem__DOT__pmem_write_TOP\n"); );
+    // Body
+    int waddr__Vcvt;
+    for (size_t waddr__Vidx = 0; waddr__Vidx < 1; ++waddr__Vidx) waddr__Vcvt = waddr;
+    int wdata__Vcvt;
+    for (size_t wdata__Vidx = 0; wdata__Vidx < 1; ++wdata__Vidx) wdata__Vcvt = wdata;
+    char wmask__Vcvt;
+    for (size_t wmask__Vidx = 0; wmask__Vidx < 1; ++wmask__Vidx) wmask__Vcvt = wmask;
+    pmem_write(waddr__Vcvt, wdata__Vcvt, wmask__Vcvt);
 }
 
 #ifdef VL_DEBUG
