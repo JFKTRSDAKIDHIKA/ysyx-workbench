@@ -202,15 +202,16 @@ void tick(Vysyx_24120009_core* top, bool silent_mode ) {
     top->eval();
     
     if (!silent_mode ) {
-        // print some debug info when registers have yet been updated!
-        printf("------------------------------------------------------------------------------\n");
-        std::cout << "Op1: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->Op1_debug
-            << ", Op2: 0x" << std::setw(8) << std::setfill('0') << top->Op2_debug
-            << ", wb_data: 0x" << std::setw(8) << std::setfill('0') << top->reg_write_data_debug
-            << ", Instruction: 0x" << std::setw(8) << std::setfill('0') << top->inst_debug
-            << std::dec << std::endl;
+      // print some debug info when registers have yet been updated!
+      printf("------------------------------------------------------------------------------\n");
+      std::cout << "Op1: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->Op1_debug
+                << ", Op2: 0x" << std::setw(8) << std::setfill('0') << top->Op2_debug
+                << ", wb_data: 0x" << std::setw(8) << std::setfill('0') << top->reg_write_data_debug
+                << ", Instruction: 0x" << std::setw(8) << std::setfill('0') << top->inst_debug
+                << ", rf_we_debug: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->rf_we_debug
+                << std::dec << std::endl;
     }
-    
+  
 /*
     // print some debug info of memory write
     if (top->mem_wen_debug == 1 && !silent_mode ) {  
