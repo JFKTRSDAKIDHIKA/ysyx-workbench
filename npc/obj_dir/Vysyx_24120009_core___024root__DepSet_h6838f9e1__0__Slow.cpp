@@ -1320,6 +1320,7 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root___ctor_var_reset(Vysyx_24120009_
     vlSelf->ysyx_24120009_core__DOT__rd_addr_from_MEM_to_WBU = VL_RAND_RESET_I(5);
     vlSelf->ysyx_24120009_core__DOT__pc_from_MEM_to_WBU = VL_RAND_RESET_I(32);
     vlSelf->ysyx_24120009_core__DOT__inst_from_MEM_to_WBU = VL_RAND_RESET_I(32);
+    vlSelf->ysyx_24120009_core__DOT__inst_from_IFU_to_WBU = VL_RAND_RESET_I(32);
     vlSelf->ysyx_24120009_core__DOT__waddr = VL_RAND_RESET_I(5);
     vlSelf->ysyx_24120009_core__DOT__rdata1 = VL_RAND_RESET_I(32);
     for (int __Vi0 = 0; __Vi0 < 32; ++__Vi0) {

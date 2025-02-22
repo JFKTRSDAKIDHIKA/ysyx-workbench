@@ -58,7 +58,7 @@ module ysyx_24120009_core (
     wire [`ysyx_24120009_DATA_WIDTH-1:0] pc_from_MEM_to_WBU;
     wire [`ysyx_24120009_DATA_WIDTH-1:0] rd_addr_from_MEM_to_WBU;
     wire [`ysyx_24120009_DATA_WIDTH-1:0] inst_from_MEM_to_WBU;
-
+    wire [`ysyx_24120009_DATA_WIDTH-1:0] inst_from_IFU_to_WBU;
 
     //  Register file address
     wire [`ysyx_24120009_REG_ADDR_WIDTH-1:0] rs1_addr;
@@ -188,7 +188,9 @@ module ysyx_24120009_core (
         .dmem_rdata_i(dmem_rdata_from_MEM_to_WBU),
         .rd_addr_i(rd_addr_from_MEM_to_WBU),
         // Signals passed to IFU
-        .pc_wen(pc_wen)
+        .pc_wen(pc_wen),
+        // Signal passed from IFU
+        .inst_from_IFU(inst_from_IFU_to_WBU)
     );
 
 

@@ -15,7 +15,9 @@ module ysyx_24120009_WBU (
     input     [`ysyx_24120009_DATA_WIDTH-1:0] dmem_rdata_i,
     input    [`ysyx_24120009_REG_ADDR_WIDTH-1:0]   rd_addr_i,
     // Signals passed to IFU
-    output pc_wen
+    output pc_wen, 
+    // Signal passed from IFU
+    input [`ysyx_24120009_DATA_WIDTH-1:0] inst_from_IFU
 );
 
     // Get ready for pipeline
@@ -101,9 +103,8 @@ module ysyx_24120009_WBU (
         })
     );
 
-    // pc_wen signal generation
-    assign pc_wen = 1'b1;
-
+    // pc_wen  signal generation
+    assign pc_wen  = inst_from_IFU == inst_o;
 
     // Control unit for WBU
     wire [2:0] funct3 = inst_o[14:12];
