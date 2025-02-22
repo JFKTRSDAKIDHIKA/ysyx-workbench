@@ -123,7 +123,7 @@ module ysyx_24120009_WBU (
             `ysyx_24120009_OPCODE_CSR:   rf_we = 1'b0;
             `ysyx_24120009_OPCODE_J:     rf_we = 1'b1;
             `ysyx_24120009_OPCODE_JALR:  rf_we = 1'b1;
-            default:                     rf_we = 1'b1;
+            default:                     rf_we = 1'b0;
         endcase
     end
 
