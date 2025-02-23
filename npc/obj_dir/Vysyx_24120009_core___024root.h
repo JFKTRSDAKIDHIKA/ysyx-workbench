@@ -26,6 +26,7 @@ class Vysyx_24120009_core___024root final : public VerilatedModule {
         VL_OUT8(opcode_debug,6,0);
         VL_OUT8(pc_wen_debug,0,0);
         VL_OUT8(mem_active_debug,0,0);
+        VL_OUT8(alu_op_debug,4,0);
         CData/*4:0*/ ysyx_24120009_core__DOT__alu_op;
         CData/*2:0*/ ysyx_24120009_core__DOT__pc_sel;
         CData/*0:0*/ ysyx_24120009_core__DOT__rf_we;
@@ -78,9 +79,9 @@ class Vysyx_24120009_core___024root final : public VerilatedModule {
         VL_OUT(result_from_MEM_to_WBU_debug,31,0);
         VL_OUT(result_from_WB_debug,31,0);
         IData/*31:0*/ ysyx_24120009_core__DOT__reg_write_data;
-        IData/*31:0*/ ysyx_24120009_core__DOT__Op1;
     };
     struct {
+        IData/*31:0*/ ysyx_24120009_core__DOT__Op1;
         IData/*31:0*/ ysyx_24120009_core__DOT__Op2;
         IData/*31:0*/ ysyx_24120009_core__DOT__pc_plus4;
         IData/*31:0*/ ysyx_24120009_core__DOT__jump_reg_target;
@@ -144,9 +145,9 @@ class Vysyx_24120009_core___024root final : public VerilatedModule {
         VlUnpacked<QData/*34:0*/, 5> ysyx_24120009_core__DOT__mem__DOT__alignment_network__DOT__mem_mux__DOT__i0__DOT__pair_list;
         VlUnpacked<CData/*2:0*/, 5> ysyx_24120009_core__DOT__mem__DOT__alignment_network__DOT__mem_mux__DOT__i0__DOT__key_list;
         VlUnpacked<IData/*31:0*/, 5> ysyx_24120009_core__DOT__mem__DOT__alignment_network__DOT__mem_mux__DOT__i0__DOT__data_list;
-        VlUnpacked<SData/*10:0*/, 3> ysyx_24120009_core__DOT__mem__DOT__wmask_gen__DOT__mem_mux_write__DOT__i0__DOT__pair_list;
     };
     struct {
+        VlUnpacked<SData/*10:0*/, 3> ysyx_24120009_core__DOT__mem__DOT__wmask_gen__DOT__mem_mux_write__DOT__i0__DOT__pair_list;
         VlUnpacked<CData/*2:0*/, 3> ysyx_24120009_core__DOT__mem__DOT__wmask_gen__DOT__mem_mux_write__DOT__i0__DOT__key_list;
         VlUnpacked<CData/*7:0*/, 3> ysyx_24120009_core__DOT__mem__DOT__wmask_gen__DOT__mem_mux_write__DOT__i0__DOT__data_list;
         VlUnpacked<SData/*12:0*/, 8> ysyx_24120009_core__DOT__mem__DOT__mem_acces_ctl_mux__DOT__i0__DOT__pair_list;

@@ -17,7 +17,9 @@ module ysyx_24120009_EXU (
     output     [`ysyx_24120009_DATA_WIDTH-1:0]    pc_o,
     output     [`ysyx_24120009_DATA_WIDTH-1:0]    result,
     output     [`ysyx_24120009_DATA_WIDTH-1:0]    rs2_data_o,
-    output     [`ysyx_24120009_REG_ADDR_WIDTH-1:0]   rd_addr_o
+    output     [`ysyx_24120009_REG_ADDR_WIDTH-1:0]   rd_addr_o,
+    // Debug signals
+    output wire [4:0] alu_op_debug
 );
 
     // Get ready for pipeline
@@ -76,6 +78,7 @@ module ysyx_24120009_EXU (
     // internal signal declaration and signal assignment
     assign dmem_addr = result;
     reg [4:0] alu_op;
+    assign alu_op_debug = alu_op;
 
     // Control Unit for EXE
     wire [2:0] funct3 = inst_o[14:12];

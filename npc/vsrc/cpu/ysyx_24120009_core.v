@@ -23,7 +23,8 @@ module ysyx_24120009_core (
     output wire mem_active_debug,
     output wire [`ysyx_24120009_DATA_WIDTH-1:0] result_from_EXU_to_MEM_debug,
     output wire [`ysyx_24120009_DATA_WIDTH-1:0] result_from_MEM_to_WBU_debug,
-    output wire [`ysyx_24120009_DATA_WIDTH-1:0] result_from_WB_debug
+    output wire [`ysyx_24120009_DATA_WIDTH-1:0] result_from_WB_debug,
+    output wire [4:0] alu_op_debug
 );
 
     // Debug signal declaration
@@ -165,7 +166,9 @@ module ysyx_24120009_core (
         .pc_o(pc_from_EXU_to_MEM),
         .result(result_from_EXU_to_MEM),
         .rs2_data_o(rdata2_from_EXU_to_MEM),
-        .rd_addr_o(rd_addr_from_EXU_to_MEM) 
+        .rd_addr_o(rd_addr_from_EXU_to_MEM),
+        // Debug signals
+        .alu_op_debug(alu_op_debug)
     );
 
     // Instantiate MEM
