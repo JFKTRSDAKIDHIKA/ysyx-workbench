@@ -179,6 +179,8 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root___nba_sequent__TOP__0(Vysyx_241
         = ((IData)(vlSelf->ysyx_24120009_core__DOT__wbu__DOT__wb_mux__DOT__i1__DOT__hit)
             ? vlSelf->ysyx_24120009_core__DOT__wbu__DOT__wb_mux__DOT__i1__DOT__lut_out
             : 0U);
+    vlSelf->mem_active_debug = (vlSelf->ysyx_24120009_core__DOT__ifu__DOT__inst 
+                                == vlSelf->ysyx_24120009_core__DOT__inst_from_MEM_to_WBU);
     vlSelf->ysyx_24120009_core__DOT__mem__DOT____Vcellinp__mem_acces_ctl_mux__key 
         = ((0x3f8U & (vlSelf->ysyx_24120009_core__DOT__inst_from_MEM_to_WBU 
                       << 3U)) | (7U & (vlSelf->ysyx_24120009_core__DOT__inst_from_MEM_to_WBU 
@@ -495,7 +497,10 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root___nba_sequent__TOP__0(Vysyx_241
         Vysyx_24120009_core___024root____Vdpiimwrap_ysyx_24120009_core__DOT__ifu__DOT__pmem_read_TOP(vlSelf->ysyx_24120009_core__DOT__mem__DOT__dmem_addr_o, vlSelf->__Vfunc_ysyx_24120009_core__DOT__mem__DOT__pmem_read__3__Vfuncout);
         vlSelf->ysyx_24120009_core__DOT__mem__DOT__dmem_rdata_raw 
             = vlSelf->__Vfunc_ysyx_24120009_core__DOT__mem__DOT__pmem_read__3__Vfuncout;
-        if ((0x23U == (0x7fU & vlSelf->ysyx_24120009_core__DOT__inst_from_MEM_to_WBU))) {
+        if (((IData)(vlSelf->mem_active_debug) & (0x23U 
+                                                  == 
+                                                  (0x7fU 
+                                                   & vlSelf->ysyx_24120009_core__DOT__inst_from_MEM_to_WBU)))) {
             Vysyx_24120009_core___024root____Vdpiimwrap_ysyx_24120009_core__DOT__mem__DOT__pmem_write_TOP(vlSelf->ysyx_24120009_core__DOT__mem__DOT__dmem_addr_o, 
                                                                                 ((0x1fU 
                                                                                 >= 

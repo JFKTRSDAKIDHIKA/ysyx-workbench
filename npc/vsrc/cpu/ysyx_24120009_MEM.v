@@ -16,7 +16,11 @@ module ysyx_24120009_MEM (
     output     [`ysyx_24120009_DATA_WIDTH-1:0]    pc_o,
     output     [`ysyx_24120009_DATA_WIDTH-1:0]    result_o,
     output     [`ysyx_24120009_DATA_WIDTH-1:0]    dmem_rdata,
-    output     [`ysyx_24120009_REG_ADDR_WIDTH-1:0]   rd_addr_o
+    output     [`ysyx_24120009_REG_ADDR_WIDTH-1:0]   rd_addr_o,
+    // Signals passed to simulation environment
+    output wire mem_active,
+    // Signals passed from IFU
+    input [`ysyx_24120009_DATA_WIDTH-1:0] inst_from_IFU
 );
 
     // direct programing interface --- C
@@ -165,12 +169,15 @@ module ysyx_24120009_MEM (
         end
     end
 
+    // mem_active signal generation
+    assign mem_active = (inst_from_IFU == inst_o);
+
     // mem_wen signal generation
     always @(*) begin
-        if (opcode == `ysyx_24120009_OPCODE_S) begin
-            mem_wen = 1'b1;
+        if (mem_active && opcode == `ysyx_24120009_OPCODE_S) begin
+            mem_wen = 1'b1; // Enable memory write only when mem_active is high and opcode indicates a store operation
         end else begin
-            mem_wen = 1'b0;
+            mem_wen = 1'b0; // Disable memory write otherwise
         end
     end
 

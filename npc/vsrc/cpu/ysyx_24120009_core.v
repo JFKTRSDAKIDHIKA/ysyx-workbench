@@ -19,7 +19,8 @@ module ysyx_24120009_core (
     output wire [`ysyx_24120009_DATA_WIDTH-1:0] pc_plus4_debug,
     output wire [1:0] wb_sel_debug,
     output wire [6:0] opcode_debug,
-    output wire pc_wen_debug
+    output wire pc_wen_debug,
+    output wire mem_active_debug
 );
 
     // Debug signal declaration
@@ -178,7 +179,10 @@ module ysyx_24120009_core (
         .pc_o(pc_from_MEM_to_WBU),
         .result_o(result_from_MEM_to_WBU),
         .dmem_rdata(dmem_rdata_from_MEM_to_WBU),
-        .rd_addr_o(rd_addr_from_MEM_to_WBU)
+        .rd_addr_o(rd_addr_from_MEM_to_WBU),
+        // Signals passed to simulation environment
+        .mem_active(mem_active_debug),
+        .inst_from_IFU(inst_from_IFU_to_IDU)
     );
 
     // Instantiate WBU
