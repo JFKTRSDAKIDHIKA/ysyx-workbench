@@ -1328,9 +1328,10 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root__trace_full_sub_0(Vysyx_24120009
     bufp->fullCData(oldp+364,(vlSelf->opcode_debug),7);
     bufp->fullBit(oldp+365,(vlSelf->pc_wen_debug));
     bufp->fullBit(oldp+366,(vlSelf->mem_active_debug));
-    bufp->fullBit(oldp+367,((((3U == (0x7fU & vlSelf->ysyx_24120009_core__DOT__inst_from_MEM_to_WBU)) 
-                              | (0x23U == (0x7fU & vlSelf->ysyx_24120009_core__DOT__inst_from_MEM_to_WBU))) 
-                             & (IData)(vlSelf->mem_active_debug))));
+    bufp->fullBit(oldp+367,(((IData)(vlSelf->mem_active_debug) 
+                             & ((3U == (0x7fU & vlSelf->ysyx_24120009_core__DOT__inst_from_MEM_to_WBU)) 
+                                | (0x23U == (0x7fU 
+                                             & vlSelf->ysyx_24120009_core__DOT__inst_from_MEM_to_WBU))))));
     bufp->fullBit(oldp+368,(((IData)(vlSelf->mem_active_debug) 
                              & (0x23U == (0x7fU & vlSelf->ysyx_24120009_core__DOT__inst_from_MEM_to_WBU)))));
     __Vtemp_h650a5f8e__0[0U] = (IData)((0x300000000ULL 

@@ -164,10 +164,10 @@ module ysyx_24120009_MEM (
 
     // mem_en signal generation
     always @(*) begin
-        if ((opcode == `ysyx_24120009_OPCODE_LOAD || opcode == `ysyx_24120009_OPCODE_S) && mem_active) begin
-            mem_en = 1'b1;
+        if (mem_active && (opcode == `ysyx_24120009_OPCODE_LOAD || opcode == `ysyx_24120009_OPCODE_S)) begin
+            mem_en = 1'b1; // Enable memory operation only when mem_active is high and opcode indicates a load or store
         end else begin
-            mem_en = 1'b0;
+            mem_en = 1'b0; // Disable memory operation otherwise
         end
     end
 
