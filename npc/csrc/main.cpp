@@ -271,7 +271,6 @@ static int execute_single_step() {
   } else {
     return 0;
   }
-  return 0;
 #else 
   return 0;
 #endif
