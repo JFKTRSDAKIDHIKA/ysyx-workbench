@@ -93,7 +93,7 @@ module ysyx_24120009_WBU (
     reg [1:0] wb_sel;
     assign pc_plus4_debug = pc_plus4;
     assign wb_sel_debug = wb_sel;
-    assign opcode_debug = inst_i[6:0];
+    assign opcode_debug = inst_o[6:0];
 
 
     // reg_write_data signal generation
@@ -114,13 +114,13 @@ module ysyx_24120009_WBU (
     );
 
     // pc_wen  signal generation
-    assign wbu_active  = inst_from_IFU == inst_i;
+    assign wbu_active  = inst_from_IFU == inst_o;
     assign pc_wen = wbu_active;
 
     // Control unit for WBU
-    wire [2:0] funct3 = inst_i[14:12];
-    wire [6:0] funct7 = inst_i[31:25];
-    wire [6:0] opcode = inst_i[6:0];
+    wire [2:0] funct3 = inst_o[14:12];
+    wire [6:0] funct7 = inst_o[31:25];
+    wire [6:0] opcode = inst_o[6:0];
 
     // rf_we signal generation
     always @(*) begin
