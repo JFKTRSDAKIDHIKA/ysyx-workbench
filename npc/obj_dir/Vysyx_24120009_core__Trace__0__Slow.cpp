@@ -733,7 +733,7 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root__trace_full_sub_0(Vysyx_24120009
     VlWide<5>/*159:0*/ __Vtemp_h4b1a9c47__0;
     VlWide<6>/*191:0*/ __Vtemp_h47858337__0;
     VlWide<6>/*191:0*/ __Vtemp_hdb58eddb__0;
-    VlWide<5>/*159:0*/ __Vtemp_hf32e5341__0;
+    VlWide<5>/*159:0*/ __Vtemp_h05feb9b2__0;
     VlWide<4>/*127:0*/ __Vtemp_ha516852c__0;
     // Body
     bufp->fullCData(oldp+1,(vlSelf->ysyx_24120009_core__DOT__exu__DOT__alu_instance__DOT__alu_mux__DOT__i0__DOT__key_list[0]),5);
@@ -1287,22 +1287,18 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root__trace_full_sub_0(Vysyx_24120009
     bufp->fullCData(oldp+336,((vlSelf->ysyx_24120009_core__DOT__wbu__DOT__inst_o 
                                >> 0x19U)),7);
     bufp->fullCData(oldp+337,((0x7fU & vlSelf->ysyx_24120009_core__DOT__wbu__DOT__inst_o)),7);
-    __Vtemp_hf32e5341__0[0U] = (IData)((0x300000000ULL 
+    __Vtemp_h05feb9b2__0[0U] = (IData)((0x300000000ULL 
                                         | (QData)((IData)(vlSelf->ysyx_24120009_core__DOT__wbu__DOT__dmem_rdata_o))));
-    __Vtemp_hf32e5341__0[1U] = ((vlSelf->ysyx_24120009_core__DOT__wbu__DOT__result_o 
+    __Vtemp_h05feb9b2__0[1U] = ((vlSelf->ysyx_24120009_core__DOT__wbu__DOT__result_o 
                                  << 2U) | (IData)((
                                                    (0x300000000ULL 
                                                     | (QData)((IData)(vlSelf->ysyx_24120009_core__DOT__wbu__DOT__dmem_rdata_o))) 
                                                    >> 0x20U)));
-    __Vtemp_hf32e5341__0[2U] = (8U | ((((IData)(4U) 
-                                        + vlSelf->ysyx_24120009_core__DOT__wbu__DOT__pc_o) 
-                                       << 4U) | (vlSelf->ysyx_24120009_core__DOT__wbu__DOT__result_o 
-                                                 >> 0x1eU)));
-    __Vtemp_hf32e5341__0[3U] = (0x10U | (((IData)(4U) 
-                                          + vlSelf->ysyx_24120009_core__DOT__wbu__DOT__pc_o) 
-                                         >> 0x1cU));
-    __Vtemp_hf32e5341__0[4U] = 0U;
-    bufp->fullWData(oldp+338,(__Vtemp_hf32e5341__0),136);
+    __Vtemp_h05feb9b2__0[2U] = (0xffff8U | (vlSelf->ysyx_24120009_core__DOT__wbu__DOT__result_o 
+                                            >> 0x1eU));
+    __Vtemp_h05feb9b2__0[3U] = 0x10U;
+    __Vtemp_h05feb9b2__0[4U] = 0U;
+    bufp->fullWData(oldp+338,(__Vtemp_h05feb9b2__0),136);
     bufp->fullQData(oldp+343,(vlSelf->ysyx_24120009_core__DOT__wbu__DOT__wb_mux__DOT__i1__DOT__pair_list[0]),34);
     bufp->fullQData(oldp+345,(vlSelf->ysyx_24120009_core__DOT__wbu__DOT__wb_mux__DOT__i1__DOT__pair_list[1]),34);
     bufp->fullQData(oldp+347,(vlSelf->ysyx_24120009_core__DOT__wbu__DOT__wb_mux__DOT__i1__DOT__pair_list[2]),34);
