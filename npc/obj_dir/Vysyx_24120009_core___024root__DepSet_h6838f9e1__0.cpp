@@ -66,7 +66,7 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root___nba_sequent__TOP__0(Vysyx_241
             = vlSelf->ysyx_24120009_core__DOT__result_from_EXU_to_MEM;
         vlSelf->ysyx_24120009_core__DOT__mem__DOT__rs2_data_o 
             = vlSelf->ysyx_24120009_core__DOT__rdata2_from_EXU_to_MEM;
-        if (vlSelf->ysyx_24120009_core__DOT__pc_wen) {
+        if (vlSelf->wbu_active_debug) {
             vlSelf->ysyx_24120009_core__DOT__ifu__DOT__pc 
                 = vlSelf->ysyx_24120009_core__DOT__ifu__DOT__pc_next;
         }
@@ -124,8 +124,8 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root___nba_sequent__TOP__0(Vysyx_241
         VL_WRITEF("EBREAK: Simulation exiting...\n");
         Vysyx_24120009_core___024root____Vdpiimwrap_ysyx_24120009_core__DOT__ifu__DOT__simulation_exit_TOP();
     }
-    vlSelf->ysyx_24120009_core__DOT__pc_wen = (vlSelf->ysyx_24120009_core__DOT__ifu__DOT__inst 
-                                               == vlSelf->ysyx_24120009_core__DOT__wbu__DOT__inst_o);
+    vlSelf->wbu_active_debug = (vlSelf->ysyx_24120009_core__DOT__ifu__DOT__inst 
+                                == vlSelf->ysyx_24120009_core__DOT__wbu__DOT__inst_o);
     vlSelf->ysyx_24120009_core__DOT__wbu__DOT__wb_mux__DOT__i1__DOT__lut_out 
         = ((- (IData)(((IData)(vlSelf->ysyx_24120009_core__DOT__wbu__DOT__wb_sel) 
                        == vlSelf->ysyx_24120009_core__DOT__wbu__DOT__wb_mux__DOT__i1__DOT__key_list
@@ -174,7 +174,7 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root___nba_sequent__TOP__0(Vysyx_241
             : 0U);
     vlSelf->waddr_debug = vlSelf->ysyx_24120009_core__DOT__waddr;
     vlSelf->__Vtableidx2 = ((0xfeU & (vlSelf->ysyx_24120009_core__DOT__wbu__DOT__inst_o 
-                                      << 1U)) | (IData)(vlSelf->ysyx_24120009_core__DOT__pc_wen));
+                                      << 1U)) | (IData)(vlSelf->wbu_active_debug));
     vlSelf->ysyx_24120009_core__DOT__rf_we = Vysyx_24120009_core__ConstPool__TABLE_h33c23ebc_0
         [vlSelf->__Vtableidx2];
     vlSelf->reg_write_data_debug = vlSelf->ysyx_24120009_core__DOT__reg_write_data;
@@ -572,6 +572,7 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root___nba_sequent__TOP__0(Vysyx_241
            | ((IData)(vlSelf->ysyx_24120009_core__DOT__exu__DOT__alu_op) 
               == vlSelf->ysyx_24120009_core__DOT__exu__DOT__alu_instance__DOT__alu_mux__DOT__i0__DOT__key_list
               [0xaU]));
+    vlSelf->imem_addr_debug = vlSelf->pc_debug;
     vlSelf->ysyx_24120009_core__DOT__mem__DOT__alignment_network__DOT__mem_mux__DOT__i0__DOT__pair_list[2U] 
         = (0x200000000ULL | (QData)((IData)(vlSelf->ysyx_24120009_core__DOT__mem__DOT__dmem_rdata_raw)));
     vlSelf->ysyx_24120009_core__DOT__mem__DOT__alignment_network__DOT__mem_mux__DOT__i0__DOT__data_list[2U] 

@@ -18,7 +18,7 @@
 #define UART_ADDR_LEN  8          
 
 // #define ENABLE_MEMORY_CHECK 1
-// #define DIFFTEST 1
+#define DIFFTEST 1
 
 // Declare global variables
 Vysyx_24120009_core* top;  // Top module (global)
@@ -264,9 +264,11 @@ static char* rl_gets() {
 static int execute_single_step() {
   tick(top, true);  
 #ifdef DIFFTEST
-  ref_difftest_exec(1);
-  ref_difftest_regcpy(&ref, DIFFTEST_TO_REF);
-  return check_dut_and_ref(top, 0x80000000, 0x1000);
+  if (top->wbu_active_debug == 1) {
+    ref_difftest_exec(1);
+    ref_difftest_regcpy(&ref, DIFFTEST_TO_REF);
+    return check_dut_and_ref(top, 0x80000000, 0x1000);
+  }
 #else 
   return 0;
 #endif

@@ -21,13 +21,13 @@ class Vysyx_24120009_core___024root final : public VerilatedModule {
         VL_OUT8(mem_wen_debug,0,0);
         VL_OUT8(mem_en_debug,0,0);
         VL_OUT8(rf_we_debug,0,0);
+        VL_OUT8(wbu_active_debug,0,0);
         CData/*4:0*/ ysyx_24120009_core__DOT__alu_op;
         CData/*2:0*/ ysyx_24120009_core__DOT__pc_sel;
         CData/*0:0*/ ysyx_24120009_core__DOT__rf_we;
         CData/*0:0*/ ysyx_24120009_core__DOT__mem_en;
         CData/*0:0*/ ysyx_24120009_core__DOT__mem_wen;
         CData/*1:0*/ ysyx_24120009_core__DOT__wb_sel;
-        CData/*0:0*/ ysyx_24120009_core__DOT__pc_wen;
         CData/*4:0*/ ysyx_24120009_core__DOT__rd_addr_from_EXU_to_MEM;
         CData/*4:0*/ ysyx_24120009_core__DOT__rd_addr_from_MEM_to_WBU;
         CData/*4:0*/ ysyx_24120009_core__DOT__waddr;
@@ -68,6 +68,7 @@ class Vysyx_24120009_core___024root final : public VerilatedModule {
         VL_OUT(x2_debug,31,0);
         VL_OUT(Op1_debug,31,0);
         VL_OUT(Op2_debug,31,0);
+        VL_OUT(imem_addr_debug,31,0);
         IData/*31:0*/ ysyx_24120009_core__DOT__reg_write_data;
         IData/*31:0*/ ysyx_24120009_core__DOT__Op1;
         IData/*31:0*/ ysyx_24120009_core__DOT__Op2;
@@ -78,9 +79,9 @@ class Vysyx_24120009_core___024root final : public VerilatedModule {
         IData/*31:0*/ ysyx_24120009_core__DOT__pc_from_IDU_to_EXU;
         IData/*31:0*/ ysyx_24120009_core__DOT__inst_from_IDU_to_EXU;
         IData/*31:0*/ ysyx_24120009_core__DOT__rdata2_from_IDU_to_EXU;
-        IData/*31:0*/ ysyx_24120009_core__DOT__pc_from_EXU_to_MEM;
     };
     struct {
+        IData/*31:0*/ ysyx_24120009_core__DOT__pc_from_EXU_to_MEM;
         IData/*31:0*/ ysyx_24120009_core__DOT__inst_from_EXU_to_MEM;
         IData/*31:0*/ ysyx_24120009_core__DOT__result_from_EXU_to_MEM;
         IData/*31:0*/ ysyx_24120009_core__DOT__rdata2_from_EXU_to_MEM;
@@ -144,6 +145,8 @@ class Vysyx_24120009_core___024root final : public VerilatedModule {
         VlUnpacked<QData/*33:0*/, 4> ysyx_24120009_core__DOT__wbu__DOT__wb_mux__DOT__i1__DOT__pair_list;
         VlUnpacked<CData/*1:0*/, 4> ysyx_24120009_core__DOT__wbu__DOT__wb_mux__DOT__i1__DOT__key_list;
         VlUnpacked<IData/*31:0*/, 4> ysyx_24120009_core__DOT__wbu__DOT__wb_mux__DOT__i1__DOT__data_list;
+    };
+    struct {
         VlUnpacked<CData/*0:0*/, 2> __Vm_traceActivity;
     };
     VlTriggerVec<1> __VstlTriggered;

@@ -18,12 +18,14 @@ Vysyx_24120009_core::Vysyx_24120009_core(VerilatedContext* _vcontextp__, const c
     , mem_wen_debug{vlSymsp->TOP.mem_wen_debug}
     , mem_en_debug{vlSymsp->TOP.mem_en_debug}
     , rf_we_debug{vlSymsp->TOP.rf_we_debug}
+    , wbu_active_debug{vlSymsp->TOP.wbu_active_debug}
     , pc_debug{vlSymsp->TOP.pc_debug}
     , inst_debug{vlSymsp->TOP.inst_debug}
     , reg_write_data_debug{vlSymsp->TOP.reg_write_data_debug}
     , x2_debug{vlSymsp->TOP.x2_debug}
     , Op1_debug{vlSymsp->TOP.Op1_debug}
     , Op2_debug{vlSymsp->TOP.Op2_debug}
+    , imem_addr_debug{vlSymsp->TOP.imem_addr_debug}
     , rootp{&(vlSymsp->TOP)}
 {
     // Register model with the context
