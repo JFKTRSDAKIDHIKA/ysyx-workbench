@@ -116,8 +116,11 @@ module ysyx_24120009_WBU (
         })
     );
 
-    // pc_wen  signal generation
+    // wbu_active indicates the state of module WBU
+    // It is asserted high only when the inst from IFU has been passed to WBU
     assign wbu_active  = inst_from_IFU == inst_o;
+
+    // Generate pc_wen signal which will be passed back to IFU
     assign pc_wen = wbu_active;
 
     // Control unit for WBU

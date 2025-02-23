@@ -23,6 +23,7 @@
 // Declare global variables
 Vysyx_24120009_core* top;  // Top module (global)
 bool step_mode;  // Step mode flag (global)
+int total_cycle;
 
 // define the DPI-C functions
 // note: extern "C" 是 C++ 中的一个声明方式，用来告诉编译器，函数使用 C 的链接方式，而不是 C++ 默认的链接方式。
@@ -290,6 +291,7 @@ static int cmd_c(char *args) {
   while(!Verilated::gotFinish()) {
     int ret = execute_single_step();
     if (ret < 0) return -1;
+    total_cycle++;
   }
   return 0;
 }
@@ -435,6 +437,7 @@ int main(int argc, char **argv) {
       if (sdb_mainloop() < 0) return -1;
     } else {
       if (cmd_c(NULL) < 0) return -1;
+      printf("total cycle: %d\n", total_cycle);
     }
 /*
     while(!Verilated::gotFinish()) {

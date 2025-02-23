@@ -162,6 +162,12 @@ module ysyx_24120009_MEM (
     })
     );
 
+    
+    // The mem_active signal indicates the operational state of the MEM module.
+    // It is asserted (high) only when an instruction has been passed to this module 
+    // but has not yet been forwarded to the WBU (Write-Back Unit).
+    assign mem_active = (inst_from_IFU == inst_o) && (inst_from_WBU != inst_o);
+
     // mem_en signal generation
     always @(*) begin
         if (mem_active && (opcode == `ysyx_24120009_OPCODE_LOAD || opcode == `ysyx_24120009_OPCODE_S)) begin
@@ -170,9 +176,6 @@ module ysyx_24120009_MEM (
             mem_en = 1'b0; // Disable memory operation otherwise
         end
     end
-
-    // mem_active signal generation
-    assign mem_active = (inst_from_IFU == inst_o) && (inst_from_WBU != inst_o);
 
     // mem_wen signal generation
     always @(*) begin
