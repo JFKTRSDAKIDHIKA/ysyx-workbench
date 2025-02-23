@@ -15,7 +15,17 @@ module ysyx_24120009_core (
     output wire [`ysyx_24120009_DATA_WIDTH-1:0] Op2_debug,
     output wire rf_we_debug,
     output wire wbu_active_debug,
-    output wire [`ysyx_24120009_DATA_WIDTH-1:0] imem_addr_debug
+    output wire [`ysyx_24120009_DATA_WIDTH-1:0] imem_addr_debug,
+    output wire [`ysyx_24120009_DATA_WIDTH-1:0] pc_plus4_debug,
+    output wire [1:0] wb_sel_debug,
+    output wire [6:0] opcode_debug,
+    output wire pc_wen_debug,
+    output wire mem_active_debug,
+    output wire [`ysyx_24120009_DATA_WIDTH-1:0] result_from_EXU_to_MEM_debug,
+    output wire [`ysyx_24120009_DATA_WIDTH-1:0] result_from_MEM_to_WBU_debug,
+    output wire [`ysyx_24120009_DATA_WIDTH-1:0] result_from_WB_debug,
+    output wire [4:0] alu_op_debug,
+    output wire [`ysyx_24120009_DATA_WIDTH-1:0] inst_from_EXU_to_MEM_debug
 );
 
     // Debug signal declaration
@@ -29,6 +39,9 @@ module ysyx_24120009_core (
     assign Op2_debug = Op2;
     assign rf_we_debug = rf_we;
     assign imem_addr_debug = pc_from_IFU_to_IDU;
+    assign pc_wen_debug = pc_wen;
+    assign result_from_EXU_to_MEM_debug = result_from_EXU_to_MEM;
+    assign result_from_MEM_to_WBU_debug = result_from_MEM_to_WBU;
 
     // Internal signals
     wire [`ysyx_24120009_DATA_WIDTH-1:0] reg_write_data;
@@ -63,6 +76,7 @@ module ysyx_24120009_core (
     wire [`ysyx_24120009_DATA_WIDTH-1:0] pc_from_MEM_to_WBU;
     wire [`ysyx_24120009_DATA_WIDTH-1:0] rd_addr_from_MEM_to_WBU;
     wire [`ysyx_24120009_DATA_WIDTH-1:0] inst_from_MEM_to_WBU;
+    wire [`ysyx_24120009_DATA_WIDTH-1:0] inst_from_WBU_to_MEM;
 
     //  Register file address
     wire [`ysyx_24120009_REG_ADDR_WIDTH-1:0] rs1_addr;
@@ -153,7 +167,10 @@ module ysyx_24120009_core (
         .pc_o(pc_from_EXU_to_MEM),
         .result(result_from_EXU_to_MEM),
         .rs2_data_o(rdata2_from_EXU_to_MEM),
-        .rd_addr_o(rd_addr_from_EXU_to_MEM) 
+        .rd_addr_o(rd_addr_from_EXU_to_MEM),
+        // Debug signals
+        .alu_op_debug(alu_op_debug),
+        .inst_from_EXU_to_MEM_debug(inst_from_EXU_to_MEM_debug)
     );
 
     // Instantiate MEM
@@ -173,7 +190,13 @@ module ysyx_24120009_core (
         .pc_o(pc_from_MEM_to_WBU),
         .result_o(result_from_MEM_to_WBU),
         .dmem_rdata(dmem_rdata_from_MEM_to_WBU),
-        .rd_addr_o(rd_addr_from_MEM_to_WBU)
+        .rd_addr_o(rd_addr_from_MEM_to_WBU),
+        // Signals passed to simulation environment
+        .mem_active(mem_active_debug),
+        // Signals passed from IFU
+        .inst_from_IFU(inst_from_IFU_to_IDU),
+        // Signals passed from WBU
+        .inst_from_WBU(inst_from_WBU_to_MEM)
     );
 
     // Instantiate WBU
@@ -196,7 +219,14 @@ module ysyx_24120009_core (
         // Signal passed from IFU
         .inst_from_IFU(inst_from_IFU_to_IDU),
         // Signals passed to simulation environment
-        .wbu_active(wbu_active_debug)
+        .wbu_active(wbu_active_debug),
+        // Signals passed back to MEM
+        .inst_o(inst_from_WBU_to_MEM),
+        // Debug signals
+        .pc_plus4_debug(pc_plus4_debug),
+        .wb_sel_debug(wb_sel_debug),
+        .opcode_debug(opcode_debug),
+        .result_from_WB_debug(result_from_WB_debug)
     );
 
 

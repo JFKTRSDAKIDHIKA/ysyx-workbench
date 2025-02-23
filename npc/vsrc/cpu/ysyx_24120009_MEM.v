@@ -16,7 +16,13 @@ module ysyx_24120009_MEM (
     output     [`ysyx_24120009_DATA_WIDTH-1:0]    pc_o,
     output     [`ysyx_24120009_DATA_WIDTH-1:0]    result_o,
     output     [`ysyx_24120009_DATA_WIDTH-1:0]    dmem_rdata,
-    output     [`ysyx_24120009_REG_ADDR_WIDTH-1:0]   rd_addr_o
+    output     [`ysyx_24120009_REG_ADDR_WIDTH-1:0]   rd_addr_o,
+    // Signals passed to simulation environment
+    output wire mem_active,
+    // Signals passed from IFU
+    input [`ysyx_24120009_DATA_WIDTH-1:0] inst_from_IFU,
+    // Signals passed from WBU
+    input [`ysyx_24120009_DATA_WIDTH-1:0] inst_from_WBU
 );
 
     // direct programing interface --- C
@@ -156,21 +162,27 @@ module ysyx_24120009_MEM (
     })
     );
 
+    
+    // The mem_active signal indicates the operational state of the MEM module.
+    // It is asserted (high) only when an instruction has been passed to this module 
+    // but has not yet been forwarded to the WBU (Write-Back Unit).
+    assign mem_active = (inst_from_IFU == inst_o) && (inst_from_WBU != inst_o);
+
     // mem_en signal generation
     always @(*) begin
-        if (opcode == `ysyx_24120009_OPCODE_LOAD || opcode == `ysyx_24120009_OPCODE_S) begin
-            mem_en = 1'b1;
+        if (mem_active && (opcode == `ysyx_24120009_OPCODE_LOAD || opcode == `ysyx_24120009_OPCODE_S)) begin
+            mem_en = 1'b1; // Enable memory operation only when mem_active is high and opcode indicates a load or store
         end else begin
-            mem_en = 1'b0;
+            mem_en = 1'b0; // Disable memory operation otherwise
         end
     end
 
     // mem_wen signal generation
     always @(*) begin
-        if (opcode == `ysyx_24120009_OPCODE_S) begin
-            mem_wen = 1'b1;
+        if (mem_active && opcode == `ysyx_24120009_OPCODE_S) begin
+            mem_wen = 1'b1; // Enable memory write only when mem_active is high and opcode indicates a store operation
         end else begin
-            mem_wen = 1'b0;
+            mem_wen = 1'b0; // Disable memory write otherwise
         end
     end
 

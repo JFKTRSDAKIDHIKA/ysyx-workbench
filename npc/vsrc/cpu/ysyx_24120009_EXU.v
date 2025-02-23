@@ -17,7 +17,10 @@ module ysyx_24120009_EXU (
     output     [`ysyx_24120009_DATA_WIDTH-1:0]    pc_o,
     output     [`ysyx_24120009_DATA_WIDTH-1:0]    result,
     output     [`ysyx_24120009_DATA_WIDTH-1:0]    rs2_data_o,
-    output     [`ysyx_24120009_REG_ADDR_WIDTH-1:0]   rd_addr_o
+    output     [`ysyx_24120009_REG_ADDR_WIDTH-1:0]   rd_addr_o,
+    // Debug signals
+    output wire [4:0] alu_op_debug,
+    output wire [`ysyx_24120009_DATA_WIDTH-1:0]    inst_from_EXU_to_MEM_debug
 );
 
     // Get ready for pipeline
@@ -76,6 +79,8 @@ module ysyx_24120009_EXU (
     // internal signal declaration and signal assignment
     assign dmem_addr = result;
     reg [4:0] alu_op;
+    assign alu_op_debug = alu_op;
+    assign inst_from_EXU_to_MEM_debug = inst_o;
 
     // Control Unit for EXE
     wire [2:0] funct3 = inst_o[14:12];
@@ -88,9 +93,28 @@ module ysyx_24120009_EXU (
                 alu_op = `ALU_OP_ADD;
             end
             `ysyx_24120009_OPCODE_LUI: begin
-                alu_op = `ALU_OP_SUB;
+                alu_op = `ALU_OP_PASS_A;
             end
-            `ysyx_24120009_OPCODE_R, `ysyx_24120009_OPCODE_I: begin
+             `ysyx_24120009_OPCODE_I: begin
+                case (funct3)
+                    3'b000: alu_op = `ALU_OP_ADD;
+                    3'b001: alu_op = `ALU_OP_SLL;
+                    3'b010: alu_op = `ALU_OP_SLT;
+                    3'b011: alu_op = `ALU_OP_SLTU;
+                    3'b100: alu_op = `ALU_OP_XOR;
+                    3'b101: begin
+                        case (funct7)
+                            7'b0000000: alu_op = `ALU_OP_SRL;
+                            7'b0100000: alu_op = `ALU_OP_SRA;
+                            default:    alu_op = `ALU_OP_ADD;
+                        endcase
+                    end
+                    3'b110: alu_op = `ALU_OP_OR;
+                    3'b111: alu_op = `ALU_OP_AND;
+                    default: alu_op = `ALU_OP_ADD;
+                endcase
+            end
+            `ysyx_24120009_OPCODE_R: begin
                 case (funct3)
                     3'b000: begin
                         case (funct7)

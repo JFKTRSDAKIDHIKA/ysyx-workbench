@@ -19,7 +19,14 @@ module ysyx_24120009_WBU (
     // Signal passed from IFU
     input [`ysyx_24120009_DATA_WIDTH-1:0] inst_from_IFU,
     // Signals passed to simulation environment
-    output wire wbu_active
+    output wire wbu_active,
+    // Signals passed back to MEM
+    output wire [`ysyx_24120009_DATA_WIDTH-1:0]    inst_o,
+    // Debug signals
+    output wire [`ysyx_24120009_DATA_WIDTH-1:0] pc_plus4_debug,
+    output wire [1:0] wb_sel_debug,
+    output wire [6:0] opcode_debug,
+    output wire [`ysyx_24120009_DATA_WIDTH-1:0] result_from_WB_debug
 );
 
     // Get ready for pipeline
@@ -81,12 +88,16 @@ module ysyx_24120009_WBU (
     // Internal signal declaration
     wire [`ysyx_24120009_DATA_WIDTH-1:0] pc_plus4;
     assign pc_plus4 = pc_o + `ysyx_24120009_PC_STEP;
-    wire     [`ysyx_24120009_DATA_WIDTH-1:0]    inst_o;
     wire     [`ysyx_24120009_DATA_WIDTH-1:0]    pc_o;
     wire     [`ysyx_24120009_DATA_WIDTH-1:0] result_o;
     wire    [`ysyx_24120009_DATA_WIDTH-1:0] dmem_addr_o;
     wire     [`ysyx_24120009_DATA_WIDTH-1:0] dmem_rdata_o;
     reg [1:0] wb_sel;
+    assign pc_plus4_debug = pc_plus4;
+    assign wb_sel_debug = wb_sel;
+    assign opcode_debug = inst_o[6:0];
+    assign result_from_WB_debug = result_o;
+
 
     // reg_write_data signal generation
     ysyx_24120009_MuxKeyWithDefault #(
@@ -105,8 +116,11 @@ module ysyx_24120009_WBU (
         })
     );
 
-    // pc_wen  signal generation
+    // wbu_active indicates the state of module WBU
+    // It is asserted high only when the inst from IFU has been passed to WBU
     assign wbu_active  = inst_from_IFU == inst_o;
+
+    // Generate pc_wen signal which will be passed back to IFU
     assign pc_wen = wbu_active;
 
     // Control unit for WBU
@@ -122,6 +136,7 @@ module ysyx_24120009_WBU (
                 `ysyx_24120009_OPCODE_LUI:   rf_we = 1'b1;
                 `ysyx_24120009_OPCODE_R:     rf_we = 1'b1;
                 `ysyx_24120009_OPCODE_I:     rf_we = 1'b1;
+                `ysyx_24120009_OPCODE_LOAD:  rf_we = 1'b1;
                 `ysyx_24120009_OPCODE_S:     rf_we = 1'b0;
                 `ysyx_24120009_OPCODE_B:     rf_we = 1'b0;
                 `ysyx_24120009_OPCODE_CSR:   rf_we = 1'b0;
@@ -141,7 +156,7 @@ module ysyx_24120009_WBU (
             `ysyx_24120009_OPCODE_LUI:   wb_sel = 2'b10;
             `ysyx_24120009_OPCODE_R:     wb_sel = 2'b10;
             `ysyx_24120009_OPCODE_I:     wb_sel = 2'b10;
-            `ysyx_24120009_OPCODE_S:     wb_sel = 2'b11;
+            `ysyx_24120009_OPCODE_LOAD:     wb_sel = 2'b11;
             `ysyx_24120009_OPCODE_B:     wb_sel = 2'b00;
             `ysyx_24120009_OPCODE_CSR:   wb_sel = 2'b00;
             `ysyx_24120009_OPCODE_J:     wb_sel = 2'b01;

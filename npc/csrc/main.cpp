@@ -18,7 +18,7 @@
 #define UART_ADDR_LEN  8          
 
 // #define ENABLE_MEMORY_CHECK 1
-#define DIFFTEST 1
+// #define DIFFTEST 1
 
 // Declare global variables
 Vysyx_24120009_core* top;  // Top module (global)
@@ -208,7 +208,17 @@ void tick(Vysyx_24120009_core* top, bool silent_mode ) {
                 << ", Op2: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->Op2_debug
                 << ", wb_data: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->reg_write_data_debug
                 << ", Instruction: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->inst_debug
+                << ", PC: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->pc_debug
+                << ", PC_PLUS4: 0x" << std::hex << static_cast<int>(top->pc_plus4_debug) // Cast to int for proper printing
                 << ", rf_we_debug: 0x" << std::hex << static_cast<int>(top->rf_we_debug) // Cast to int for proper printing
+                << ", wb_sel_debug: 0x" << std::hex << static_cast<int>(top->wb_sel_debug) // Cast to int for proper printing
+                << ", opcode: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->opcode_debug) // Cast to int for proper printing
+                << ", pc_wen: 0x" << std::hex << static_cast<int>(top->pc_wen_debug) // Cast to int for proper printing
+                << ", result_from_EXU: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->result_from_EXU_to_MEM_debug
+                << ", result_from_MEM: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->result_from_MEM_to_WBU_debug
+                << ", result_from_WB: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->result_from_WB_debug
+                << ", alu_op: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->alu_op_debug) // Cast to int for proper printing
+                << ", inst_from_EXU_to_MEM_debug: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->inst_from_EXU_to_MEM_debug
                 << std::dec << std::endl;
     }
   
