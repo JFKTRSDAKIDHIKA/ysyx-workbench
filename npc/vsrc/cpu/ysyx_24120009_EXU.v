@@ -95,9 +95,34 @@ module ysyx_24120009_EXU (
             `ysyx_24120009_OPCODE_LUI: begin
                 alu_op = `ALU_OP_PASS_A;
             end
-            `ysyx_24120009_OPCODE_R, `ysyx_24120009_OPCODE_I: begin
+             `ysyx_24120009_OPCODE_I: begin
                 case (funct3)
                     3'b000: alu_op = `ALU_OP_ADD;
+                    3'b001: alu_op = `ALU_OP_SLL;
+                    3'b010: alu_op = `ALU_OP_SLT;
+                    3'b011: alu_op = `ALU_OP_SLTU;
+                    3'b100: alu_op = `ALU_OP_XOR;
+                    3'b101: begin
+                        case (funct7)
+                            7'b0000000: alu_op = `ALU_OP_SRL;
+                            7'b0100000: alu_op = `ALU_OP_SRA;
+                            default:    alu_op = `ALU_OP_ADD;
+                        endcase
+                    end
+                    3'b110: alu_op = `ALU_OP_OR;
+                    3'b111: alu_op = `ALU_OP_AND;
+                    default: alu_op = `ALU_OP_ADD;
+                endcase
+            end
+            `ysyx_24120009_OPCODE_R: begin
+                case (funct3)
+                    3'b000: begin
+                        case (funct7)
+                            7'b0000000: alu_op = `ALU_OP_ADD;
+                            7'b0100000: alu_op = `ALU_OP_SUB;
+                            default:    alu_op = `ALU_OP_ADD;
+                        endcase
+                    end
                     3'b001: alu_op = `ALU_OP_SLL;
                     3'b010: alu_op = `ALU_OP_SLT;
                     3'b011: alu_op = `ALU_OP_SLTU;
