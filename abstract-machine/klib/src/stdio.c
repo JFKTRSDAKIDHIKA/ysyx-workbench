@@ -64,10 +64,10 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
   const char *p = fmt;
   while (*p) {
     if (*p == '%') {
-      printf("test");
       p++;
       switch (*p) {
         case 'd': {
+          printf("d\n");
           int val = va_arg(ap, int);
           char buf[32];
           int_to_str(val, buf);
