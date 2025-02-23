@@ -109,7 +109,7 @@ module ysyx_24120009_MEM (
             dmem_rdata_raw = pmem_read(dmem_addr_o);
             if (mem_wen) begin 
             // write data to data memory
-            pmem_write(dmem_addr_o, dmem_wdata, 8'b0);
+            pmem_write(dmem_addr_o, dmem_wdata, wmask);
             end
         end
         else begin
