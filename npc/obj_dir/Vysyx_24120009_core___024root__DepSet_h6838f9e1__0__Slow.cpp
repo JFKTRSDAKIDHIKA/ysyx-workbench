@@ -547,7 +547,8 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root___stl_sequent__TOP__0(Vysyx_2412
     vlSelf->ysyx_24120009_core__DOT__wbu__DOT__wb_sel 
         = Vysyx_24120009_core__ConstPool__TABLE_hd37b394f_0
         [vlSelf->__Vtableidx3];
-    if ((0x100073U == vlSelf->ysyx_24120009_core__DOT__ifu__DOT__inst)) {
+    if (VL_UNLIKELY((0x100073U == vlSelf->ysyx_24120009_core__DOT__ifu__DOT__inst))) {
+        VL_WRITEF("EBREAK: Simulation exiting...\n");
         Vysyx_24120009_core___024root____Vdpiimwrap_ysyx_24120009_core__DOT__ifu__DOT__simulation_exit_TOP();
     }
     vlSelf->inst_debug = vlSelf->ysyx_24120009_core__DOT__ifu__DOT__inst;

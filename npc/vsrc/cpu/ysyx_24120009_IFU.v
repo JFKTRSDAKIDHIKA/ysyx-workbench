@@ -60,7 +60,7 @@ module ysyx_24120009_IFU (
   // handle ebreak instruction
   always @(*) begin
       if (inst == 32'h00100073) begin
-          //$display("EBREAK: Simulation exiting...");
+          $display("EBREAK: Simulation exiting...");
           simulation_exit(); // 通知仿真环境结束
       end
   end
