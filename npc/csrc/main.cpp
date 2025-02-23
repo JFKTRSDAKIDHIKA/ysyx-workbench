@@ -268,7 +268,10 @@ static int execute_single_step() {
     ref_difftest_exec(1);
     ref_difftest_regcpy(&ref, DIFFTEST_TO_REF);
     return check_dut_and_ref(top, 0x80000000, 0x1000);
+  } else {
+    return 0;
   }
+  return 0;
 #else 
   return 0;
 #endif
