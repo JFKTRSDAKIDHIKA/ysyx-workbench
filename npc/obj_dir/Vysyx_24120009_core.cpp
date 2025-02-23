@@ -19,6 +19,7 @@ Vysyx_24120009_core::Vysyx_24120009_core(VerilatedContext* _vcontextp__, const c
     , mem_en_debug{vlSymsp->TOP.mem_en_debug}
     , rf_we_debug{vlSymsp->TOP.rf_we_debug}
     , wbu_active_debug{vlSymsp->TOP.wbu_active_debug}
+    , wb_sel_debug{vlSymsp->TOP.wb_sel_debug}
     , pc_debug{vlSymsp->TOP.pc_debug}
     , inst_debug{vlSymsp->TOP.inst_debug}
     , reg_write_data_debug{vlSymsp->TOP.reg_write_data_debug}

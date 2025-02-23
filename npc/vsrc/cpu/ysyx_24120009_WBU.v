@@ -21,7 +21,8 @@ module ysyx_24120009_WBU (
     // Signals passed to simulation environment
     output wire wbu_active,
     // Debug signals
-    output wire [`ysyx_24120009_DATA_WIDTH-1:0] pc_plus4_debug
+    output wire [`ysyx_24120009_DATA_WIDTH-1:0] pc_plus4_debug,
+    output wire [1:0] wb_sel_debug
 );
 
     // Get ready for pipeline
@@ -89,6 +90,9 @@ module ysyx_24120009_WBU (
     wire    [`ysyx_24120009_DATA_WIDTH-1:0] dmem_addr_o;
     wire     [`ysyx_24120009_DATA_WIDTH-1:0] dmem_rdata_o;
     reg [1:0] wb_sel;
+    assign pc_plus4_debug = pc_plus4;
+    assign wb_sel_debug = wb_sel;
+
 
     // reg_write_data signal generation
     ysyx_24120009_MuxKeyWithDefault #(
@@ -110,7 +114,6 @@ module ysyx_24120009_WBU (
     // pc_wen  signal generation
     assign wbu_active  = inst_from_IFU == inst_o;
     assign pc_wen = wbu_active;
-    assign pc_plus4_debug = pc_plus4;
 
     // Control unit for WBU
     wire [2:0] funct3 = inst_o[14:12];

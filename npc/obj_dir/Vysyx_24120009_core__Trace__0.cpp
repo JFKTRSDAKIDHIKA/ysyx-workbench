@@ -625,6 +625,7 @@ void Vysyx_24120009_core___024root__trace_chg_sub_0(Vysyx_24120009_core___024roo
     bufp->chgBit(oldp+362,(vlSelf->wbu_active_debug));
     bufp->chgIData(oldp+363,(vlSelf->imem_addr_debug),32);
     bufp->chgIData(oldp+364,(vlSelf->pc_plus4_debug),32);
+    bufp->chgCData(oldp+365,(vlSelf->wb_sel_debug),2);
     __Vtemp_h650a5f8e__0[0U] = (IData)((0x300000000ULL 
                                         | (QData)((IData)(vlSelf->ysyx_24120009_core__DOT__wbu__DOT__dmem_rdata_o))));
     __Vtemp_h650a5f8e__0[1U] = ((vlSelf->ysyx_24120009_core__DOT__wbu__DOT__result_o 
@@ -638,7 +639,7 @@ void Vysyx_24120009_core___024root__trace_chg_sub_0(Vysyx_24120009_core___024roo
     __Vtemp_h650a5f8e__0[3U] = (0x10U | (vlSelf->pc_plus4_debug 
                                          >> 0x1cU));
     __Vtemp_h650a5f8e__0[4U] = 0U;
-    bufp->chgWData(oldp+365,(__Vtemp_h650a5f8e__0),136);
+    bufp->chgWData(oldp+366,(__Vtemp_h650a5f8e__0),136);
 }
 
 void Vysyx_24120009_core___024root__trace_cleanup(void* voidSelf, VerilatedVcd* /*unused*/) {
