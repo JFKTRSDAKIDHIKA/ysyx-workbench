@@ -15,7 +15,8 @@ module ysyx_24120009_core (
     output wire [`ysyx_24120009_DATA_WIDTH-1:0] Op2_debug,
     output wire rf_we_debug,
     output wire wbu_active_debug,
-    output wire [`ysyx_24120009_DATA_WIDTH-1:0] imem_addr_debug
+    output wire [`ysyx_24120009_DATA_WIDTH-1:0] imem_addr_debug,
+    output wire [`ysyx_24120009_DATA_WIDTH-1:0] pc_plus4_debug
 );
 
     // Debug signal declaration
@@ -196,7 +197,9 @@ module ysyx_24120009_core (
         // Signal passed from IFU
         .inst_from_IFU(inst_from_IFU_to_IDU),
         // Signals passed to simulation environment
-        .wbu_active(wbu_active_debug)
+        .wbu_active(wbu_active_debug),
+        // Debug signals
+        .pc_plus4_debug(pc_plus4_debug)
     );
 
 
