@@ -164,7 +164,7 @@ module ysyx_24120009_MEM (
 
     // mem_en signal generation
     always @(*) begin
-        if (opcode == `ysyx_24120009_OPCODE_LOAD || opcode == `ysyx_24120009_OPCODE_S) begin
+        if ((opcode == `ysyx_24120009_OPCODE_LOAD || opcode == `ysyx_24120009_OPCODE_S) && mem_active) begin
             mem_en = 1'b1;
         end else begin
             mem_en = 1'b0;
