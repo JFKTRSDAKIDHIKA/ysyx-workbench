@@ -266,7 +266,8 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root___stl_sequent__TOP__0(Vysyx_2412
                              ? 0U : ((4U & vlSelf->ysyx_24120009_core__DOT__inst_from_EXU_to_MEM)
                                       ? ((2U & vlSelf->ysyx_24120009_core__DOT__inst_from_EXU_to_MEM)
                                           ? ((1U & vlSelf->ysyx_24120009_core__DOT__inst_from_EXU_to_MEM)
-                                              ? 1U : 0U)
+                                              ? 0xaU
+                                              : 0U)
                                           : 0U) : (
                                                    (2U 
                                                     & vlSelf->ysyx_24120009_core__DOT__inst_from_EXU_to_MEM)

@@ -88,7 +88,7 @@ module ysyx_24120009_EXU (
                 alu_op = `ALU_OP_ADD;
             end
             `ysyx_24120009_OPCODE_LUI: begin
-                alu_op = `ALU_OP_SUB;
+                alu_op = `ALU_OP_PASS_A;
             end
             `ysyx_24120009_OPCODE_R, `ysyx_24120009_OPCODE_I: begin
                 case (funct3)
