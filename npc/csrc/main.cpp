@@ -267,7 +267,7 @@ static char* rl_gets() {
   }
   
 static int execute_single_step() {
-  tick(top, false);  
+  tick(top, true);  
 #ifdef DIFFTEST
   if (top->wbu_active_debug == 1) {
     ref_difftest_regcpy(&ref, DIFFTEST_TO_REF);
