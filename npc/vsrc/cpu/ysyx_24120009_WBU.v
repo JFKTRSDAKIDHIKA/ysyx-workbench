@@ -150,7 +150,7 @@ module ysyx_24120009_WBU (
             `ysyx_24120009_OPCODE_LUI:   wb_sel = 2'b10;
             `ysyx_24120009_OPCODE_R:     wb_sel = 2'b10;
             `ysyx_24120009_OPCODE_I:     wb_sel = 2'b10;
-            `ysyx_24120009_OPCODE_S:     wb_sel = 2'b11;
+            `ysyx_24120009_OPCODE_LOAD:     wb_sel = 2'b11;
             `ysyx_24120009_OPCODE_B:     wb_sel = 2'b00;
             `ysyx_24120009_OPCODE_CSR:   wb_sel = 2'b00;
             `ysyx_24120009_OPCODE_J:     wb_sel = 2'b01;
