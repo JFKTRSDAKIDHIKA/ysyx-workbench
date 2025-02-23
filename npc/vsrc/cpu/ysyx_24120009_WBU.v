@@ -17,7 +17,9 @@ module ysyx_24120009_WBU (
     // Signals passed to IFU
     output pc_wen, 
     // Signal passed from IFU
-    input [`ysyx_24120009_DATA_WIDTH-1:0] inst_from_IFU
+    input [`ysyx_24120009_DATA_WIDTH-1:0] inst_from_IFU,
+    // Signals passed to simulation environment
+    output wire wbu_active
 );
 
     // Get ready for pipeline
@@ -85,7 +87,6 @@ module ysyx_24120009_WBU (
     wire    [`ysyx_24120009_DATA_WIDTH-1:0] dmem_addr_o;
     wire     [`ysyx_24120009_DATA_WIDTH-1:0] dmem_rdata_o;
     reg [1:0] wb_sel;
-    wire wbu_active;
 
     // reg_write_data signal generation
     ysyx_24120009_MuxKeyWithDefault #(

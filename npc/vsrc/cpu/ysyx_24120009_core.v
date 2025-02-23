@@ -13,7 +13,9 @@ module ysyx_24120009_core (
     output wire mem_en_debug,
     output wire [`ysyx_24120009_DATA_WIDTH-1:0] Op1_debug,
     output wire [`ysyx_24120009_DATA_WIDTH-1:0] Op2_debug,
-    output wire rf_we_debug
+    output wire rf_we_debug,
+    output wire wbu_active_debug,
+    output wire [`ysyx_24120009_DATA_WIDTH-1:0] imem_addr_debug
 );
 
     // Debug signal declaration
@@ -26,6 +28,7 @@ module ysyx_24120009_core (
     assign Op1_debug = Op1;
     assign Op2_debug = Op2;
     assign rf_we_debug = rf_we;
+    assign imem_addr_debug = pc_from_IFU_to_IDU;
 
     // Internal signals
     wire [`ysyx_24120009_DATA_WIDTH-1:0] reg_write_data;
@@ -191,7 +194,9 @@ module ysyx_24120009_core (
         // Signals passed to IFU
         .pc_wen(pc_wen),
         // Signal passed from IFU
-        .inst_from_IFU(inst_from_IFU_to_IDU)
+        .inst_from_IFU(inst_from_IFU_to_IDU),
+        // Signals passed to simulation environment
+        .wbu_active(wbu_active_debug)
     );
 
 
