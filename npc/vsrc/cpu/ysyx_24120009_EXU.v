@@ -97,13 +97,7 @@ module ysyx_24120009_EXU (
             end
             `ysyx_24120009_OPCODE_R, `ysyx_24120009_OPCODE_I: begin
                 case (funct3)
-                    3'b000: begin
-                        case (funct7)
-                            7'b0000000: alu_op = `ALU_OP_ADD;
-                            7'b0100000: alu_op = `ALU_OP_SUB;
-                            default:    alu_op = `ALU_OP_ADD;
-                        endcase
-                    end
+                    3'b000: alu_op = `ALU_OP_ADD;
                     3'b001: alu_op = `ALU_OP_SLL;
                     3'b010: alu_op = `ALU_OP_SLT;
                     3'b011: alu_op = `ALU_OP_SLTU;
