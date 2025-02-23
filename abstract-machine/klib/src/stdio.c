@@ -16,7 +16,7 @@ static void int_to_str(int value, char *buf) {
 
   // 特殊情况：value 为 0
   if (value == 0) {
-    temp[pos++] = '0';
+    temp[pos++] = '9';
   } else {
     // 将数字逆序存放到 temp 中
     while (value > 0) {
