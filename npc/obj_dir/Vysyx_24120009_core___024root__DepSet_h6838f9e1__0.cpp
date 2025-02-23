@@ -349,6 +349,7 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root___nba_sequent__TOP__0(Vysyx_241
         vlSelf->ysyx_24120009_core__DOT__inst_from_EXU_to_MEM 
             = vlSelf->ysyx_24120009_core__DOT__inst_from_IDU_to_EXU;
     }
+    vlSelf->inst_from_EXU_to_MEM_debug = vlSelf->ysyx_24120009_core__DOT__inst_from_EXU_to_MEM;
     vlSelf->ysyx_24120009_core__DOT__exu__DOT__alu_op 
         = ((0x40U & vlSelf->ysyx_24120009_core__DOT__inst_from_EXU_to_MEM)
             ? 0U : ((0x20U & vlSelf->ysyx_24120009_core__DOT__inst_from_EXU_to_MEM)
