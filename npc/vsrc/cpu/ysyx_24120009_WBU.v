@@ -22,7 +22,8 @@ module ysyx_24120009_WBU (
     output wire wbu_active,
     // Debug signals
     output wire [`ysyx_24120009_DATA_WIDTH-1:0] pc_plus4_debug,
-    output wire [1:0] wb_sel_debug
+    output wire [1:0] wb_sel_debug,
+    output wire [6:0] opcode_debug
 );
 
     // Get ready for pipeline
@@ -92,6 +93,7 @@ module ysyx_24120009_WBU (
     reg [1:0] wb_sel;
     assign pc_plus4_debug = pc_plus4;
     assign wb_sel_debug = wb_sel;
+    assign opcode_debug = inst_o[6:0];
 
 
     // reg_write_data signal generation

@@ -17,7 +17,8 @@ module ysyx_24120009_core (
     output wire wbu_active_debug,
     output wire [`ysyx_24120009_DATA_WIDTH-1:0] imem_addr_debug,
     output wire [`ysyx_24120009_DATA_WIDTH-1:0] pc_plus4_debug,
-    output wire [1:0] wb_sel_debug
+    output wire [1:0] wb_sel_debug,
+    output wire [6:0] opcode_debug
 );
 
     // Debug signal declaration
@@ -201,7 +202,8 @@ module ysyx_24120009_core (
         .wbu_active(wbu_active_debug),
         // Debug signals
         .pc_plus4_debug(pc_plus4_debug),
-        .wb_sel_debug(wb_sel_debug)
+        .wb_sel_debug(wb_sel_debug),
+        .opcode_debug(opcode_debug)
     );
 
 
