@@ -32,6 +32,8 @@ Vysyx_24120009_core::Vysyx_24120009_core(VerilatedContext* _vcontextp__, const c
     , imem_addr_debug{vlSymsp->TOP.imem_addr_debug}
     , pc_plus4_debug{vlSymsp->TOP.pc_plus4_debug}
     , result_from_EXU_to_MEM_debug{vlSymsp->TOP.result_from_EXU_to_MEM_debug}
+    , result_from_MEM_to_WBU_debug{vlSymsp->TOP.result_from_MEM_to_WBU_debug}
+    , result_from_WB_debug{vlSymsp->TOP.result_from_WB_debug}
     , rootp{&(vlSymsp->TOP)}
 {
     // Register model with the context

@@ -46,6 +46,8 @@ class Vysyx_24120009_core VL_NOT_FINAL : public VerilatedModel {
     VL_OUT(&imem_addr_debug,31,0);
     VL_OUT(&pc_plus4_debug,31,0);
     VL_OUT(&result_from_EXU_to_MEM_debug,31,0);
+    VL_OUT(&result_from_MEM_to_WBU_debug,31,0);
+    VL_OUT(&result_from_WB_debug,31,0);
 
     // CELLS
     // Public to allow access to /* verilator public */ items.
