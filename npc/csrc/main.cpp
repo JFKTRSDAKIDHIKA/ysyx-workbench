@@ -213,6 +213,7 @@ void tick(Vysyx_24120009_core* top, bool silent_mode ) {
                 << ", rf_we_debug: 0x" << std::hex << static_cast<int>(top->rf_we_debug) // Cast to int for proper printing
                 << ", wb_sel_debug: 0x" << std::hex << static_cast<int>(top->wb_sel_debug) // Cast to int for proper printing
                 << ", opcode: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->opcode_debug) // Cast to int for proper printing
+                << ", pc_wen: 0x" << std::hex << static_cast<int>(top->pc_wen_debug) // Cast to int for proper printing
                 << std::dec << std::endl;
     }
   

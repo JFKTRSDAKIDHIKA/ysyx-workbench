@@ -121,6 +121,7 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root___nba_sequent__TOP__0(Vysyx_241
         = Vysyx_24120009_core__ConstPool__TABLE_hd37b394f_0
         [vlSelf->__Vtableidx3];
     vlSelf->waddr_debug = vlSelf->ysyx_24120009_core__DOT__waddr;
+    vlSelf->pc_wen_debug = vlSelf->wbu_active_debug;
     vlSelf->__Vtableidx2 = (((IData)(vlSelf->opcode_debug) 
                              << 1U) | (IData)(vlSelf->wbu_active_debug));
     vlSelf->ysyx_24120009_core__DOT__rf_we = Vysyx_24120009_core__ConstPool__TABLE_h33c23ebc_0
