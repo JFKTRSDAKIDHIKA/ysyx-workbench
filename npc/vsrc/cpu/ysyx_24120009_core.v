@@ -182,6 +182,7 @@ module ysyx_24120009_core (
         .rd_addr_o(rd_addr_from_MEM_to_WBU),
         // Signals passed to simulation environment
         .mem_active(mem_active_debug),
+        // Signals passed from IFU
         .inst_from_IFU(inst_from_IFU_to_IDU)
     );
 
