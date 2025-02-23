@@ -208,6 +208,7 @@ void tick(Vysyx_24120009_core* top, bool silent_mode ) {
                 << ", Op2: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->Op2_debug
                 << ", wb_data: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->reg_write_data_debug
                 << ", Instruction: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->inst_debug
+                << ", PC: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->pc_debug
                 << ", rf_we_debug: 0x" << std::hex << static_cast<int>(top->rf_we_debug) // Cast to int for proper printing
                 << std::dec << std::endl;
     }
