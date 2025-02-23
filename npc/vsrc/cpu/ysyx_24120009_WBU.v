@@ -20,6 +20,8 @@ module ysyx_24120009_WBU (
     input [`ysyx_24120009_DATA_WIDTH-1:0] inst_from_IFU,
     // Signals passed to simulation environment
     output wire wbu_active,
+    // Signals passed back to MEM
+    output wire [`ysyx_24120009_DATA_WIDTH-1:0]    inst_o,
     // Debug signals
     output wire [`ysyx_24120009_DATA_WIDTH-1:0] pc_plus4_debug,
     output wire [1:0] wb_sel_debug,
@@ -85,7 +87,6 @@ module ysyx_24120009_WBU (
     // Internal signal declaration
     wire [`ysyx_24120009_DATA_WIDTH-1:0] pc_plus4;
     assign pc_plus4 = pc_o + `ysyx_24120009_PC_STEP;
-    wire     [`ysyx_24120009_DATA_WIDTH-1:0]    inst_o;
     wire     [`ysyx_24120009_DATA_WIDTH-1:0]    pc_o;
     wire     [`ysyx_24120009_DATA_WIDTH-1:0] result_o;
     wire    [`ysyx_24120009_DATA_WIDTH-1:0] dmem_addr_o;

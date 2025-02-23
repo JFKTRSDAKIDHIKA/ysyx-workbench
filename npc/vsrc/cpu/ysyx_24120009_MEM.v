@@ -20,7 +20,9 @@ module ysyx_24120009_MEM (
     // Signals passed to simulation environment
     output wire mem_active,
     // Signals passed from IFU
-    input [`ysyx_24120009_DATA_WIDTH-1:0] inst_from_IFU
+    input [`ysyx_24120009_DATA_WIDTH-1:0] inst_from_IFU,
+    // Signals passed from WBU
+    input [`ysyx_24120009_DATA_WIDTH-1:0] inst_from_WBU
 );
 
     // direct programing interface --- C
@@ -170,7 +172,7 @@ module ysyx_24120009_MEM (
     end
 
     // mem_active signal generation
-    assign mem_active = (inst_from_IFU == inst_o);
+    assign mem_active = (inst_from_IFU == inst_o) && (inst_from_WBU != inst_o);
 
     // mem_wen signal generation
     always @(*) begin

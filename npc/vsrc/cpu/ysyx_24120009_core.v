@@ -69,6 +69,7 @@ module ysyx_24120009_core (
     wire [`ysyx_24120009_DATA_WIDTH-1:0] pc_from_MEM_to_WBU;
     wire [`ysyx_24120009_DATA_WIDTH-1:0] rd_addr_from_MEM_to_WBU;
     wire [`ysyx_24120009_DATA_WIDTH-1:0] inst_from_MEM_to_WBU;
+    wire [`ysyx_24120009_DATA_WIDTH-1:0] inst_from_WBU_to_MEM;
 
     //  Register file address
     wire [`ysyx_24120009_REG_ADDR_WIDTH-1:0] rs1_addr;
@@ -183,7 +184,9 @@ module ysyx_24120009_core (
         // Signals passed to simulation environment
         .mem_active(mem_active_debug),
         // Signals passed from IFU
-        .inst_from_IFU(inst_from_IFU_to_IDU)
+        .inst_from_IFU(inst_from_IFU_to_IDU),
+        // Signals passed from WBU
+        .inst_from_WBU(inst_from_WBU_to_MEM)
     );
 
     // Instantiate WBU
@@ -207,6 +210,8 @@ module ysyx_24120009_core (
         .inst_from_IFU(inst_from_IFU_to_IDU),
         // Signals passed to simulation environment
         .wbu_active(wbu_active_debug),
+        // Signals passed back to MEM
+        .inst_o(inst_from_WBU_to_MEM),
         // Debug signals
         .pc_plus4_debug(pc_plus4_debug),
         .wb_sel_debug(wb_sel_debug),
