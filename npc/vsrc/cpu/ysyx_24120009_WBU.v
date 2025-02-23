@@ -99,7 +99,7 @@ module ysyx_24120009_WBU (
         .default_out({`ysyx_24120009_DATA_WIDTH{1'b0}}),
         .lut({
             2'b00, {`ysyx_24120009_DATA_WIDTH{1'b0}}, // Example value, replace with actual data
-            2'b01, 32'hFFFF,
+            2'b01, pc_plus4,
             2'b10, result_o,
             2'b11, dmem_rdata_o // data memory read data
         })
