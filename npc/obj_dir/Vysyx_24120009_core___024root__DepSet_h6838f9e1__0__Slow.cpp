@@ -1255,6 +1255,7 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root___stl_sequent__TOP__0(Vysyx_2412
               [4U]));
     vlSelf->ysyx_24120009_core__DOT__dmem_rdata_from_MEM_to_WBU 
         = vlSelf->ysyx_24120009_core__DOT__mem__DOT__alignment_network__DOT__mem_mux__DOT__i0__DOT__lut_out;
+    vlSelf->result_from_EXU_to_MEM_debug = vlSelf->ysyx_24120009_core__DOT__result_from_EXU_to_MEM;
 }
 
 VL_ATTR_COLD void Vysyx_24120009_core___024root___eval_stl(Vysyx_24120009_core___024root* vlSelf) {
@@ -1323,6 +1324,7 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root___ctor_var_reset(Vysyx_24120009_
     vlSelf->opcode_debug = VL_RAND_RESET_I(7);
     vlSelf->pc_wen_debug = VL_RAND_RESET_I(1);
     vlSelf->mem_active_debug = VL_RAND_RESET_I(1);
+    vlSelf->result_from_EXU_to_MEM_debug = VL_RAND_RESET_I(32);
     vlSelf->ysyx_24120009_core__DOT__reg_write_data = VL_RAND_RESET_I(32);
     vlSelf->ysyx_24120009_core__DOT__alu_op = VL_RAND_RESET_I(5);
     vlSelf->ysyx_24120009_core__DOT__pc_sel = VL_RAND_RESET_I(3);

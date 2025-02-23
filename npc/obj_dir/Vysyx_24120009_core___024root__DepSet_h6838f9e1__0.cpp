@@ -63,7 +63,7 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root___nba_sequent__TOP__0(Vysyx_241
         vlSelf->ysyx_24120009_core__DOT__wbu__DOT__pc_o 
             = vlSelf->ysyx_24120009_core__DOT__pc_from_MEM_to_WBU;
         vlSelf->ysyx_24120009_core__DOT__mem__DOT__dmem_addr_o 
-            = vlSelf->ysyx_24120009_core__DOT__result_from_EXU_to_MEM;
+            = vlSelf->result_from_EXU_to_MEM_debug;
         vlSelf->ysyx_24120009_core__DOT__mem__DOT__rs2_data_o 
             = vlSelf->ysyx_24120009_core__DOT__rdata2_from_EXU_to_MEM;
         if (vlSelf->wbu_active_debug) {
@@ -1158,6 +1158,7 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root___nba_sequent__TOP__0(Vysyx_241
               [0xaU]));
     vlSelf->ysyx_24120009_core__DOT__result_from_EXU_to_MEM 
         = vlSelf->ysyx_24120009_core__DOT__exu__DOT__alu_instance__DOT__alu_mux__DOT__i0__DOT__lut_out;
+    vlSelf->result_from_EXU_to_MEM_debug = vlSelf->ysyx_24120009_core__DOT__result_from_EXU_to_MEM;
 }
 
 void Vysyx_24120009_core___024root___eval_nba(Vysyx_24120009_core___024root* vlSelf) {
