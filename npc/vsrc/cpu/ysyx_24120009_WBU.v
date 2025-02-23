@@ -130,6 +130,7 @@ module ysyx_24120009_WBU (
                 `ysyx_24120009_OPCODE_LUI:   rf_we = 1'b1;
                 `ysyx_24120009_OPCODE_R:     rf_we = 1'b1;
                 `ysyx_24120009_OPCODE_I:     rf_we = 1'b1;
+                `ysyx_24120009_OPCODE_LOAD:  rf_we = 1'b1;
                 `ysyx_24120009_OPCODE_S:     rf_we = 1'b0;
                 `ysyx_24120009_OPCODE_B:     rf_we = 1'b0;
                 `ysyx_24120009_OPCODE_CSR:   rf_we = 1'b0;
