@@ -64,6 +64,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
   const char *p = fmt;
   while (*p) {
     if (*p == '%') {
+      printf("test");
       p++;
       switch (*p) {
         case 'd': {
