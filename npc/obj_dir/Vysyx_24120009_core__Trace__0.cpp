@@ -24,7 +24,7 @@ void Vysyx_24120009_core___024root__trace_chg_sub_0(Vysyx_24120009_core___024roo
     uint32_t* const oldp VL_ATTR_UNUSED = bufp->oldp(vlSymsp->__Vm_baseCode + 1);
     VlWide<13>/*415:0*/ __Vtemp_hd74bf4d1__0;
     VlWide<3>/*95:0*/ __Vtemp_h3e4b9c5b__0;
-    VlWide<5>/*159:0*/ __Vtemp_h14945392__0;
+    VlWide<5>/*159:0*/ __Vtemp_h4b1a9c47__0;
     VlWide<6>/*191:0*/ __Vtemp_h47858337__0;
     VlWide<6>/*191:0*/ __Vtemp_hdb58eddb__0;
     VlWide<5>/*159:0*/ __Vtemp_hf32e5341__0;
@@ -389,9 +389,9 @@ void Vysyx_24120009_core___024root__trace_chg_sub_0(Vysyx_24120009_core___024roo
         bufp->chgIData(oldp+201,(vlSelf->ysyx_24120009_core__DOT__idu__DOT__op1_sel_mux__DOT__i0__DOT__data_list[1]),32);
         bufp->chgIData(oldp+202,(vlSelf->ysyx_24120009_core__DOT__idu__DOT__op1_sel_mux__DOT__i0__DOT__lut_out),32);
         bufp->chgBit(oldp+203,(vlSelf->ysyx_24120009_core__DOT__idu__DOT__op1_sel_mux__DOT__i0__DOT__hit));
-        __Vtemp_h14945392__0[0U] = (IData)((0x300000000ULL 
+        __Vtemp_h4b1a9c47__0[0U] = (IData)((0x300000000ULL 
                                             | (QData)((IData)(vlSelf->ysyx_24120009_core__DOT__rdata2_from_IDU_to_EXU))));
-        __Vtemp_h14945392__0[1U] = ((0xfffffffcU & 
+        __Vtemp_h4b1a9c47__0[1U] = ((0xfffffffcU & 
                                      (((- (IData)((vlSelf->ysyx_24120009_core__DOT__inst_from_IDU_to_EXU 
                                                    >> 0x1fU))) 
                                        << 0xeU) | ((IData)(vlSelf->ysyx_24120009_core__DOT__idu__DOT__imm_s) 
@@ -399,7 +399,7 @@ void Vysyx_24120009_core___024root__trace_chg_sub_0(Vysyx_24120009_core___024roo
                                     | (IData)(((0x300000000ULL 
                                                 | (QData)((IData)(vlSelf->ysyx_24120009_core__DOT__rdata2_from_IDU_to_EXU))) 
                                                >> 0x20U)));
-        __Vtemp_h14945392__0[2U] = (8U | ((vlSelf->ysyx_24120009_core__DOT__idu__DOT__imm_i_sext 
+        __Vtemp_h4b1a9c47__0[2U] = (8U | ((vlSelf->ysyx_24120009_core__DOT__idu__DOT__imm_i_sext 
                                            << 4U) | 
                                           (3U & ((3U 
                                                   & ((- (IData)(
@@ -408,13 +408,13 @@ void Vysyx_24120009_core___024root__trace_chg_sub_0(Vysyx_24120009_core___024roo
                                                      >> 0x12U)) 
                                                  | ((IData)(vlSelf->ysyx_24120009_core__DOT__idu__DOT__imm_s) 
                                                     >> 0x1eU)))));
-        __Vtemp_h14945392__0[3U] = (0x10U | ((vlSelf->ysyx_24120009_core__DOT__idu__DOT__imm_i_sext 
+        __Vtemp_h4b1a9c47__0[3U] = (0x10U | ((vlSelf->ysyx_24120009_core__DOT__ifu__DOT__pc 
                                               << 6U) 
                                              | (vlSelf->ysyx_24120009_core__DOT__idu__DOT__imm_i_sext 
                                                 >> 0x1cU)));
-        __Vtemp_h14945392__0[4U] = (vlSelf->ysyx_24120009_core__DOT__idu__DOT__imm_i_sext 
+        __Vtemp_h4b1a9c47__0[4U] = (vlSelf->ysyx_24120009_core__DOT__ifu__DOT__pc 
                                     >> 0x1aU);
-        bufp->chgWData(oldp+204,(__Vtemp_h14945392__0),136);
+        bufp->chgWData(oldp+204,(__Vtemp_h4b1a9c47__0),136);
         bufp->chgQData(oldp+209,(vlSelf->ysyx_24120009_core__DOT__idu__DOT__op2_sel_mux__DOT__i0__DOT__pair_list[0]),34);
         bufp->chgQData(oldp+211,(vlSelf->ysyx_24120009_core__DOT__idu__DOT__op2_sel_mux__DOT__i0__DOT__pair_list[1]),34);
         bufp->chgQData(oldp+213,(vlSelf->ysyx_24120009_core__DOT__idu__DOT__op2_sel_mux__DOT__i0__DOT__pair_list[2]),34);

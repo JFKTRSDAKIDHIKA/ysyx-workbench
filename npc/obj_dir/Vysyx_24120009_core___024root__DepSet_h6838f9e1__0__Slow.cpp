@@ -256,6 +256,8 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root___stl_sequent__TOP__0(Vysyx_2412
     vlSelf->pc_debug = vlSelf->ysyx_24120009_core__DOT__ifu__DOT__pc;
     vlSelf->ysyx_24120009_core__DOT__ifu__DOT__mux_pc_sel__DOT__i0__DOT__pair_list[4U] 
         = (QData)((IData)(((IData)(4U) + vlSelf->ysyx_24120009_core__DOT__ifu__DOT__pc)));
+    vlSelf->ysyx_24120009_core__DOT__idu__DOT__op2_sel_mux__DOT__i0__DOT__pair_list[3U] 
+        = (QData)((IData)(vlSelf->ysyx_24120009_core__DOT__ifu__DOT__pc));
     vlSelf->ysyx_24120009_core__DOT__ifu__DOT__mux_pc_sel__DOT__i0__DOT__data_list[4U] 
         = ((IData)(4U) + vlSelf->ysyx_24120009_core__DOT__ifu__DOT__pc);
     vlSelf->ysyx_24120009_core__DOT__exu__DOT__alu_op 
@@ -455,9 +457,7 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root___stl_sequent__TOP__0(Vysyx_2412
                         >> 0x1fU))) << 0xcU) | (vlSelf->ysyx_24120009_core__DOT__inst_from_IDU_to_EXU 
                                                 >> 0x14U));
     vlSelf->ysyx_24120009_core__DOT__idu__DOT__op2_sel_mux__DOT__i0__DOT__data_list[3U] 
-        = (((- (IData)((vlSelf->ysyx_24120009_core__DOT__inst_from_IDU_to_EXU 
-                        >> 0x1fU))) << 0xcU) | (vlSelf->ysyx_24120009_core__DOT__inst_from_IDU_to_EXU 
-                                                >> 0x14U));
+        = vlSelf->ysyx_24120009_core__DOT__ifu__DOT__pc;
     vlSelf->ysyx_24120009_core__DOT__idu__DOT__op2_sel_mux__DOT__i0__DOT__data_list[0U] 
         = vlSelf->ysyx_24120009_core__DOT__u_RegisterFile__DOT__rf
         [(0x1fU & (vlSelf->ysyx_24120009_core__DOT__inst_from_IDU_to_EXU 
@@ -599,8 +599,6 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root___stl_sequent__TOP__0(Vysyx_2412
            + vlSelf->ysyx_24120009_core__DOT__idu__DOT__imm_j_sext);
     vlSelf->ysyx_24120009_core__DOT__idu__DOT__op2_sel_mux__DOT__i0__DOT__pair_list[2U] 
         = (0x100000000ULL | (QData)((IData)(vlSelf->ysyx_24120009_core__DOT__idu__DOT__imm_i_sext)));
-    vlSelf->ysyx_24120009_core__DOT__idu__DOT__op2_sel_mux__DOT__i0__DOT__pair_list[3U] 
-        = (QData)((IData)(vlSelf->ysyx_24120009_core__DOT__idu__DOT__imm_i_sext));
     vlSelf->ysyx_24120009_core__DOT__mem__DOT__mem_acces_ctl_mux__DOT__i0__DOT__hit 
         = ((IData)(vlSelf->ysyx_24120009_core__DOT__mem__DOT____Vcellinp__mem_acces_ctl_mux__key) 
            == vlSelf->ysyx_24120009_core__DOT__mem__DOT__mem_acces_ctl_mux__DOT__i0__DOT__key_list
