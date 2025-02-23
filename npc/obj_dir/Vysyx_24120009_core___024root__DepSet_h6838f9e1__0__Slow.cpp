@@ -533,7 +533,7 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root___stl_sequent__TOP__0(Vysyx_2412
     }
     vlSelf->inst_debug = vlSelf->ysyx_24120009_core__DOT__ifu__DOT__inst;
     vlSelf->wbu_active_debug = (vlSelf->ysyx_24120009_core__DOT__ifu__DOT__inst 
-                                == vlSelf->ysyx_24120009_core__DOT__wbu__DOT__inst_o);
+                                == vlSelf->ysyx_24120009_core__DOT__inst_from_MEM_to_WBU);
     vlSelf->ysyx_24120009_core__DOT__br_target = (vlSelf->ysyx_24120009_core__DOT__ifu__DOT__pc 
                                                   + vlSelf->ysyx_24120009_core__DOT__idu__DOT__imm_b_sext);
     vlSelf->ysyx_24120009_core__DOT__ifu__DOT__mux_pc_sel__DOT__i0__DOT__data_list[2U] 

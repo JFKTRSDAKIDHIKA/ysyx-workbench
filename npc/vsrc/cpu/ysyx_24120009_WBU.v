@@ -114,7 +114,7 @@ module ysyx_24120009_WBU (
     );
 
     // pc_wen  signal generation
-    assign wbu_active  = inst_from_IFU == inst_o;
+    assign wbu_active  = inst_from_IFU == inst_i;
     assign pc_wen = wbu_active;
 
     // Control unit for WBU

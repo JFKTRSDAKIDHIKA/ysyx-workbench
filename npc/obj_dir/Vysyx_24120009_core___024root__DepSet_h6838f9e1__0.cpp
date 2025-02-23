@@ -142,9 +142,9 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root___nba_sequent__TOP__0(Vysyx_241
         vlSelf->ysyx_24120009_core__DOT__inst_from_IDU_to_EXU 
             = vlSelf->inst_debug;
     }
-    vlSelf->wbu_active_debug = (vlSelf->ysyx_24120009_core__DOT__ifu__DOT__inst 
-                                == vlSelf->ysyx_24120009_core__DOT__wbu__DOT__inst_o);
     vlSelf->waddr_debug = vlSelf->ysyx_24120009_core__DOT__waddr;
+    vlSelf->wbu_active_debug = (vlSelf->ysyx_24120009_core__DOT__ifu__DOT__inst 
+                                == vlSelf->ysyx_24120009_core__DOT__inst_from_MEM_to_WBU);
     vlSelf->opcode_debug = (0x7fU & vlSelf->ysyx_24120009_core__DOT__inst_from_MEM_to_WBU);
     vlSelf->__Vtableidx2 = (((IData)(vlSelf->opcode_debug) 
                              << 1U) | (IData)(vlSelf->wbu_active_debug));
