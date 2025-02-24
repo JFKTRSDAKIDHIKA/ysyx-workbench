@@ -35,7 +35,7 @@ module ysyx_24120009_SRAM (
       data_out = pmem_read(addr_delayed);  // Call DPI-C function to read data
       rd_res_valid = 1'b1;
     end else begin
-      data_out = 32'b1;  // Default value when no valid read request
+      data_out = 32'b0;  // Default value when no valid read request
       rd_res_valid = 1'b0;
     end
   end
