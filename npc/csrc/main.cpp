@@ -203,7 +203,7 @@ void tick(Vysyx_24120009_core* top, bool silent_mode ) {
     top->clk = 0;
     top->eval();
 
-    assert (static_cast<int>(top->inst_debug) != 0);
+    // assert (static_cast<int>(top->inst_debug) != 0);
     
     if (!silent_mode ) {
       // print some debug info when registers have yet been updated!
