@@ -364,7 +364,7 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root__trace_init_sub__TOP__0(Vysyx_24
     tracep->declBus(c+354,"inst", false,-1, 31,0);
     tracep->declBus(c+393,"exception", false,-1, 31,0);
     tracep->declBus(c+375,"sram_data_out", false,-1, 31,0);
-    tracep->declBit(c+397,"sram_rd_req", false,-1);
+    tracep->declBit(c+368,"sram_rd_req", false,-1);
     tracep->declBit(c+376,"rd_res_valid", false,-1);
     tracep->declBus(c+229,"if_inst_buffer", false,-1, 31,0);
     tracep->pushNamePrefix("mux_pc_sel ");
@@ -409,12 +409,12 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root__trace_init_sub__TOP__0(Vysyx_24
     tracep->pushNamePrefix("sram_inst ");
     tracep->declBit(c+351,"clk", false,-1);
     tracep->declBit(c+352,"rst", false,-1);
-    tracep->declBit(c+397,"rd_req", false,-1);
+    tracep->declBit(c+368,"rd_req_valid", false,-1);
     tracep->declBus(c+226,"addr", false,-1, 31,0);
     tracep->declBus(c+375,"data_out", false,-1, 31,0);
     tracep->declBit(c+376,"rd_res_valid", false,-1);
     tracep->declBus(c+72,"addr_delayed", false,-1, 31,0);
-    tracep->declBit(c+73,"rd_req_delayed", false,-1);
+    tracep->declBit(c+73,"rd_req_valid_delayed", false,-1);
     tracep->popNamePrefix(2);
     tracep->pushNamePrefix("mem ");
     tracep->declBit(c+351,"clk", false,-1);
@@ -853,7 +853,7 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root__trace_full_sub_0(Vysyx_24120009
     bufp->fullCData(oldp+70,(vlSelf->ysyx_24120009_core__DOT__wbu__DOT__wb_mux__DOT__i1__DOT__key_list[2]),2);
     bufp->fullCData(oldp+71,(vlSelf->ysyx_24120009_core__DOT__wbu__DOT__wb_mux__DOT__i1__DOT__key_list[3]),2);
     bufp->fullIData(oldp+72,(vlSelf->ysyx_24120009_core__DOT__ifu__DOT__sram_inst__DOT__addr_delayed),32);
-    bufp->fullBit(oldp+73,(vlSelf->ysyx_24120009_core__DOT__ifu__DOT__sram_inst__DOT__rd_req_delayed));
+    bufp->fullBit(oldp+73,(vlSelf->ysyx_24120009_core__DOT__ifu__DOT__sram_inst__DOT__rd_req_valid_delayed));
     bufp->fullBit(oldp+74,(vlSelf->ysyx_24120009_core__DOT__wbu__DOT__wbu_active_reg));
     bufp->fullIData(oldp+75,(vlSelf->ysyx_24120009_core__DOT__reg_write_data),32);
     bufp->fullCData(oldp+76,(vlSelf->ysyx_24120009_core__DOT__pc_sel),3);

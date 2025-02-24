@@ -15,13 +15,9 @@ module ysyx_24120009_IFU (
   // signal passed to IDU
   output     [`ysyx_24120009_DATA_WIDTH-1:0] pc_o,
   output     [31:0]                          inst_o
-  // Handshake signals
-  // output                               IFU_valid,
-  // input                                IDU_ready
 );
 
   // direct programing interface --- C
-  import "DPI-C" function int pmem_read(input int raddr);
   import "DPI-C" function void simulation_exit();
 
   // Internal signals declaration
@@ -29,7 +25,7 @@ module ysyx_24120009_IFU (
   wire  [`ysyx_24120009_DATA_WIDTH-1:0] pc_next;
   wire  [`ysyx_24120009_DATA_WIDTH-1:0] pc_plus4;
   wire  [`ysyx_24120009_DATA_WIDTH-1:0] imem_addr;
-  reg [`ysyx_24120009_DATA_WIDTH-1:0] inst;
+  reg   [`ysyx_24120009_DATA_WIDTH-1:0] inst;
 
   // Module instantiation
   ysyx_24120009_Reg #(
@@ -55,17 +51,17 @@ module ysyx_24120009_IFU (
   });
   wire [`ysyx_24120009_DATA_WIDTH-1:0] exception = `ysyx_24120009_DATA_WIDTH'b0; // 占位定义，默认无异常
 
-  // Instantiate SRAM module
+  // Use SRAM module to read the instruction
   wire [31:0] sram_data_out;
-  wire        sram_rd_req = 1'b1;  // Always enable read request for instruction fetch
+  wire        sram_rd_req = pc_wen;  // Always enable read request for instruction fetch
   wire        rd_res_valid;
   reg  [31:0] if_inst_buffer;
 
   ysyx_24120009_SRAM sram_inst (
     .clk(clk),
     .rst(rst),
-    .rd_req(sram_rd_req),
-    .addr(pc),       // Use PC as the address
+    .rd_req_valid(sram_rd_req),
+    .addr(pc),       
     .data_out(sram_data_out),
     .rd_res_valid(rd_res_valid)
   );

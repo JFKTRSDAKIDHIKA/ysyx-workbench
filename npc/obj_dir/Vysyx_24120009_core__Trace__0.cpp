@@ -104,7 +104,7 @@ void Vysyx_24120009_core___024root__trace_chg_sub_0(Vysyx_24120009_core___024roo
     }
     if (VL_UNLIKELY(vlSelf->__Vm_traceActivity[1U])) {
         bufp->chgIData(oldp+71,(vlSelf->ysyx_24120009_core__DOT__ifu__DOT__sram_inst__DOT__addr_delayed),32);
-        bufp->chgBit(oldp+72,(vlSelf->ysyx_24120009_core__DOT__ifu__DOT__sram_inst__DOT__rd_req_delayed));
+        bufp->chgBit(oldp+72,(vlSelf->ysyx_24120009_core__DOT__ifu__DOT__sram_inst__DOT__rd_req_valid_delayed));
         bufp->chgBit(oldp+73,(vlSelf->ysyx_24120009_core__DOT__wbu__DOT__wbu_active_reg));
     }
     if (VL_UNLIKELY(vlSelf->__Vm_traceActivity[2U])) {

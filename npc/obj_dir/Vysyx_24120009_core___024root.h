@@ -38,7 +38,7 @@ class Vysyx_24120009_core___024root final : public VerilatedModule {
         CData/*4:0*/ ysyx_24120009_core__DOT__waddr;
         CData/*0:0*/ ysyx_24120009_core__DOT__ifu__DOT__rd_res_valid;
         CData/*0:0*/ ysyx_24120009_core__DOT__ifu__DOT__mux_pc_sel__DOT__i0__DOT__hit;
-        CData/*0:0*/ ysyx_24120009_core__DOT__ifu__DOT__sram_inst__DOT__rd_req_delayed;
+        CData/*0:0*/ ysyx_24120009_core__DOT__ifu__DOT__sram_inst__DOT__rd_req_valid_delayed;
         CData/*0:0*/ ysyx_24120009_core__DOT__idu__DOT__br_eq;
         CData/*0:0*/ ysyx_24120009_core__DOT__idu__DOT__br_lt;
         CData/*0:0*/ ysyx_24120009_core__DOT__idu__DOT__br_ltu;
