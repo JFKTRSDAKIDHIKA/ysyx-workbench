@@ -11,6 +11,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <sys/time.h> // 包含 gettimeofday
+#include <cassert>
 
 #define CLOCK_ADDRESS 0xa0000048 
 #define UART_BASE_ADDR 0xa00003F8  
@@ -201,6 +202,8 @@ int check_dut_and_ref(Vysyx_24120009_core* top, paddr_t start_addr, size_t size)
 void tick(Vysyx_24120009_core* top, bool silent_mode ) {
     top->clk = 0;
     top->eval();
+
+    assert (static_cast<int>(top->inst_debug) != 0);
     
     if (!silent_mode ) {
       // print some debug info when registers have yet been updated!
