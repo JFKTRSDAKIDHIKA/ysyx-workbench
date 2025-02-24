@@ -446,7 +446,7 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root___stl_sequent__TOP__0(Vysyx_2412
             = vlSelf->__Vfunc_ysyx_24120009_core__DOT__ifu__DOT__sram_inst__DOT__pmem_read__2__Vfuncout;
         vlSelf->ysyx_24120009_core__DOT__ifu__DOT__rd_res_valid = 1U;
     } else {
-        vlSelf->ysyx_24120009_core__DOT__ifu__DOT__sram_data_out = 0U;
+        vlSelf->ysyx_24120009_core__DOT__ifu__DOT__sram_data_out = 1U;
         vlSelf->ysyx_24120009_core__DOT__ifu__DOT__rd_res_valid = 0U;
     }
     vlSelf->ysyx_24120009_core__DOT__idu__DOT__op2_sel_mux__DOT__i0__DOT__data_list[2U] 

@@ -804,7 +804,7 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root___nba_sequent__TOP__1(Vysyx_241
             = vlSelf->__Vfunc_ysyx_24120009_core__DOT__ifu__DOT__sram_inst__DOT__pmem_read__2__Vfuncout;
         vlSelf->ysyx_24120009_core__DOT__ifu__DOT__rd_res_valid = 1U;
     } else {
-        vlSelf->ysyx_24120009_core__DOT__ifu__DOT__sram_data_out = 0U;
+        vlSelf->ysyx_24120009_core__DOT__ifu__DOT__sram_data_out = 1U;
         vlSelf->ysyx_24120009_core__DOT__ifu__DOT__rd_res_valid = 0U;
     }
 }
