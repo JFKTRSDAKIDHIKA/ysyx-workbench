@@ -20,6 +20,7 @@
 
 // #define ENABLE_MEMORY_CHECK 1
 #define DIFFTEST 1
+#define if_silent_mode 1
 
 // Declare global variables
 Vysyx_24120009_core* top;  // Top module (global)
@@ -277,7 +278,7 @@ static char* rl_gets() {
   }
   
 static int execute_single_step() {
-  tick(top, true);  
+  tick(top, if_silent_mode);  
 #ifdef DIFFTEST
   if (top->wbu_active_debug == 1) {
     ref_difftest_regcpy(&ref, DIFFTEST_TO_REF);
