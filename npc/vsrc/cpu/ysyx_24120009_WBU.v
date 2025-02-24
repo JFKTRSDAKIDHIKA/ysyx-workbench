@@ -118,24 +118,24 @@ module ysyx_24120009_WBU (
 
     // wbu_active indicates the state of module WBU
     // It is asserted high only when the inst from IFU has been passed to WBU
-    reg wbu_active_reg;  // 状态寄存器，用于记录是否已经拉高过 wbu_active
+    reg wbu_active_reg;  
 
     always @(posedge clk or posedge rst) begin
         if (rst) begin
-            wbu_active_reg <= 1'b0;  // 复位时清除状态寄存器
-            wbu_active <= 1'b0;      // 复位时 wbu_active 为低电平
+            wbu_active_reg <= 1'b0;  
+            wbu_active <= 1'b0;      
         end else begin
-            // why use inst_i instead of inst_o?
+            // Why use inst_i instead of inst_o? Because wbu_active may be delayed one cycle.
             if (inst_from_IFU == inst_i) begin
                 if (!wbu_active_reg) begin
-                    wbu_active <= 1'b1;  // 第一次检测到 inst_from_IFU == inst_o 时拉高 wbu_active
-                    wbu_active_reg <= 1'b1;  // 设置状态寄存器
+                    wbu_active <= 1'b1;  
+                    wbu_active_reg <= 1'b1;  
                 end else begin
-                    wbu_active <= 1'b0;  // 后续周期保持低电平
+                    wbu_active <= 1'b0;  
                 end
             end else begin
-                wbu_active_reg <= 1'b0;  // 当 inst_from_IFU != inst_o 时清除状态寄存器
-                wbu_active <= 1'b0;      // 保持低电平
+                wbu_active_reg <= 1'b0;  
+                wbu_active <= 1'b0;     
             end
         end
     end

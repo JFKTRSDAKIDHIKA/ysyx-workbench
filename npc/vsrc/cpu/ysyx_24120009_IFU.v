@@ -53,7 +53,7 @@ module ysyx_24120009_IFU (
 
   // Use SRAM module to read the instruction
   wire [31:0] sram_data_out;
-  wire        sram_rd_req = pc_wen;  // Always enable read request for instruction fetch
+  wire        sram_rd_req = 1'b1;  // Always enable read request for instruction fetch
   wire        rd_res_valid;
   reg  [31:0] if_inst_buffer;
 
@@ -66,6 +66,10 @@ module ysyx_24120009_IFU (
     .rd_res_valid(rd_res_valid)
   );
 
+  // If the instruction has not yet been read from IMEM, inst will remain 0, 
+  // causing WBU to mistakenly assume that the instruction has already been fetched, leading to errors.
+  // Here, inst retains its previous value until rd_res_valid becomes 1, 
+  // ensuring correctness when the instruction is not yet available from IMEM.
   always @(posedge clk) begin
     if (rd_res_valid) begin
       if_inst_buffer <= sram_data_out;

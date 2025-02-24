@@ -364,7 +364,7 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root__trace_init_sub__TOP__0(Vysyx_24
     tracep->declBus(c+354,"inst", false,-1, 31,0);
     tracep->declBus(c+393,"exception", false,-1, 31,0);
     tracep->declBus(c+375,"sram_data_out", false,-1, 31,0);
-    tracep->declBit(c+368,"sram_rd_req", false,-1);
+    tracep->declBit(c+397,"sram_rd_req", false,-1);
     tracep->declBit(c+376,"rd_res_valid", false,-1);
     tracep->declBus(c+229,"if_inst_buffer", false,-1, 31,0);
     tracep->pushNamePrefix("mux_pc_sel ");
@@ -409,7 +409,7 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root__trace_init_sub__TOP__0(Vysyx_24
     tracep->pushNamePrefix("sram_inst ");
     tracep->declBit(c+351,"clk", false,-1);
     tracep->declBit(c+352,"rst", false,-1);
-    tracep->declBit(c+368,"rd_req_valid", false,-1);
+    tracep->declBit(c+397,"rd_req_valid", false,-1);
     tracep->declBus(c+226,"addr", false,-1, 31,0);
     tracep->declBus(c+375,"data_out", false,-1, 31,0);
     tracep->declBit(c+376,"rd_res_valid", false,-1);

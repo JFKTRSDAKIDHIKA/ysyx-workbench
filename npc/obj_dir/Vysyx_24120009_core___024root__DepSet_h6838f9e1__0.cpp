@@ -24,7 +24,7 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root___nba_sequent__TOP__0(Vysyx_241
     __Vdly__ysyx_24120009_core__DOT__wbu__DOT__wbu_active_reg 
         = vlSelf->ysyx_24120009_core__DOT__wbu__DOT__wbu_active_reg;
     vlSelf->ysyx_24120009_core__DOT__ifu__DOT__sram_inst__DOT__rd_req_valid_delayed 
-        = ((~ (IData)(vlSelf->rst)) & (IData)(vlSelf->pc_wen_debug));
+        = (1U & (~ (IData)(vlSelf->rst)));
     if (vlSelf->rst) {
         vlSelf->ysyx_24120009_core__DOT__ifu__DOT__sram_inst__DOT__addr_delayed = 0U;
         __Vdly__ysyx_24120009_core__DOT__wbu__DOT__wbu_active_reg = 0U;
