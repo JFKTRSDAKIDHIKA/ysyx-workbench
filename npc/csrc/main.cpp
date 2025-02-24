@@ -11,6 +11,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <sys/time.h> // 包含 gettimeofday
+#include <cassert>
 
 #define CLOCK_ADDRESS 0xa0000048 
 #define UART_BASE_ADDR 0xa00003F8  
@@ -19,10 +20,12 @@
 
 // #define ENABLE_MEMORY_CHECK 1
 // #define DIFFTEST 1
+#define is_silent_mode 1
 
 // Declare global variables
 Vysyx_24120009_core* top;  // Top module (global)
 bool step_mode;  // Step mode flag (global)
+int total_cycle;
 
 // define the DPI-C functions
 // note: extern "C" 是 C++ 中的一个声明方式，用来告诉编译器，函数使用 C 的链接方式，而不是 C++ 默认的链接方式。
@@ -200,6 +203,8 @@ int check_dut_and_ref(Vysyx_24120009_core* top, paddr_t start_addr, size_t size)
 void tick(Vysyx_24120009_core* top, bool silent_mode ) {
     top->clk = 0;
     top->eval();
+
+    // assert (static_cast<int>(top->inst_debug) != 0);
     
     if (!silent_mode ) {
       // print some debug info when registers have yet been updated!
@@ -219,6 +224,7 @@ void tick(Vysyx_24120009_core* top, bool silent_mode ) {
                 << ", result_from_WB: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->result_from_WB_debug
                 << ", alu_op: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->alu_op_debug) // Cast to int for proper printing
                 << ", inst_from_EXU_to_MEM_debug: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->inst_from_EXU_to_MEM_debug
+                << ", mem_active: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->mem_active_debug)
                 << std::dec << std::endl;
     }
   
@@ -272,7 +278,7 @@ static char* rl_gets() {
   }
   
 static int execute_single_step() {
-  tick(top, true);  
+  tick(top, is_silent_mode);  
 #ifdef DIFFTEST
   if (top->wbu_active_debug == 1) {
     ref_difftest_regcpy(&ref, DIFFTEST_TO_REF);
@@ -290,6 +296,7 @@ static int cmd_c(char *args) {
   while(!Verilated::gotFinish()) {
     int ret = execute_single_step();
     if (ret < 0) return -1;
+    total_cycle++;
   }
   return 0;
 }
@@ -435,6 +442,7 @@ int main(int argc, char **argv) {
       if (sdb_mainloop() < 0) return -1;
     } else {
       if (cmd_c(NULL) < 0) return -1;
+      printf("total cycle: %d\n", total_cycle);
     }
 /*
     while(!Verilated::gotFinish()) {

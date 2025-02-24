@@ -19,7 +19,7 @@ module ysyx_24120009_WBU (
     // Signal passed from IFU
     input [`ysyx_24120009_DATA_WIDTH-1:0] inst_from_IFU,
     // Signals passed to simulation environment
-    output wire wbu_active,
+    output reg wbu_active,
     // Signals passed back to MEM
     output wire [`ysyx_24120009_DATA_WIDTH-1:0]    inst_o,
     // Debug signals
@@ -118,7 +118,27 @@ module ysyx_24120009_WBU (
 
     // wbu_active indicates the state of module WBU
     // It is asserted high only when the inst from IFU has been passed to WBU
-    assign wbu_active  = inst_from_IFU == inst_o;
+    reg wbu_active_reg;  
+
+    always @(posedge clk or posedge rst) begin
+        if (rst) begin
+            wbu_active_reg <= 1'b0;  
+            wbu_active <= 1'b0;      
+        end else begin
+            // Why use inst_i instead of inst_o? Because wbu_active may be delayed one cycle.
+            if (inst_from_IFU == inst_i) begin
+                if (!wbu_active_reg) begin
+                    wbu_active <= 1'b1;  
+                    wbu_active_reg <= 1'b1;  
+                end else begin
+                    wbu_active <= 1'b0;  
+                end
+            end else begin
+                wbu_active_reg <= 1'b0;  
+                wbu_active <= 1'b0;     
+            end
+        end
+    end
 
     // Generate pc_wen signal which will be passed back to IFU
     assign pc_wen = wbu_active;
