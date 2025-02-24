@@ -19,7 +19,7 @@ module ysyx_24120009_WBU (
     // Signal passed from IFU
     input [`ysyx_24120009_DATA_WIDTH-1:0] inst_from_IFU,
     // Signals passed to simulation environment
-    output wire wbu_active,
+    output reg wbu_active,
     // Signals passed back to MEM
     output wire [`ysyx_24120009_DATA_WIDTH-1:0]    inst_o,
     // Debug signals
@@ -118,7 +118,26 @@ module ysyx_24120009_WBU (
 
     // wbu_active indicates the state of module WBU
     // It is asserted high only when the inst from IFU has been passed to WBU
-    assign wbu_active  = inst_from_IFU == inst_o;
+    reg wbu_active_reg;  // 状态寄存器，用于记录是否已经拉高过 wbu_active
+
+    always @(posedge clk or posedge rst) begin
+        if (rst) begin
+            wbu_active_reg <= 1'b0;  // 复位时清除状态寄存器
+            wbu_active <= 1'b0;      // 复位时 wbu_active 为低电平
+        end else begin
+            if (inst_from_IFU == inst_o) begin
+                if (!wbu_active_reg) begin
+                    wbu_active <= 1'b1;  // 第一次检测到 inst_from_IFU == inst_o 时拉高 wbu_active
+                    wbu_active_reg <= 1'b1;  // 设置状态寄存器
+                end else begin
+                    wbu_active <= 1'b0;  // 后续周期保持低电平
+                end
+            end else begin
+                wbu_active_reg <= 1'b0;  // 当 inst_from_IFU != inst_o 时清除状态寄存器
+                wbu_active <= 1'b0;      // 保持低电平
+            end
+        end
+    end
 
     // Generate pc_wen signal which will be passed back to IFU
     assign pc_wen = wbu_active;
