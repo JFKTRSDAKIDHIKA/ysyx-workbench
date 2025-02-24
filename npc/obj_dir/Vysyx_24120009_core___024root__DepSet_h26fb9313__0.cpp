@@ -63,7 +63,12 @@ void Vysyx_24120009_core___024root___eval_triggers__act(Vysyx_24120009_core___02
     // Body
     vlSelf->__VactTriggered.at(0U) = ((IData)(vlSelf->clk) 
                                       & (~ (IData)(vlSelf->__Vtrigrprev__TOP__clk)));
+    vlSelf->__VactTriggered.at(1U) = (((IData)(vlSelf->clk) 
+                                       & (~ (IData)(vlSelf->__Vtrigrprev__TOP__clk))) 
+                                      | ((IData)(vlSelf->rst) 
+                                         & (~ (IData)(vlSelf->__Vtrigrprev__TOP__rst))));
     vlSelf->__Vtrigrprev__TOP__clk = vlSelf->clk;
+    vlSelf->__Vtrigrprev__TOP__rst = vlSelf->rst;
 #ifdef VL_DEBUG
     if (VL_UNLIKELY(vlSymsp->_vm_contextp__->debug())) {
         Vysyx_24120009_core___024root___dump_triggers__act(vlSelf);

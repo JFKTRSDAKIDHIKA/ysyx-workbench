@@ -15,6 +15,9 @@ module ysyx_24120009_IFU (
   // signal passed to IDU
   output     [`ysyx_24120009_DATA_WIDTH-1:0] pc_o,
   output     [31:0]                          inst_o
+  // Handshake signals
+  // output                               IFU_valid,
+  // input                                IDU_ready
 );
 
   // direct programing interface --- C
@@ -52,10 +55,20 @@ module ysyx_24120009_IFU (
   });
   wire [`ysyx_24120009_DATA_WIDTH-1:0] exception = `ysyx_24120009_DATA_WIDTH'b0; // 占位定义，默认无异常
 
-  // Read instruction from instruction memory
-  always @(*) begin
-        inst = pmem_read(pc);
-  end
+  // Instantiate SRAM module
+  wire        sram_rd_req = 1'b1;  
+  wire        rd_res_valid;
+
+  ysyx_24120009_SRAM sram_inst (
+    .clk(clk),
+    .rst(rst),
+    .rd_req(sram_rd_req),
+    .addr(pc),       // Use PC as the address
+    .data_out(inst),
+    .rd_res_valid(rd_res_valid)
+  );
+
+  // assign IFU_valid = rd_res_valid == 1'b1 ? 1 : 0;
 
   // handle ebreak instruction
   always @(*) begin
