@@ -125,6 +125,7 @@ module ysyx_24120009_WBU (
             wbu_active_reg <= 1'b0;  // 复位时清除状态寄存器
             wbu_active <= 1'b0;      // 复位时 wbu_active 为低电平
         end else begin
+            // why use inst_i instead of inst_o?
             if (inst_from_IFU == inst_i) begin
                 if (!wbu_active_reg) begin
                     wbu_active <= 1'b1;  // 第一次检测到 inst_from_IFU == inst_o 时拉高 wbu_active
