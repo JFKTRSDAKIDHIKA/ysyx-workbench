@@ -108,7 +108,8 @@ class Vysyx_24120009_core___024root final : public VerilatedModule {
         IData/*31:0*/ ysyx_24120009_core__DOT__ifu__DOT__pc;
         IData/*31:0*/ ysyx_24120009_core__DOT__ifu__DOT__pc_next;
         IData/*31:0*/ ysyx_24120009_core__DOT__ifu__DOT__imem_addr;
-        IData/*31:0*/ ysyx_24120009_core__DOT__ifu__DOT__inst;
+        IData/*31:0*/ ysyx_24120009_core__DOT__ifu__DOT__sram_data_out;
+        IData/*31:0*/ ysyx_24120009_core__DOT__ifu__DOT__if_inst_buffer;
         IData/*31:0*/ ysyx_24120009_core__DOT__ifu__DOT__mux_pc_sel__DOT__i0__DOT__lut_out;
         IData/*31:0*/ ysyx_24120009_core__DOT__ifu__DOT__sram_inst__DOT__addr_delayed;
         IData/*31:0*/ ysyx_24120009_core__DOT__idu__DOT__imm_i_sext;
@@ -144,9 +145,9 @@ class Vysyx_24120009_core___024root final : public VerilatedModule {
         VlUnpacked<CData/*3:0*/, 6> ysyx_24120009_core__DOT__idu__DOT__b_taken_mux__DOT__i0__DOT__pair_list;
         VlUnpacked<CData/*2:0*/, 6> ysyx_24120009_core__DOT__idu__DOT__b_taken_mux__DOT__i0__DOT__key_list;
         VlUnpacked<CData/*0:0*/, 6> ysyx_24120009_core__DOT__idu__DOT__b_taken_mux__DOT__i0__DOT__data_list;
-        VlUnpacked<QData/*36:0*/, 11> ysyx_24120009_core__DOT__exu__DOT__alu_instance__DOT__alu_mux__DOT__i0__DOT__pair_list;
     };
     struct {
+        VlUnpacked<QData/*36:0*/, 11> ysyx_24120009_core__DOT__exu__DOT__alu_instance__DOT__alu_mux__DOT__i0__DOT__pair_list;
         VlUnpacked<CData/*4:0*/, 11> ysyx_24120009_core__DOT__exu__DOT__alu_instance__DOT__alu_mux__DOT__i0__DOT__key_list;
         VlUnpacked<IData/*31:0*/, 11> ysyx_24120009_core__DOT__exu__DOT__alu_instance__DOT__alu_mux__DOT__i0__DOT__data_list;
         VlUnpacked<QData/*34:0*/, 5> ysyx_24120009_core__DOT__mem__DOT__alignment_network__DOT__mem_mux__DOT__i0__DOT__pair_list;
