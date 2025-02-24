@@ -167,7 +167,7 @@ module ysyx_24120009_MEM (
     // It is asserted (high) only when an instruction has been passed to this module 
     // but has not yet been forwarded to the WBU (Write-Back Unit).
     assign mem_active = (inst_from_IFU == inst_o) && (inst_from_WBU != inst_o);
-
+    
     // mem_en signal generation
     always @(*) begin
         if (mem_active && (opcode == `ysyx_24120009_OPCODE_LOAD || opcode == `ysyx_24120009_OPCODE_S)) begin
