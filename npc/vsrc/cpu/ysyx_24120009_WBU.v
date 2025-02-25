@@ -128,7 +128,7 @@ module ysyx_24120009_WBU (
         end else begin
             // Why use inst_i instead of inst_o? Because wbu_active may be delayed one cycle.
             if (inst_from_IFU == inst_i) begin
-                if (!wbu_active_reg && mem_valid) begin
+                if (!wbu_active_reg) begin
                     wbu_active <= 1'b1;  
                     wbu_active_reg <= 1'b1;  
                 end else begin
