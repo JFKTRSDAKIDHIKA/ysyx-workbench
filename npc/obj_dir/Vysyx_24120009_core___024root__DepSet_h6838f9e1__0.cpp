@@ -1240,6 +1240,7 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root___nba_comb__TOP__0(Vysyx_241200
                                                    == 
                                                    (0x7fU 
                                                     & vlSelf->ysyx_24120009_core__DOT__inst_from_MEM_to_WBU))));
+    vlSelf->dmem_rdata_from_MEM_to_WBU_debug = vlSelf->ysyx_24120009_core__DOT__dmem_rdata_from_MEM_to_WBU;
     vlSelf->mem_valid_debug = (1U & ((IData)(vlSelf->ysyx_24120009_core__DOT__mem__DOT__wt_res_valid) 
                                      | ((~ (IData)(vlSelf->ysyx_24120009_core__DOT__mem__DOT__mem_en)) 
                                         | (IData)(vlSelf->ysyx_24120009_core__DOT__mem__DOT__rd_res_valid))));
