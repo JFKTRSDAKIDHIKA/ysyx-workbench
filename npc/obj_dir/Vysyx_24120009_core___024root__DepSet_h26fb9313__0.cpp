@@ -40,8 +40,8 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root____Vdpiimwrap_ysyx_24120009_cor
 
 extern "C" void pmem_write(int waddr, int wdata, char wmask);
 
-VL_INLINE_OPT void Vysyx_24120009_core___024root____Vdpiimwrap_ysyx_24120009_core__DOT__mem__DOT__pmem_write_TOP(IData/*31:0*/ waddr, IData/*31:0*/ wdata, CData/*7:0*/ wmask) {
-    VL_DEBUG_IF(VL_DBG_MSGF("+    Vysyx_24120009_core___024root____Vdpiimwrap_ysyx_24120009_core__DOT__mem__DOT__pmem_write_TOP\n"); );
+VL_INLINE_OPT void Vysyx_24120009_core___024root____Vdpiimwrap_ysyx_24120009_core__DOT__ifu__DOT__sram_inst__DOT__pmem_write_TOP(IData/*31:0*/ waddr, IData/*31:0*/ wdata, CData/*7:0*/ wmask) {
+    VL_DEBUG_IF(VL_DBG_MSGF("+    Vysyx_24120009_core___024root____Vdpiimwrap_ysyx_24120009_core__DOT__ifu__DOT__sram_inst__DOT__pmem_write_TOP\n"); );
     // Body
     int waddr__Vcvt;
     for (size_t waddr__Vidx = 0; waddr__Vidx < 1; ++waddr__Vidx) waddr__Vcvt = waddr;

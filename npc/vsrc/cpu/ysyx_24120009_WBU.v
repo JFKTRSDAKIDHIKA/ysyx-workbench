@@ -14,6 +14,7 @@ module ysyx_24120009_WBU (
     input     [`ysyx_24120009_DATA_WIDTH-1:0] result_i,
     input     [`ysyx_24120009_DATA_WIDTH-1:0] dmem_rdata_i,
     input    [`ysyx_24120009_REG_ADDR_WIDTH-1:0]   rd_addr_i,
+    input mem_valid,
     // Signals passed to IFU
     output pc_wen, 
     // Signal passed from IFU
@@ -127,7 +128,7 @@ module ysyx_24120009_WBU (
         end else begin
             // Why use inst_i instead of inst_o? Because wbu_active may be delayed one cycle.
             if (inst_from_IFU == inst_i) begin
-                if (!wbu_active_reg) begin
+                if (!wbu_active_reg && mem_valid) begin
                     wbu_active <= 1'b1;  
                     wbu_active_reg <= 1'b1;  
                 end else begin

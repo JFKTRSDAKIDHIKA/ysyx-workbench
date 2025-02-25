@@ -17,6 +17,7 @@ module ysyx_24120009_MEM (
     output     [`ysyx_24120009_DATA_WIDTH-1:0]    result_o,
     output     [`ysyx_24120009_DATA_WIDTH-1:0]    dmem_rdata,
     output     [`ysyx_24120009_REG_ADDR_WIDTH-1:0]   rd_addr_o,
+    output                                           mem_valid,
     // Signals passed to simulation environment
     output wire mem_active,
     // Signals passed from IFU
@@ -24,10 +25,6 @@ module ysyx_24120009_MEM (
     // Signals passed from WBU
     input [`ysyx_24120009_DATA_WIDTH-1:0] inst_from_WBU
 );
-
-    // direct programing interface --- C
-    import "DPI-C" function int pmem_read(input int raddr);
-    import "DPI-C" function void pmem_write(input int waddr, input int wdata, input byte wmask);
 
     // Get ready for pipeline
     ysyx_24120009_Reg #(
@@ -106,9 +103,13 @@ module ysyx_24120009_MEM (
     reg mem_wen;
     wire     [`ysyx_24120009_DATA_WIDTH-1:0]    dmem_addr_o;
     wire     [`ysyx_24120009_DATA_WIDTH-1:0]    rs2_data_o;
+    wire rd_res_valid;
+    wire wt_res_valid;
+
 
     // Interact with data memory
     // Data memeory access
+    /*
     always @(*) begin
         if (mem_en) begin 
             // read data from data memory
@@ -122,6 +123,25 @@ module ysyx_24120009_MEM (
             dmem_rdata_raw = 0;
         end
     end
+    */
+    ysyx_24120009_SRAM LSU (
+        // Clock and reset signals
+        .clk(clk),
+        .rst(rst),
+        // Read memory signals
+        .rd_req_valid(mem_en),
+        .addr(dmem_addr_o),
+        .data_out(dmem_rdata_raw),
+        .rd_res_valid(rd_res_valid),
+        // Write memory signals
+        .wt_req_valid(mem_wen),
+        .waddr(dmem_addr_o),
+        .wdata(dmem_wdata),
+        .wmask(wmask),
+        .wt_res_valid(wt_res_valid)
+    );
+
+    assign mem_valid = wt_res_valid || rd_res_valid;
 
     assign dmem_wdata_raw = rs2_data_o;
 
