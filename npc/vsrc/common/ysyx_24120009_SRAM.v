@@ -58,7 +58,7 @@ module ysyx_24120009_SRAM (
       wt_res_valid = 1'b0;
     end else if (wt_req_valid_delayed) begin
       pmem_write(waddr_delayed, wdata_delayed, wmask_delayed);
-      data_out = 32'b1;  
+      data_out = wdata_delayed;  
       rd_res_valid = 1'b0;
       wt_res_valid = 1'b1;
     end else begin
