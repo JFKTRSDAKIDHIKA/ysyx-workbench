@@ -662,7 +662,7 @@ void Vysyx_24120009_core___024root__trace_chg_sub_0(Vysyx_24120009_core___024roo
     bufp->chgIData(oldp+390,(vlSelf->result_from_WB_debug),32);
     bufp->chgCData(oldp+391,(vlSelf->alu_op_debug),5);
     bufp->chgIData(oldp+392,(vlSelf->inst_from_EXU_to_MEM_debug),32);
-    bufp->chgBit(oldp+393,(vlSelf->mem_valid_debug));
+    bufp->chgBit(oldp+393,(vlSelf->mem_access_done_debug));
     bufp->chgIData(oldp+394,(vlSelf->dmem_rdata_from_MEM_to_WBU_debug),32);
     bufp->chgBit(oldp+395,(vlSelf->wt_res_valid_debug));
     __Vtemp_h650a5f8e__0[0U] = (IData)((0x300000000ULL 

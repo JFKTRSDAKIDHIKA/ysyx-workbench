@@ -27,7 +27,7 @@ class Vysyx_24120009_core___024root final : public VerilatedModule {
         VL_OUT8(pc_wen_debug,0,0);
         VL_OUT8(mem_active_debug,0,0);
         VL_OUT8(alu_op_debug,4,0);
-        VL_OUT8(mem_valid_debug,0,0);
+        VL_OUT8(mem_access_done_debug,0,0);
         VL_OUT8(wt_res_valid_debug,0,0);
         CData/*4:0*/ ysyx_24120009_core__DOT__alu_op;
         CData/*2:0*/ ysyx_24120009_core__DOT__pc_sel;

@@ -38,7 +38,7 @@ class Vysyx_24120009_core VL_NOT_FINAL : public VerilatedModel {
     VL_OUT8(&pc_wen_debug,0,0);
     VL_OUT8(&mem_active_debug,0,0);
     VL_OUT8(&alu_op_debug,4,0);
-    VL_OUT8(&mem_valid_debug,0,0);
+    VL_OUT8(&mem_access_done_debug,0,0);
     VL_OUT8(&wt_res_valid_debug,0,0);
     VL_OUT(&pc_debug,31,0);
     VL_OUT(&inst_debug,31,0);

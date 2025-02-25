@@ -35,7 +35,7 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root__trace_init_sub__TOP__0(Vysyx_24
     tracep->declBus(c+391,"result_from_WB_debug", false,-1, 31,0);
     tracep->declBus(c+392,"alu_op_debug", false,-1, 4,0);
     tracep->declBus(c+393,"inst_from_EXU_to_MEM_debug", false,-1, 31,0);
-    tracep->declBit(c+394,"mem_valid_debug", false,-1);
+    tracep->declBit(c+394,"mem_access_done_debug", false,-1);
     tracep->declBus(c+395,"dmem_rdata_from_MEM_to_WBU_debug", false,-1, 31,0);
     tracep->declBit(c+396,"wt_res_valid_debug", false,-1);
     tracep->pushNamePrefix("ysyx_24120009_core ");
@@ -63,7 +63,7 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root__trace_init_sub__TOP__0(Vysyx_24
     tracep->declBus(c+391,"result_from_WB_debug", false,-1, 31,0);
     tracep->declBus(c+392,"alu_op_debug", false,-1, 4,0);
     tracep->declBus(c+393,"inst_from_EXU_to_MEM_debug", false,-1, 31,0);
-    tracep->declBit(c+394,"mem_valid_debug", false,-1);
+    tracep->declBit(c+394,"mem_access_done_debug", false,-1);
     tracep->declBus(c+395,"dmem_rdata_from_MEM_to_WBU_debug", false,-1, 31,0);
     tracep->declBit(c+396,"wt_res_valid_debug", false,-1);
     tracep->declBus(c+109,"reg_write_data", false,-1, 31,0);
@@ -1427,7 +1427,7 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root__trace_full_sub_0(Vysyx_24120009
     bufp->fullIData(oldp+391,(vlSelf->result_from_WB_debug),32);
     bufp->fullCData(oldp+392,(vlSelf->alu_op_debug),5);
     bufp->fullIData(oldp+393,(vlSelf->inst_from_EXU_to_MEM_debug),32);
-    bufp->fullBit(oldp+394,(vlSelf->mem_valid_debug));
+    bufp->fullBit(oldp+394,(vlSelf->mem_access_done_debug));
     bufp->fullIData(oldp+395,(vlSelf->dmem_rdata_from_MEM_to_WBU_debug),32);
     bufp->fullBit(oldp+396,(vlSelf->wt_res_valid_debug));
     __Vtemp_h650a5f8e__0[0U] = (IData)((0x300000000ULL 
