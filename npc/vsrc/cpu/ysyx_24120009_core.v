@@ -27,7 +27,8 @@ module ysyx_24120009_core (
     output wire [4:0] alu_op_debug,
     output wire [`ysyx_24120009_DATA_WIDTH-1:0] inst_from_EXU_to_MEM_debug,
     output wire mem_valid_debug,
-    output wire [`ysyx_24120009_DATA_WIDTH-1:0] dmem_rdata_from_MEM_to_WBU_debug
+    output wire [`ysyx_24120009_DATA_WIDTH-1:0] dmem_rdata_from_MEM_to_WBU_debug,
+    output wire wt_res_valid_debug
 );
 
     // Debug signal declaration and assignment
@@ -202,7 +203,9 @@ module ysyx_24120009_core (
         // Signals passed from IFU
         .inst_from_IFU(inst_from_IFU_to_IDU),
         // Signals passed from WBU
-        .inst_from_WBU(inst_from_WBU_to_MEM)
+        .inst_from_WBU(inst_from_WBU_to_MEM),
+        // debug signals
+        .wt_res_valid_debug(wt_res_valid_debug)
     );
 
     // Instantiate WBU

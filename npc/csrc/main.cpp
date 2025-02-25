@@ -203,7 +203,7 @@ int check_dut_and_ref(Vysyx_24120009_core* top, paddr_t start_addr, size_t size)
 void tick(Vysyx_24120009_core* top, bool silent_mode ) {
     top->clk = 0;
     top->eval();
-
+    
     if (!silent_mode ) {
       // print some debug info when registers have yet been updated!
       printf("------------------------------------------------------------------------------\n");
@@ -225,6 +225,7 @@ void tick(Vysyx_24120009_core* top, bool silent_mode ) {
                 << ", mem_active: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->mem_active_debug)
                 << ", mem_valid: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->mem_valid_debug)
                 << ". dmem_rdata_from_MEM: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->dmem_rdata_from_MEM_to_WBU_debug
+                << ", wt_res_valid: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->wt_res_valid_debug)
                 << std::dec << std::endl;
     }
   

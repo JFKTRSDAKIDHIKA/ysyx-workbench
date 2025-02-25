@@ -23,7 +23,9 @@ module ysyx_24120009_MEM (
     // Signals passed from IFU
     input [`ysyx_24120009_DATA_WIDTH-1:0] inst_from_IFU,
     // Signals passed from WBU
-    input [`ysyx_24120009_DATA_WIDTH-1:0] inst_from_WBU
+    input [`ysyx_24120009_DATA_WIDTH-1:0] inst_from_WBU,
+    // debug signals
+    output wt_res_valid_debug
 );
 
     // Get ready for pipeline
@@ -142,6 +144,8 @@ module ysyx_24120009_MEM (
     );
 
     assign mem_valid = wt_res_valid || rd_res_valid || !mem_en;
+
+    assign wt_res_valid_debug = wt_res_valid;
 
     assign dmem_wdata_raw = rs2_data_o;
 
