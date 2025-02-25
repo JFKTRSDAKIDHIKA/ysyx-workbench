@@ -141,7 +141,7 @@ module ysyx_24120009_MEM (
         .wt_res_valid(wt_res_valid)
     );
 
-    assign mem_valid = wt_res_valid || rd_res_valid;
+    assign mem_valid = wt_res_valid || rd_res_valid || !mem_en;
 
     assign dmem_wdata_raw = rs2_data_o;
 
