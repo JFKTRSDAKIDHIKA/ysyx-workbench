@@ -126,17 +126,20 @@ module ysyx_24120009_MEM (
         end
     end
     */
+    wire rd_req_valid = mem_en && !mem_wen;
+    wire wt_req_valid = mem_en && mem_wen;
+
     ysyx_24120009_SRAM LSU (
         // Clock and reset signals
         .clk(clk),
         .rst(rst),
         // Read memory signals
-        .rd_req_valid(mem_en),
+        .rd_req_valid(rd_req_valid),
         .addr(dmem_addr_o),
         .data_out(dmem_rdata_raw),
         .rd_res_valid(rd_res_valid),
         // Write memory signals
-        .wt_req_valid(mem_wen),
+        .wt_req_valid(wt_req_valid),
         .waddr(dmem_addr_o),
         .wdata(dmem_wdata),
         .wmask(wmask),
