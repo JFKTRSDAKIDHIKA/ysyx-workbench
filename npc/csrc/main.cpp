@@ -204,27 +204,28 @@ void tick(Vysyx_24120009_core* top, bool silent_mode ) {
     top->clk = 0;
     top->eval();
 
-    if (!silent_mode) {
-      // Print some debug info when registers have yet been updated!
-      printf("--------------------------------------------------------------------------------------------------------\n");
-      printf("| %-20s | %-20s | %-20s | %-20s | %-20s |\n", "Op1", "Op2", "wb_data", "Instruction", "PC");
-      printf("| 0x%08x          | 0x%08x          | 0x%08x          | 0x%08x          | 0x%08x          |\n",
-             top->Op1_debug, top->Op2_debug, top->reg_write_data_debug, top->inst_debug, top->pc_debug);
-  
-      printf("| %-20s | %-20s | %-20s | %-20s | %-20s |\n", "PC_PLUS4", "rf_we", "wb_sel", "opcode", "pc_wen");
-      printf("| 0x%08x          | 0x%01x                | 0x%01x                | 0x%02x               | 0x%01x                |\n",
-             static_cast<int>(top->pc_plus4_debug), static_cast<int>(top->rf_we_debug),
-             static_cast<int>(top->wb_sel_debug), static_cast<int>(top->opcode_debug), static_cast<int>(top->pc_wen_debug));
-  
-      printf("| %-20s | %-20s | %-20s | %-20s | %-20s |\n", "result_EXU", "result_MEM", "result_WB", "alu_op", "inst_EXU_to_MEM");
-      printf("| 0x%08x          | 0x%08x          | 0x%08x          | 0x%02x               | 0x%08x          |\n",
-             top->result_from_EXU_to_MEM_debug, top->result_from_MEM_to_WBU_debug,
-             top->result_from_WB_debug, static_cast<int>(top->alu_op_debug), top->inst_from_EXU_to_MEM_debug);
-  
-      printf("| %-20s |\n", "mem_active");
-      printf("| 0x%02x               |\n", static_cast<int>(top->mem_active_debug));
-      printf("--------------------------------------------------------------------------------------------------------\n");
-  }
+    if (!silent_mode ) {
+      // print some debug info when registers have yet been updated!
+      printf("------------------------------------------------------------------------------\n");
+      std::cout << "Op1: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->Op1_debug
+                << ", Op2: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->Op2_debug
+                << ", wb_data: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->reg_write_data_debug
+                << ", Instruction: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->inst_debug
+                << ", PC: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->pc_debug
+                << ", PC_PLUS4: 0x" << std::hex << static_cast<int>(top->pc_plus4_debug) // Cast to int for proper printing
+                << ", rf_we_debug: 0x" << std::hex << static_cast<int>(top->rf_we_debug) // Cast to int for proper printing
+                << ", wb_sel_debug: 0x" << std::hex << static_cast<int>(top->wb_sel_debug) // Cast to int for proper printing
+                << ", opcode: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->opcode_debug) // Cast to int for proper printing
+                << ", pc_wen: 0x" << std::hex << static_cast<int>(top->pc_wen_debug) // Cast to int for proper printing
+                << ", result_from_EXU: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->result_from_EXU_to_MEM_debug
+                << ", result_from_MEM: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->result_from_MEM_to_WBU_debug
+                << ", result_from_WB: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->result_from_WB_debug
+                << ", alu_op: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->alu_op_debug) // Cast to int for proper printing
+                << ", inst_from_EXU_to_MEM_debug: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->inst_from_EXU_to_MEM_debug
+                << ", mem_active: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->mem_active_debug)
+                << ", mem_valid: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->mem_valid_debug)
+                << std::dec << std::endl;
+    }
   
 /*
     // print some debug info of memory write

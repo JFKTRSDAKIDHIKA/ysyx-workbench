@@ -25,7 +25,8 @@ module ysyx_24120009_core (
     output wire [`ysyx_24120009_DATA_WIDTH-1:0] result_from_MEM_to_WBU_debug,
     output wire [`ysyx_24120009_DATA_WIDTH-1:0] result_from_WB_debug,
     output wire [4:0] alu_op_debug,
-    output wire [`ysyx_24120009_DATA_WIDTH-1:0] inst_from_EXU_to_MEM_debug
+    output wire [`ysyx_24120009_DATA_WIDTH-1:0] inst_from_EXU_to_MEM_debug,
+    output wire mem_valid_debug
 );
 
     // Debug signal declaration and assignment
@@ -42,6 +43,7 @@ module ysyx_24120009_core (
     assign pc_wen_debug = pc_wen;
     assign result_from_EXU_to_MEM_debug = result_from_EXU_to_MEM;
     assign result_from_MEM_to_WBU_debug = result_from_MEM_to_WBU;
+    assign mem_valid_debug = mem_valid;
 
     // Internal signals
     wire [`ysyx_24120009_DATA_WIDTH-1:0] reg_write_data;

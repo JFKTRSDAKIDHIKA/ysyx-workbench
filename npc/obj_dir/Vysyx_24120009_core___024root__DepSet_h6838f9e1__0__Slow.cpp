@@ -669,6 +669,8 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root___stl_sequent__TOP__0(Vysyx_2412
               [7U]));
     vlSelf->ysyx_24120009_core__DOT__mem__DOT__ctl_mem_access 
         = vlSelf->ysyx_24120009_core__DOT__mem__DOT__mem_acces_ctl_mux__DOT__i0__DOT__lut_out;
+    vlSelf->mem_valid_debug = ((IData)(vlSelf->ysyx_24120009_core__DOT__mem__DOT__rd_res_valid) 
+                               | (IData)(vlSelf->ysyx_24120009_core__DOT__mem__DOT__wt_res_valid));
     vlSelf->ysyx_24120009_core__DOT__mem__DOT__alignment_network__DOT__mem_mux__DOT__i0__DOT__pair_list[2U] 
         = (0x200000000ULL | (QData)((IData)(vlSelf->ysyx_24120009_core__DOT__mem__DOT__dmem_rdata_raw)));
     vlSelf->ysyx_24120009_core__DOT__mem__DOT__alignment_network__DOT__mem_mux__DOT__i0__DOT__data_list[2U] 
@@ -1327,6 +1329,7 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root___ctor_var_reset(Vysyx_24120009_
     vlSelf->result_from_WB_debug = VL_RAND_RESET_I(32);
     vlSelf->alu_op_debug = VL_RAND_RESET_I(5);
     vlSelf->inst_from_EXU_to_MEM_debug = VL_RAND_RESET_I(32);
+    vlSelf->mem_valid_debug = VL_RAND_RESET_I(1);
     vlSelf->ysyx_24120009_core__DOT__reg_write_data = VL_RAND_RESET_I(32);
     vlSelf->ysyx_24120009_core__DOT__alu_op = VL_RAND_RESET_I(5);
     vlSelf->ysyx_24120009_core__DOT__pc_sel = VL_RAND_RESET_I(3);
