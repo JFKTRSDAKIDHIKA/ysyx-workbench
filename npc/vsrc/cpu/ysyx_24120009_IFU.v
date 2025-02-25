@@ -63,7 +63,12 @@ module ysyx_24120009_IFU (
     .rd_req_valid(sram_rd_req),
     .addr(pc),       
     .data_out(sram_data_out),
-    .rd_res_valid(rd_res_valid)
+    .rd_res_valid(rd_res_valid),
+    .wt_req_valid(),
+    .waddr(),
+    .wdata(),
+    .wmask(),
+    .wt_res_valid()
   );
 
   // If the instruction has not yet been read from IMEM, inst will remain 0, 

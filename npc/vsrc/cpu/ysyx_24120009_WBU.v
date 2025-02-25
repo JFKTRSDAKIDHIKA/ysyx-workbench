@@ -9,11 +9,12 @@ module ysyx_24120009_WBU (
     output     [`ysyx_24120009_REG_ADDR_WIDTH-1:0]   rd_addr_o,
     output reg rf_we,
     // Signals passed from MEM
-    input     [`ysyx_24120009_DATA_WIDTH-1:0] pc_i,
-    input wire [`ysyx_24120009_DATA_WIDTH-1:0] inst_i,
-    input     [`ysyx_24120009_DATA_WIDTH-1:0] result_i,
-    input     [`ysyx_24120009_DATA_WIDTH-1:0] dmem_rdata_i,
+    input     [`ysyx_24120009_DATA_WIDTH-1:0]      pc_i,
+    input     [`ysyx_24120009_DATA_WIDTH-1:0]      inst_i,
+    input     [`ysyx_24120009_DATA_WIDTH-1:0]      result_i,
+    input     [`ysyx_24120009_DATA_WIDTH-1:0]      dmem_rdata_i,
     input    [`ysyx_24120009_REG_ADDR_WIDTH-1:0]   rd_addr_i,
+    input                                          mem_access_done,
     // Signals passed to IFU
     output pc_wen, 
     // Signal passed from IFU
@@ -127,7 +128,8 @@ module ysyx_24120009_WBU (
         end else begin
             // Why use inst_i instead of inst_o? Because wbu_active may be delayed one cycle.
             if (inst_from_IFU == inst_i) begin
-                if (!wbu_active_reg) begin
+                // Signal wbu_active is asserted high only when memory access has finished (mem_access_done==1).
+                if (!wbu_active_reg && mem_access_done) begin
                     wbu_active <= 1'b1;  
                     wbu_active_reg <= 1'b1;  
                 end else begin

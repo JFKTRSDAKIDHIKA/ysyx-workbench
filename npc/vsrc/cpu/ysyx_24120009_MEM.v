@@ -6,28 +6,27 @@ module ysyx_24120009_MEM (
     input wire rst,
     // Signals passed from EXU
     input     [`ysyx_24120009_DATA_WIDTH-1:0] pc_i,
-    input wire [`ysyx_24120009_DATA_WIDTH-1:0] inst_i,
+    input     [`ysyx_24120009_DATA_WIDTH-1:0] inst_i,
     input     [`ysyx_24120009_DATA_WIDTH-1:0] result_i,
     input     [`ysyx_24120009_DATA_WIDTH-1:0] dmem_addr_i,
-    input      [`ysyx_24120009_DATA_WIDTH-1:0] rs2_data_i,
-    input    [`ysyx_24120009_REG_ADDR_WIDTH-1:0]   rd_addr_i,
+    input     [`ysyx_24120009_DATA_WIDTH-1:0] rs2_data_i,
+    input     [`ysyx_24120009_REG_ADDR_WIDTH-1:0]   rd_addr_i,
     // Signals passed to WBU
     output     [`ysyx_24120009_DATA_WIDTH-1:0]    inst_o,
     output     [`ysyx_24120009_DATA_WIDTH-1:0]    pc_o,
     output     [`ysyx_24120009_DATA_WIDTH-1:0]    result_o,
     output     [`ysyx_24120009_DATA_WIDTH-1:0]    dmem_rdata,
     output     [`ysyx_24120009_REG_ADDR_WIDTH-1:0]   rd_addr_o,
+    output                                           mem_access_done,
     // Signals passed to simulation environment
-    output wire mem_active,
+    output  mem_active,
     // Signals passed from IFU
     input [`ysyx_24120009_DATA_WIDTH-1:0] inst_from_IFU,
     // Signals passed from WBU
-    input [`ysyx_24120009_DATA_WIDTH-1:0] inst_from_WBU
+    input [`ysyx_24120009_DATA_WIDTH-1:0] inst_from_WBU,
+    // debug signals
+    output wt_res_valid_debug
 );
-
-    // direct programing interface --- C
-    import "DPI-C" function int pmem_read(input int raddr);
-    import "DPI-C" function void pmem_write(input int waddr, input int wdata, input byte wmask);
 
     // Get ready for pipeline
     ysyx_24120009_Reg #(
@@ -106,24 +105,38 @@ module ysyx_24120009_MEM (
     reg mem_wen;
     wire     [`ysyx_24120009_DATA_WIDTH-1:0]    dmem_addr_o;
     wire     [`ysyx_24120009_DATA_WIDTH-1:0]    rs2_data_o;
+    wire rd_res_valid;
+    wire wt_res_valid;
+
 
     // Interact with data memory
     // Data memeory access
-    always @(*) begin
-        if (mem_en) begin 
-            // read data from data memory
-            dmem_rdata_raw = pmem_read(dmem_addr_o);
-            if (mem_wen) begin 
-            // write data to data memory
-            pmem_write(dmem_addr_o, dmem_wdata, wmask);
-            end
-        end
-        else begin
-            dmem_rdata_raw = 0;
-        end
-    end
 
+    // Ensure the only one of the "rd_req_valid" and "wt_req_valid" signals should be asserted (high).
+    wire rd_req_valid = mem_en && !mem_wen;
+    wire wt_req_valid = mem_en && mem_wen;
+
+    // Instantiate SRAM module
+    ysyx_24120009_SRAM LSU (
+        // Clock and reset signals
+        .clk(clk),
+        .rst(rst),
+        // Read memory signals
+        .rd_req_valid(rd_req_valid),
+        .addr(dmem_addr_o),
+        .data_out(dmem_rdata_raw),
+        .rd_res_valid(rd_res_valid),
+        // Write memory signals
+        .wt_req_valid(wt_req_valid),
+        .waddr(dmem_addr_o),
+        .wdata(dmem_wdata),
+        .wmask(wmask),
+        .wt_res_valid(wt_res_valid)
+    );
+
+    assign mem_access_done = wt_res_valid || rd_res_valid || !mem_en;    // The signal "mem_access_done" is asserted high when no memory access is required or the current memory access has completed.
     assign dmem_wdata_raw = rs2_data_o;
+    assign wt_res_valid_debug = wt_res_valid;
 
     ysyx_24120009_alignment_network alignment_network (
         .data_in(dmem_rdata_raw),
