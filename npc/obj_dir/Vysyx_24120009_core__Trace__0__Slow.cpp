@@ -98,7 +98,7 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root__trace_init_sub__TOP__0(Vysyx_24
     tracep->declBus(c+127,"pc_from_MEM_to_WBU", false,-1, 31,0);
     tracep->declBus(c+128,"inst_from_MEM_to_WBU", false,-1, 31,0);
     tracep->declBus(c+129,"inst_from_WBU_to_MEM", false,-1, 31,0);
-    tracep->declBit(c+394,"mem_valid", false,-1);
+    tracep->declBit(c+394,"mem_access_done", false,-1);
     tracep->declBus(c+130,"rs1_addr", false,-1, 4,0);
     tracep->declBus(c+131,"rs2_addr", false,-1, 4,0);
     tracep->declBus(c+132,"waddr", false,-1, 4,0);
@@ -446,7 +446,7 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root__trace_init_sub__TOP__0(Vysyx_24
     tracep->declBus(c+125,"result_o", false,-1, 31,0);
     tracep->declBus(c+359,"dmem_rdata", false,-1, 31,0);
     tracep->declBus(c+126,"rd_addr_o", false,-1, 4,0);
-    tracep->declBit(c+394,"mem_valid", false,-1);
+    tracep->declBit(c+394,"mem_access_done", false,-1);
     tracep->declBit(c+388,"mem_active", false,-1);
     tracep->declBus(c+373,"inst_from_IFU", false,-1, 31,0);
     tracep->declBus(c+129,"inst_from_WBU", false,-1, 31,0);
@@ -679,7 +679,7 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root__trace_init_sub__TOP__0(Vysyx_24
     tracep->declBus(c+125,"result_i", false,-1, 31,0);
     tracep->declBus(c+359,"dmem_rdata_i", false,-1, 31,0);
     tracep->declBus(c+126,"rd_addr_i", false,-1, 4,0);
-    tracep->declBit(c+394,"mem_valid", false,-1);
+    tracep->declBit(c+394,"mem_access_done", false,-1);
     tracep->declBit(c+387,"pc_wen", false,-1);
     tracep->declBus(c+373,"inst_from_IFU", false,-1, 31,0);
     tracep->declBit(c+382,"wbu_active", false,-1);

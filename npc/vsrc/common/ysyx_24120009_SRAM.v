@@ -5,31 +5,31 @@ module ysyx_24120009_SRAM (
   // Clock and reset signals
   input                                                       clk,       
   input                                                       rst,     
-  //  Read memory signals
-  input                                                       rd_req_valid,      // Read request signal
-  input        [`ysyx_24120009_DATA_WIDTH-1:0]                addr,              // 32-bit address
-  output reg   [`ysyx_24120009_DATA_WIDTH-1:0]                data_out,          // 32-bit data output
-  output wire                                                 rd_res_valid,       // Read response valid signal
+  // Read memory signals
+  input                                                       rd_req_valid,      // Indicates a valid read request
+  input        [`ysyx_24120009_DATA_WIDTH-1:0]                addr,              // Address for the read operation (32-bit)
+  output reg   [`ysyx_24120009_DATA_WIDTH-1:0]                data_out,          // Data output from memory (32-bit)
+  output wire                                                 rd_res_valid,      // Indicates a valid read response
+
   // Write memory signals
-  input                                                       wt_req_valid,
-  input        [`ysyx_24120009_DATA_WIDTH-1:0]                waddr,
-  input        [`ysyx_24120009_DATA_WIDTH-1:0]                wdata,
-  input wire   [7:0]                                          wmask,
-  output wire                                                 wt_res_valid       // Read response valid signal
+  input                                                       wt_req_valid,      // Indicates a valid write request
+  input        [`ysyx_24120009_DATA_WIDTH-1:0]                waddr,             // Address for the write operation (32-bit)
+  input        [`ysyx_24120009_DATA_WIDTH-1:0]                wdata,             // Data to be written to memory (32-bit)
+  input wire   [7:0]                                          wmask,             // Write mask to specify which bytes to update
+  output wire                                                 wt_res_valid       // Indicates a valid write response
 );
 
   // Import DPI-C function for memory read
   import "DPI-C" function int pmem_read(input int raddr);
   import "DPI-C" function void pmem_write(input int waddr, input int wdata, input byte wmask);
 
-
   // Internal signals for pipeline delay
-  reg  [31:0] addr_delayed;  
-  reg         rd_req_valid_delayed;  
-  reg  [31:0] waddr_delayed; 
-  reg  [31:0] wdata_delayed; 
-  reg  [7:0]  wmask_delayed; 
-  reg         wt_req_valid_delayed;
+  reg  [`ysyx_24120009_DATA_WIDTH-1:0] addr_delayed;  
+  reg                                  rd_req_valid_delayed;  
+  reg  [`ysyx_24120009_DATA_WIDTH-1:0] waddr_delayed; 
+  reg  [`ysyx_24120009_DATA_WIDTH-1:0] wdata_delayed; 
+  reg  [7:0]                           wmask_delayed; 
+  reg                                  wt_req_valid_delayed;
 
   // Pipeline stage to simulate 1-cycle latency
   always @(posedge clk or posedge rst) begin
@@ -50,7 +50,8 @@ module ysyx_24120009_SRAM (
     end
   end
 
-  // Data output logic
+  // Memory read & write logic
+  // Warning: At any given time, only one of the "rd_req_valid_delayed" and "wt_req_valid_delayed" signals should be asserted (high).
   always @(*) begin
     if (rd_req_valid_delayed) begin
       data_out = pmem_read(addr_delayed);  
