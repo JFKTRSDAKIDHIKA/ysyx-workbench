@@ -32,6 +32,7 @@ module ysyx_24120009_core (
     output wire [2:0] ifu_state_debug,
     output wire rd_res_valid_debug,
     output wire [1:0] axi4_ifu_state_debug,
+    output wire [1:0] mem_ctl_state_debug,
     output wire [1:0] axi4_mem_state_debug
 );
 
@@ -217,6 +218,7 @@ module ysyx_24120009_core (
         .inst_from_WBU(inst_from_WBU_to_MEM),
         // debug signals
         .wt_res_valid_debug(wt_res_valid_debug),
+        .mem_ctl_state_debug(mem_ctl_state_debug),
         .axi4_mem_state_debug(axi4_mem_state_debug)
     );
 

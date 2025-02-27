@@ -26,6 +26,7 @@ module ysyx_24120009_MEM (
     input [`ysyx_24120009_DATA_WIDTH-1:0] inst_from_WBU,
     // debug signals
     output wt_res_valid_debug,
+    output [1:0] mem_ctl_state_debug,
     output [1:0] axi4_mem_state_debug
 );
 
@@ -57,8 +58,10 @@ module ysyx_24120009_MEM (
 
     // Instantiate sram_axi4_lite_wrapper module
     ysyx_24120009_sram_axi4_lite_wrapper axi4_mem (
+        // Clock and reset signals
         .clk(clk),
         .rst(rst),
+        // AXI4-Lite Write Channel
         .awvalid(wt_req_valid),
         .awready(),
         .awaddr(dmem_addr_o),
@@ -69,6 +72,7 @@ module ysyx_24120009_MEM (
         .bvalid(wt_res_valid),
         .bready(1'b1),
         .bresp(),
+        // AXI4-Lite Read Channel
         .arvalid(arvalid),
         .arready(),
         .araddr(dmem_addr_o),
@@ -76,7 +80,8 @@ module ysyx_24120009_MEM (
         .rready(1'b1),
         .rdata(dmem_rdata_raw),
         .rresp(),
-        .axi4_ifu_state_debug()
+        // debug signals
+        .axi4_ifu_state_debug(axi4_mem_state_debug)
     );
 
     // Alignment network
@@ -161,7 +166,7 @@ module ysyx_24120009_MEM (
     assign mem_access_done = (state == DONE);
     assign dmem_wdata_raw = rs2_data_o;
     assign wt_res_valid_debug = wt_res_valid;
-    assign axi4_mem_state_debug = state;
+    assign mem_ctl_state_debug = state;
     assign mem_active = (state == MEM_ACCESS);
 
     // Pipeline registers

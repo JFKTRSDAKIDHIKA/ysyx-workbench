@@ -51,10 +51,10 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root___nba_sequent__TOP__0(Vysyx_241
         = vlSelf->ysyx_24120009_core__DOT__mem__DOT__state;
     __Vdly__ysyx_24120009_core__DOT__mem__DOT__rvalid 
         = vlSelf->ysyx_24120009_core__DOT__mem__DOT__rvalid;
-    __Vdly__ysyx_24120009_core__DOT__mem__DOT__axi4_mem__DOT__state 
-        = vlSelf->ysyx_24120009_core__DOT__mem__DOT__axi4_mem__DOT__state;
     __Vdly__ysyx_24120009_core__DOT__mem__DOT__wt_res_valid 
         = vlSelf->ysyx_24120009_core__DOT__mem__DOT__wt_res_valid;
+    __Vdly__ysyx_24120009_core__DOT__mem__DOT__axi4_mem__DOT__state 
+        = vlSelf->ysyx_24120009_core__DOT__mem__DOT__axi4_mem__DOT__state;
     vlSelf->ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__sram_inst__DOT__wt_req_valid_delayed 
         = ((~ (IData)(vlSelf->rst)) & (IData)(vlSelf->ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__wt_req_valid));
     vlSelf->ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__sram_inst__DOT__rd_req_valid_delayed 
@@ -334,6 +334,7 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root___nba_sequent__TOP__0(Vysyx_241
     }
     vlSelf->axi4_ifu_state_debug = vlSelf->ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__state;
     vlSelf->rd_res_valid_debug = vlSelf->ysyx_24120009_core__DOT__ifu__DOT__rvalid;
+    vlSelf->axi4_mem_state_debug = vlSelf->ysyx_24120009_core__DOT__mem__DOT__axi4_mem__DOT__state;
     vlSelf->ysyx_24120009_core__DOT__mem__DOT__alignment_network__DOT__mem_mux__DOT__i0__DOT__pair_list[2U] 
         = (0x200000000ULL | (QData)((IData)(vlSelf->ysyx_24120009_core__DOT__mem__DOT__dmem_rdata_raw)));
     vlSelf->ysyx_24120009_core__DOT__mem__DOT__alignment_network__DOT__mem_mux__DOT__i0__DOT__data_list[2U] 
@@ -347,7 +348,7 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root___nba_sequent__TOP__0(Vysyx_241
     vlSelf->wt_res_valid_debug = vlSelf->ysyx_24120009_core__DOT__mem__DOT__wt_res_valid;
     vlSelf->mem_active_debug = (1U == (IData)(vlSelf->ysyx_24120009_core__DOT__mem__DOT__state));
     vlSelf->mem_access_done_debug = (2U == (IData)(vlSelf->ysyx_24120009_core__DOT__mem__DOT__state));
-    vlSelf->axi4_mem_state_debug = vlSelf->ysyx_24120009_core__DOT__mem__DOT__state;
+    vlSelf->mem_ctl_state_debug = vlSelf->ysyx_24120009_core__DOT__mem__DOT__state;
 }
 
 void Vysyx_24120009_core___024root____Vdpiimwrap_ysyx_24120009_core__DOT__u_RegisterFile__DOT__get_register_values_TOP(VlUnpacked<IData/*31:0*/, 32> rf);

@@ -29,6 +29,7 @@ Vysyx_24120009_core::Vysyx_24120009_core(VerilatedContext* _vcontextp__, const c
     , ifu_state_debug{vlSymsp->TOP.ifu_state_debug}
     , rd_res_valid_debug{vlSymsp->TOP.rd_res_valid_debug}
     , axi4_ifu_state_debug{vlSymsp->TOP.axi4_ifu_state_debug}
+    , mem_ctl_state_debug{vlSymsp->TOP.mem_ctl_state_debug}
     , axi4_mem_state_debug{vlSymsp->TOP.axi4_mem_state_debug}
     , pc_debug{vlSymsp->TOP.pc_debug}
     , inst_debug{vlSymsp->TOP.inst_debug}
