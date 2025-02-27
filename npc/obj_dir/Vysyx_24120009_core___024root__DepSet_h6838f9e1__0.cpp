@@ -188,6 +188,7 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root___nba_sequent__TOP__0(Vysyx_241
                 __Vdly__ysyx_24120009_core__DOT__mem__DOT__axi4_mem__DOT__state = 1U;
                 vlSelf->ysyx_24120009_core__DOT__mem__DOT__axi4_mem__DOT__awready = 0U;
                 vlSelf->ysyx_24120009_core__DOT__mem__DOT__axi4_mem__DOT__wready = 0U;
+                vlSelf->ysyx_24120009_core__DOT__mem__DOT__axi4_mem__DOT__wt_req_valid = 1U;
             } else if (((~ (IData)(vlSelf->ysyx_24120009_core__DOT__mem__DOT__mem_wen)) 
                         & (IData)(vlSelf->ysyx_24120009_core__DOT__mem__DOT__mem_en))) {
                 vlSelf->ysyx_24120009_core__DOT__mem__DOT__axi4_mem__DOT__addr_reg 
@@ -196,7 +197,7 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root___nba_sequent__TOP__0(Vysyx_241
                 vlSelf->ysyx_24120009_core__DOT__mem__DOT__axi4_mem__DOT__arready = 0U;
             }
         } else if ((1U == (IData)(vlSelf->ysyx_24120009_core__DOT__mem__DOT__axi4_mem__DOT__state))) {
-            vlSelf->ysyx_24120009_core__DOT__mem__DOT__axi4_mem__DOT__wt_req_valid = 1U;
+            vlSelf->ysyx_24120009_core__DOT__mem__DOT__axi4_mem__DOT__wt_req_valid = 0U;
             if (vlSelf->ysyx_24120009_core__DOT__mem__DOT__axi4_mem__DOT__sram_wt_res_valid) {
                 vlSelf->ysyx_24120009_core__DOT__mem__DOT__axi4_mem__DOT__wt_req_valid = 0U;
                 __Vdly__ysyx_24120009_core__DOT__mem__DOT__wt_res_valid = 1U;
@@ -272,7 +273,7 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root___nba_sequent__TOP__0(Vysyx_241
                 vlSelf->ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__arready = 0U;
             }
         } else if ((1U == (IData)(vlSelf->ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__state))) {
-            vlSelf->ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__wt_req_valid = 1U;
+            vlSelf->ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__wt_req_valid = 0U;
             if (vlSelf->ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__sram_wt_res_valid) {
                 vlSelf->ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__wt_req_valid = 0U;
                 vlSelf->ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__bvalid = 1U;

@@ -103,6 +103,7 @@ module ysyx_24120009_sram_axi4_lite_wrapper #(
                         state <= WRITE;
                         awready <= 1'b0;
                         wready <= 1'b0;
+                        wt_req_valid <= 1'b1;
                     end else if (arvalid) begin
                         // Capture read request
                         addr_reg <= araddr;
@@ -113,7 +114,7 @@ module ysyx_24120009_sram_axi4_lite_wrapper #(
 
                 // Write state: Send write request to SRAM and wait for response
                 WRITE: begin
-                    wt_req_valid <= 1'b1;
+                    wt_req_valid <= 1'b0;
                     if (sram_wt_res_valid) begin
                         wt_req_valid <= 1'b0;
                         bvalid <= 1'b1;
