@@ -281,6 +281,7 @@ static char* rl_gets() {
 static int execute_single_step() {
   tick(top, is_silent_mode);  
 #ifdef DIFFTEST
+  std::cout << ", wbu_active: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->wbu_active_debug);
   if (top->wbu_active_debug == 1) {
     ref_difftest_regcpy(&ref, DIFFTEST_TO_REF);
     ref_difftest_exec(1);
