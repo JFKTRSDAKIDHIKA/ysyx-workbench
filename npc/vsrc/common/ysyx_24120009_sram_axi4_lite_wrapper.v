@@ -116,7 +116,6 @@ module ysyx_24120009_sram_axi4_lite_wrapper #(
                 WRITE: begin
                     wt_req_valid <= 1'b0;
                     if (sram_wt_res_valid) begin
-                        wt_req_valid <= 1'b0;
                         bvalid <= 1'b1;
                         bresp <= 2'b00; // OKAY response
                         if (bready) begin

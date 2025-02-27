@@ -147,8 +147,6 @@ module ysyx_24120009_MEM (
                         mem_en <= 0;
                         mem_wen <= 0;
                     if (wt_res_valid || rvalid) begin
-                        mem_en <= 0;
-                        mem_wen <= 0;
                         bready <= 1;
                         state <= DONE;
                     end
