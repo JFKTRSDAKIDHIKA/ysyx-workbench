@@ -52,6 +52,7 @@ module ysyx_24120009_MEM (
     wire     [`ysyx_24120009_DATA_WIDTH-1:0]    rs2_data_o;
     wire rvalid;
     wire wt_res_valid;
+    reg bready;
 
     // AXI4-Lite signals
     wire arvalid = mem_en && !mem_wen;
@@ -71,7 +72,7 @@ module ysyx_24120009_MEM (
         .wdata(dmem_wdata),
         .wstrb(wmask),
         .bvalid(wt_res_valid),
-        .bready(1'b1),
+        .bready(bready),
         .bresp(),
         // AXI4-Lite Read Channel
         .arvalid(arvalid),
@@ -134,6 +135,7 @@ module ysyx_24120009_MEM (
                 IDLE: begin
                         mem_en <= 0;
                         mem_wen <= 0;
+                        bready <= 0;
                     if (EXU_done == 1) begin
                         state <= MEM_ACCESS;
                         mem_en <= 1;
@@ -145,11 +147,13 @@ module ysyx_24120009_MEM (
                     if (wt_res_valid || rvalid) begin
                         mem_en <= 0;
                         mem_wen <= 0;
+                        bready <= 0;
                         state <= DONE;
                     end
                 end
 
                 DONE: begin
+                        bready <= 1;
                         mem_en <= 0;
                         mem_wen <= 0;
                         state <= IDLE;
@@ -158,6 +162,7 @@ module ysyx_24120009_MEM (
                     state <= IDLE;
                     mem_en <= 0;
                     mem_wen <= 0;
+                    bready <= 0;
                 end
             endcase
         end
