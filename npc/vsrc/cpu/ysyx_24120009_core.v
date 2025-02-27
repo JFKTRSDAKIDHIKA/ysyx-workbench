@@ -34,7 +34,8 @@ module ysyx_24120009_core (
     output wire [1:0] axi4_ifu_state_debug,
     output wire [1:0] mem_ctl_state_debug,
     output wire [1:0] axi4_mem_state_debug,
-    output wire [1:0] idu_state_debug
+    output wire [1:0] idu_state_debug,
+    output wire inst_valid_debug
 );
 
     // Debug signal declaration and assignment
@@ -53,6 +54,7 @@ module ysyx_24120009_core (
     assign result_from_MEM_to_WBU_debug = result_from_MEM_to_WBU;
     assign mem_access_done_debug = mem_access_done;
     assign dmem_rdata_from_MEM_to_WBU_debug = dmem_rdata_from_MEM_to_WBU;
+    assign inst_valid_debug = inst_valid;
 
     // Internal signals
     wire [`ysyx_24120009_DATA_WIDTH-1:0] reg_write_data;

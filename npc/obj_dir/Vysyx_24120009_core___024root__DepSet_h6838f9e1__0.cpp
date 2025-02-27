@@ -238,6 +238,7 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root___nba_sequent__TOP__0(Vysyx_241
         vlSelf->ysyx_24120009_core__DOT__mem__DOT__axi4_mem__DOT__sram_wt_res_valid = 0U;
     }
     vlSelf->ifu_state_debug = vlSelf->ysyx_24120009_core__DOT__ifu__DOT__state;
+    vlSelf->inst_valid_debug = vlSelf->ysyx_24120009_core__DOT__inst_valid;
     if (VL_UNLIKELY((0x100073U == vlSelf->ysyx_24120009_core__DOT__ifu__DOT__if_inst_buffer))) {
         VL_WRITEF("EBREAK: Simulation exiting...\n");
         Vysyx_24120009_core___024root____Vdpiimwrap_ysyx_24120009_core__DOT__ifu__DOT__simulation_exit_TOP();
