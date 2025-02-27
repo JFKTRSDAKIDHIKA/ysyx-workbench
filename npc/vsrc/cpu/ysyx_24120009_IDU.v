@@ -66,6 +66,7 @@ module ysyx_24120009_IDU (
         end
     end
 
+    // Assign output and debug signals 
     assign ID_done = (state == DONE);
     assign idu_state_debug = state;
 

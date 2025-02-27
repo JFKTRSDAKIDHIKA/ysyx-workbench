@@ -11,7 +11,7 @@ module ysyx_24120009_MEM (
     input     [`ysyx_24120009_DATA_WIDTH-1:0] dmem_addr_i,
     input     [`ysyx_24120009_DATA_WIDTH-1:0] rs2_data_i,
     input     [`ysyx_24120009_REG_ADDR_WIDTH-1:0]   rd_addr_i,
-    input                                      EXU_done,
+    input                                           EXU_done,
     // Signals passed to WBU
     output     [`ysyx_24120009_DATA_WIDTH-1:0]    inst_o,
     output     [`ysyx_24120009_DATA_WIDTH-1:0]    pc_o,
@@ -40,6 +40,46 @@ module ysyx_24120009_MEM (
 
     state_t state;
 
+    // State machine logic
+    always @(posedge clk or posedge rst) begin
+        if (rst) begin
+            state <= IDLE;
+            mem_en <= 0;
+            mem_wen <= 0;
+        end else begin
+            case (state)
+                IDLE: begin
+                        mem_en <= 0;
+                        mem_wen <= 0;
+                    if (EXU_done == 1) begin
+                        state <= MEM_ACCESS;
+                        mem_en <= 1;
+                        mem_wen <= (opcode == `ysyx_24120009_OPCODE_S) ? 1'b1 : 1'b0;
+                    end
+                end
+
+                MEM_ACCESS: begin
+                        mem_en <= 0;
+                        mem_wen <= 0;
+                    if (wt_res_valid || rvalid) begin
+                        state <= DONE;
+                    end
+                end
+
+                DONE: begin
+                        mem_en <= 0;
+                        mem_wen <= 0;
+                        state <= IDLE;
+                end
+                default: begin
+                    state <= IDLE;
+                    mem_en <= 0;
+                    mem_wen <= 0;
+                end
+            endcase
+        end
+    end
+
     // Internal signals
     reg [`ysyx_24120009_DATA_WIDTH-1:0] dmem_rdata_raw;
     wire [`ysyx_24120009_DATA_WIDTH-1:0] dmem_wdata_raw;
@@ -52,7 +92,6 @@ module ysyx_24120009_MEM (
     wire     [`ysyx_24120009_DATA_WIDTH-1:0]    rs2_data_o;
     wire rvalid;
     wire wt_res_valid;
-    reg bready;
 
     // AXI4-Lite signals
     wire arvalid = mem_en && !mem_wen;
@@ -72,7 +111,7 @@ module ysyx_24120009_MEM (
         .wdata(dmem_wdata),
         .wstrb(wmask),
         .bvalid(wt_res_valid),
-        .bready(bready),
+        .bready(1'b1),
         .bresp(),
         // AXI4-Lite Read Channel
         .arvalid(arvalid),
@@ -123,50 +162,6 @@ module ysyx_24120009_MEM (
             10'b0100011_001, 3'b001  // SH
         })
     );
-
-    // State machine logic
-    always @(posedge clk or posedge rst) begin
-        if (rst) begin
-            state <= IDLE;
-            mem_en <= 0;
-            mem_wen <= 0;
-        end else begin
-            case (state)
-                IDLE: begin
-                        mem_en <= 0;
-                        mem_wen <= 0;
-                        bready <= 1;
-                    if (EXU_done == 1) begin
-                        state <= MEM_ACCESS;
-                        mem_en <= 1;
-                        mem_wen <= (opcode == `ysyx_24120009_OPCODE_S) ? 1'b1 : 1'b0;
-                    end
-                end
-
-                MEM_ACCESS: begin
-                        mem_en <= 0;
-                        mem_wen <= 0;
-                    if (wt_res_valid || rvalid) begin
-                        bready <= 1;
-                        state <= DONE;
-                    end
-                end
-
-                DONE: begin
-                        bready <= 1;
-                        mem_en <= 0;
-                        mem_wen <= 0;
-                        state <= IDLE;
-                end
-                default: begin
-                    state <= IDLE;
-                    mem_en <= 0;
-                    mem_wen <= 0;
-                    bready <= 1;
-                end
-            endcase
-        end
-    end
 
     // Output assignments
     assign mem_access_done = (state == DONE);

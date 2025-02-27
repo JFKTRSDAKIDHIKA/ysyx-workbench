@@ -88,7 +88,6 @@ class Vysyx_24120009_core___024root final : public VerilatedModule {
         CData/*0:0*/ ysyx_24120009_core__DOT__mem__DOT__mem_wen;
         CData/*0:0*/ ysyx_24120009_core__DOT__mem__DOT__rvalid;
         CData/*0:0*/ ysyx_24120009_core__DOT__mem__DOT__wt_res_valid;
-        CData/*0:0*/ ysyx_24120009_core__DOT__mem__DOT__bready;
         CData/*0:0*/ ysyx_24120009_core__DOT__mem__DOT__axi4_mem__DOT__awready;
         CData/*0:0*/ ysyx_24120009_core__DOT__mem__DOT__axi4_mem__DOT__wready;
         CData/*1:0*/ ysyx_24120009_core__DOT__mem__DOT__axi4_mem__DOT__bresp;
@@ -145,9 +144,9 @@ class Vysyx_24120009_core___024root final : public VerilatedModule {
         IData/*31:0*/ ysyx_24120009_core__DOT__pc_from_IDU_to_EXU;
         IData/*31:0*/ ysyx_24120009_core__DOT__inst_from_IDU_to_EXU;
         IData/*31:0*/ ysyx_24120009_core__DOT__rdata2_from_IDU_to_EXU;
+        IData/*31:0*/ ysyx_24120009_core__DOT__pc_from_EXU_to_MEM;
     };
     struct {
-        IData/*31:0*/ ysyx_24120009_core__DOT__pc_from_EXU_to_MEM;
         IData/*31:0*/ ysyx_24120009_core__DOT__inst_from_EXU_to_MEM;
         IData/*31:0*/ ysyx_24120009_core__DOT__result_from_EXU_to_MEM;
         IData/*31:0*/ ysyx_24120009_core__DOT__rdata2_from_EXU_to_MEM;
@@ -211,9 +210,9 @@ class Vysyx_24120009_core___024root final : public VerilatedModule {
         VlUnpacked<CData/*0:0*/, 6> ysyx_24120009_core__DOT__idu__DOT__b_taken_mux__DOT__i0__DOT__data_list;
         VlUnpacked<QData/*36:0*/, 11> ysyx_24120009_core__DOT__exu__DOT__alu_instance__DOT__alu_mux__DOT__i0__DOT__pair_list;
         VlUnpacked<CData/*4:0*/, 11> ysyx_24120009_core__DOT__exu__DOT__alu_instance__DOT__alu_mux__DOT__i0__DOT__key_list;
+        VlUnpacked<IData/*31:0*/, 11> ysyx_24120009_core__DOT__exu__DOT__alu_instance__DOT__alu_mux__DOT__i0__DOT__data_list;
     };
     struct {
-        VlUnpacked<IData/*31:0*/, 11> ysyx_24120009_core__DOT__exu__DOT__alu_instance__DOT__alu_mux__DOT__i0__DOT__data_list;
         VlUnpacked<QData/*34:0*/, 5> ysyx_24120009_core__DOT__mem__DOT__alignment_network__DOT__mem_mux__DOT__i0__DOT__pair_list;
         VlUnpacked<CData/*2:0*/, 5> ysyx_24120009_core__DOT__mem__DOT__alignment_network__DOT__mem_mux__DOT__i0__DOT__key_list;
         VlUnpacked<IData/*31:0*/, 5> ysyx_24120009_core__DOT__mem__DOT__alignment_network__DOT__mem_mux__DOT__i0__DOT__data_list;

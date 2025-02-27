@@ -114,7 +114,7 @@ module ysyx_24120009_sram_axi4_lite_wrapper #(
 
                 // Write state: Send write request to SRAM and wait for response
                 WRITE: begin
-                    wt_req_valid <= 1'b0;
+                    wt_req_valid <= 1'b0; // Set wt_req_valid to zero when state switches to WRITE state to ensure that wt_req_valid sustains hign for only one clock cycle
                     if (sram_wt_res_valid) begin
                         bvalid <= 1'b1;
                         bresp <= 2'b00; // OKAY response

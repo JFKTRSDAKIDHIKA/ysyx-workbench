@@ -34,7 +34,7 @@ module ysyx_24120009_EXU (
 
     state_t state;
 
-        // State machine logic
+    // State machine logic
     always @(posedge clk or posedge rst) begin
         if (rst) begin
             state <= IDLE;
@@ -60,6 +60,7 @@ module ysyx_24120009_EXU (
         end
     end
 
+    // Assign output and debug signals
     assign EXU_done = (state == DONE);
 
     // Get ready for pipeline
