@@ -112,7 +112,7 @@ module ysyx_24120009_IDU (
         .out(Op2),
         .key(Op2Sel),
         .lut({
-            2'b00, pc_i,
+            2'b00, pc_i - 32'h4,
             2'b01, imm_i_sext,
             2'b10, imm_s_sext,
             2'b11, rs2_data_i
