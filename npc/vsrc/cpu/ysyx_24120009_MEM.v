@@ -136,13 +136,15 @@ module ysyx_24120009_MEM (
                         mem_wen <= 0;
                     if (EXU_done == 1) begin
                         state <= MEM_ACCESS;
+                        mem_en <= 1;
+                        mem_wen <= (opcode == `ysyx_24120009_OPCODE_S) ? 1'b1 : 1'b0;
                     end
                 end
 
                 MEM_ACCESS: begin
-                        mem_en <= 1;
-                        mem_wen <= (opcode == `ysyx_24120009_OPCODE_S) ? 1'b1 : 1'b0;
                     if (wt_res_valid || rvalid) begin
+                        mem_en <= 0;
+                        mem_wen <= 0;
                         state <= DONE;
                     end
                 end
