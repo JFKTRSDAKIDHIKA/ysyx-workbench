@@ -30,6 +30,15 @@ module ysyx_24120009_WBU (
     output wire [`ysyx_24120009_DATA_WIDTH-1:0] result_from_WB_debug
 );
 
+    // State definition
+    typedef enum reg [1:0] {
+        IDLE,
+        WB,
+        DONE
+    } state_t;
+
+    state_t state;
+
     // Get ready for pipeline
     ysyx_24120009_Reg #(
         .WIDTH(`ysyx_24120009_DATA_WIDTH),
@@ -143,10 +152,41 @@ module ysyx_24120009_WBU (
         end
     end
     */
-    assign wbu_active = (mem_access_done == 1'b1) ? 1'b1 : 1'b0;
 
-    // Generate pc_wen signal which will be passed back to IFU
-    assign pc_wen = wbu_active;
+        // State machine logic
+    always @(posedge clk or posedge rst) begin
+        if (rst) begin
+            state <= IDLE;
+            wbu_active <= 0;
+        end else begin
+            case (state)
+                IDLE: begin
+                        wbu_active <= 0;
+                        pc_wen <= 0;
+                    if (mem_access_done == 1'b1) begin
+                        state <= WB;
+                    end
+                end
+
+                WB: begin
+                        wbu_active <= 1;
+                        pc_wen <= 0;
+                        state <= DONE;
+                end
+
+                DONE: begin
+                        wbu_active <= 0;
+                        pc_wen <= 1;
+                        state <= IDLE;
+                end
+                default: begin
+                    state <= IDLE;
+                    wbu_active <= 0;
+                    pc_wen <= 0;
+                end
+            endcase
+        end
+    end
 
     // Control unit for WBU
     wire [2:0] funct3 = inst_o[14:12];
