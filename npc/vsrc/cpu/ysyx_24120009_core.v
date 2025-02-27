@@ -29,7 +29,8 @@ module ysyx_24120009_core (
     output wire mem_access_done_debug,
     output wire [`ysyx_24120009_DATA_WIDTH-1:0] dmem_rdata_from_MEM_to_WBU_debug,
     output wire wt_res_valid_debug,
-    output wire [2:0] ifu_state_debug
+    output wire [2:0] ifu_state_debug,
+    output wire rd_res_valid_debug
 );
 
     // Debug signal declaration and assignment
@@ -129,7 +130,8 @@ module ysyx_24120009_core (
         .inst_valid(),
         .idu_ready(1'b1),
         // debug signals 
-        .state_debug(ifu_state_debug)
+        .state_debug(ifu_state_debug),
+        .rd_res_valid_debug(rd_res_valid_debug)
     );
 
 
