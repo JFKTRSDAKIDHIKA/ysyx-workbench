@@ -45,7 +45,7 @@ module ysyx_24120009_IDU (
         end else begin
             case (state)
                 IDLE: begin
-                    if (inst_valid == 1) begin
+                    if (inst_valid == 1'b1) begin
                         state <= ID;
                     end
                 end
