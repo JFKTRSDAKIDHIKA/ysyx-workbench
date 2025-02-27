@@ -103,7 +103,6 @@ module ysyx_24120009_IFU (
         FETCH_DONE: begin
           inst_valid <= 1'b1;  
           if (idu_ready) begin
-            inst_valid <= 1'b0;
             state <= IDLE;     
             arvalid <= 1'b0;
           end

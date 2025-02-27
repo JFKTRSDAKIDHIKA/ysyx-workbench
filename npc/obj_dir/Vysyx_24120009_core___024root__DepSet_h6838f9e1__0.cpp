@@ -144,7 +144,6 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root___nba_sequent__TOP__0(Vysyx_241
                 vlSelf->ysyx_24120009_core__DOT__inst_valid = 1U;
                 __Vdly__ysyx_24120009_core__DOT__ifu__DOT__state = 0U;
                 __Vdly__ysyx_24120009_core__DOT__ifu__DOT__arvalid = 0U;
-                vlSelf->ysyx_24120009_core__DOT__inst_valid = 0U;
             } else {
                 vlSelf->ysyx_24120009_core__DOT__inst_valid = 0U;
                 __Vdly__ysyx_24120009_core__DOT__ifu__DOT__arvalid = 0U;
