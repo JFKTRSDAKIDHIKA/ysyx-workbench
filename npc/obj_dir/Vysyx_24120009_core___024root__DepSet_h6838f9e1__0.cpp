@@ -318,7 +318,7 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root___nba_sequent__TOP__0(Vysyx_241
             __Vdly__ysyx_24120009_core__DOT__mem__DOT__state = 0U;
             vlSelf->ysyx_24120009_core__DOT__mem__DOT__mem_en = 0U;
             vlSelf->ysyx_24120009_core__DOT__mem__DOT__mem_wen = 0U;
-            vlSelf->ysyx_24120009_core__DOT__mem__DOT__bready = 0U;
+            vlSelf->ysyx_24120009_core__DOT__mem__DOT__bready = 1U;
         }
     }
     vlSelf->axi4_mem_state_debug = vlSelf->ysyx_24120009_core__DOT__mem__DOT__axi4_mem__DOT__state;

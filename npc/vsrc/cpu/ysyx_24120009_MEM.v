@@ -162,7 +162,7 @@ module ysyx_24120009_MEM (
                     state <= IDLE;
                     mem_en <= 0;
                     mem_wen <= 0;
-                    bready <= 0;
+                    bready <= 1;
                 end
             endcase
         end

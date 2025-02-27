@@ -80,6 +80,7 @@ extern "C" void pmem_write(int waddr, int wdata, char wmask) {
 
     // 串口
     if (waddr >= UART_BASE_ADDR && waddr < UART_BASE_ADDR + UART_ADDR_LEN) {
+      printf("UART write %d\n", wdata);
       putchar(static_cast<char>(wdata & 0xFF));  
       return;  
     }
