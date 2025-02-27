@@ -11,6 +11,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <sys/time.h> // 包含 gettimeofday
+#include <cassert>
 
 #define CLOCK_ADDRESS 0xa0000048 
 #define UART_BASE_ADDR 0xa00003F8  
@@ -19,10 +20,12 @@
 
 // #define ENABLE_MEMORY_CHECK 1
 // #define DIFFTEST 1
+#define is_silent_mode 1
 
 // Declare global variables
 Vysyx_24120009_core* top;  // Top module (global)
 bool step_mode;  // Step mode flag (global)
+int total_cycle;
 
 // define the DPI-C functions
 // note: extern "C" 是 C++ 中的一个声明方式，用来告诉编译器，函数使用 C 的链接方式，而不是 C++ 默认的链接方式。
@@ -202,15 +205,31 @@ void tick(Vysyx_24120009_core* top, bool silent_mode ) {
     top->eval();
     
     if (!silent_mode ) {
-        // print some debug info when registers have yet been updated!
-        printf("------------------------------------------------------------------------------\n");
-        std::cout << "Op1: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->Op1_debug
-            << ", Op2: 0x" << std::setw(8) << std::setfill('0') << top->Op2_debug
-            << ", wb_data: 0x" << std::setw(8) << std::setfill('0') << top->reg_write_data_debug
-            << ", Instruction: 0x" << std::setw(8) << std::setfill('0') << top->inst_debug
-            << std::dec << std::endl;
+      // print some debug info when registers have yet been updated!
+      printf("------------------------------------------------------------------------------\n");
+      std::cout << "Op1: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->Op1_debug
+                << ", Op2: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->Op2_debug
+                << ", wb_data: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->reg_write_data_debug
+                << ", Instruction: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->inst_debug
+                << ", PC: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->pc_debug
+                << ", PC_PLUS4: 0x" << std::hex << static_cast<int>(top->pc_plus4_debug) // Cast to int for proper printing
+                << ", rf_we_debug: 0x" << std::hex << static_cast<int>(top->rf_we_debug) // Cast to int for proper printing
+                << ", wb_sel_debug: 0x" << std::hex << static_cast<int>(top->wb_sel_debug) // Cast to int for proper printing
+                << ", opcode: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->opcode_debug) // Cast to int for proper printing
+                << ", pc_wen: 0x" << std::hex << static_cast<int>(top->pc_wen_debug) // Cast to int for proper printing
+                << ", result_from_EXU: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->result_from_EXU_to_MEM_debug
+                << ", result_from_MEM: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->result_from_MEM_to_WBU_debug
+                << ", result_from_WB: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->result_from_WB_debug
+                << ", alu_op: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->alu_op_debug) // Cast to int for proper printing
+                << ", inst_from_EXU_to_MEM_debug: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->inst_from_EXU_to_MEM_debug
+                << ", mem_active: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->mem_active_debug)
+                << ", mem_access: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->mem_access_done_debug)
+                << ". dmem_rdata_from_MEM: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->dmem_rdata_from_MEM_to_WBU_debug
+                << ", wt_res_valid: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->wt_res_valid_debug)
+                << std::dec << std::endl;
     }
-
+  
+/*
     // print some debug info of memory write
     if (top->mem_wen_debug == 1 && !silent_mode ) {  
         std::cout << "Memory Write - Addr: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->dmem_addr_debug
@@ -225,6 +244,7 @@ void tick(Vysyx_24120009_core* top, bool silent_mode ) {
             std::cout << "Memory Read  - Addr: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->dmem_addr_debug
                       << std::dec << std::endl;
     }
+*/
 
     top->clk = 1;
     top->eval();
@@ -258,11 +278,15 @@ static char* rl_gets() {
   }
   
 static int execute_single_step() {
-  tick(top, true);  
+  tick(top, is_silent_mode);  
 #ifdef DIFFTEST
-  ref_difftest_exec(1);
-  ref_difftest_regcpy(&ref, DIFFTEST_TO_REF);
-  return check_dut_and_ref(top, 0x80000000, 0x1000);
+  if (top->wbu_active_debug == 1) {
+    ref_difftest_regcpy(&ref, DIFFTEST_TO_REF);
+    ref_difftest_exec(1);
+    return check_dut_and_ref(top, 0x80000000, 0x1000);
+  } else {
+    return 0;
+  }
 #else 
   return 0;
 #endif
@@ -272,6 +296,7 @@ static int cmd_c(char *args) {
   while(!Verilated::gotFinish()) {
     int ret = execute_single_step();
     if (ret < 0) return -1;
+    total_cycle++;
   }
   return 0;
 }
@@ -417,6 +442,7 @@ int main(int argc, char **argv) {
       if (sdb_mainloop() < 0) return -1;
     } else {
       if (cmd_c(NULL) < 0) return -1;
+      printf("total cycle: %d\n", total_cycle);
     }
 /*
     while(!Verilated::gotFinish()) {
