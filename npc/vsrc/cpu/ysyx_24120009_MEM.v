@@ -131,26 +131,26 @@ module ysyx_24120009_MEM (
         end else begin
             case (state)
                 IDLE: begin
+                        mem_en <= 0;
+                        mem_wen <= 0;
                     if (inst_from_IFU == inst_i) begin
                         state <= MEM_ACCESS;
-                        mem_en <= 1;
-                        mem_wen <= (opcode == `ysyx_24120009_OPCODE_S) ? 1'b1 : 1'b0;
                     end
                 end
 
                 MEM_ACCESS: begin
+                        mem_en <= 1;
+                        mem_wen <= (opcode == `ysyx_24120009_OPCODE_S) ? 1'b1 : 1'b0;
                     if (wt_res_valid || rvalid) begin
                         state <= DONE;
-                        mem_en <= 0;
-                        mem_wen <= 0;
                     end
                 end
 
                 DONE: begin
-                    if (inst_from_WBU == inst_o) begin
-                        state <= IDLE;
                         mem_en <= 0;
                         mem_wen <= 0;
+                    if (inst_from_WBU == inst_o) begin
+                        state <= IDLE;
                     end
                 end
                 default: begin
