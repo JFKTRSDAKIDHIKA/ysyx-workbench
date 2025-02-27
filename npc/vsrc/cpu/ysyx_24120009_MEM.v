@@ -135,7 +135,7 @@ module ysyx_24120009_MEM (
                 IDLE: begin
                         mem_en <= 0;
                         mem_wen <= 0;
-                        bready <= 0;
+                        bready <= 1;
                     if (EXU_done == 1) begin
                         state <= MEM_ACCESS;
                         mem_en <= 1;
