@@ -8,6 +8,7 @@ module ysyx_24120009_IDU (
     // Signals passed from IFU
     input      [31:0]                                inst_i,
     input  [`ysyx_24120009_DATA_WIDTH-1:0] pc_i,
+    input                                            inst_valid,
     // IDU interact with register file 
     input      [`ysyx_24120009_DATA_WIDTH-1:0]       rs1_data_i,
     input      [`ysyx_24120009_DATA_WIDTH-1:0]       rs2_data_i,
@@ -20,12 +21,54 @@ module ysyx_24120009_IDU (
     output     [`ysyx_24120009_DATA_WIDTH-1:0]    pc_o,
     output     [`ysyx_24120009_DATA_WIDTH-1:0]    inst_o,
     output     [`ysyx_24120009_DATA_WIDTH-1:0]    rs2_data_o,
+    output                                        ID_done,
     // Signals passed back to IFU (Feedback signals)
     output [`ysyx_24120009_DATA_WIDTH-1:0] jump_reg_target_o,
     output [`ysyx_24120009_DATA_WIDTH-1:0] br_target_o,
     output [`ysyx_24120009_DATA_WIDTH-1:0] jmp_target_o,
-    output reg    [2:0]                                 pc_sel
+    output reg    [2:0]                                 pc_sel,
+    // debug signals 
+    output [1:0] idu_state_debug
 );
+
+    // State definition
+    typedef enum reg [1:0] {
+        IDLE,
+        ID,
+        DONE
+    } state_t;
+
+    state_t state;
+
+    // State machine logic
+    always @(posedge clk or posedge rst) begin
+        if (rst) begin
+            state <= IDLE;
+        end else begin
+            case (state)
+                IDLE: begin
+                    if (inst_valid == 1'b1) begin
+                        state <= ID;
+                    end
+                end
+
+                ID: begin
+                    state <= DONE;
+                end
+
+                DONE: begin
+                    state <= IDLE;
+                end
+                default: begin
+                    state <= IDLE;
+                end
+            endcase
+        end
+    end
+
+    // Assign output and debug signals 
+    assign ID_done = (state == DONE);
+    assign idu_state_debug = state;
 
     // Get ready for pipeline
     ysyx_24120009_Reg #(

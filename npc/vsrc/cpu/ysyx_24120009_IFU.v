@@ -14,8 +14,72 @@ module ysyx_24120009_IFU (
   input                                pc_wen,
   // signal passed to IDU
   output     [`ysyx_24120009_DATA_WIDTH-1:0] pc_o,
-  output     [31:0]                          inst_o
+  output     [31:0]                          inst_o,
+  // handshake signals
+  output reg                            inst_valid,
+  input                                 idu_ready,
+  // debug signals 
+  output [2:0]                          state_debug,
+  output                                rd_res_valid_debug,
+  output [1:0]                          axi4_ifu_state_debug
 );
+
+  // Use state machine to control the IFU logic
+  reg [2:0] state;
+
+  localparam IDLE        = 3'b000,
+             FETCH_REQ   = 3'b001,
+             FETCH_WAIT  = 3'b010,
+             FETCH_DONE  = 3'b011;
+
+  // State machine logic 
+  always @(posedge clk or posedge rst) begin
+    if (rst) begin
+      state <= FETCH_REQ;
+      if_inst_buffer <= 32'b0;
+      arvalid <= 1'b0;
+      inst_valid <= 1'b0;
+    end else begin
+      case (state)
+        IDLE: begin
+          inst_valid <= 1'b0;
+          arvalid <= 1'b0;
+          if (pc_wen) begin
+            state <= FETCH_REQ;  
+          end
+        end
+
+        FETCH_REQ: begin
+          inst_valid <= 1'b0;
+          arvalid <= 1'b1;  
+          state <= FETCH_WAIT; 
+        end
+
+        FETCH_WAIT: begin
+          inst_valid <= 1'b0;
+          arvalid <= 1'b0;
+          if (rvalid) begin
+            if_inst_buffer <= rdata;  
+            state <= FETCH_DONE;              
+          end
+        end
+
+        FETCH_DONE: begin
+          inst_valid <= 1'b1;  
+          if (idu_ready) begin
+            state <= IDLE;     
+            arvalid <= 1'b0;
+          end
+        end
+
+        default: begin
+          state <= IDLE;
+          inst_valid <= 1'b0;
+          arvalid <= 1'b0;
+        end
+      endcase
+    end
+  end
 
   // direct programing interface --- C
   import "DPI-C" function void simulation_exit();
@@ -25,7 +89,6 @@ module ysyx_24120009_IFU (
   wire  [`ysyx_24120009_DATA_WIDTH-1:0] pc_next;
   wire  [`ysyx_24120009_DATA_WIDTH-1:0] pc_plus4;
   wire  [`ysyx_24120009_DATA_WIDTH-1:0] imem_addr;
-  reg   [`ysyx_24120009_DATA_WIDTH-1:0] inst;
 
   // Module instantiation
   ysyx_24120009_Reg #(
@@ -49,50 +112,56 @@ module ysyx_24120009_IFU (
     3'b011, jmp_target,
     3'b100, exception
   });
+
   wire [`ysyx_24120009_DATA_WIDTH-1:0] exception = `ysyx_24120009_DATA_WIDTH'b0; // 占位定义，默认无异常
 
-  // Use SRAM module to read the instruction
-  wire [31:0] sram_data_out;
-  wire        sram_rd_req = 1'b1;  // Always enable read request for instruction fetch
-  wire        rd_res_valid;
+  // Use sram_axi4_lite_wrapper module to read the instruction
+  wire [31:0] rdata;
+  wire        rvalid;
   reg  [31:0] if_inst_buffer;
+  reg         arvalid;
 
-  ysyx_24120009_SRAM sram_inst (
+  // Instantiate sram_axi4_lite_wrapper module
+  ysyx_24120009_sram_axi4_lite_wrapper axi4_ifu (
+    // Clock and reset signals
     .clk(clk),
     .rst(rst),
-    .rd_req_valid(sram_rd_req),
-    .addr(pc),       
-    .data_out(sram_data_out),
-    .rd_res_valid(rd_res_valid),
-    .wt_req_valid(),
-    .waddr(),
-    .wdata(),
-    .wmask(),
-    .wt_res_valid()
+    // AXI4-Lite Write Channel
+    .awvalid(1'b0),
+    .awready(),   
+    .awaddr(32'b0),
+    .wvalid(1'b0),
+    .wready(),    
+    .wdata(32'b0),
+    .wstrb(8'b0), 
+    .bvalid(),    
+    .bready(1'b0),
+    .bresp(),     
+    // AXI4-Lite Read Channel
+    .arvalid(arvalid),
+    .arready(),
+    .araddr(pc),
+    .rvalid(rvalid),
+    .rready(1'b1),
+    .rdata(rdata),
+    .rresp(),
+    // debug signals
+    .axi4_ifu_state_debug(axi4_ifu_state_debug)
   );
 
-  // If the instruction has not yet been read from IMEM, inst will remain 0, 
-  // causing WBU to mistakenly assume that the instruction has already been fetched, leading to errors.
-  // Here, inst retains its previous value until rd_res_valid becomes 1, 
-  // ensuring correctness when the instruction is not yet available from IMEM.
-  always @(posedge clk) begin
-    if (rd_res_valid) begin
-      if_inst_buffer <= sram_data_out;
-    end
-  end
-
-  assign inst = rd_res_valid == 1'b1 ? sram_data_out : if_inst_buffer;  
+  assign inst_o = if_inst_buffer;   
 
   // handle ebreak instruction
   always @(*) begin
-      if (inst == 32'h00100073) begin
+      if (inst_o == 32'h00100073) begin
           $display("EBREAK: Simulation exiting...");
           simulation_exit(); // 通知仿真环境结束
       end
   end
 
-  // Assign output signals
-  assign inst_o = inst;
+  // Assign output and debug signals
   assign pc_o = pc;
+  assign state_debug = state;
+  assign rd_res_valid_debug = rvalid;
 
 endmodule

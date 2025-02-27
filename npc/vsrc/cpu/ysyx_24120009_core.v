@@ -28,7 +28,14 @@ module ysyx_24120009_core (
     output wire [`ysyx_24120009_DATA_WIDTH-1:0] inst_from_EXU_to_MEM_debug,
     output wire mem_access_done_debug,
     output wire [`ysyx_24120009_DATA_WIDTH-1:0] dmem_rdata_from_MEM_to_WBU_debug,
-    output wire wt_res_valid_debug
+    output wire wt_res_valid_debug,
+    output wire [2:0] ifu_state_debug,
+    output wire rd_res_valid_debug,
+    output wire [1:0] axi4_ifu_state_debug,
+    output wire [1:0] mem_ctl_state_debug,
+    output wire [1:0] axi4_mem_state_debug,
+    output wire [1:0] idu_state_debug,
+    output wire inst_valid_debug
 );
 
     // Debug signal declaration and assignment
@@ -47,6 +54,7 @@ module ysyx_24120009_core (
     assign result_from_MEM_to_WBU_debug = result_from_MEM_to_WBU;
     assign mem_access_done_debug = mem_access_done;
     assign dmem_rdata_from_MEM_to_WBU_debug = dmem_rdata_from_MEM_to_WBU;
+    assign inst_valid_debug = inst_valid;
 
     // Internal signals
     wire [`ysyx_24120009_DATA_WIDTH-1:0] reg_write_data;
@@ -83,6 +91,9 @@ module ysyx_24120009_core (
     wire [`ysyx_24120009_DATA_WIDTH-1:0] inst_from_MEM_to_WBU;
     wire [`ysyx_24120009_DATA_WIDTH-1:0] inst_from_WBU_to_MEM;
     wire                                 mem_access_done;
+    wire                                 inst_valid;
+    wire                                 ID_done;
+    wire                                 EXU_done;
 
     //  Register file address
     wire [`ysyx_24120009_REG_ADDR_WIDTH-1:0] rs1_addr;
@@ -123,7 +134,14 @@ module ysyx_24120009_core (
         .pc_wen(pc_wen),
         // signal passed to IDU
         .pc_o(pc_from_IFU_to_IDU),
-        .inst_o(inst_from_IFU_to_IDU)
+        .inst_o(inst_from_IFU_to_IDU),
+        // handshake signals
+        .inst_valid(inst_valid),
+        .idu_ready(1'b1),
+        // debug signals 
+        .state_debug(ifu_state_debug),
+        .rd_res_valid_debug(rd_res_valid_debug),
+        .axi4_ifu_state_debug(axi4_ifu_state_debug)
     );
 
 
@@ -135,6 +153,7 @@ module ysyx_24120009_core (
         // Signals passed from IFU
         .inst_i(inst_from_IFU_to_IDU),
         .pc_i(pc_from_IFU_to_IDU),
+        .inst_valid(inst_valid),
         // IDU interact with register file 
         .rs1_data_i(rdata1),
         .rs2_data_i(rdata2),
@@ -147,11 +166,14 @@ module ysyx_24120009_core (
         .pc_o(pc_from_IDU_to_EXU),
         .inst_o(inst_from_IDU_to_EXU),
         .rs2_data_o(rdata2_from_IDU_to_EXU),
+        .ID_done(ID_done),
         // Signals passed back to IFU
         .jump_reg_target_o(jump_reg_target),
         .br_target_o(br_target),
         .jmp_target_o(jmp_target),
-        .pc_sel(pc_sel)
+        .pc_sel(pc_sel),
+        // debug signals
+        .idu_state_debug(idu_state_debug)
     );
 
 
@@ -167,6 +189,7 @@ module ysyx_24120009_core (
         .inst_i(inst_from_IDU_to_EXU),
         .rs2_data_i(rdata2_from_IDU_to_EXU),
         .rd_addr_i(rd_addr_from_IDU_to_EXU),
+        .ID_done(ID_done),
         // Signals passed to MEM
         .dmem_addr(dmem_addr_from_EXU_to_MEM),
         .inst_o(inst_from_EXU_to_MEM),
@@ -174,6 +197,7 @@ module ysyx_24120009_core (
         .result(result_from_EXU_to_MEM),
         .rs2_data_o(rdata2_from_EXU_to_MEM),
         .rd_addr_o(rd_addr_from_EXU_to_MEM),
+        .EXU_done(EXU_done),
         // Debug signals
         .alu_op_debug(alu_op_debug),
         .inst_from_EXU_to_MEM_debug(inst_from_EXU_to_MEM_debug)
@@ -191,6 +215,7 @@ module ysyx_24120009_core (
         .dmem_addr_i(dmem_addr_from_EXU_to_MEM),
         .rs2_data_i(rdata2_from_EXU_to_MEM),
         .rd_addr_i(rd_addr_from_EXU_to_MEM),
+        .EXU_done(EXU_done),
         // Signals passed to WBU
         .inst_o(inst_from_MEM_to_WBU),
         .pc_o(pc_from_MEM_to_WBU),
@@ -205,7 +230,9 @@ module ysyx_24120009_core (
         // Signals passed from WBU
         .inst_from_WBU(inst_from_WBU_to_MEM),
         // debug signals
-        .wt_res_valid_debug(wt_res_valid_debug)
+        .wt_res_valid_debug(wt_res_valid_debug),
+        .mem_ctl_state_debug(mem_ctl_state_debug),
+        .axi4_mem_state_debug(axi4_mem_state_debug)
     );
 
     // Instantiate WBU

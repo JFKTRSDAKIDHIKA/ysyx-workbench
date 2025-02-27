@@ -30,6 +30,50 @@ module ysyx_24120009_WBU (
     output wire [`ysyx_24120009_DATA_WIDTH-1:0] result_from_WB_debug
 );
 
+    // State definition
+    typedef enum reg [1:0] {
+        IDLE,
+        WB,
+        DONE
+    } state_t;
+
+    state_t state;
+
+    // State machine logic
+    always @(posedge clk or posedge rst) begin
+        if (rst) begin
+            state <= IDLE;
+            wbu_active <= 0;
+        end else begin
+            case (state)
+                IDLE: begin
+                        wbu_active <= 0;
+                        pc_wen <= 0;
+                    if (mem_access_done == 1'b1) begin
+                        state <= WB;
+                    end
+                end
+
+                WB: begin
+                        wbu_active <= 1;
+                        pc_wen <= 0;
+                        state <= DONE;
+                end
+
+                DONE: begin
+                        wbu_active <= 0;
+                        pc_wen <= 1;
+                        state <= IDLE;
+                end
+                default: begin
+                    state <= IDLE;
+                    wbu_active <= 0;
+                    pc_wen <= 0;
+                end
+            endcase
+        end
+    end
+
     // Get ready for pipeline
     ysyx_24120009_Reg #(
         .WIDTH(`ysyx_24120009_DATA_WIDTH),
@@ -116,34 +160,6 @@ module ysyx_24120009_WBU (
             2'b11, dmem_rdata_o // data memory read data
         })
     );
-
-    // wbu_active indicates the state of module WBU
-    // It is asserted high only when the inst from IFU has been passed to WBU
-    reg wbu_active_reg;  
-
-    always @(posedge clk or posedge rst) begin
-        if (rst) begin
-            wbu_active_reg <= 1'b0;  
-            wbu_active <= 1'b0;      
-        end else begin
-            // Why use inst_i instead of inst_o? Because wbu_active may be delayed one cycle.
-            if (inst_from_IFU == inst_i) begin
-                // Signal wbu_active is asserted high only when memory access has finished (mem_access_done==1).
-                if (!wbu_active_reg && mem_access_done) begin
-                    wbu_active <= 1'b1;  
-                    wbu_active_reg <= 1'b1;  
-                end else begin
-                    wbu_active <= 1'b0;  
-                end
-            end else begin
-                wbu_active_reg <= 1'b0;  
-                wbu_active <= 1'b0;     
-            end
-        end
-    end
-
-    // Generate pc_wen signal which will be passed back to IFU
-    assign pc_wen = wbu_active;
 
     // Control unit for WBU
     wire [2:0] funct3 = inst_o[14:12];
