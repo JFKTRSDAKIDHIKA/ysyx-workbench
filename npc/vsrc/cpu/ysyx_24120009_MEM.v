@@ -25,7 +25,8 @@ module ysyx_24120009_MEM (
     // Signals passed from WBU
     input [`ysyx_24120009_DATA_WIDTH-1:0] inst_from_WBU,
     // debug signals
-    output wt_res_valid_debug
+    output wt_res_valid_debug,
+    output [1:0] axi4_mem_state_debug
 );
 
     // State definition
@@ -160,6 +161,7 @@ module ysyx_24120009_MEM (
     assign mem_access_done = (state == DONE);
     assign dmem_wdata_raw = rs2_data_o;
     assign wt_res_valid_debug = wt_res_valid;
+    assign axi4_mem_state_debug = state;
     assign mem_active = (state == MEM_ACCESS);
 
     // Pipeline registers
