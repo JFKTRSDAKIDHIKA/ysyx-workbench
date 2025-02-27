@@ -19,8 +19,8 @@
 #define UART_ADDR_LEN  8          
 
 // #define ENABLE_MEMORY_CHECK 1
-#define DIFFTEST 1
-#define is_silent_mode 0
+// #define DIFFTEST 1
+#define is_silent_mode 1
 
 // Declare global variables
 Vysyx_24120009_core* top;  // Top module (global)
@@ -149,7 +149,6 @@ int check_dut_and_ref(Vysyx_24120009_core* top, paddr_t start_addr, size_t size)
   }
 
   // Compare program counter (PC) between DUT and REF
-/*
   if (top->imem_addr_debug != ref.pc) {
       std::cerr << "PC mismatch - DUT: 0x" << std::hex << top->imem_addr_debug 
                 << " REF: 0x" << std::hex << ref.pc << std::endl;
@@ -163,10 +162,10 @@ int check_dut_and_ref(Vysyx_24120009_core* top, paddr_t start_addr, size_t size)
       for (int j = 0; j < 32; j++) {
           std::cerr << "x" << j << ": 0x" << std::hex << ref.gpr[j] << std::endl;
       }
-   
+
       return -1;  // End simulation
   }
-*/ 
+
 #ifdef ENABLE_MEMORY_CHECK
   // ----------- 检查内存 -----------
   // Allocate buffers for memory comparison
@@ -227,7 +226,6 @@ void tick(Vysyx_24120009_core* top, bool silent_mode ) {
                 << ", mem_access: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->mem_access_done_debug)
                 << ". dmem_rdata_from_MEM: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->dmem_rdata_from_MEM_to_WBU_debug
                 << ", wt_res_valid: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->wt_res_valid_debug)
-                << ", wbu_active: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->wbu_active_debug)
                 << std::dec << std::endl;
     }
   
@@ -279,18 +277,14 @@ static char* rl_gets() {
     return line_read;
   }
   
-int wbu_active_debug_old;
 static int execute_single_step() {
   tick(top, is_silent_mode);  
 #ifdef DIFFTEST
-  if (wbu_active_debug_old == 1) {
-    printf("enable difftest: %d\n", top->wbu_active_debug);
+  if (top->wbu_active_debug == 1) {
     ref_difftest_regcpy(&ref, DIFFTEST_TO_REF);
     ref_difftest_exec(1);
-    wbu_active_debug_old = top->wbu_active_debug;
     return check_dut_and_ref(top, 0x80000000, 0x1000);
   } else {
-    wbu_active_debug_old = top->wbu_active_debug;
     return 0;
   }
 #else 

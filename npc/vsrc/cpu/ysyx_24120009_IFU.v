@@ -53,38 +53,23 @@ module ysyx_24120009_IFU (
 
   // Use SRAM module to read the instruction
   wire [31:0] sram_data_out;
-  wire        arvalid = 1'b1;  // Always enable read request for instruction fetch
-  wire        rready = 1'b1;
+  wire        sram_rd_req = 1'b1;  // Always enable read request for instruction fetch
   wire        rd_res_valid;
   reg  [31:0] if_inst_buffer;
 
-  ysyx_24120009_axi4_lite_interface axi4_ifu (
-    // Clock and reset signals
+  ysyx_24120009_SRAM sram_inst (
     .clk(clk),
     .rst(rst),
-    // Write Address Channel
-    .awaddr(),
-    .awvalid(),
-    .awready(),
-    // Write Data Channel
+    .rd_req_valid(sram_rd_req),
+    .addr(pc),       
+    .data_out(sram_data_out),
+    .rd_res_valid(rd_res_valid),
+    .wt_req_valid(),
+    .waddr(),
     .wdata(),
-    .wstrb(),
-    .wvalid(),
-    .wready(),
-    // Write Response Channel
-    .bresp(),
-    .bvalid(),
-    .bready(),
-    // Read Address Channel
-    .araddr(pc),
-    .arvalid(arvalid),
-    .arready(),
-    // Read Data Channel
-    .rdata(sram_data_out),
-    .rresp(),
-    .rvalid(rd_res_valid),
-    .rready(rready)
-  ); 
+    .wmask(),
+    .wt_res_valid()
+  );
 
   // If the instruction has not yet been read from IMEM, inst will remain 0, 
   // causing WBU to mistakenly assume that the instruction has already been fetched, leading to errors.
