@@ -17,7 +17,9 @@ module ysyx_24120009_IFU (
   output     [31:0]                          inst_o,
   // handshake signals
   output reg                            inst_valid,
-  input                                 idu_ready
+  input                                 idu_ready,
+  // debug signals 
+  output [2:0]                          state_debug
 );
 
   // direct programing interface --- C
@@ -55,6 +57,7 @@ module ysyx_24120009_IFU (
 
   // Use state machine to control the IFU logic
   reg [2:0] state;
+  assign state_debug = state;
   localparam IDLE        = 3'b000,
              FETCH_REQ   = 3'b001,
              FETCH_WAIT  = 3'b010,
