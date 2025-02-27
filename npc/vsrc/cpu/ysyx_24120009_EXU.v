@@ -11,6 +11,7 @@ module ysyx_24120009_EXU (
     input wire [`ysyx_24120009_DATA_WIDTH-1:0] inst_i,
     input      [`ysyx_24120009_DATA_WIDTH-1:0] rs2_data_i,
     input    [`ysyx_24120009_REG_ADDR_WIDTH-1:0]   rd_addr_i,
+    input wire                                   ID_done,
     // Signals passed to MEM
     output wire [`ysyx_24120009_DATA_WIDTH-1:0] dmem_addr,
     output     [`ysyx_24120009_DATA_WIDTH-1:0]    inst_o,
@@ -18,10 +19,48 @@ module ysyx_24120009_EXU (
     output     [`ysyx_24120009_DATA_WIDTH-1:0]    result,
     output     [`ysyx_24120009_DATA_WIDTH-1:0]    rs2_data_o,
     output     [`ysyx_24120009_REG_ADDR_WIDTH-1:0]   rd_addr_o,
+    output                                           EXU_done,
     // Debug signals
     output wire [4:0] alu_op_debug,
     output wire [`ysyx_24120009_DATA_WIDTH-1:0]    inst_from_EXU_to_MEM_debug
 );
+
+    // State definition
+    typedef enum reg [1:0] {
+        IDLE,
+        EXE,
+        DONE
+    } state_t;
+
+    state_t state;
+
+        // State machine logic
+    always @(posedge clk or posedge rst) begin
+        if (rst) begin
+            state <= IDLE;
+        end else begin
+            case (state)
+                IDLE: begin
+                    if (ID_done == 1) begin
+                        state <= EXE;
+                    end
+                end
+
+                EXE: begin
+                    state <= DONE;
+                end
+
+                DONE: begin
+                    state <= IDLE;
+                end
+                default: begin
+                    state <= IDLE;
+                end
+            endcase
+        end
+    end
+
+    assign EXU_done = (state == DONE);
 
     // Get ready for pipeline
     ysyx_24120009_Reg #(

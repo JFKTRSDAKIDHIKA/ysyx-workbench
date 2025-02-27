@@ -11,6 +11,7 @@ module ysyx_24120009_MEM (
     input     [`ysyx_24120009_DATA_WIDTH-1:0] dmem_addr_i,
     input     [`ysyx_24120009_DATA_WIDTH-1:0] rs2_data_i,
     input     [`ysyx_24120009_REG_ADDR_WIDTH-1:0]   rd_addr_i,
+    input                                      EXU_done,
     // Signals passed to WBU
     output     [`ysyx_24120009_DATA_WIDTH-1:0]    inst_o,
     output     [`ysyx_24120009_DATA_WIDTH-1:0]    pc_o,
@@ -133,7 +134,7 @@ module ysyx_24120009_MEM (
                 IDLE: begin
                         mem_en <= 0;
                         mem_wen <= 0;
-                    if (inst_from_IFU == inst_i) begin
+                    if (EXU_done == 1) begin
                         state <= MEM_ACCESS;
                     end
                 end
@@ -149,9 +150,7 @@ module ysyx_24120009_MEM (
                 DONE: begin
                         mem_en <= 0;
                         mem_wen <= 0;
-                    if (inst_from_WBU == inst_o) begin
                         state <= IDLE;
-                    end
                 end
                 default: begin
                     state <= IDLE;
