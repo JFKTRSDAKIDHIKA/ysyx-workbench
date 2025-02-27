@@ -41,8 +41,9 @@ module ysyx_24120009_sram_axi4_lite_wrapper #(
     // State machine definition
     reg [1:0] state;
     localparam IDLE = 2'b00,
-               WRITE = 2'b01,
-               READ = 2'b10;
+               WRITE_REQ = 2'b01,
+               WRITE = 2'b10,
+               READ = 2'b11;
 
     // Internal registers for AXI4-Lite to SRAM conversion
     reg [ADDR_WIDTH-1:0] addr_reg;              // Registered address for SRAM
@@ -103,13 +104,16 @@ module ysyx_24120009_sram_axi4_lite_wrapper #(
                         state <= WRITE;
                         awready <= 1'b0;
                         wready <= 1'b0;
-                        wt_req_valid <= 1'b1;
                     end else if (arvalid) begin
                         // Capture read request
                         addr_reg <= araddr;
                         state <= READ;
                         arready <= 1'b0;
                     end
+                end
+                WRITE_REQ: begin
+                    wt_req_valid <= 1'b1;
+                    state <= WRITE;
                 end
 
                 // Write state: Send write request to SRAM and wait for response
