@@ -278,15 +278,18 @@ static char* rl_gets() {
     return line_read;
   }
   
+int wbu_active_debug_old;
 static int execute_single_step() {
   tick(top, is_silent_mode);  
 #ifdef DIFFTEST
-  if (top->wbu_active_debug == 1) {
+  if (wbu_active_debug_old == 1) {
     printf("enable difftest: %d\n", top->wbu_active_debug);
     ref_difftest_regcpy(&ref, DIFFTEST_TO_REF);
     ref_difftest_exec(1);
+    wbu_active_debug_old = top->wbu_active_debug;
     return check_dut_and_ref(top, 0x80000000, 0x1000);
   } else {
+    wbu_active_debug_old = top->wbu_active_debug;
     return 0;
   }
 #else 
