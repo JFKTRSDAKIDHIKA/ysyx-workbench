@@ -90,6 +90,7 @@ module ysyx_24120009_sram_axi4_lite_wrapper #(
             case (state)
                 // Idle state: Wait for a valid AXI4-Lite request
                 IDLE: begin
+                    bvalid <= 1'b0;
                     rvalid <= 1'b0;
                     awready <= 1'b1;
                     wready <= 1'b1;
@@ -118,7 +119,6 @@ module ysyx_24120009_sram_axi4_lite_wrapper #(
                         bvalid <= 1'b1;
                         bresp <= 2'b00; // OKAY response
                         if (bready) begin
-                            bvalid <= 1'b0;
                             state <= IDLE;
                         end
                     end

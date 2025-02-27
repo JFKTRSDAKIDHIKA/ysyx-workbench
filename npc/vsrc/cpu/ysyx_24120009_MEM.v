@@ -105,36 +105,46 @@ module ysyx_24120009_MEM (
     reg mem_wen;
     wire     [`ysyx_24120009_DATA_WIDTH-1:0]    dmem_addr_o;
     wire     [`ysyx_24120009_DATA_WIDTH-1:0]    rs2_data_o;
-    wire rd_res_valid;
+    wire rvalid;
     wire wt_res_valid;
 
 
     // Interact with data memory
     // Data memeory access
 
-    // Ensure the only one of the "rd_req_valid" and "wt_req_valid" signals should be asserted (high).
-    wire rd_req_valid = mem_en && !mem_wen;
+    // Ensure the only one of the "arvalid" and "wt_req_valid" signals should be asserted (high).
+    wire arvalid = mem_en && !mem_wen;
     wire wt_req_valid = mem_en && mem_wen;
 
-    // Instantiate SRAM module
-    ysyx_24120009_SRAM LSU (
+    // Instantiate sram_axi4_lite_wrapper module
+    ysyx_24120009_sram_axi4_lite_wrapper axi4_mem (
         // Clock and reset signals
         .clk(clk),
         .rst(rst),
-        // Read memory signals
-        .rd_req_valid(rd_req_valid),
-        .addr(dmem_addr_o),
-        .data_out(dmem_rdata_raw),
-        .rd_res_valid(rd_res_valid),
-        // Write memory signals
-        .wt_req_valid(wt_req_valid),
-        .waddr(dmem_addr_o),
+        // AXI4-Lite Write Channel
+        .awvalid(wt_req_valid),
+        .awready(),
+        .awaddr(dmem_addr_o),
+        .wvalid(wt_req_valid),
+        .wready(),
         .wdata(dmem_wdata),
-        .wmask(wmask),
-        .wt_res_valid(wt_res_valid)
+        .wstrb(wmask),
+        .bvalid(wt_res_valid),
+        .bready(1'b1),
+        .bresp(),
+        // AXI4-Lite Read Channel
+        .arvalid(arvalid),
+        .arready(),
+        .araddr(dmem_addr_o),
+        .rvalid(rvalid),
+        .rready(1'b1),
+        .rdata(dmem_rdata_raw),
+        .rresp(),
+        // debug signals
+        .axi4_ifu_state_debug()
     );
 
-    assign mem_access_done = wt_res_valid || rd_res_valid || !mem_en;    // The signal "mem_access_done" is asserted high when no memory access is required or the current memory access has completed.
+    assign mem_access_done = wt_res_valid || rvalid || !mem_en;    // The signal "mem_access_done" is asserted high when no memory access is required or the current memory access has completed.
     assign dmem_wdata_raw = rs2_data_o;
     assign wt_res_valid_debug = wt_res_valid;
 
