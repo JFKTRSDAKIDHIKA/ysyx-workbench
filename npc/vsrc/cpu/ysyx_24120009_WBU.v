@@ -119,6 +119,7 @@ module ysyx_24120009_WBU (
 
     // wbu_active indicates the state of module WBU
     // It is asserted high only when the inst from IFU has been passed to WBU
+    /*
     reg wbu_active_reg;  
 
     always @(posedge clk or posedge rst) begin
@@ -141,6 +142,8 @@ module ysyx_24120009_WBU (
             end
         end
     end
+    */
+    assign wbu_active = (mem_access_done == 1'b1) ? 1'b1 : 1'b0;
 
     // Generate pc_wen signal which will be passed back to IFU
     assign pc_wen = wbu_active;
