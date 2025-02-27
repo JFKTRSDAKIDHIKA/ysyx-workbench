@@ -25,8 +25,13 @@ module ysyx_24120009_sram_axi4_lite_wrapper #(
     output reg rvalid,                          // Read data valid
     input wire rready,                          // Read data ready
     output reg [DATA_WIDTH-1:0] rdata,          // Read data
-    output reg [1:0] rresp                      // Read response
+    output reg [1:0] rresp,                     // Read response
+
+    // debug signals
+    output wire [1:0] axi4_ifu_state_debug
 );
+    // debug signals assignment
+    assign axi4_ifu_state_debug = state;
 
     // Internal signals for SRAM interface
     wire [DATA_WIDTH-1:0] sram_data_out;        // SRAM read data

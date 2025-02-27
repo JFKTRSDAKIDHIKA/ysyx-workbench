@@ -20,7 +20,8 @@ module ysyx_24120009_IFU (
   input                                 idu_ready,
   // debug signals 
   output [2:0]                          state_debug,
-  output                                rd_res_valid_debug
+  output                                rd_res_valid_debug,
+  output [1:0]                          axi4_ifu_state_debug
 );
 
   // direct programing interface --- C
@@ -147,7 +148,9 @@ module ysyx_24120009_IFU (
     .rvalid(rd_res_valid),
     .rready(1'b1),
     .rdata(sram_data_out),
-    .rresp()
+    .rresp(),
+    // debug signals
+    .axi4_ifu_state_debug(axi4_ifu_state_debug)
   );
 
   assign inst_o = if_inst_buffer;   
