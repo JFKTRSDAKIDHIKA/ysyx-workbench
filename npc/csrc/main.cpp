@@ -291,6 +291,7 @@ static int execute_single_step() {
     return 0;
   }
   wbu_active_old = top->wbu_active_debug;
+  std::cout << "wbu_active_old: " << wbu_active_old;
 #else 
   return 0;
 #endif
