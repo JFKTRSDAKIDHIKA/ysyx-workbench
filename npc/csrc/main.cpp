@@ -286,12 +286,12 @@ static int execute_single_step() {
   if (wbu_active_old == 1) {
     ref_difftest_regcpy(&ref, DIFFTEST_TO_REF);
     ref_difftest_exec(1);
+    wbu_active_old = top->wbu_active_debug;
     return check_dut_and_ref(top, 0x80000000, 0x1000);
   } else {
+    wbu_active_old = top->wbu_active_debug;
     return 0;
   }
-  wbu_active_old = top->wbu_active_debug;
-  std::cout << "wbu_active_old: " << wbu_active_old;
 #else 
   return 0;
 #endif
