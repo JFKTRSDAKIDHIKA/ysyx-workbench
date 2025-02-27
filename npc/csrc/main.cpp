@@ -19,7 +19,7 @@
 #define UART_ADDR_LEN  8          
 
 // #define ENABLE_MEMORY_CHECK 1
-// #define DIFFTEST 1
+#define DIFFTEST 1
 #define is_silent_mode 1
 
 // Declare global variables
@@ -80,7 +80,6 @@ extern "C" void pmem_write(int waddr, int wdata, char wmask) {
 
     // 串口
     if (waddr >= UART_BASE_ADDR && waddr < UART_BASE_ADDR + UART_ADDR_LEN) {
-      // printf("UART write %d\n", wdata);
       putchar(static_cast<char>(wdata & 0xFF));  
       return;  
     }
@@ -450,7 +449,7 @@ int main(int argc, char **argv) {
       if (sdb_mainloop() < 0) return -1;
     } else {
       if (cmd_c(NULL) < 0) return -1;
-      printf("total cycle: %d\n", total_cycle);
+      printf("Total Cycle: %5d\n", total_cycle);
     }
 /*
     while(!Verilated::gotFinish()) {
