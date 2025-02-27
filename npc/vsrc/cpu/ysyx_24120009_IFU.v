@@ -66,7 +66,7 @@ module ysyx_24120009_IFU (
   // State machine logic 
   always @(posedge clk or posedge rst) begin
     if (rst) begin
-      state <= IDLE;
+      state <= FETCH_REQ;
       if_inst_buffer <= 32'b0;
       sram_rd_req <= 1'b0;
       inst_valid <= 1'b0;
