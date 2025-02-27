@@ -277,18 +277,20 @@ static char* rl_gets() {
   
     return line_read;
   }
-  
+
+int wbu_active_old = 0;
+
 static int execute_single_step() {
   tick(top, is_silent_mode);  
 #ifdef DIFFTEST
-  std::cout << ", wbu_active: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->wbu_active_debug);
-  if (top->wbu_active_debug == 1) {
+  if (wbu_active_old == 1) {
     ref_difftest_regcpy(&ref, DIFFTEST_TO_REF);
     ref_difftest_exec(1);
     return check_dut_and_ref(top, 0x80000000, 0x1000);
   } else {
     return 0;
   }
+  wbu_active_old = top->wbu_active_debug;
 #else 
   return 0;
 #endif
