@@ -108,7 +108,6 @@ module ysyx_24120009_MEM (
     wire rvalid;
     wire wt_res_valid;
 
-
     // Interact with data memory
     // Data memeory access
 
