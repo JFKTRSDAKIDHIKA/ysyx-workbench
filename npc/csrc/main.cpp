@@ -227,7 +227,7 @@ void tick(Vysyx_24120009_core* top, bool silent_mode ) {
                 << ". dmem_rdata_from_MEM: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->dmem_rdata_from_MEM_to_WBU_debug
                 << ", wt_res_valid: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->wt_res_valid_debug)
                 << ", ifu_state" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->ifu_state_debug)
-                << ", rd_res_valid_ifu" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->rd_res_valid_debug) 
+                << ", rd_res_valid_ifu: " << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->rd_res_valid_debug) 
                 << std::dec << std::endl;
     }
   
