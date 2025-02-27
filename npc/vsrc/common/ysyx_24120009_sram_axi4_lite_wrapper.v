@@ -101,7 +101,7 @@ module ysyx_24120009_sram_axi4_lite_wrapper #(
                         addr_reg <= awaddr;
                         wdata_reg <= wdata;
                         wstrb_reg <= wstrb;
-                        state <= WRITE;
+                        state <= WRITE_REQ;
                         awready <= 1'b0;
                         wready <= 1'b0;
                     end else if (arvalid) begin
