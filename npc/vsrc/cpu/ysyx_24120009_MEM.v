@@ -144,6 +144,8 @@ module ysyx_24120009_MEM (
                 end
 
                 MEM_ACCESS: begin
+                        mem_en <= 0;
+                        mem_wen <= 0;
                     if (wt_res_valid || rvalid) begin
                         mem_en <= 0;
                         mem_wen <= 0;

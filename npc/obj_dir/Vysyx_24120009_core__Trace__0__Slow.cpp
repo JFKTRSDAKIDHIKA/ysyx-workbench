@@ -435,12 +435,11 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root__trace_init_sub__TOP__0(Vysyx_24
     tracep->declBit(c+90,"sram_wt_res_valid", false,-1);
     tracep->declBus(c+91,"state", false,-1, 1,0);
     tracep->declBus(c+476,"IDLE", false,-1, 1,0);
-    tracep->declBus(c+477,"WRITE_REQ", false,-1, 1,0);
-    tracep->declBus(c+478,"WRITE", false,-1, 1,0);
-    tracep->declBus(c+479,"READ", false,-1, 1,0);
+    tracep->declBus(c+477,"WRITE", false,-1, 1,0);
+    tracep->declBus(c+478,"READ", false,-1, 1,0);
     tracep->declBus(c+92,"addr_reg", false,-1, 31,0);
-    tracep->declBus(c+480,"wdata_reg", false,-1, 31,0);
-    tracep->declBus(c+481,"wstrb_reg", false,-1, 7,0);
+    tracep->declBus(c+479,"wdata_reg", false,-1, 31,0);
+    tracep->declBus(c+480,"wstrb_reg", false,-1, 7,0);
     tracep->declBit(c+93,"rd_req_valid", false,-1);
     tracep->declBit(c+94,"wt_req_valid", false,-1);
     tracep->pushNamePrefix("sram_inst ");
@@ -452,8 +451,8 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root__trace_init_sub__TOP__0(Vysyx_24
     tracep->declBit(c+89,"rd_res_valid", false,-1);
     tracep->declBit(c+94,"wt_req_valid", false,-1);
     tracep->declBus(c+92,"waddr", false,-1, 31,0);
-    tracep->declBus(c+480,"wdata", false,-1, 31,0);
-    tracep->declBus(c+481,"wmask", false,-1, 7,0);
+    tracep->declBus(c+479,"wdata", false,-1, 31,0);
+    tracep->declBus(c+480,"wmask", false,-1, 7,0);
     tracep->declBit(c+90,"wt_res_valid", false,-1);
     tracep->declBus(c+95,"addr_delayed", false,-1, 31,0);
     tracep->declBit(c+96,"rd_req_valid_delayed", false,-1);
@@ -478,7 +477,7 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root__trace_init_sub__TOP__0(Vysyx_24
     tracep->declBus(c+152,"key", false,-1, 2,0);
     tracep->declBus(c+454,"default_out", false,-1, 31,0);
     tracep->declArray(c+305,"lut", false,-1, 174,0);
-    tracep->declBus(c+482,"PAIR_LEN", false,-1, 31,0);
+    tracep->declBus(c+481,"PAIR_LEN", false,-1, 31,0);
     for (int i = 0; i < 5; ++i) {
         tracep->declQuad(c+311+i*2,"pair_list", true,(i+0), 34,0);
     }
@@ -490,7 +489,7 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root__trace_init_sub__TOP__0(Vysyx_24
     }
     tracep->declBus(c+326,"lut_out", false,-1, 31,0);
     tracep->declBit(c+327,"hit", false,-1);
-    tracep->declBus(c+483,"i", false,-1, 31,0);
+    tracep->declBus(c+482,"i", false,-1, 31,0);
     tracep->popNamePrefix(2);
     tracep->pushNamePrefix("pc_reg ");
     tracep->declBus(c+452,"WIDTH", false,-1, 31,0);
@@ -568,7 +567,7 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root__trace_init_sub__TOP__0(Vysyx_24
     tracep->declBus(c+331,"key", false,-1, 2,0);
     tracep->declBus(c+454,"default_out", false,-1, 31,0);
     tracep->declArray(c+130,"lut", false,-1, 174,0);
-    tracep->declBus(c+482,"PAIR_LEN", false,-1, 31,0);
+    tracep->declBus(c+481,"PAIR_LEN", false,-1, 31,0);
     for (int i = 0; i < 5; ++i) {
         tracep->declQuad(c+136+i*2,"pair_list", true,(i+0), 34,0);
     }
@@ -580,7 +579,7 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root__trace_init_sub__TOP__0(Vysyx_24
     }
     tracep->declBus(c+403,"lut_out", false,-1, 31,0);
     tracep->declBit(c+337,"hit", false,-1);
-    tracep->declBus(c+483,"i", false,-1, 31,0);
+    tracep->declBus(c+482,"i", false,-1, 31,0);
     tracep->popNamePrefix(3);
     tracep->pushNamePrefix("axi4_mem ");
     tracep->declBus(c+452,"ADDR_WIDTH", false,-1, 31,0);
@@ -610,9 +609,8 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root__trace_init_sub__TOP__0(Vysyx_24
     tracep->declBit(c+117,"sram_wt_res_valid", false,-1);
     tracep->declBus(c+118,"state", false,-1, 1,0);
     tracep->declBus(c+476,"IDLE", false,-1, 1,0);
-    tracep->declBus(c+477,"WRITE_REQ", false,-1, 1,0);
-    tracep->declBus(c+478,"WRITE", false,-1, 1,0);
-    tracep->declBus(c+479,"READ", false,-1, 1,0);
+    tracep->declBus(c+477,"WRITE", false,-1, 1,0);
+    tracep->declBus(c+478,"READ", false,-1, 1,0);
     tracep->declBus(c+119,"addr_reg", false,-1, 31,0);
     tracep->declBus(c+120,"wdata_reg", false,-1, 31,0);
     tracep->declBus(c+121,"wstrb_reg", false,-1, 7,0);
@@ -656,22 +654,22 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root__trace_init_sub__TOP__0(Vysyx_24
     tracep->declBit(c+458,"wen", false,-1);
     tracep->popNamePrefix(1);
     tracep->pushNamePrefix("mem_acces_ctl_mux ");
-    tracep->declBus(c+484,"NR_KEY", false,-1, 31,0);
-    tracep->declBus(c+485,"KEY_LEN", false,-1, 31,0);
+    tracep->declBus(c+483,"NR_KEY", false,-1, 31,0);
+    tracep->declBus(c+484,"KEY_LEN", false,-1, 31,0);
     tracep->declBus(c+461,"DATA_LEN", false,-1, 31,0);
     tracep->declBus(c+331,"out", false,-1, 2,0);
     tracep->declBus(c+338,"key", false,-1, 9,0);
-    tracep->declArray(c+486,"lut", false,-1, 103,0);
+    tracep->declArray(c+485,"lut", false,-1, 103,0);
     tracep->pushNamePrefix("i0 ");
-    tracep->declBus(c+484,"NR_KEY", false,-1, 31,0);
-    tracep->declBus(c+485,"KEY_LEN", false,-1, 31,0);
+    tracep->declBus(c+483,"NR_KEY", false,-1, 31,0);
+    tracep->declBus(c+484,"KEY_LEN", false,-1, 31,0);
     tracep->declBus(c+461,"DATA_LEN", false,-1, 31,0);
     tracep->declBus(c+453,"HAS_DEFAULT", false,-1, 31,0);
     tracep->declBus(c+331,"out", false,-1, 2,0);
     tracep->declBus(c+338,"key", false,-1, 9,0);
     tracep->declBus(c+471,"default_out", false,-1, 2,0);
-    tracep->declArray(c+486,"lut", false,-1, 103,0);
-    tracep->declBus(c+490,"PAIR_LEN", false,-1, 31,0);
+    tracep->declArray(c+485,"lut", false,-1, 103,0);
+    tracep->declBus(c+489,"PAIR_LEN", false,-1, 31,0);
     for (int i = 0; i < 8; ++i) {
         tracep->declBus(c+34+i*1,"pair_list", true,(i+0), 12,0);
     }
@@ -683,7 +681,7 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root__trace_init_sub__TOP__0(Vysyx_24
     }
     tracep->declBus(c+339,"lut_out", false,-1, 2,0);
     tracep->declBit(c+340,"hit", false,-1);
-    tracep->declBus(c+491,"i", false,-1, 31,0);
+    tracep->declBus(c+490,"i", false,-1, 31,0);
     tracep->popNamePrefix(2);
     tracep->pushNamePrefix("pc_reg_MEM ");
     tracep->declBus(c+452,"WIDTH", false,-1, 31,0);
@@ -733,19 +731,19 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root__trace_init_sub__TOP__0(Vysyx_24
     tracep->pushNamePrefix("mem_mux_write ");
     tracep->declBus(c+461,"NR_KEY", false,-1, 31,0);
     tracep->declBus(c+461,"KEY_LEN", false,-1, 31,0);
-    tracep->declBus(c+484,"DATA_LEN", false,-1, 31,0);
+    tracep->declBus(c+483,"DATA_LEN", false,-1, 31,0);
     tracep->declBus(c+341,"out", false,-1, 7,0);
     tracep->declBus(c+331,"key", false,-1, 2,0);
-    tracep->declQuad(c+492,"lut", false,-1, 32,0);
+    tracep->declQuad(c+491,"lut", false,-1, 32,0);
     tracep->pushNamePrefix("i0 ");
     tracep->declBus(c+461,"NR_KEY", false,-1, 31,0);
     tracep->declBus(c+461,"KEY_LEN", false,-1, 31,0);
-    tracep->declBus(c+484,"DATA_LEN", false,-1, 31,0);
+    tracep->declBus(c+483,"DATA_LEN", false,-1, 31,0);
     tracep->declBus(c+453,"HAS_DEFAULT", false,-1, 31,0);
     tracep->declBus(c+341,"out", false,-1, 7,0);
     tracep->declBus(c+331,"key", false,-1, 2,0);
     tracep->declBus(c+475,"default_out", false,-1, 7,0);
-    tracep->declQuad(c+492,"lut", false,-1, 32,0);
+    tracep->declQuad(c+491,"lut", false,-1, 32,0);
     tracep->declBus(c+450,"PAIR_LEN", false,-1, 31,0);
     for (int i = 0; i < 3; ++i) {
         tracep->declBus(c+58+i*1,"pair_list", true,(i+0), 10,0);
@@ -758,7 +756,7 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root__trace_init_sub__TOP__0(Vysyx_24
     }
     tracep->declBus(c+342,"lut_out", false,-1, 7,0);
     tracep->declBit(c+343,"hit", false,-1);
-    tracep->declBus(c+494,"i", false,-1, 31,0);
+    tracep->declBus(c+493,"i", false,-1, 31,0);
     tracep->popNamePrefix(4);
     tracep->pushNamePrefix("u_RegisterFile ");
     tracep->declBus(c+451,"ADDR_WIDTH", false,-1, 31,0);
@@ -802,7 +800,7 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root__trace_init_sub__TOP__0(Vysyx_24
     tracep->declBus(c+418,"pc_plus4", false,-1, 31,0);
     tracep->declBus(c+376,"pc_o", false,-1, 31,0);
     tracep->declBus(c+377,"result_o", false,-1, 31,0);
-    tracep->declBus(c+495,"dmem_addr_o", false,-1, 31,0);
+    tracep->declBus(c+494,"dmem_addr_o", false,-1, 31,0);
     tracep->declBus(c+378,"dmem_rdata_o", false,-1, 31,0);
     tracep->declBus(c+379,"wb_sel", false,-1, 1,0);
     tracep->declBus(c+380,"funct3", false,-1, 2,0);
@@ -1631,21 +1629,20 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root__trace_full_sub_0(Vysyx_24120009
     bufp->fullCData(oldp+476,(0U),2);
     bufp->fullCData(oldp+477,(1U),2);
     bufp->fullCData(oldp+478,(2U),2);
-    bufp->fullCData(oldp+479,(3U),2);
-    bufp->fullIData(oldp+480,(vlSelf->ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__wdata_reg),32);
-    bufp->fullCData(oldp+481,(vlSelf->ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__wstrb_reg),8);
-    bufp->fullIData(oldp+482,(0x23U),32);
-    bufp->fullIData(oldp+483,(5U),32);
-    bufp->fullIData(oldp+484,(8U),32);
-    bufp->fullIData(oldp+485,(0xaU),32);
+    bufp->fullIData(oldp+479,(vlSelf->ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__wdata_reg),32);
+    bufp->fullCData(oldp+480,(vlSelf->ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__wstrb_reg),8);
+    bufp->fullIData(oldp+481,(0x23U),32);
+    bufp->fullIData(oldp+482,(5U),32);
+    bufp->fullIData(oldp+483,(8U),32);
+    bufp->fullIData(oldp+484,(0xaU),32);
     __Vtemp_ha516852c__0[0U] = 0x491808c9U;
     __Vtemp_ha516852c__0[1U] = 0xc9076a3U;
     __Vtemp_ha516852c__0[2U] = 0x903001c8U;
     __Vtemp_ha516852c__0[3U] = 6U;
-    bufp->fullWData(oldp+486,(__Vtemp_ha516852c__0),104);
-    bufp->fullIData(oldp+490,(0xdU),32);
-    bufp->fullIData(oldp+491,(8U),32);
-    bufp->fullQData(oldp+492,(0x83c81801ULL),33);
-    bufp->fullIData(oldp+494,(3U),32);
-    bufp->fullIData(oldp+495,(vlSelf->ysyx_24120009_core__DOT__wbu__DOT__dmem_addr_o),32);
+    bufp->fullWData(oldp+485,(__Vtemp_ha516852c__0),104);
+    bufp->fullIData(oldp+489,(0xdU),32);
+    bufp->fullIData(oldp+490,(8U),32);
+    bufp->fullQData(oldp+491,(0x83c81801ULL),33);
+    bufp->fullIData(oldp+493,(3U),32);
+    bufp->fullIData(oldp+494,(vlSelf->ysyx_24120009_core__DOT__wbu__DOT__dmem_addr_o),32);
 }
