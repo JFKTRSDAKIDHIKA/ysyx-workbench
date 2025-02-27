@@ -45,6 +45,7 @@ class Vysyx_24120009_core VL_NOT_FINAL : public VerilatedModel {
     VL_OUT8(&axi4_ifu_state_debug,1,0);
     VL_OUT8(&mem_ctl_state_debug,1,0);
     VL_OUT8(&axi4_mem_state_debug,1,0);
+    VL_OUT8(&idu_state_debug,1,0);
     VL_OUT(&pc_debug,31,0);
     VL_OUT(&inst_debug,31,0);
     VL_OUT(&reg_write_data_debug,31,0);

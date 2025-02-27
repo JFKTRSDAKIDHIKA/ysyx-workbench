@@ -33,7 +33,8 @@ module ysyx_24120009_core (
     output wire rd_res_valid_debug,
     output wire [1:0] axi4_ifu_state_debug,
     output wire [1:0] mem_ctl_state_debug,
-    output wire [1:0] axi4_mem_state_debug
+    output wire [1:0] axi4_mem_state_debug,
+    output wire [1:0] idu_state_debug
 );
 
     // Debug signal declaration and assignment
@@ -168,7 +169,9 @@ module ysyx_24120009_core (
         .jump_reg_target_o(jump_reg_target),
         .br_target_o(br_target),
         .jmp_target_o(jmp_target),
-        .pc_sel(pc_sel)
+        .pc_sel(pc_sel),
+        // debug signals
+        .idu_state_debug(idu_state_debug)
     );
 
 

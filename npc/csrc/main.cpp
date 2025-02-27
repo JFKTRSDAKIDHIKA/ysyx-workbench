@@ -226,12 +226,12 @@ void tick(Vysyx_24120009_core* top, bool silent_mode ) {
                 << ", mem_access: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->mem_access_done_debug)
                 << ". dmem_rdata_from_MEM: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->dmem_rdata_from_MEM_to_WBU_debug
                 << ", wt_res_valid: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->wt_res_valid_debug)
-                << ", ifu_state" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->ifu_state_debug)
                 << ", rd_res_valid_ifu: " << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->rd_res_valid_debug) 
                 << ", axi4_ifu_state: " << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->axi4_ifu_state_debug) 
                 << ", mem_ctl_state: " << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->mem_ctl_state_debug) 
                 << ", axi4_mem_state: " << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->axi4_mem_state_debug) 
-                << ", ifu_state: " << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->ifu_state_debug) 
+                << ", ifu_state" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->ifu_state_debug)
+                << ", idu_state: " << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->idu_state_debug) 
                 << std::dec << std::endl;
     }
   

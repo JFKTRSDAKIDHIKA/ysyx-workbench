@@ -72,6 +72,7 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root___nba_sequent__TOP__0(Vysyx_241
         __Vdly__ysyx_24120009_core__DOT__idu__DOT__state = 0U;
         vlSelf->ysyx_24120009_core__DOT__idu__DOT__state 
             = __Vdly__ysyx_24120009_core__DOT__idu__DOT__state;
+        vlSelf->idu_state_debug = vlSelf->ysyx_24120009_core__DOT__idu__DOT__state;
         vlSelf->ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__sram_inst__DOT__wmask_delayed = 0U;
         vlSelf->ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__sram_inst__DOT__wdata_delayed = 0U;
         vlSelf->ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__sram_inst__DOT__waddr_delayed = 0U;
@@ -117,6 +118,7 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root___nba_sequent__TOP__0(Vysyx_241
         }
         vlSelf->ysyx_24120009_core__DOT__idu__DOT__state 
             = __Vdly__ysyx_24120009_core__DOT__idu__DOT__state;
+        vlSelf->idu_state_debug = vlSelf->ysyx_24120009_core__DOT__idu__DOT__state;
         vlSelf->ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__sram_inst__DOT__wmask_delayed 
             = vlSelf->ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__wstrb_reg;
         vlSelf->ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__sram_inst__DOT__wdata_delayed 

@@ -26,7 +26,9 @@ module ysyx_24120009_IDU (
     output [`ysyx_24120009_DATA_WIDTH-1:0] jump_reg_target_o,
     output [`ysyx_24120009_DATA_WIDTH-1:0] br_target_o,
     output [`ysyx_24120009_DATA_WIDTH-1:0] jmp_target_o,
-    output reg    [2:0]                                 pc_sel
+    output reg    [2:0]                                 pc_sel,
+    // debug signals 
+    output [1:0] idu_state_debug
 );
 
     // State definition
@@ -65,6 +67,7 @@ module ysyx_24120009_IDU (
     end
 
     assign ID_done = (state == DONE);
+    assign idu_state_debug = state;
 
     // Get ready for pipeline
     ysyx_24120009_Reg #(
