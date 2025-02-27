@@ -43,8 +43,8 @@ class Vysyx_24120009_core___024root final : public VerilatedModule {
         CData/*4:0*/ ysyx_24120009_core__DOT__waddr;
         CData/*0:0*/ ysyx_24120009_core__DOT__ifu__DOT__inst_valid;
         CData/*2:0*/ ysyx_24120009_core__DOT__ifu__DOT__state;
-        CData/*0:0*/ ysyx_24120009_core__DOT__ifu__DOT__rd_res_valid;
-        CData/*0:0*/ ysyx_24120009_core__DOT__ifu__DOT__sram_rd_req;
+        CData/*0:0*/ ysyx_24120009_core__DOT__ifu__DOT__rvalid;
+        CData/*0:0*/ ysyx_24120009_core__DOT__ifu__DOT__arvalid;
         CData/*0:0*/ ysyx_24120009_core__DOT__ifu__DOT__mux_pc_sel__DOT__i0__DOT__hit;
         CData/*0:0*/ ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__awready;
         CData/*0:0*/ ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__wready;
@@ -139,7 +139,7 @@ class Vysyx_24120009_core___024root final : public VerilatedModule {
         IData/*31:0*/ ysyx_24120009_core__DOT__ifu__DOT__pc;
         IData/*31:0*/ ysyx_24120009_core__DOT__ifu__DOT__pc_next;
         IData/*31:0*/ ysyx_24120009_core__DOT__ifu__DOT__imem_addr;
-        IData/*31:0*/ ysyx_24120009_core__DOT__ifu__DOT__sram_data_out;
+        IData/*31:0*/ ysyx_24120009_core__DOT__ifu__DOT__rdata;
         IData/*31:0*/ ysyx_24120009_core__DOT__ifu__DOT__if_inst_buffer;
         IData/*31:0*/ ysyx_24120009_core__DOT__ifu__DOT__mux_pc_sel__DOT__i0__DOT__lut_out;
         IData/*31:0*/ ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__sram_data_out;

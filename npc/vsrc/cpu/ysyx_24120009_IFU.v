@@ -61,7 +61,7 @@ module ysyx_24120009_IFU (
   reg [2:0] state;
 
   assign state_debug = state;
-  assign rd_res_valid_debug = rd_res_valid;
+  assign rd_res_valid_debug = rvalid;
 
   localparam IDLE        = 3'b000,
              FETCH_REQ   = 3'b001,
@@ -73,13 +73,13 @@ module ysyx_24120009_IFU (
     if (rst) begin
       state <= FETCH_REQ;
       if_inst_buffer <= 32'b0;
-      sram_rd_req <= 1'b0;
+      arvalid <= 1'b0;
       inst_valid <= 1'b0;
     end else begin
       case (state)
         IDLE: begin
           inst_valid <= 1'b0;
-          sram_rd_req <= 1'b0;
+          arvalid <= 1'b0;
           if (pc_wen) begin
             state <= FETCH_REQ;  
           end
@@ -87,15 +87,15 @@ module ysyx_24120009_IFU (
 
         FETCH_REQ: begin
           inst_valid <= 1'b0;
-          sram_rd_req <= 1'b1;  
+          arvalid <= 1'b1;  
           state <= FETCH_WAIT; 
         end
 
         FETCH_WAIT: begin
           inst_valid <= 1'b0;
-          sram_rd_req <= 1'b0;
-          if (rd_res_valid) begin
-            if_inst_buffer <= sram_data_out;  
+          arvalid <= 1'b0;
+          if (rvalid) begin
+            if_inst_buffer <= rdata;  
             state <= FETCH_DONE;              
           end
         end
@@ -105,14 +105,14 @@ module ysyx_24120009_IFU (
           if (idu_ready) begin
             inst_valid <= 1'b0;
             state <= IDLE;     
-            sram_rd_req <= 1'b0;
+            arvalid <= 1'b0;
           end
         end
 
         default: begin
           state <= IDLE;
           inst_valid <= 1'b0;
-          sram_rd_req <= 1'b0;
+          arvalid <= 1'b0;
         end
       endcase
     end
@@ -120,10 +120,10 @@ module ysyx_24120009_IFU (
 
 
   // Use sram_axi4_lite_wrapper module to read the instruction
-  wire [31:0] sram_data_out;
-  wire        rd_res_valid;
+  wire [31:0] rdata;
+  wire        rvalid;
   reg  [31:0] if_inst_buffer;
-  reg         sram_rd_req;
+  reg         arvalid;
 
   // Instantiate sram_axi4_lite_wrapper module
   ysyx_24120009_sram_axi4_lite_wrapper axi4_ifu (
@@ -142,12 +142,12 @@ module ysyx_24120009_IFU (
     .bready(1'b0),
     .bresp(),     
     // AXI4-Lite Read Channel
-    .arvalid(sram_rd_req),
+    .arvalid(arvalid),
     .arready(),
     .araddr(pc),
-    .rvalid(rd_res_valid),
+    .rvalid(rvalid),
     .rready(1'b1),
-    .rdata(sram_data_out),
+    .rdata(rdata),
     .rresp(),
     // debug signals
     .axi4_ifu_state_debug(axi4_ifu_state_debug)

@@ -385,10 +385,10 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root__trace_init_sub__TOP__0(Vysyx_24
     tracep->declBus(c+447,"FETCH_REQ", false,-1, 2,0);
     tracep->declBus(c+448,"FETCH_WAIT", false,-1, 2,0);
     tracep->declBus(c+449,"FETCH_DONE", false,-1, 2,0);
-    tracep->declBus(c+74,"sram_data_out", false,-1, 31,0);
-    tracep->declBit(c+75,"rd_res_valid", false,-1);
+    tracep->declBus(c+74,"rdata", false,-1, 31,0);
+    tracep->declBit(c+75,"rvalid", false,-1);
     tracep->declBus(c+76,"if_inst_buffer", false,-1, 31,0);
-    tracep->declBit(c+77,"sram_rd_req", false,-1);
+    tracep->declBit(c+77,"arvalid", false,-1);
     tracep->pushNamePrefix("axi4_ifu ");
     tracep->declBus(c+427,"ADDR_WIDTH", false,-1, 31,0);
     tracep->declBus(c+427,"DATA_WIDTH", false,-1, 31,0);
@@ -946,10 +946,10 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root__trace_full_sub_0(Vysyx_24120009
     bufp->fullCData(oldp+71,(vlSelf->ysyx_24120009_core__DOT__wbu__DOT__wb_mux__DOT__i1__DOT__key_list[3]),2);
     bufp->fullBit(oldp+72,(vlSelf->ysyx_24120009_core__DOT__ifu__DOT__inst_valid));
     bufp->fullCData(oldp+73,(vlSelf->ysyx_24120009_core__DOT__ifu__DOT__state),3);
-    bufp->fullIData(oldp+74,(vlSelf->ysyx_24120009_core__DOT__ifu__DOT__sram_data_out),32);
-    bufp->fullBit(oldp+75,(vlSelf->ysyx_24120009_core__DOT__ifu__DOT__rd_res_valid));
+    bufp->fullIData(oldp+74,(vlSelf->ysyx_24120009_core__DOT__ifu__DOT__rdata),32);
+    bufp->fullBit(oldp+75,(vlSelf->ysyx_24120009_core__DOT__ifu__DOT__rvalid));
     bufp->fullIData(oldp+76,(vlSelf->ysyx_24120009_core__DOT__ifu__DOT__if_inst_buffer),32);
-    bufp->fullBit(oldp+77,(vlSelf->ysyx_24120009_core__DOT__ifu__DOT__sram_rd_req));
+    bufp->fullBit(oldp+77,(vlSelf->ysyx_24120009_core__DOT__ifu__DOT__arvalid));
     bufp->fullBit(oldp+78,(vlSelf->ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__awready));
     bufp->fullBit(oldp+79,(vlSelf->ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__wready));
     bufp->fullBit(oldp+80,(vlSelf->ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__bvalid));
