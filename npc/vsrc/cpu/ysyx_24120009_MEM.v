@@ -147,13 +147,13 @@ module ysyx_24120009_MEM (
                     if (wt_res_valid || rvalid) begin
                         mem_en <= 0;
                         mem_wen <= 0;
-                        bready <= 0;
+                        bready <= 1;
                         state <= DONE;
                     end
                 end
 
                 DONE: begin
-                        bready <= 1;
+                        bready <= 0;
                         mem_en <= 0;
                         mem_wen <= 0;
                         state <= IDLE;
