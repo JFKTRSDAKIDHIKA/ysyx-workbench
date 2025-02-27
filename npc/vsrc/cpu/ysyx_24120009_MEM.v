@@ -153,7 +153,7 @@ module ysyx_24120009_MEM (
                 end
 
                 DONE: begin
-                        bready <= 0;
+                        bready <= 1;
                         mem_en <= 0;
                         mem_wen <= 0;
                         state <= IDLE;
