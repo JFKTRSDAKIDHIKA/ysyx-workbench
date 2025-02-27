@@ -121,7 +121,8 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root___nba_sequent__TOP__0(Vysyx_241
         }
         vlSelf->ysyx_24120009_core__DOT__ifu__DOT__state 
             = __Vdly__ysyx_24120009_core__DOT__ifu__DOT__state;
-        if ((vlSelf->inst_debug == vlSelf->ysyx_24120009_core__DOT__inst_from_MEM_to_WBU)) {
+        if (((vlSelf->inst_debug == vlSelf->ysyx_24120009_core__DOT__inst_from_MEM_to_WBU) 
+             & (0U != vlSelf->ysyx_24120009_core__DOT__inst_from_MEM_to_WBU))) {
             if (((~ (IData)(vlSelf->ysyx_24120009_core__DOT__wbu__DOT__wbu_active_reg)) 
                  & (IData)(vlSelf->mem_access_done_debug))) {
                 vlSelf->wbu_active_debug = 1U;

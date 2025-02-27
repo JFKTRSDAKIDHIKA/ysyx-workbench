@@ -127,7 +127,7 @@ module ysyx_24120009_WBU (
             wbu_active <= 1'b0;      
         end else begin
             // Why use inst_i instead of inst_o? Because wbu_active may be delayed one cycle.
-            if (inst_from_IFU == inst_i) begin
+            if (inst_from_IFU == inst_i && inst_i != 32'h0) begin
                 // Signal wbu_active is asserted high only when memory access has finished (mem_access_done==1).
                 if (!wbu_active_reg && mem_access_done) begin
                     wbu_active <= 1'b1;  
