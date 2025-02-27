@@ -92,7 +92,7 @@ module ysyx_24120009_IFU (
 
         FETCH_WAIT: begin
           inst_valid <= 1'b0;
-          sram_rd_req <= 1'b1;
+          sram_rd_req <= 1'b0;
           if (rd_res_valid) begin
             if_inst_buffer <= sram_data_out;  
             state <= FETCH_DONE;              
