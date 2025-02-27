@@ -43,12 +43,21 @@ class Vysyx_24120009_core___024root final : public VerilatedModule {
         CData/*0:0*/ ysyx_24120009_core__DOT__ifu__DOT__rd_res_valid;
         CData/*0:0*/ ysyx_24120009_core__DOT__ifu__DOT__sram_rd_req;
         CData/*0:0*/ ysyx_24120009_core__DOT__ifu__DOT__mux_pc_sel__DOT__i0__DOT__hit;
-        CData/*0:0*/ ysyx_24120009_core__DOT__ifu__DOT__sram_inst__DOT__wt_req_valid;
-        CData/*7:0*/ ysyx_24120009_core__DOT__ifu__DOT__sram_inst__DOT__wmask;
-        CData/*0:0*/ ysyx_24120009_core__DOT__ifu__DOT__sram_inst__DOT__wt_res_valid;
-        CData/*0:0*/ ysyx_24120009_core__DOT__ifu__DOT__sram_inst__DOT__rd_req_valid_delayed;
-        CData/*7:0*/ ysyx_24120009_core__DOT__ifu__DOT__sram_inst__DOT__wmask_delayed;
-        CData/*0:0*/ ysyx_24120009_core__DOT__ifu__DOT__sram_inst__DOT__wt_req_valid_delayed;
+        CData/*0:0*/ ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__awready;
+        CData/*0:0*/ ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__wready;
+        CData/*0:0*/ ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__bvalid;
+        CData/*1:0*/ ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__bresp;
+        CData/*0:0*/ ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__arready;
+        CData/*1:0*/ ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__rresp;
+        CData/*0:0*/ ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__sram_rd_res_valid;
+        CData/*0:0*/ ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__sram_wt_res_valid;
+        CData/*1:0*/ ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__state;
+        CData/*7:0*/ ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__wstrb_reg;
+        CData/*0:0*/ ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__rd_req_valid;
+        CData/*0:0*/ ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__wt_req_valid;
+        CData/*0:0*/ ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__sram_inst__DOT__rd_req_valid_delayed;
+        CData/*7:0*/ ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__sram_inst__DOT__wmask_delayed;
+        CData/*0:0*/ ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__sram_inst__DOT__wt_req_valid_delayed;
         CData/*0:0*/ ysyx_24120009_core__DOT__idu__DOT__br_eq;
         CData/*0:0*/ ysyx_24120009_core__DOT__idu__DOT__br_lt;
         CData/*0:0*/ ysyx_24120009_core__DOT__idu__DOT__br_ltu;
@@ -70,6 +79,8 @@ class Vysyx_24120009_core___024root final : public VerilatedModule {
         CData/*7:0*/ ysyx_24120009_core__DOT__mem__DOT__LSU__DOT__wmask_delayed;
         CData/*0:0*/ ysyx_24120009_core__DOT__mem__DOT__LSU__DOT__wt_req_valid_delayed;
         CData/*0:0*/ ysyx_24120009_core__DOT__mem__DOT__alignment_network__DOT__mem_mux__DOT__i0__DOT__hit;
+    };
+    struct {
         CData/*7:0*/ ysyx_24120009_core__DOT__mem__DOT__wmask_gen__DOT__base_mask;
         CData/*7:0*/ ysyx_24120009_core__DOT__mem__DOT__wmask_gen__DOT__mem_mux_write__DOT__i0__DOT__lut_out;
         CData/*0:0*/ ysyx_24120009_core__DOT__mem__DOT__wmask_gen__DOT__mem_mux_write__DOT__i0__DOT__hit;
@@ -79,8 +90,6 @@ class Vysyx_24120009_core___024root final : public VerilatedModule {
         CData/*0:0*/ ysyx_24120009_core__DOT__wbu__DOT__wbu_active_reg;
         CData/*0:0*/ ysyx_24120009_core__DOT__wbu__DOT__wb_mux__DOT__i1__DOT__hit;
         CData/*0:0*/ __VdfgTmp_h9d12977d__0;
-    };
-    struct {
         CData/*0:0*/ __VdfgTmp_h9d0653ad__0;
         CData/*6:0*/ __Vtableidx1;
         CData/*7:0*/ __Vtableidx2;
@@ -130,11 +139,14 @@ class Vysyx_24120009_core___024root final : public VerilatedModule {
         IData/*31:0*/ ysyx_24120009_core__DOT__ifu__DOT__sram_data_out;
         IData/*31:0*/ ysyx_24120009_core__DOT__ifu__DOT__if_inst_buffer;
         IData/*31:0*/ ysyx_24120009_core__DOT__ifu__DOT__mux_pc_sel__DOT__i0__DOT__lut_out;
-        IData/*31:0*/ ysyx_24120009_core__DOT__ifu__DOT__sram_inst__DOT__waddr;
-        IData/*31:0*/ ysyx_24120009_core__DOT__ifu__DOT__sram_inst__DOT__wdata;
-        IData/*31:0*/ ysyx_24120009_core__DOT__ifu__DOT__sram_inst__DOT__addr_delayed;
-        IData/*31:0*/ ysyx_24120009_core__DOT__ifu__DOT__sram_inst__DOT__waddr_delayed;
-        IData/*31:0*/ ysyx_24120009_core__DOT__ifu__DOT__sram_inst__DOT__wdata_delayed;
+        IData/*31:0*/ ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__sram_data_out;
+        IData/*31:0*/ ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__addr_reg;
+        IData/*31:0*/ ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__wdata_reg;
+        IData/*31:0*/ ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__sram_inst__DOT__addr_delayed;
+        IData/*31:0*/ ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__sram_inst__DOT__waddr_delayed;
+        IData/*31:0*/ ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__sram_inst__DOT__wdata_delayed;
+    };
+    struct {
         IData/*31:0*/ ysyx_24120009_core__DOT__idu__DOT__imm_i_sext;
         IData/*31:0*/ ysyx_24120009_core__DOT__idu__DOT__imm_b_sext;
         IData/*31:0*/ ysyx_24120009_core__DOT__idu__DOT__imm_j_sext;
@@ -145,8 +157,6 @@ class Vysyx_24120009_core___024root final : public VerilatedModule {
         IData/*31:0*/ ysyx_24120009_core__DOT__mem__DOT__dmem_addr_o;
         IData/*31:0*/ ysyx_24120009_core__DOT__mem__DOT__rs2_data_o;
         IData/*31:0*/ ysyx_24120009_core__DOT__mem__DOT__LSU__DOT__addr_delayed;
-    };
-    struct {
         IData/*31:0*/ ysyx_24120009_core__DOT__mem__DOT__LSU__DOT__waddr_delayed;
         IData/*31:0*/ ysyx_24120009_core__DOT__mem__DOT__LSU__DOT__wdata_delayed;
         IData/*31:0*/ ysyx_24120009_core__DOT__mem__DOT__alignment_network__DOT__shifted_data;
@@ -156,7 +166,7 @@ class Vysyx_24120009_core___024root final : public VerilatedModule {
         IData/*31:0*/ ysyx_24120009_core__DOT__wbu__DOT__dmem_addr_o;
         IData/*31:0*/ ysyx_24120009_core__DOT__wbu__DOT__dmem_rdata_o;
         IData/*31:0*/ ysyx_24120009_core__DOT__wbu__DOT__wb_mux__DOT__i1__DOT__lut_out;
-        IData/*31:0*/ __Vfunc_ysyx_24120009_core__DOT__ifu__DOT__sram_inst__DOT__pmem_read__2__Vfuncout;
+        IData/*31:0*/ __Vfunc_ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__sram_inst__DOT__pmem_read__2__Vfuncout;
         IData/*31:0*/ __Vfunc_ysyx_24120009_core__DOT__mem__DOT__LSU__DOT__pmem_read__4__Vfuncout;
         IData/*31:0*/ __VstlIterCount;
         IData/*31:0*/ __VactIterCount;

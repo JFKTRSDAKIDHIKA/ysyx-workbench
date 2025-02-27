@@ -53,14 +53,14 @@ module ysyx_24120009_IFU (
   });
   wire [`ysyx_24120009_DATA_WIDTH-1:0] exception = `ysyx_24120009_DATA_WIDTH'b0; // 占位定义，默认无异常
 
-  // use state machine to control the IFU logic
+  // Use state machine to control the IFU logic
   reg [2:0] state;
   localparam IDLE        = 3'b000,
              FETCH_REQ   = 3'b001,
              FETCH_WAIT  = 3'b010,
              FETCH_DONE  = 3'b011;
 
-  // state machine logic 
+  // State machine logic 
   always @(posedge clk or posedge rst) begin
     if (rst) begin
       state <= IDLE;
@@ -104,31 +104,45 @@ module ysyx_24120009_IFU (
         default: begin
           state <= IDLE;
           inst_valid <= 1'b0;
+          sram_rd_req <= 1'b0;
         end
       endcase
     end
   end
 
 
-  // Use SRAM module to read the instruction
+  // Use sram_axi4_lite_wrapper module to read the instruction
   wire [31:0] sram_data_out;
   wire        rd_res_valid;
   reg  [31:0] if_inst_buffer;
   reg         sram_rd_req;
 
-  ysyx_24120009_SRAM sram_inst (
+  // Instantiate sram_axi4_lite_wrapper module
+  ysyx_24120009_sram_axi4_lite_wrapper axi4_ifu (
+    // Clock and reset signals
     .clk(clk),
     .rst(rst),
-    .rd_req_valid(sram_rd_req),
-    .addr(pc),       
-    .data_out(sram_data_out),
-    .rd_res_valid(rd_res_valid),
-    .wt_req_valid(),
-    .waddr(),
-    .wdata(),
-    .wmask(),
-    .wt_res_valid()
+    // AXI4-Lite Write Channel
+    .awvalid(1'b0),
+    .awready(),   
+    .awaddr(32'b0),
+    .wvalid(1'b0),
+    .wready(),    
+    .wdata(32'b0),
+    .wstrb(8'b0), 
+    .bvalid(),    
+    .bready(1'b0),
+    .bresp(),     
+    // AXI4-Lite Read Channel
+    .arvalid(sram_rd_req),
+    .arready(),
+    .araddr(pc),
+    .rvalid(rd_res_valid),
+    .rready(1'b1),
+    .rdata(sram_data_out),
+    .rresp()
   );
+
 
   assign inst_o = if_inst_buffer;   
 
