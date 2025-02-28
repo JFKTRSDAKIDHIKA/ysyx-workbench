@@ -5,7 +5,7 @@ module ysyx_24120009_WBU (
     input wire clk,
     input wire rst,
     // WBU interact with register file 
-    output wire [`ysyx_24120009_DATA_WIDTH-1:0] reg_write_data,
+    output reg [`ysyx_24120009_DATA_WIDTH-1:0] reg_write_data_delayed,
     output     [`ysyx_24120009_REG_ADDR_WIDTH-1:0]   rd_addr_o,
     output reg rf_we,
     // Signals passed from MEM
@@ -138,7 +138,7 @@ module ysyx_24120009_WBU (
     wire    [`ysyx_24120009_DATA_WIDTH-1:0] dmem_addr_o;
     wire     [`ysyx_24120009_DATA_WIDTH-1:0] dmem_rdata_o;
     reg [1:0] wb_sel;
-    reg [`ysyx_24120009_DATA_WIDTH-1:0] dmem_rdata_o_delayed;
+    reg [`ysyx_24120009_DATA_WIDTH-1:0] reg_write_data;
     assign pc_plus4_debug = pc_plus4;
     assign wb_sel_debug = wb_sel;
     assign opcode_debug = inst_o[6:0];
@@ -146,11 +146,9 @@ module ysyx_24120009_WBU (
 
     always @(posedge clk or posedge rst) begin
         if (rst) begin
-            // Reset the delayed value to 0 on reset
-            dmem_rdata_o_delayed <= {`ysyx_24120009_DATA_WIDTH{1'b0}};
+            reg_write_data_delayed <= {`ysyx_24120009_DATA_WIDTH{1'b0}};
         end else begin
-            // Capture the current value of dmem_rdata_o
-            dmem_rdata_o_delayed <= dmem_rdata_o;
+            reg_write_data_delayed <= reg_write_data;
         end
     end
 
@@ -167,7 +165,7 @@ module ysyx_24120009_WBU (
             2'b00, {`ysyx_24120009_DATA_WIDTH{1'b0}}, // Example value, replace with actual data
             2'b01, pc_plus4,
             2'b10, result_o,
-            2'b11, dmem_rdata_o_delayed  // data memory read data
+            2'b11, dmem_rdata_o  // data memory read data
         })
     );
 
