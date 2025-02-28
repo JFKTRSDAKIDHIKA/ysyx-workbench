@@ -34,7 +34,8 @@ module ysyx_24120009_core (
     output wire [1:0] mem_ctl_state_debug,
     output wire [1:0] axi4_mem_state_debug,
     output wire [1:0] idu_state_debug,
-    output wire inst_valid_debug
+    output wire inst_valid_debug,
+    output wire [1:0] arbiter_state_debug
 );
 
     // Debug signal declaration and assignment
@@ -234,7 +235,9 @@ module ysyx_24120009_core (
         .araddr_wire(araddr_wire),
         .rvalid_wire(rvalid_wire),
         .rready_wire(rready_wire),
-        .rdata_wire(rdata_wire)
+        .rdata_wire(rdata_wire),
+        // debug signals
+        .arbiter_state_debug(arbiter_state_debug)
     );
             
     // Fetch instruction

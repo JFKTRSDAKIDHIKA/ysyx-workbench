@@ -407,6 +407,7 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root___nba_sequent__TOP__0(Vysyx_241
     vlSelf->ysyx_24120009_core__DOT__ifu_arvalid = __Vdly__ysyx_24120009_core__DOT__ifu_arvalid;
     vlSelf->ysyx_24120009_core__DOT__bus_arbiter_inst__DOT__state 
         = __Vdly__ysyx_24120009_core__DOT__bus_arbiter_inst__DOT__state;
+    vlSelf->arbiter_state_debug = vlSelf->ysyx_24120009_core__DOT__bus_arbiter_inst__DOT__state;
     vlSelf->rd_res_valid_debug = vlSelf->ysyx_24120009_core__DOT__ifu_rvalid;
     vlSelf->ysyx_24120009_core__DOT__mem__DOT__alignment_network__DOT__mem_mux__DOT__i0__DOT__pair_list[2U] 
         = (0x200000000ULL | (QData)((IData)(vlSelf->ysyx_24120009_core__DOT__mem_rdata)));

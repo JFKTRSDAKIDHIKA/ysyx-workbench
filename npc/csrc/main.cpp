@@ -232,6 +232,7 @@ void tick(Vysyx_24120009_core* top, bool silent_mode ) {
                 << ", ifu_state: " << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->ifu_state_debug)
                 << ", inst_valid: " << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->inst_valid_debug)
                 << ", idu_state: " << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->idu_state_debug) 
+                << ", arbiter_state: " << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->arbiter_state_debug) 
                 << std::dec << std::endl;
     }
   

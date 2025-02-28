@@ -29,7 +29,7 @@ module ysyx_24120009_MEM (
     // AXI4-Lite Write Channel
     output wire awvalid,
     // Warning: 'awready' signal is not used !
-    output wire [31:0] awaddr,
+    output wire [`ysyx_24120009_DATA_WIDTH-1:0] awaddr,
     output wire wvalid,
     output reg  wready,
     output wire [31:0] wdata,
@@ -111,7 +111,7 @@ module ysyx_24120009_MEM (
     end
 
     // Internal signals
-    reg [`ysyx_24120009_DATA_WIDTH-1:0] dmem_rdata_raw;
+    reg  [`ysyx_24120009_DATA_WIDTH-1:0] dmem_rdata_raw;
     wire [`ysyx_24120009_DATA_WIDTH-1:0] dmem_wdata_raw;
     wire [`ysyx_24120009_DATA_WIDTH-1:0] dmem_wdata;
     wire [7:0] wmask;

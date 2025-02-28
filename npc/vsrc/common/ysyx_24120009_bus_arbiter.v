@@ -43,7 +43,10 @@ module ysyx_24120009_bus_arbiter (
     output reg [31:0] araddr_wire, // Memory read address
     input wire rvalid_wire,    // Memory read data valid
     output reg rready_wire,    // Memory read data ready
-    input wire [31:0] rdata_wire   // Memory read data
+    input wire [31:0] rdata_wire,  // Memory read data
+
+    // debug signals
+    output wire [1:0] arbiter_state_debug
 );
 
     // State machine states
@@ -53,6 +56,8 @@ module ysyx_24120009_bus_arbiter (
     localparam mem_READ = 2'b11; // LSU read transaction
 
     reg [1:0] state; // Current state
+
+    assign arbiter_state_debug = state;
 
     // Single always block for state machine and output logic
     always @(posedge clk or posedge rst) begin
