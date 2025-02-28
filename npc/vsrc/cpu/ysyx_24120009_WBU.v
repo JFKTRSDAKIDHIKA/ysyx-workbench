@@ -50,7 +50,6 @@ module ysyx_24120009_WBU (
                         wbu_active <= 0;
                         pc_wen <= 0;
                     if (mem_access_done == 1'b1) begin
-                        dmem_rdata_i_delay <= dmem_rdata_i;
                         state <= WB;
                     end
                 end
@@ -115,8 +114,19 @@ module ysyx_24120009_WBU (
     ) dmem_rdata_reg_WBU (
         .clk (clk),
         .rst (rst),
-        .din (dmem_rdata_i_delay),
+        .din (dmem_rdata_i),
         .dout(dmem_rdata_o),
+        .wen (1'b1)
+    );
+
+    ysyx_24120009_Reg #(
+        .WIDTH(`ysyx_24120009_DATA_WIDTH),
+        .RESET_VAL(`ysyx_24120009_RESET_PC)
+    ) dmem_rdata_reg_duplicate_WBU (
+        .clk (clk),
+        .rst (rst),
+        .din (dmem_rdata_o),
+        .dout(dmem_rdata_o_twice),
         .wen (1'b1)
     );
 
@@ -138,12 +148,12 @@ module ysyx_24120009_WBU (
     wire     [`ysyx_24120009_DATA_WIDTH-1:0] result_o;
     wire    [`ysyx_24120009_DATA_WIDTH-1:0] dmem_addr_o;
     wire     [`ysyx_24120009_DATA_WIDTH-1:0] dmem_rdata_o;
+    wire     [`ysyx_24120009_DATA_WIDTH-1:0] dmem_rdata_o_twice;
     reg [1:0] wb_sel;
     assign pc_plus4_debug = pc_plus4;
     assign wb_sel_debug = wb_sel;
     assign opcode_debug = inst_o[6:0];
     assign result_from_WB_debug = result_o;
-    reg  [`ysyx_24120009_DATA_WIDTH-1:0]      dmem_rdata_i_delay;
 
 
     // reg_write_data signal generation
@@ -159,7 +169,7 @@ module ysyx_24120009_WBU (
             2'b00, {`ysyx_24120009_DATA_WIDTH{1'b0}}, // Example value, replace with actual data
             2'b01, pc_plus4,
             2'b10, result_o,
-            2'b11, dmem_rdata_o // data memory read data
+            2'b11, dmem_rdata_o_twice // data memory read data
         })
     );
 
