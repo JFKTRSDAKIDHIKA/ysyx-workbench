@@ -382,7 +382,7 @@ module ysyx_24120009_core (
         .clk(clk),
         .rst(rst),
         // WBU interact with register file 
-        .reg_write_data_delayed(reg_write_data),
+        .reg_write_data(reg_write_data),
         .rd_addr_o(waddr),
         .rf_we(rf_we),
         // Signals passed from MEM
