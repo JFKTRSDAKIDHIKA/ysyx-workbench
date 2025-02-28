@@ -50,12 +50,12 @@ class Vysyx_24120009_core___024root final : public VerilatedModule {
         CData/*2:0*/ ysyx_24120009_core__DOT__ifu__DOT__state;
         CData/*0:0*/ ysyx_24120009_core__DOT__ifu__DOT__rvalid;
         CData/*0:0*/ ysyx_24120009_core__DOT__ifu__DOT__arvalid;
+        CData/*0:0*/ ysyx_24120009_core__DOT__ifu__DOT__arready;
         CData/*0:0*/ ysyx_24120009_core__DOT__ifu__DOT__mux_pc_sel__DOT__i0__DOT__hit;
         CData/*0:0*/ ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__awready;
         CData/*0:0*/ ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__wready;
         CData/*0:0*/ ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__bvalid;
         CData/*1:0*/ ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__bresp;
-        CData/*0:0*/ ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__arready;
         CData/*1:0*/ ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__rresp;
         CData/*0:0*/ ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__sram_rd_res_valid;
         CData/*0:0*/ ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__sram_wt_res_valid;

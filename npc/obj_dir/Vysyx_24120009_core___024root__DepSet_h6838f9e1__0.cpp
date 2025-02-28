@@ -156,7 +156,9 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root___nba_sequent__TOP__0(Vysyx_241
         } else if ((1U & (IData)(vlSelf->ysyx_24120009_core__DOT__ifu__DOT__state))) {
             vlSelf->ysyx_24120009_core__DOT__inst_valid = 0U;
             __Vdly__ysyx_24120009_core__DOT__ifu__DOT__arvalid = 1U;
-            __Vdly__ysyx_24120009_core__DOT__ifu__DOT__state = 2U;
+            if (vlSelf->ysyx_24120009_core__DOT__ifu__DOT__arready) {
+                __Vdly__ysyx_24120009_core__DOT__ifu__DOT__state = 2U;
+            }
         } else {
             vlSelf->ysyx_24120009_core__DOT__inst_valid = 0U;
             __Vdly__ysyx_24120009_core__DOT__ifu__DOT__arvalid = 0U;
@@ -248,7 +250,7 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root___nba_sequent__TOP__0(Vysyx_241
         vlSelf->ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__wready = 0U;
         vlSelf->ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__bvalid = 0U;
         vlSelf->ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__bresp = 0U;
-        vlSelf->ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__arready = 0U;
+        vlSelf->ysyx_24120009_core__DOT__ifu__DOT__arready = 0U;
         vlSelf->ysyx_24120009_core__DOT__ifu__DOT__rvalid = 0U;
         vlSelf->ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__rresp = 0U;
         vlSelf->ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__rd_req_valid = 0U;
@@ -262,12 +264,12 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root___nba_sequent__TOP__0(Vysyx_241
             vlSelf->ysyx_24120009_core__DOT__ifu__DOT__rvalid = 0U;
             vlSelf->ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__awready = 1U;
             vlSelf->ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__wready = 1U;
-            vlSelf->ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__arready = 1U;
+            vlSelf->ysyx_24120009_core__DOT__ifu__DOT__arready = 1U;
             if (vlSelf->ysyx_24120009_core__DOT__ifu__DOT__arvalid) {
                 vlSelf->ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__addr_reg 
                     = vlSelf->ysyx_24120009_core__DOT__ifu__DOT__pc;
                 __Vdly__ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__state = 2U;
-                vlSelf->ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__arready = 0U;
+                vlSelf->ysyx_24120009_core__DOT__ifu__DOT__arready = 0U;
             }
         } else if ((1U == (IData)(vlSelf->ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__state))) {
             vlSelf->ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__wt_req_valid = 0U;

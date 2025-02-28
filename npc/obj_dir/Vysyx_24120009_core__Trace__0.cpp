@@ -113,11 +113,11 @@ void Vysyx_24120009_core___024root__trace_chg_sub_0(Vysyx_24120009_core___024roo
         bufp->chgBit(oldp+78,(vlSelf->ysyx_24120009_core__DOT__ifu__DOT__rvalid));
         bufp->chgIData(oldp+79,(vlSelf->ysyx_24120009_core__DOT__ifu__DOT__if_inst_buffer),32);
         bufp->chgBit(oldp+80,(vlSelf->ysyx_24120009_core__DOT__ifu__DOT__arvalid));
-        bufp->chgBit(oldp+81,(vlSelf->ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__awready));
-        bufp->chgBit(oldp+82,(vlSelf->ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__wready));
-        bufp->chgBit(oldp+83,(vlSelf->ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__bvalid));
-        bufp->chgCData(oldp+84,(vlSelf->ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__bresp),2);
-        bufp->chgBit(oldp+85,(vlSelf->ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__arready));
+        bufp->chgBit(oldp+81,(vlSelf->ysyx_24120009_core__DOT__ifu__DOT__arready));
+        bufp->chgBit(oldp+82,(vlSelf->ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__awready));
+        bufp->chgBit(oldp+83,(vlSelf->ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__wready));
+        bufp->chgBit(oldp+84,(vlSelf->ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__bvalid));
+        bufp->chgCData(oldp+85,(vlSelf->ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__bresp),2);
         bufp->chgCData(oldp+86,(vlSelf->ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__rresp),2);
         bufp->chgIData(oldp+87,(vlSelf->ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__sram_data_out),32);
         bufp->chgBit(oldp+88,(vlSelf->ysyx_24120009_core__DOT__ifu__DOT__axi4_ifu__DOT__sram_rd_res_valid));

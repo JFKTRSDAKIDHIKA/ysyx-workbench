@@ -52,7 +52,9 @@ module ysyx_24120009_IFU (
         FETCH_REQ: begin
           inst_valid <= 1'b0;
           arvalid <= 1'b1;  
-          state <= FETCH_WAIT; 
+          if (arready) begin
+            state <= FETCH_WAIT; 
+          end
         end
 
         FETCH_WAIT: begin
@@ -120,6 +122,7 @@ module ysyx_24120009_IFU (
   wire        rvalid;
   reg  [31:0] if_inst_buffer;
   reg         arvalid;
+  wire        arready;
 
   // Instantiate sram_axi4_lite_wrapper module
   ysyx_24120009_sram_axi4_lite_wrapper axi4_ifu (
@@ -139,7 +142,7 @@ module ysyx_24120009_IFU (
     .bresp(),     
     // AXI4-Lite Read Channel
     .arvalid(arvalid),
-    .arready(),
+    .arready(arready),
     .araddr(pc),
     .rvalid(rvalid),
     .rready(1'b1),
