@@ -20,7 +20,7 @@
 
 // #define ENABLE_MEMORY_CHECK 1
 // #define DIFFTEST 1
-#define is_silent_mode 1
+#define is_silent_mode 0
 
 // Declare global variables
 Vysyx_24120009_core* top;  // Top module (global)
@@ -204,38 +204,39 @@ void tick(Vysyx_24120009_core* top, bool silent_mode ) {
     top->clk = 0;
     top->eval();
     
-    if (!silent_mode ) {
-      // print some debug info when registers have yet been updated!
+    if (!silent_mode) {
       printf("------------------------------------------------------------------------------\n");
-      std::cout << "Op1: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->Op1_debug
-                << ", Op2: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->Op2_debug
-                << ", wb_data: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->reg_write_data_debug
-                << ", Instruction: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->inst_debug
-                << ", PC: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->pc_debug
-                << ", PC_PLUS4: 0x" << std::hex << static_cast<int>(top->pc_plus4_debug) // Cast to int for proper printing
-                << ", rf_we_debug: 0x" << std::hex << static_cast<int>(top->rf_we_debug) // Cast to int for proper printing
-                << ", wb_sel_debug: 0x" << std::hex << static_cast<int>(top->wb_sel_debug) // Cast to int for proper printing
-                << ", opcode: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->opcode_debug) // Cast to int for proper printing
-                << ", pc_wen: 0x" << std::hex << static_cast<int>(top->pc_wen_debug) // Cast to int for proper printing
-                << ", result_from_EXU: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->result_from_EXU_to_MEM_debug
-                << ", result_from_MEM: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->result_from_MEM_to_WBU_debug
-                << ", result_from_WB: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->result_from_WB_debug
-                << ", alu_op: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->alu_op_debug) // Cast to int for proper printing
-                << ", inst_from_EXU_to_MEM_debug: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->inst_from_EXU_to_MEM_debug
+      std::cout << "ALU Operands: "
+                << "Op1: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->Op1_debug
+                << ", Op2: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->Op2_debug << "\n"
+                << "Instruction Info: "
+                << "Instruction: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->inst_debug
+                << ", PC: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->pc_debug << "\n"
+                << "Write-Back Info: "
+                << "wb_data: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->reg_write_data_debug
+                << ", rf_we_debug: 0x" << std::hex << static_cast<int>(top->rf_we_debug)
+                << ", wb_sel_debug: 0x" << std::hex << static_cast<int>(top->wb_sel_debug) << "\n"
+                << "Control Signals: "
+                << "pc_wen: 0x" << std::hex << static_cast<int>(top->pc_wen_debug)
+                << ", inst_valid: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->inst_valid_debug) << "\n"
+                << "Pipeline Results: "
+                << "EXU Result: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->result_from_EXU_to_MEM_debug
+                << ", MEM Result: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->result_from_MEM_to_WBU_debug
+                << ", WB Result: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->result_from_WB_debug << "\n"
+                << "Memory Info: "
+                << "dmem_rdata_from_MEM: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->dmem_rdata_from_MEM_to_WBU_debug
                 << ", mem_active: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->mem_active_debug)
-                << ", mem_access: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->mem_access_done_debug)
-                << ". dmem_rdata_from_MEM: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->dmem_rdata_from_MEM_to_WBU_debug
-                << ", wt_res_valid: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->wt_res_valid_debug)
-                << ", rd_res_valid_ifu: " << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->rd_res_valid_debug) 
-                << ", mem_ctl_state: " << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->mem_ctl_state_debug) 
-                << ", ifu_state: " << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->ifu_state_debug)
-                << ", inst_valid: " << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->inst_valid_debug)
-                << ", idu_state: " << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->idu_state_debug) 
-                << ", arbiter_state: " << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->arbiter_state_debug) 
-                << ", axi4_lite_state: " << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->axi4_lite_state_debug) 
+                << ", mem_access_done: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->mem_access_done_debug) << "\n"
+                << "State Machines: "
+                << "ifu_state: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->ifu_state_debug)
+                << ", idu_state: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->idu_state_debug)
+                << ", mem_ctl_state: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->mem_ctl_state_debug)
+                << ", arbiter_state: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->arbiter_state_debug)
+                << ", axi4_lite_state: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->axi4_lite_state_debug) << "\n"
+                << "ALU Opcode: "
+                << "alu_op: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->alu_op_debug)
                 << std::dec << std::endl;
-    }
-  
+  }
 /*
     // print some debug info of memory write
     if (top->mem_wen_debug == 1 && !silent_mode ) {  
