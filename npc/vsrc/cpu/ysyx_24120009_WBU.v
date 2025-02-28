@@ -51,11 +51,12 @@ module ysyx_24120009_WBU (
                         pc_wen <= 0;
                     if (mem_access_done == 1'b1) begin
                         state <= WB;
+                        wbu_active <= 1;
                     end
                 end
 
                 WB: begin
-                        wbu_active <= 1;
+                        wbu_active <= 0;
                         pc_wen <= 0;
                         state <= DONE;
                 end

@@ -1438,7 +1438,7 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root___nba_sequent__TOP__1(Vysyx_241
 
 extern const VlUnpacked<CData/*2:0*/, 16> Vysyx_24120009_core__ConstPool__TABLE_h977a84d4_0;
 extern const VlUnpacked<CData/*1:0*/, 16> Vysyx_24120009_core__ConstPool__TABLE_hfc83a919_0;
-extern const VlUnpacked<CData/*0:0*/, 16> Vysyx_24120009_core__ConstPool__TABLE_ha1b09cb8_0;
+extern const VlUnpacked<CData/*0:0*/, 16> Vysyx_24120009_core__ConstPool__TABLE_h16dbd3c0_0;
 extern const VlUnpacked<CData/*0:0*/, 16> Vysyx_24120009_core__ConstPool__TABLE_h904e77fc_0;
 
 VL_INLINE_OPT void Vysyx_24120009_core___024root___nba_sequent__TOP__2(Vysyx_24120009_core___024root* vlSelf) {
@@ -1459,7 +1459,7 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root___nba_sequent__TOP__2(Vysyx_241
             = Vysyx_24120009_core__ConstPool__TABLE_hfc83a919_0
             [__Vtableidx2];
     }
-    vlSelf->wbu_active_debug = Vysyx_24120009_core__ConstPool__TABLE_ha1b09cb8_0
+    vlSelf->wbu_active_debug = Vysyx_24120009_core__ConstPool__TABLE_h16dbd3c0_0
         [__Vtableidx2];
     if ((4U & Vysyx_24120009_core__ConstPool__TABLE_h977a84d4_0
          [__Vtableidx2])) {
