@@ -445,6 +445,7 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root__trace_init_sub__TOP__0(Vysyx_24
     tracep->declBit(c+94,"rd_req_valid", false,-1);
     tracep->declBit(c+95,"wt_req_valid", false,-1);
     tracep->pushNamePrefix("sram_inst ");
+    tracep->declBus(c+464,"DELAY_CYCLES", false,-1, 31,0);
     tracep->declBit(c+406,"clk", false,-1);
     tracep->declBit(c+407,"rst", false,-1);
     tracep->declBit(c+94,"rd_req_valid", false,-1);
@@ -623,6 +624,7 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root__trace_init_sub__TOP__0(Vysyx_24
     tracep->declBit(c+124,"rd_req_valid", false,-1);
     tracep->declBit(c+125,"wt_req_valid", false,-1);
     tracep->pushNamePrefix("sram_inst ");
+    tracep->declBus(c+464,"DELAY_CYCLES", false,-1, 31,0);
     tracep->declBit(c+406,"clk", false,-1);
     tracep->declBit(c+407,"rst", false,-1);
     tracep->declBit(c+124,"rd_req_valid", false,-1);
