@@ -2,7 +2,7 @@
 `include "vsrc/include/ysyx_24120009_defs.vh"
 
 module ysyx_24120009_SRAM #(
-  parameter DELAY_CYCLES = 1  // Default delay is 1 cycle
+  parameter DELAY_CYCLES = 20  // Default delay is 1 cycle
 )(
   // Clock and reset signals
   input                                                       clk,       
