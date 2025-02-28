@@ -51,6 +51,7 @@ module ysyx_24120009_MEM (
                 IDLE: begin
                         mem_en <= 0;
                         mem_wen <= 0;
+                        rready <= 0;
                     if (EXU_done == 1) begin
                         state <= MEM_ACCESS;
                         mem_en <= 1;
@@ -61,12 +62,14 @@ module ysyx_24120009_MEM (
                 MEM_ACCESS: begin
                         mem_en <= 0;
                         mem_wen <= 0;
+                        rready <= 1;
                     if (wt_res_valid || rvalid) begin
                         state <= DONE;
                     end
                 end
 
                 DONE: begin
+                        rready <= 0;
                         mem_en <= 0;
                         mem_wen <= 0;
                         state <= IDLE;
@@ -75,6 +78,7 @@ module ysyx_24120009_MEM (
                     state <= IDLE;
                     mem_en <= 0;
                     mem_wen <= 0;
+                    rready <= 0;
                 end
             endcase
         end
@@ -96,6 +100,8 @@ module ysyx_24120009_MEM (
     // AXI4-Lite signals
     wire arvalid = mem_en && !mem_wen;
     wire wt_req_valid = mem_en && mem_wen;
+    wire arready;
+    reg rready;
 
     // Instantiate sram_axi4_lite_wrapper module
     ysyx_24120009_sram_axi4_lite_wrapper axi4_mem (
@@ -115,10 +121,10 @@ module ysyx_24120009_MEM (
         .bresp(),
         // AXI4-Lite Read Channel
         .arvalid(arvalid),
-        .arready(),
+        .arready(arready),
         .araddr(dmem_addr_o),
         .rvalid(rvalid),
-        .rready(1'b1),
+        .rready(rready),
         .rdata(dmem_rdata_raw),
         .rresp(),
         // debug signals
