@@ -228,7 +228,6 @@ void tick(Vysyx_24120009_core* top, bool silent_mode ) {
                 << ", wt_res_valid: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->wt_res_valid_debug)
                 << ", rd_res_valid_ifu: " << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->rd_res_valid_debug) 
                 << ", mem_ctl_state: " << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->mem_ctl_state_debug) 
-                << ", axi4_mem_state: " << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->axi4_mem_state_debug) 
                 << ", ifu_state: " << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->ifu_state_debug)
                 << ", inst_valid: " << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->inst_valid_debug)
                 << ", idu_state: " << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->idu_state_debug) 
