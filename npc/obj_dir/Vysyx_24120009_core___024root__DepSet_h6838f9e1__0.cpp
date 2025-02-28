@@ -321,10 +321,6 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root___nba_sequent__TOP__0(Vysyx_241
                  & (IData)(vlSelf->ysyx_24120009_core__DOT__ifu_rready))) {
                 __Vdly__ysyx_24120009_core__DOT__bus_arbiter_inst__DOT__state = 0U;
             }
-            vlSelf->ysyx_24120009_core__DOT__arvalid_wire 
-                = vlSelf->ysyx_24120009_core__DOT__ifu_arvalid;
-            vlSelf->ysyx_24120009_core__DOT__araddr_wire 
-                = vlSelf->pc_debug;
             vlSelf->ysyx_24120009_core__DOT__ifu_arready 
                 = vlSelf->ysyx_24120009_core__DOT__arready_wire;
             vlSelf->ysyx_24120009_core__DOT__ifu_rvalid 
@@ -335,6 +331,10 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root___nba_sequent__TOP__0(Vysyx_241
                 = vlSelf->ysyx_24120009_core__DOT__ifu_rready;
         } else if (vlSelf->ysyx_24120009_core__DOT__ifu_arvalid) {
             __Vdly__ysyx_24120009_core__DOT__bus_arbiter_inst__DOT__state = 1U;
+            vlSelf->ysyx_24120009_core__DOT__arvalid_wire 
+                = vlSelf->ysyx_24120009_core__DOT__ifu_arvalid;
+            vlSelf->ysyx_24120009_core__DOT__araddr_wire 
+                = vlSelf->pc_debug;
         } else if (vlSelf->ysyx_24120009_core__DOT__mem_awvalid) {
             __Vdly__ysyx_24120009_core__DOT__bus_arbiter_inst__DOT__state = 2U;
             vlSelf->ysyx_24120009_core__DOT__awvalid_wire 
