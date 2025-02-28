@@ -1371,7 +1371,6 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root___ctor_var_reset(Vysyx_24120009_
     vlSelf->ysyx_24120009_core__DOT__ifu_rready = VL_RAND_RESET_I(1);
     vlSelf->ysyx_24120009_core__DOT__ifu_rdata = VL_RAND_RESET_I(32);
     vlSelf->ysyx_24120009_core__DOT__mem_awvalid = VL_RAND_RESET_I(1);
-    vlSelf->ysyx_24120009_core__DOT__mem_awready = VL_RAND_RESET_I(1);
     vlSelf->ysyx_24120009_core__DOT__mem_wready = VL_RAND_RESET_I(1);
     vlSelf->ysyx_24120009_core__DOT__mem_bvalid = VL_RAND_RESET_I(1);
     vlSelf->ysyx_24120009_core__DOT__mem_bready = VL_RAND_RESET_I(1);
@@ -1417,6 +1416,7 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root___ctor_var_reset(Vysyx_24120009_
     vlSelf->ysyx_24120009_core__DOT__axi4_lite_wrapper__DOT__sram_inst__DOT__wdata_delayed = VL_RAND_RESET_I(32);
     vlSelf->ysyx_24120009_core__DOT__axi4_lite_wrapper__DOT__sram_inst__DOT__wmask_delayed = VL_RAND_RESET_I(8);
     vlSelf->ysyx_24120009_core__DOT__axi4_lite_wrapper__DOT__sram_inst__DOT__wt_req_valid_delayed = VL_RAND_RESET_I(1);
+    vlSelf->ysyx_24120009_core__DOT__bus_arbiter_inst__DOT__mem_awready = VL_RAND_RESET_I(1);
     vlSelf->ysyx_24120009_core__DOT__bus_arbiter_inst__DOT__mem_arready = VL_RAND_RESET_I(1);
     vlSelf->ysyx_24120009_core__DOT__bus_arbiter_inst__DOT__state = VL_RAND_RESET_I(2);
     vlSelf->ysyx_24120009_core__DOT__ifu__DOT__state = VL_RAND_RESET_I(3);

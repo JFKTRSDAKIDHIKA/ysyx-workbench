@@ -104,36 +104,35 @@ module ysyx_24120009_core (
     wire [`ysyx_24120009_DATA_WIDTH-1:0] ifu_rdata;
     // Memoey interface (mem)
     wire                                 mem_awvalid;
-    wire                                 mem_awready;
-    wire [31:0]                          mem_awaddr;
+    wire [`ysyx_24120009_DATA_WIDTH-1:0] mem_awaddr;
     wire                                 mem_wvalid;
     wire                                 mem_wready;
-    wire [31:0]                          mem_wdata;
+    wire [`ysyx_24120009_DATA_WIDTH-1:0] mem_wdata;
     wire [7:0]                           mem_wstrb;
     wire                                 mem_bvalid;
     wire                                 mem_bready;
     wire                                 mem_arvalid;
-    wire [31:0]                          mem_araddr;
+    wire [`ysyx_24120009_DATA_WIDTH-1:0] mem_araddr;
     wire                                 mem_rvalid;
     wire                                 mem_rready;
-    wire [31:0]                          mem_rdata;
-    wire awvalid_wire;
-    wire awready_wire;
-    wire [31:0] awaddr_wire;
-    wire wvalid_wire;
-    wire wready_wire;
-    wire [31:0] wdata_wire;
-    wire [7:0] wstrb_wire;
-    wire bvalid_wire;
-    wire bready_wire;
-    wire [1:0] bresp_wire;
-    wire arvalid_wire;
-    wire arready_wire;
-    wire [31:0] araddr_wire;
-    wire rvalid_wire;
-    wire rready_wire;
-    wire [31:0] rdata_wire;
-    wire [1:0] rresp_wire;
+    wire [`ysyx_24120009_DATA_WIDTH-1:0] mem_rdata;
+    wire                                 awvalid_wire;
+    wire                                 awready_wire;
+    wire [`ysyx_24120009_DATA_WIDTH-1:0] awaddr_wire;
+    wire                                 wvalid_wire;
+    wire                                 wready_wire;
+    wire [`ysyx_24120009_DATA_WIDTH-1:0] wdata_wire;
+    wire [7:0]                           wstrb_wire;
+    wire                                 bvalid_wire;
+    wire                                 bready_wire;
+    wire [1:0]                           bresp_wire;
+    wire                                 arvalid_wire;
+    wire                                 arready_wire;
+    wire [`ysyx_24120009_DATA_WIDTH-1:0] araddr_wire;
+    wire                                 rvalid_wire;
+    wire                                 rready_wire;
+    wire [`ysyx_24120009_DATA_WIDTH-1:0] rdata_wire;
+    wire [1:0]                           rresp_wire;
 
     //  Register file address
     wire [`ysyx_24120009_REG_ADDR_WIDTH-1:0] rs1_addr;
@@ -141,7 +140,6 @@ module ysyx_24120009_core (
     wire [`ysyx_24120009_REG_ADDR_WIDTH-1:0] waddr;
     wire [`ysyx_24120009_DATA_WIDTH-1:0] rdata1;
     wire [`ysyx_24120009_DATA_WIDTH-1:0] rdata2;  
-
 
     // Register File
     ysyx_24120009_RegisterFile #(
@@ -167,7 +165,6 @@ module ysyx_24120009_core (
         // Clock and reset signals
         .clk(clk),
         .rst(rst),
-
         // AXI4-Lite Write Channel
         .awvalid(awvalid_wire),
         .awready(awready_wire),
@@ -179,7 +176,6 @@ module ysyx_24120009_core (
         .bvalid(bvalid_wire),
         .bready(bready_wire),
         .bresp(bresp_wire),
-
         // AXI4-Lite Read Channel
         .arvalid(arvalid_wire),
         .arready(arready_wire),
@@ -188,12 +184,11 @@ module ysyx_24120009_core (
         .rready(rready_wire),
         .rdata(rdata_wire),
         .rresp(rresp_wire),
-
         // Debug signals
         .axi4_ifu_state_debug(axi4_lite_state_debug)
     );
 
-    // Instantiate the bus_arbiter module
+    // Arbiter
     ysyx_24120009_bus_arbiter bus_arbiter_inst (
         // Clock and reset signals
         .clk(clk),
@@ -205,9 +200,9 @@ module ysyx_24120009_core (
         .ifu_rvalid(ifu_rvalid),
         .ifu_rready(ifu_rready),
         .ifu_rdata(ifu_rdata),
-        // LSU memory interface
+        // MEM memory interface
         .mem_awvalid(mem_awvalid),
-        .mem_awready(mem_awready),
+        .mem_awready(),
         .mem_awaddr(mem_awaddr),
         .mem_wvalid(mem_wvalid),
         .mem_wready(mem_wready),

@@ -251,7 +251,7 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root___nba_sequent__TOP__0(Vysyx_241
         vlSelf->ysyx_24120009_core__DOT__ifu_arready = 0U;
         vlSelf->ysyx_24120009_core__DOT__ifu_rvalid = 0U;
         vlSelf->ysyx_24120009_core__DOT__ifu_rdata = 0U;
-        vlSelf->ysyx_24120009_core__DOT__mem_awready = 0U;
+        vlSelf->ysyx_24120009_core__DOT__bus_arbiter_inst__DOT__mem_awready = 0U;
         vlSelf->ysyx_24120009_core__DOT__mem_wready = 0U;
         vlSelf->ysyx_24120009_core__DOT__mem_bvalid = 0U;
         vlSelf->ysyx_24120009_core__DOT__bus_arbiter_inst__DOT__mem_arready = 0U;
@@ -273,7 +273,7 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root___nba_sequent__TOP__0(Vysyx_241
         vlSelf->ysyx_24120009_core__DOT__ifu_arready = 0U;
         vlSelf->ysyx_24120009_core__DOT__ifu_rvalid = 0U;
         vlSelf->ysyx_24120009_core__DOT__ifu_rdata = 0U;
-        vlSelf->ysyx_24120009_core__DOT__mem_awready = 0U;
+        vlSelf->ysyx_24120009_core__DOT__bus_arbiter_inst__DOT__mem_awready = 0U;
         vlSelf->ysyx_24120009_core__DOT__mem_wready = 0U;
         vlSelf->ysyx_24120009_core__DOT__mem_bvalid = 0U;
         vlSelf->ysyx_24120009_core__DOT__bus_arbiter_inst__DOT__mem_arready = 0U;
@@ -307,7 +307,7 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root___nba_sequent__TOP__0(Vysyx_241
                      & (IData)(vlSelf->ysyx_24120009_core__DOT__mem_bready))) {
                     __Vdly__ysyx_24120009_core__DOT__bus_arbiter_inst__DOT__state = 0U;
                 }
-                vlSelf->ysyx_24120009_core__DOT__mem_awready 
+                vlSelf->ysyx_24120009_core__DOT__bus_arbiter_inst__DOT__mem_awready 
                     = vlSelf->ysyx_24120009_core__DOT__awready_wire;
                 vlSelf->ysyx_24120009_core__DOT__mem_wready 
                     = vlSelf->ysyx_24120009_core__DOT__wready_wire;

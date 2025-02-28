@@ -52,7 +52,6 @@ class Vysyx_24120009_core___024root final : public VerilatedModule {
         CData/*0:0*/ ysyx_24120009_core__DOT__ifu_rvalid;
         CData/*0:0*/ ysyx_24120009_core__DOT__ifu_rready;
         CData/*0:0*/ ysyx_24120009_core__DOT__mem_awvalid;
-        CData/*0:0*/ ysyx_24120009_core__DOT__mem_awready;
         CData/*0:0*/ ysyx_24120009_core__DOT__mem_wready;
         CData/*0:0*/ ysyx_24120009_core__DOT__mem_bvalid;
         CData/*0:0*/ ysyx_24120009_core__DOT__mem_bready;
@@ -79,11 +78,12 @@ class Vysyx_24120009_core___024root final : public VerilatedModule {
         CData/*7:0*/ ysyx_24120009_core__DOT__axi4_lite_wrapper__DOT__wstrb_reg;
         CData/*0:0*/ ysyx_24120009_core__DOT__axi4_lite_wrapper__DOT__rd_req_valid;
         CData/*0:0*/ ysyx_24120009_core__DOT__axi4_lite_wrapper__DOT__wt_req_valid;
+        CData/*0:0*/ ysyx_24120009_core__DOT__axi4_lite_wrapper__DOT__sram_inst__DOT__rd_req_valid_delayed;
     };
     struct {
-        CData/*0:0*/ ysyx_24120009_core__DOT__axi4_lite_wrapper__DOT__sram_inst__DOT__rd_req_valid_delayed;
         CData/*7:0*/ ysyx_24120009_core__DOT__axi4_lite_wrapper__DOT__sram_inst__DOT__wmask_delayed;
         CData/*0:0*/ ysyx_24120009_core__DOT__axi4_lite_wrapper__DOT__sram_inst__DOT__wt_req_valid_delayed;
+        CData/*0:0*/ ysyx_24120009_core__DOT__bus_arbiter_inst__DOT__mem_awready;
         CData/*0:0*/ ysyx_24120009_core__DOT__bus_arbiter_inst__DOT__mem_arready;
         CData/*1:0*/ ysyx_24120009_core__DOT__bus_arbiter_inst__DOT__state;
         CData/*2:0*/ ysyx_24120009_core__DOT__ifu__DOT__state;
