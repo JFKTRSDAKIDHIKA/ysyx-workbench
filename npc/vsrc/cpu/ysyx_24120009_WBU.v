@@ -50,13 +50,13 @@ module ysyx_24120009_WBU (
                         wbu_active <= 0;
                         pc_wen <= 0;
                     if (mem_access_done == 1'b1) begin
+                        dmem_rdata_i_delay <= dmem_rdata_i;
                         state <= WB;
-                        wbu_active <= 1;
                     end
                 end
 
                 WB: begin
-                        wbu_active <= 0;
+                        wbu_active <= 1;
                         pc_wen <= 0;
                         state <= DONE;
                 end
@@ -115,7 +115,7 @@ module ysyx_24120009_WBU (
     ) dmem_rdata_reg_WBU (
         .clk (clk),
         .rst (rst),
-        .din (dmem_rdata_i),
+        .din (dmem_rdata_i_delay),
         .dout(dmem_rdata_o),
         .wen (1'b1)
     );
@@ -143,6 +143,7 @@ module ysyx_24120009_WBU (
     assign wb_sel_debug = wb_sel;
     assign opcode_debug = inst_o[6:0];
     assign result_from_WB_debug = result_o;
+    reg  [`ysyx_24120009_DATA_WIDTH-1:0]      dmem_rdata_i_delay;
 
 
     // reg_write_data signal generation

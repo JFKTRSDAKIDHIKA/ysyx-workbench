@@ -163,7 +163,7 @@ void Vysyx_24120009_core___024root__trace_chg_sub_0(Vysyx_24120009_core___024roo
         bufp->chgBit(oldp+128,(vlSelf->ysyx_24120009_core__DOT__mem__DOT__mem_wen));
     }
     if (VL_UNLIKELY((vlSelf->__Vm_traceActivity[1U] 
-                     | vlSelf->__Vm_traceActivity[3U]))) {
+                     | vlSelf->__Vm_traceActivity[4U]))) {
         __Vtemp_hf0c5ea7d__0[0U] = (IData)((0x100000000ULL 
                                             | (QData)((IData)(
                                                               (((- (IData)(
@@ -651,60 +651,63 @@ void Vysyx_24120009_core___024root__trace_chg_sub_0(Vysyx_24120009_core___024roo
         bufp->chgBit(oldp+394,(vlSelf->ysyx_24120009_core__DOT__wbu__DOT__wb_mux__DOT__i1__DOT__hit));
     }
     if (VL_UNLIKELY(vlSelf->__Vm_traceActivity[3U])) {
-        bufp->chgBit(oldp+395,(vlSelf->ysyx_24120009_core__DOT__rf_we));
-        bufp->chgIData(oldp+396,(vlSelf->ysyx_24120009_core__DOT__dmem_rdata_from_MEM_to_WBU),32);
-        bufp->chgIData(oldp+397,(vlSelf->ysyx_24120009_core__DOT__mem__DOT__alignment_network__DOT__shifted_data),32);
-        bufp->chgIData(oldp+398,((0xffU & vlSelf->ysyx_24120009_core__DOT__mem__DOT__alignment_network__DOT__shifted_data)),32);
-        bufp->chgIData(oldp+399,((0xffffU & vlSelf->ysyx_24120009_core__DOT__mem__DOT__alignment_network__DOT__shifted_data)),32);
-        bufp->chgIData(oldp+400,((((- (IData)((1U & 
+        bufp->chgBit(oldp+395,(vlSelf->ysyx_24120009_core__DOT__pc_wen));
+        bufp->chgCData(oldp+396,(vlSelf->ysyx_24120009_core__DOT__wbu__DOT__state),2);
+        bufp->chgIData(oldp+397,(vlSelf->ysyx_24120009_core__DOT__wbu__DOT__dmem_rdata_i_delay),32);
+    }
+    if (VL_UNLIKELY(vlSelf->__Vm_traceActivity[4U])) {
+        bufp->chgBit(oldp+398,(vlSelf->ysyx_24120009_core__DOT__rf_we));
+        bufp->chgIData(oldp+399,(vlSelf->ysyx_24120009_core__DOT__dmem_rdata_from_MEM_to_WBU),32);
+        bufp->chgIData(oldp+400,(vlSelf->ysyx_24120009_core__DOT__mem__DOT__alignment_network__DOT__shifted_data),32);
+        bufp->chgIData(oldp+401,((0xffU & vlSelf->ysyx_24120009_core__DOT__mem__DOT__alignment_network__DOT__shifted_data)),32);
+        bufp->chgIData(oldp+402,((0xffffU & vlSelf->ysyx_24120009_core__DOT__mem__DOT__alignment_network__DOT__shifted_data)),32);
+        bufp->chgIData(oldp+403,((((- (IData)((1U & 
                                                (vlSelf->ysyx_24120009_core__DOT__mem__DOT__alignment_network__DOT__shifted_data 
                                                 >> 7U)))) 
                                    << 8U) | (0xffU 
                                              & vlSelf->ysyx_24120009_core__DOT__mem__DOT__alignment_network__DOT__shifted_data))),32);
-        bufp->chgIData(oldp+401,((((- (IData)((1U & 
+        bufp->chgIData(oldp+404,((((- (IData)((1U & 
                                                (vlSelf->ysyx_24120009_core__DOT__mem__DOT__alignment_network__DOT__shifted_data 
                                                 >> 0xfU)))) 
                                    << 0x10U) | (0xffffU 
                                                 & vlSelf->ysyx_24120009_core__DOT__mem__DOT__alignment_network__DOT__shifted_data))),32);
-        bufp->chgIData(oldp+402,(vlSelf->ysyx_24120009_core__DOT__mem__DOT__alignment_network__DOT__mem_mux__DOT__i0__DOT__lut_out),32);
+        bufp->chgIData(oldp+405,(vlSelf->ysyx_24120009_core__DOT__mem__DOT__alignment_network__DOT__mem_mux__DOT__i0__DOT__lut_out),32);
     }
-    bufp->chgBit(oldp+403,(vlSelf->clk));
-    bufp->chgBit(oldp+404,(vlSelf->rst));
-    bufp->chgIData(oldp+405,(vlSelf->pc_debug),32);
-    bufp->chgIData(oldp+406,(vlSelf->inst_debug),32);
-    bufp->chgIData(oldp+407,(vlSelf->reg_write_data_debug),32);
-    bufp->chgIData(oldp+408,(vlSelf->x2_debug),32);
-    bufp->chgCData(oldp+409,(vlSelf->waddr_debug),5);
-    bufp->chgBit(oldp+410,(vlSelf->mem_wen_debug));
-    bufp->chgBit(oldp+411,(vlSelf->mem_en_debug));
-    bufp->chgIData(oldp+412,(vlSelf->Op1_debug),32);
-    bufp->chgIData(oldp+413,(vlSelf->Op2_debug),32);
-    bufp->chgBit(oldp+414,(vlSelf->rf_we_debug));
-    bufp->chgBit(oldp+415,(vlSelf->wbu_active_debug));
-    bufp->chgIData(oldp+416,(vlSelf->imem_addr_debug),32);
-    bufp->chgIData(oldp+417,(vlSelf->pc_plus4_debug),32);
-    bufp->chgCData(oldp+418,(vlSelf->wb_sel_debug),2);
-    bufp->chgCData(oldp+419,(vlSelf->opcode_debug),7);
-    bufp->chgBit(oldp+420,(vlSelf->pc_wen_debug));
-    bufp->chgBit(oldp+421,(vlSelf->mem_active_debug));
-    bufp->chgIData(oldp+422,(vlSelf->result_from_EXU_to_MEM_debug),32);
-    bufp->chgIData(oldp+423,(vlSelf->result_from_MEM_to_WBU_debug),32);
-    bufp->chgIData(oldp+424,(vlSelf->result_from_WB_debug),32);
-    bufp->chgCData(oldp+425,(vlSelf->alu_op_debug),5);
-    bufp->chgIData(oldp+426,(vlSelf->inst_from_EXU_to_MEM_debug),32);
-    bufp->chgBit(oldp+427,(vlSelf->mem_access_done_debug));
-    bufp->chgIData(oldp+428,(vlSelf->dmem_rdata_from_MEM_to_WBU_debug),32);
-    bufp->chgBit(oldp+429,(vlSelf->wt_res_valid_debug));
-    bufp->chgCData(oldp+430,(vlSelf->ifu_state_debug),3);
-    bufp->chgBit(oldp+431,(vlSelf->rd_res_valid_debug));
-    bufp->chgCData(oldp+432,(vlSelf->mem_ctl_state_debug),2);
-    bufp->chgCData(oldp+433,(vlSelf->axi4_mem_state_debug),2);
-    bufp->chgCData(oldp+434,(vlSelf->idu_state_debug),2);
-    bufp->chgBit(oldp+435,(vlSelf->inst_valid_debug));
-    bufp->chgCData(oldp+436,(vlSelf->arbiter_state_debug),2);
-    bufp->chgCData(oldp+437,(vlSelf->axi4_lite_state_debug),2);
-    bufp->chgBit(oldp+438,(vlSelf->ysyx_24120009_core__DOT__pc_wen));
-    bufp->chgCData(oldp+439,(vlSelf->ysyx_24120009_core__DOT__wbu__DOT__state),2);
+    bufp->chgBit(oldp+406,(vlSelf->clk));
+    bufp->chgBit(oldp+407,(vlSelf->rst));
+    bufp->chgIData(oldp+408,(vlSelf->pc_debug),32);
+    bufp->chgIData(oldp+409,(vlSelf->inst_debug),32);
+    bufp->chgIData(oldp+410,(vlSelf->reg_write_data_debug),32);
+    bufp->chgIData(oldp+411,(vlSelf->x2_debug),32);
+    bufp->chgCData(oldp+412,(vlSelf->waddr_debug),5);
+    bufp->chgBit(oldp+413,(vlSelf->mem_wen_debug));
+    bufp->chgBit(oldp+414,(vlSelf->mem_en_debug));
+    bufp->chgIData(oldp+415,(vlSelf->Op1_debug),32);
+    bufp->chgIData(oldp+416,(vlSelf->Op2_debug),32);
+    bufp->chgBit(oldp+417,(vlSelf->rf_we_debug));
+    bufp->chgBit(oldp+418,(vlSelf->wbu_active_debug));
+    bufp->chgIData(oldp+419,(vlSelf->imem_addr_debug),32);
+    bufp->chgIData(oldp+420,(vlSelf->pc_plus4_debug),32);
+    bufp->chgCData(oldp+421,(vlSelf->wb_sel_debug),2);
+    bufp->chgCData(oldp+422,(vlSelf->opcode_debug),7);
+    bufp->chgBit(oldp+423,(vlSelf->pc_wen_debug));
+    bufp->chgBit(oldp+424,(vlSelf->mem_active_debug));
+    bufp->chgIData(oldp+425,(vlSelf->result_from_EXU_to_MEM_debug),32);
+    bufp->chgIData(oldp+426,(vlSelf->result_from_MEM_to_WBU_debug),32);
+    bufp->chgIData(oldp+427,(vlSelf->result_from_WB_debug),32);
+    bufp->chgCData(oldp+428,(vlSelf->alu_op_debug),5);
+    bufp->chgIData(oldp+429,(vlSelf->inst_from_EXU_to_MEM_debug),32);
+    bufp->chgBit(oldp+430,(vlSelf->mem_access_done_debug));
+    bufp->chgIData(oldp+431,(vlSelf->dmem_rdata_from_MEM_to_WBU_debug),32);
+    bufp->chgBit(oldp+432,(vlSelf->wt_res_valid_debug));
+    bufp->chgCData(oldp+433,(vlSelf->ifu_state_debug),3);
+    bufp->chgBit(oldp+434,(vlSelf->rd_res_valid_debug));
+    bufp->chgCData(oldp+435,(vlSelf->mem_ctl_state_debug),2);
+    bufp->chgCData(oldp+436,(vlSelf->axi4_mem_state_debug),2);
+    bufp->chgCData(oldp+437,(vlSelf->idu_state_debug),2);
+    bufp->chgBit(oldp+438,(vlSelf->inst_valid_debug));
+    bufp->chgCData(oldp+439,(vlSelf->arbiter_state_debug),2);
+    bufp->chgCData(oldp+440,(vlSelf->axi4_lite_state_debug),2);
     __Vtemp_h650a5f8e__0[0U] = (IData)((0x300000000ULL 
                                         | (QData)((IData)(vlSelf->ysyx_24120009_core__DOT__wbu__DOT__dmem_rdata_o))));
     __Vtemp_h650a5f8e__0[1U] = ((vlSelf->ysyx_24120009_core__DOT__wbu__DOT__result_o 
@@ -718,7 +721,7 @@ void Vysyx_24120009_core___024root__trace_chg_sub_0(Vysyx_24120009_core___024roo
     __Vtemp_h650a5f8e__0[3U] = (0x10U | (vlSelf->pc_plus4_debug 
                                          >> 0x1cU));
     __Vtemp_h650a5f8e__0[4U] = 0U;
-    bufp->chgWData(oldp+440,(__Vtemp_h650a5f8e__0),136);
+    bufp->chgWData(oldp+441,(__Vtemp_h650a5f8e__0),136);
 }
 
 void Vysyx_24120009_core___024root__trace_cleanup(void* voidSelf, VerilatedVcd* /*unused*/) {
@@ -732,4 +735,5 @@ void Vysyx_24120009_core___024root__trace_cleanup(void* voidSelf, VerilatedVcd* 
     vlSymsp->TOP.__Vm_traceActivity[1U] = 0U;
     vlSymsp->TOP.__Vm_traceActivity[2U] = 0U;
     vlSymsp->TOP.__Vm_traceActivity[3U] = 0U;
+    vlSymsp->TOP.__Vm_traceActivity[4U] = 0U;
 }
