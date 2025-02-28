@@ -18,11 +18,18 @@ module ysyx_24120009_IFU (
   // handshake signals
   output reg                            inst_valid,
   input                                 idu_ready,
+  // Memoey interface
+  output reg                                  arvalid,
+  input  wire                                 arready,
+  output wire [`ysyx_24120009_DATA_WIDTH-1:0] araddr,
+  input wire                                  rvalid,
+  output reg                                  rready,
+  input  wire [`ysyx_24120009_DATA_WIDTH-1:0] rdata,
+  // Warning: Signal 'rresp' is not used !
   // debug signals 
   output [2:0]                          state_debug,
-  output                                rd_res_valid_debug,
-  output [1:0]                          axi4_ifu_state_debug
-);
+  output                                rd_res_valid_debug
+  );
 
   // Use state machine to control the IFU logic
   reg [2:0] state;
@@ -44,6 +51,7 @@ module ysyx_24120009_IFU (
         IDLE: begin
           inst_valid <= 1'b0;
           arvalid <= 1'b0;
+          rready <= 0;
           if (pc_wen) begin
             state <= FETCH_REQ;  
           end
@@ -52,12 +60,16 @@ module ysyx_24120009_IFU (
         FETCH_REQ: begin
           inst_valid <= 1'b0;
           arvalid <= 1'b1;  
-          state <= FETCH_WAIT; 
+          rready <= 0;
+          if (arready) begin
+            state <= FETCH_WAIT; 
+          end
         end
 
         FETCH_WAIT: begin
           inst_valid <= 1'b0;
           arvalid <= 1'b0;
+          rready <= 1;
           if (rvalid) begin
             if_inst_buffer <= rdata;  
             state <= FETCH_DONE;              
@@ -66,6 +78,7 @@ module ysyx_24120009_IFU (
 
         FETCH_DONE: begin
           inst_valid <= 1'b1;  
+          rready <= 0;
           if (idu_ready) begin
             state <= IDLE;     
             arvalid <= 1'b0;
@@ -76,6 +89,7 @@ module ysyx_24120009_IFU (
           state <= IDLE;
           inst_valid <= 1'b0;
           arvalid <= 1'b0;
+          rready <= 0;
         end
       endcase
     end
@@ -113,43 +127,9 @@ module ysyx_24120009_IFU (
     3'b100, exception
   });
 
+  // Internal signal declaration
   wire [`ysyx_24120009_DATA_WIDTH-1:0] exception = `ysyx_24120009_DATA_WIDTH'b0; // 占位定义，默认无异常
-
-  // Use sram_axi4_lite_wrapper module to read the instruction
-  wire [31:0] rdata;
-  wire        rvalid;
   reg  [31:0] if_inst_buffer;
-  reg         arvalid;
-
-  // Instantiate sram_axi4_lite_wrapper module
-  ysyx_24120009_sram_axi4_lite_wrapper axi4_ifu (
-    // Clock and reset signals
-    .clk(clk),
-    .rst(rst),
-    // AXI4-Lite Write Channel
-    .awvalid(1'b0),
-    .awready(),   
-    .awaddr(32'b0),
-    .wvalid(1'b0),
-    .wready(),    
-    .wdata(32'b0),
-    .wstrb(8'b0), 
-    .bvalid(),    
-    .bready(1'b0),
-    .bresp(),     
-    // AXI4-Lite Read Channel
-    .arvalid(arvalid),
-    .arready(),
-    .araddr(pc),
-    .rvalid(rvalid),
-    .rready(1'b1),
-    .rdata(rdata),
-    .rresp(),
-    // debug signals
-    .axi4_ifu_state_debug(axi4_ifu_state_debug)
-  );
-
-  assign inst_o = if_inst_buffer;   
 
   // handle ebreak instruction
   always @(*) begin
@@ -163,5 +143,7 @@ module ysyx_24120009_IFU (
   assign pc_o = pc;
   assign state_debug = state;
   assign rd_res_valid_debug = rvalid;
+  assign araddr = pc;
+  assign inst_o = if_inst_buffer; 
 
 endmodule
