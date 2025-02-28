@@ -110,6 +110,11 @@ module ysyx_24120009_bus_arbiter (
                         state <= IFU_READ;
                     end else if (mem_awvalid) begin
                         state <= mem_WRITE;
+                        awvalid_wire <= mem_awvalid;
+                        awaddr_wire <= mem_awaddr;
+                        wvalid_wire <= mem_wvalid;
+                        wdata_wire <= mem_wdata;
+                        wstrb_wire <= mem_wstrb;
                     end else if (mem_arvalid) begin
                         state <= mem_READ;
                         arvalid_wire <= mem_arvalid;
@@ -133,11 +138,6 @@ module ysyx_24120009_bus_arbiter (
                         state <= IDLE;
                     end
                     // LSU write transaction
-                    awvalid_wire <= mem_awvalid;
-                    awaddr_wire <= mem_awaddr;
-                    wvalid_wire <= mem_wvalid;
-                    wdata_wire <= mem_wdata;
-                    wstrb_wire <= mem_wstrb;
                     mem_awready <= awready_wire;
                     mem_wready <= wready_wire;
                     mem_bvalid <= bvalid_wire;
