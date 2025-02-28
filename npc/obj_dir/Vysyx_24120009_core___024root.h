@@ -192,7 +192,7 @@ class Vysyx_24120009_core___024root final : public VerilatedModule {
         IData/*31:0*/ ysyx_24120009_core__DOT__wbu__DOT__result_o;
         IData/*31:0*/ ysyx_24120009_core__DOT__wbu__DOT__dmem_addr_o;
         IData/*31:0*/ ysyx_24120009_core__DOT__wbu__DOT__dmem_rdata_o;
-        IData/*31:0*/ ysyx_24120009_core__DOT__wbu__DOT__dmem_rdata_o_twice;
+        IData/*31:0*/ ysyx_24120009_core__DOT__wbu__DOT__dmem_rdata_o_delayed;
         IData/*31:0*/ ysyx_24120009_core__DOT__wbu__DOT__wb_mux__DOT__i1__DOT__lut_out;
         IData/*31:0*/ __Vfunc_ysyx_24120009_core__DOT__axi4_lite_wrapper__DOT__sram_inst__DOT__pmem_read__1__Vfuncout;
         IData/*31:0*/ __VstlIterCount;
