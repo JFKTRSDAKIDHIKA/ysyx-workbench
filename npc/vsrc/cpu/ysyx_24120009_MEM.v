@@ -25,6 +25,24 @@ module ysyx_24120009_MEM (
     input [`ysyx_24120009_DATA_WIDTH-1:0] inst_from_IFU,
     // Signals passed from WBU
     input [`ysyx_24120009_DATA_WIDTH-1:0] inst_from_WBU,
+    // Memory interface
+    // AXI4-Lite Write Channel
+    output wire awvalid,
+    // Warning: 'awready' signal is not used !
+    output wire [31:0] awaddr,
+    output wire wvalid,
+    output reg  wready,
+    output wire [31:0] wdata,
+    output wire [7:0] wstrb,
+    input  wire bvalid,
+    output reg  bready,
+    // AXI4-Lite Read Channel
+    output wire arvalid,
+    // Warning: 'arready' signal is not used !
+    output wire [31:0] araddr,
+    input wire rvalid,
+    output reg rready,
+    input wire [31:0] rdata,
     // debug signals
     output wt_res_valid_debug,
     output [1:0] mem_ctl_state_debug,
@@ -102,42 +120,19 @@ module ysyx_24120009_MEM (
     reg mem_wen;
     wire     [`ysyx_24120009_DATA_WIDTH-1:0]    dmem_addr_o;
     wire     [`ysyx_24120009_DATA_WIDTH-1:0]    rs2_data_o;
-    wire rvalid;
     wire wt_res_valid;
 
     // AXI4-Lite signals
-    wire arvalid = mem_en && !mem_wen;
+    assign arvalid = mem_en && !mem_wen;
     wire wt_req_valid = mem_en && mem_wen;
-    wire arready, awready; // For simplicity, those signals are not used!
-    reg rready, wready, bready;
-
-    // Instantiate sram_axi4_lite_wrapper module
-    ysyx_24120009_sram_axi4_lite_wrapper axi4_mem (
-        // Clock and reset signals
-        .clk(clk),
-        .rst(rst),
-        // AXI4-Lite Write Channel
-        .awvalid(wt_req_valid),
-        .awready(awready),
-        .awaddr(dmem_addr_o),
-        .wvalid(wt_req_valid),
-        .wready(wready),
-        .wdata(dmem_wdata),
-        .wstrb(wmask),
-        .bvalid(wt_res_valid),
-        .bready(bready),
-        .bresp(),
-        // AXI4-Lite Read Channel
-        .arvalid(arvalid),
-        .arready(arready),
-        .araddr(dmem_addr_o),
-        .rvalid(rvalid),
-        .rready(rready),
-        .rdata(dmem_rdata_raw),
-        .rresp(),
-        // debug signals
-        .axi4_ifu_state_debug(axi4_mem_state_debug)
-    );
+    assign awvalid = wt_req_valid;
+    assign awaddr = dmem_addr_o;
+    assign wvalid = wt_req_valid;
+    assign wdata = dmem_wdata;
+    assign wstrb = wmask;
+    assign wt_res_valid = bvalid;
+    assign araddr = dmem_addr_o;
+    assign dmem_rdata_raw = rdata;
 
     // Alignment network
     ysyx_24120009_alignment_network alignment_network (

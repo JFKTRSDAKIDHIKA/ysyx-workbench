@@ -31,7 +31,6 @@ module ysyx_24120009_core (
     output wire wt_res_valid_debug,
     output wire [2:0] ifu_state_debug,
     output wire rd_res_valid_debug,
-    output wire [1:0] axi4_ifu_state_debug,
     output wire [1:0] mem_ctl_state_debug,
     output wire [1:0] axi4_mem_state_debug,
     output wire [1:0] idu_state_debug,
@@ -94,6 +93,43 @@ module ysyx_24120009_core (
     wire                                 inst_valid;
     wire                                 ID_done;
     wire                                 EXU_done;
+    wire                                 ifu_arvalid;
+    wire                                 ifu_arready;
+    wire [31:0]                          ifu_araddr;
+    wire                                 ifu_rvalid;
+    wire                                 ifu_rready;
+    wire [31:0]                          ifu_rdata;
+    wire                                 mem_awvalid;
+    wire                                 mem_awready;
+    wire [31:0]                          mem_awaddr;
+    wire                                 mem_wvalid;
+    wire                                 mem_wready;
+    wire [31:0]                          mem_wdata;
+    wire [7:0]                           mem_wstrb;
+    wire                                 mem_bvalid;
+    wire                                 mem_bready;
+    wire                                 mem_arvalid;
+    wire [31:0]                          mem_araddr;
+    wire                                 mem_rvalid;
+    wire                                 mem_rready;
+    wire [31:0]                          mem_rdata;
+    wire awvalid_wire;
+    wire awready_wire;
+    wire [31:0] awaddr_wire;
+    wire wvalid_wire;
+    wire wready_wire;
+    wire [31:0] wdata_wire;
+    wire [7:0] wstrb_wire;
+    wire bvalid_wire;
+    wire bready_wire;
+    wire [1:0] bresp_wire;
+    wire arvalid_wire;
+    wire arready_wire;
+    wire [31:0] araddr_wire;
+    wire rvalid_wire;
+    wire rready_wire;
+    wire [31:0] rdata_wire;
+    wire [1:0] rresp_wire;
 
     //  Register file address
     wire [`ysyx_24120009_REG_ADDR_WIDTH-1:0] rs1_addr;
@@ -118,8 +154,90 @@ module ysyx_24120009_core (
         .rdata2(rdata2),
         .x2_debug(x2_debug)
     );
-        
-        
+
+    // axi4_lite_wrapper
+    ysyx_24120009_sram_axi4_lite_wrapper #(
+        .ADDR_WIDTH(32),
+        .DATA_WIDTH(32)
+    ) axi4_lite_wrapper (
+        // Clock and reset signals
+        .clk(clk),
+        .rst(rst),
+
+        // AXI4-Lite Write Channel
+        .awvalid(awvalid_wire),
+        .awready(awready_wire),
+        .awaddr(awaddr_wire),
+        .wvalid(wvalid_wire),
+        .wready(wready_wire),
+        .wdata(wdata_wire),
+        .wstrb(wstrb_wire),
+        .bvalid(bvalid_wire),
+        .bready(bready_wire),
+        .bresp(bresp_wire),
+
+        // AXI4-Lite Read Channel
+        .arvalid(arvalid_wire),
+        .arready(arready_wire),
+        .araddr(araddr_wire),
+        .rvalid(rvalid_wire),
+        .rready(rready_wire),
+        .rdata(rdata_wire),
+        .rresp(rresp_wire),
+
+        // Debug signals
+        .axi4_ifu_state_debug()
+    );
+
+    // Instantiate the bus_arbiter module
+    ysyx_24120009_bus_arbiter bus_arbiter_inst (
+        // Clock and reset signals
+        .clk(clk),
+        .rst(rst),
+
+        // IFU memory interface
+        .ifu_arvalid(ifu_arvalid),
+        .ifu_arready(ifu_arready),
+        .ifu_araddr(ifu_araddr),
+        .ifu_rvalid(ifu_rvalid),
+        .ifu_rready(ifu_rready),
+        .ifu_rdata(ifu_rdata),
+
+        // LSU memory interface
+        .mem_awvalid(mem_awvalid),
+        .mem_awready(mem_awready),
+        .mem_awaddr(mem_awaddr),
+        .mem_wvalid(mem_wvalid),
+        .mem_wready(mem_wready),
+        .mem_wdata(mem_wdata),
+        .mem_wstrb(mem_wstrb),
+        .mem_bvalid(mem_bvalid),
+        .mem_bready(mem_bready),
+        .mem_arvalid(mem_arvalid),
+        .mem_arready(),
+        .mem_araddr(mem_araddr),
+        .mem_rvalid(mem_rvalid),
+        .mem_rready(mem_rready),
+        .mem_rdata(mem_rdata),
+
+        // Unified memory interface
+        .awvalid_wire(awvalid_wire),
+        .awready_wire(awready_wire),
+        .awaddr_wire(awaddr_wire),
+        .wvalid_wire(wvalid_wire),
+        .wready_wire(wready_wire),
+        .wdata_wire(wdata_wire),
+        .wstrb_wire(wstrb_wire),
+        .bvalid_wire(bvalid_wire),
+        .bready_wire(bready_wire),
+        .arvalid_wire(arvalid_wire),
+        .arready_wire(arready_wire),
+        .araddr_wire(araddr_wire),
+        .rvalid_wire(rvalid_wire),
+        .rready_wire(rready_wire),
+        .rdata_wire(rdata_wire)
+    );
+            
     // Fetch instruction
     ysyx_24120009_IFU ifu (
         // Clock and reset signals
@@ -138,11 +256,17 @@ module ysyx_24120009_core (
         // handshake signals
         .inst_valid(inst_valid),
         .idu_ready(1'b1),
+        // Memoey interface
+        .arvalid(ifu_arvalid),
+        .arready(ifu_arready),
+        .araddr(ifu_araddr),
+        .rvalid(ifu_rvalid),
+        .rready(ifu_rready),
+        .rdata(ifu_rdata),
         // debug signals 
         .state_debug(ifu_state_debug),
-        .rd_res_valid_debug(rd_res_valid_debug),
-        .axi4_ifu_state_debug(axi4_ifu_state_debug)
-    );
+        .rd_res_valid_debug(rd_res_valid_debug)
+);
 
 
     // Instantiate IDU
@@ -229,6 +353,20 @@ module ysyx_24120009_core (
         .inst_from_IFU(inst_from_IFU_to_IDU),
         // Signals passed from WBU
         .inst_from_WBU(inst_from_WBU_to_MEM),
+        // Memory interface
+        .awvalid(mem_awvalid),
+        .awaddr(mem_awaddr),
+        .wvalid(mem_wvalid),
+        .wready(mem_wready),
+        .wdata(mem_wdata),
+        .wstrb(mem_wstrb),
+        .bvalid(mem_bvalid),
+        .bready(mem_bready),
+        .arvalid(mem_arvalid),
+        .araddr(mem_araddr),
+        .rvalid(mem_rvalid),
+        .rready(mem_rready),
+        .rdata(mem_rdata),
         // debug signals
         .wt_res_valid_debug(wt_res_valid_debug),
         .mem_ctl_state_debug(mem_ctl_state_debug),
