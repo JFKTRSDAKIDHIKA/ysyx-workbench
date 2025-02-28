@@ -93,7 +93,7 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root___nba_sequent__TOP__0(Vysyx_241
             = __Vdly__ysyx_24120009_core__DOT__ifu__DOT__state;
         __Vdly__ysyx_24120009_core__DOT__mem__DOT__axi4_mem__DOT__state = 0U;
         vlSelf->ysyx_24120009_core__DOT__mem__DOT__awready = 0U;
-        vlSelf->ysyx_24120009_core__DOT__mem__DOT__axi4_mem__DOT__wready = 0U;
+        vlSelf->ysyx_24120009_core__DOT__mem__DOT__wready = 0U;
         __Vdly__ysyx_24120009_core__DOT__mem__DOT__wt_res_valid = 0U;
         vlSelf->ysyx_24120009_core__DOT__mem__DOT__axi4_mem__DOT__bresp = 0U;
         vlSelf->ysyx_24120009_core__DOT__mem__DOT__arready = 0U;
@@ -181,7 +181,7 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root___nba_sequent__TOP__0(Vysyx_241
             __Vdly__ysyx_24120009_core__DOT__mem__DOT__wt_res_valid = 0U;
             __Vdly__ysyx_24120009_core__DOT__mem__DOT__rvalid = 0U;
             vlSelf->ysyx_24120009_core__DOT__mem__DOT__awready = 1U;
-            vlSelf->ysyx_24120009_core__DOT__mem__DOT__axi4_mem__DOT__wready = 1U;
+            vlSelf->ysyx_24120009_core__DOT__mem__DOT__wready = 1U;
             vlSelf->ysyx_24120009_core__DOT__mem__DOT__arready = 1U;
             if (((IData)(vlSelf->ysyx_24120009_core__DOT__mem__DOT__mem_en) 
                  & (IData)(vlSelf->ysyx_24120009_core__DOT__mem__DOT__mem_wen))) {
@@ -198,7 +198,7 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root___nba_sequent__TOP__0(Vysyx_241
                                 << (3U & vlSelf->ysyx_24120009_core__DOT__mem__DOT__dmem_addr_o)));
                 __Vdly__ysyx_24120009_core__DOT__mem__DOT__axi4_mem__DOT__state = 1U;
                 vlSelf->ysyx_24120009_core__DOT__mem__DOT__awready = 0U;
-                vlSelf->ysyx_24120009_core__DOT__mem__DOT__axi4_mem__DOT__wready = 0U;
+                vlSelf->ysyx_24120009_core__DOT__mem__DOT__wready = 0U;
                 vlSelf->ysyx_24120009_core__DOT__mem__DOT__axi4_mem__DOT__wt_req_valid = 1U;
             } else if (((~ (IData)(vlSelf->ysyx_24120009_core__DOT__mem__DOT__mem_wen)) 
                         & (IData)(vlSelf->ysyx_24120009_core__DOT__mem__DOT__mem_en))) {

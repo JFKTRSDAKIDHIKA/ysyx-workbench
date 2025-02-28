@@ -117,7 +117,7 @@ module ysyx_24120009_MEM (
         .awready(awready),
         .awaddr(dmem_addr_o),
         .wvalid(wt_req_valid),
-        .wready(),
+        .wready(wready),
         .wdata(dmem_wdata),
         .wstrb(wmask),
         .bvalid(wt_res_valid),
