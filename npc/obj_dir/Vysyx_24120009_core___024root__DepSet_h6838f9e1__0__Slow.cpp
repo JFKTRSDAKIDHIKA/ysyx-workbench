@@ -1386,6 +1386,7 @@ VL_ATTR_COLD void Vysyx_24120009_core___024root___ctor_var_reset(Vysyx_24120009_
     vlSelf->ysyx_24120009_core__DOT__ifu__DOT__if_inst_buffer = VL_RAND_RESET_I(32);
     vlSelf->ysyx_24120009_core__DOT__ifu__DOT__arvalid = VL_RAND_RESET_I(1);
     vlSelf->ysyx_24120009_core__DOT__ifu__DOT__arready = VL_RAND_RESET_I(1);
+    vlSelf->ysyx_24120009_core__DOT__ifu__DOT__rready = VL_RAND_RESET_I(1);
     for (int __Vi0 = 0; __Vi0 < 5; ++__Vi0) {
         vlSelf->ysyx_24120009_core__DOT__ifu__DOT__mux_pc_sel__DOT__i0__DOT__pair_list[__Vi0] = VL_RAND_RESET_Q(35);
     }
