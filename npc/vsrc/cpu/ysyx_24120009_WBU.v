@@ -5,7 +5,7 @@ module ysyx_24120009_WBU (
     input wire clk,
     input wire rst,
     // WBU interact with register file 
-    output wire [`ysyx_24120009_DATA_WIDTH-1:0] reg_write_data,
+    output reg [`ysyx_24120009_DATA_WIDTH-1:0] reg_write_data_delayed,
     output     [`ysyx_24120009_REG_ADDR_WIDTH-1:0]   rd_addr_o,
     output reg rf_we,
     // Signals passed from MEM
@@ -138,12 +138,20 @@ module ysyx_24120009_WBU (
     wire     [`ysyx_24120009_DATA_WIDTH-1:0] result_o;
     wire    [`ysyx_24120009_DATA_WIDTH-1:0] dmem_addr_o;
     wire     [`ysyx_24120009_DATA_WIDTH-1:0] dmem_rdata_o;
+    wire     [`ysyx_24120009_DATA_WIDTH-1:0] reg_write_data;
     reg [1:0] wb_sel;
     assign pc_plus4_debug = pc_plus4;
     assign wb_sel_debug = wb_sel;
     assign opcode_debug = inst_o[6:0];
     assign result_from_WB_debug = result_o;
 
+    always @(posedge clk or posedge rst) begin
+        if (rst) begin
+            reg_write_data_delayed <= {`ysyx_24120009_DATA_WIDTH{1'b0}};
+        end else begin
+            reg_write_data_delayed <= reg_write_data;
+        end
+    end
 
     // reg_write_data signal generation
     ysyx_24120009_MuxKeyWithDefault #(
