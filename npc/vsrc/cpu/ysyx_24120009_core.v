@@ -125,14 +125,12 @@ module ysyx_24120009_core (
     wire [7:0]                           wstrb_wire;
     wire                                 bvalid_wire;
     wire                                 bready_wire;
-    wire [1:0]                           bresp_wire;
     wire                                 arvalid_wire;
     wire                                 arready_wire;
     wire [`ysyx_24120009_DATA_WIDTH-1:0] araddr_wire;
     wire                                 rvalid_wire;
     wire                                 rready_wire;
     wire [`ysyx_24120009_DATA_WIDTH-1:0] rdata_wire;
-    wire [1:0]                           rresp_wire;
 
     //  Register file address
     wire [`ysyx_24120009_REG_ADDR_WIDTH-1:0] rs1_addr;
@@ -175,7 +173,7 @@ module ysyx_24120009_core (
         .wstrb(wstrb_wire),
         .bvalid(bvalid_wire),
         .bready(bready_wire),
-        .bresp(bresp_wire),
+        .bresp(),
         // AXI4-Lite Read Channel
         .arvalid(arvalid_wire),
         .arready(arready_wire),
@@ -183,7 +181,7 @@ module ysyx_24120009_core (
         .rvalid(rvalid_wire),
         .rready(rready_wire),
         .rdata(rdata_wire),
-        .rresp(rresp_wire),
+        .rresp(),
         // Debug signals
         .axi4_ifu_state_debug(axi4_lite_state_debug)
     );

@@ -98,10 +98,10 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root___nba_sequent__TOP__0(Vysyx_241
         __Vdly__ysyx_24120009_core__DOT__awready_wire = 0U;
         __Vdly__ysyx_24120009_core__DOT__wready_wire = 0U;
         __Vdly__ysyx_24120009_core__DOT__bvalid_wire = 0U;
-        vlSelf->ysyx_24120009_core__DOT__bresp_wire = 0U;
+        vlSelf->ysyx_24120009_core__DOT__axi4_lite_wrapper__DOT__bresp = 0U;
         __Vdly__ysyx_24120009_core__DOT__arready_wire = 0U;
         __Vdly__ysyx_24120009_core__DOT__rvalid_wire = 0U;
-        vlSelf->ysyx_24120009_core__DOT__rresp_wire = 0U;
+        vlSelf->ysyx_24120009_core__DOT__axi4_lite_wrapper__DOT__rresp = 0U;
         vlSelf->ysyx_24120009_core__DOT__axi4_lite_wrapper__DOT__rd_req_valid = 0U;
         vlSelf->ysyx_24120009_core__DOT__axi4_lite_wrapper__DOT__wt_req_valid = 0U;
     } else {
@@ -200,7 +200,7 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root___nba_sequent__TOP__0(Vysyx_241
             vlSelf->ysyx_24120009_core__DOT__axi4_lite_wrapper__DOT__wt_req_valid = 0U;
             if (vlSelf->ysyx_24120009_core__DOT__axi4_lite_wrapper__DOT__sram_wt_res_valid) {
                 __Vdly__ysyx_24120009_core__DOT__bvalid_wire = 1U;
-                vlSelf->ysyx_24120009_core__DOT__bresp_wire = 0U;
+                vlSelf->ysyx_24120009_core__DOT__axi4_lite_wrapper__DOT__bresp = 0U;
                 if (vlSelf->ysyx_24120009_core__DOT__bready_wire) {
                     __Vdly__ysyx_24120009_core__DOT__axi4_lite_wrapper__DOT__state = 0U;
                 }
@@ -212,7 +212,7 @@ VL_INLINE_OPT void Vysyx_24120009_core___024root___nba_sequent__TOP__0(Vysyx_241
                 __Vdly__ysyx_24120009_core__DOT__rdata_wire 
                     = vlSelf->ysyx_24120009_core__DOT__axi4_lite_wrapper__DOT__sram_data_out;
                 __Vdly__ysyx_24120009_core__DOT__rvalid_wire = 1U;
-                vlSelf->ysyx_24120009_core__DOT__rresp_wire = 0U;
+                vlSelf->ysyx_24120009_core__DOT__axi4_lite_wrapper__DOT__rresp = 0U;
                 if (vlSelf->ysyx_24120009_core__DOT__rready_wire) {
                     __Vdly__ysyx_24120009_core__DOT__axi4_lite_wrapper__DOT__state = 0U;
                 }

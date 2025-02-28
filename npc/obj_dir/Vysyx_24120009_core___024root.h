@@ -65,13 +65,13 @@ class Vysyx_24120009_core___024root final : public VerilatedModule {
         CData/*7:0*/ ysyx_24120009_core__DOT__wstrb_wire;
         CData/*0:0*/ ysyx_24120009_core__DOT__bvalid_wire;
         CData/*0:0*/ ysyx_24120009_core__DOT__bready_wire;
-        CData/*1:0*/ ysyx_24120009_core__DOT__bresp_wire;
         CData/*0:0*/ ysyx_24120009_core__DOT__arvalid_wire;
         CData/*0:0*/ ysyx_24120009_core__DOT__arready_wire;
         CData/*0:0*/ ysyx_24120009_core__DOT__rvalid_wire;
         CData/*0:0*/ ysyx_24120009_core__DOT__rready_wire;
-        CData/*1:0*/ ysyx_24120009_core__DOT__rresp_wire;
         CData/*4:0*/ ysyx_24120009_core__DOT__waddr;
+        CData/*1:0*/ ysyx_24120009_core__DOT__axi4_lite_wrapper__DOT__bresp;
+        CData/*1:0*/ ysyx_24120009_core__DOT__axi4_lite_wrapper__DOT__rresp;
         CData/*0:0*/ ysyx_24120009_core__DOT__axi4_lite_wrapper__DOT__sram_rd_res_valid;
         CData/*0:0*/ ysyx_24120009_core__DOT__axi4_lite_wrapper__DOT__sram_wt_res_valid;
         CData/*1:0*/ ysyx_24120009_core__DOT__axi4_lite_wrapper__DOT__state;

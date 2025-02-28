@@ -11,7 +11,7 @@ module ysyx_24120009_bus_arbiter (
     input wire ifu_rready,     // IFU read data ready
     output reg [31:0] ifu_rdata,  // IFU read data
 
-    // LSU memory interface
+    // MEM memory interface
     input wire mem_awvalid,    // LSU write address valid
     output reg mem_awready,    // LSU write address ready
     input wire [31:0] mem_awaddr, // LSU write address
@@ -137,7 +137,7 @@ module ysyx_24120009_bus_arbiter (
                     if (bvalid_wire && mem_bready) begin
                         state <= IDLE;
                     end
-                    // LSU write transaction
+                    // MEM write transaction
                     mem_awready <= awready_wire;
                     mem_wready <= wready_wire;
                     mem_bvalid <= bvalid_wire;
