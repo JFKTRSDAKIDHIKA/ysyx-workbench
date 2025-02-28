@@ -93,12 +93,14 @@ module ysyx_24120009_core (
     wire                                 inst_valid;
     wire                                 ID_done;
     wire                                 EXU_done;
+    // Memoey interface (ifu)
     wire                                 ifu_arvalid;
     wire                                 ifu_arready;
-    wire [31:0]                          ifu_araddr;
+    wire [`ysyx_24120009_DATA_WIDTH-1:0] ifu_araddr;
     wire                                 ifu_rvalid;
     wire                                 ifu_rready;
-    wire [31:0]                          ifu_rdata;
+    wire [`ysyx_24120009_DATA_WIDTH-1:0] ifu_rdata;
+    // Memoey interface (mem)
     wire                                 mem_awvalid;
     wire                                 mem_awready;
     wire [31:0]                          mem_awaddr;
@@ -194,7 +196,6 @@ module ysyx_24120009_core (
         // Clock and reset signals
         .clk(clk),
         .rst(rst),
-
         // IFU memory interface
         .ifu_arvalid(ifu_arvalid),
         .ifu_arready(ifu_arready),
@@ -202,7 +203,6 @@ module ysyx_24120009_core (
         .ifu_rvalid(ifu_rvalid),
         .ifu_rready(ifu_rready),
         .ifu_rdata(ifu_rdata),
-
         // LSU memory interface
         .mem_awvalid(mem_awvalid),
         .mem_awready(mem_awready),
@@ -219,7 +219,6 @@ module ysyx_24120009_core (
         .mem_rvalid(mem_rvalid),
         .mem_rready(mem_rready),
         .mem_rdata(mem_rdata),
-
         // Unified memory interface
         .awvalid_wire(awvalid_wire),
         .awready_wire(awready_wire),

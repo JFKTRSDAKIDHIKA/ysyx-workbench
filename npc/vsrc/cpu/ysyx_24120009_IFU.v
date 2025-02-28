@@ -19,12 +19,13 @@ module ysyx_24120009_IFU (
   output reg                            inst_valid,
   input                                 idu_ready,
   // Memoey interface
-  output reg                            arvalid,
-  input  wire                           arready,
-  output wire [31:0]                          araddr,
-  input wire                            rvalid,
-  output reg                            rready,
-  input  wire [31:0]                    rdata,
+  output reg                                  arvalid,
+  input  wire                                 arready,
+  output wire [`ysyx_24120009_DATA_WIDTH-1:0] araddr,
+  input wire                                  rvalid,
+  output reg                                  rready,
+  input  wire [`ysyx_24120009_DATA_WIDTH-1:0] rdata,
+  // Warning: Signal 'rresp' is not used !
   // debug signals 
   output [2:0]                          state_debug,
   output                                rd_res_valid_debug
