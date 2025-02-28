@@ -35,7 +35,8 @@ module ysyx_24120009_core (
     output wire [1:0] axi4_mem_state_debug,
     output wire [1:0] idu_state_debug,
     output wire inst_valid_debug,
-    output wire [1:0] arbiter_state_debug
+    output wire [1:0] arbiter_state_debug,
+    output wire [1:0] axi4_lite_state_debug
 );
 
     // Debug signal declaration and assignment
@@ -189,7 +190,7 @@ module ysyx_24120009_core (
         .rresp(rresp_wire),
 
         // Debug signals
-        .axi4_ifu_state_debug()
+        .axi4_ifu_state_debug(axi4_lite_state_debug)
     );
 
     // Instantiate the bus_arbiter module

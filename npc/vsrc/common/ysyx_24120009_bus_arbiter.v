@@ -145,7 +145,7 @@ module ysyx_24120009_bus_arbiter (
                     if (rvalid_wire && mem_rready) begin
                         state <= IDLE;
                     end
-                    // LSU read transaction
+                    // MEM read transaction
                     arvalid_wire <= mem_arvalid;
                     araddr_wire <= mem_araddr;
                     mem_arready <= arready_wire;
