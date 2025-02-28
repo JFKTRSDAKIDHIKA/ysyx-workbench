@@ -112,6 +112,8 @@ module ysyx_24120009_bus_arbiter (
                         state <= mem_WRITE;
                     end else if (mem_arvalid) begin
                         state <= mem_READ;
+                        arvalid_wire <= mem_arvalid;
+                        araddr_wire <= mem_araddr;
                     end
                 end
                 IFU_READ: begin
@@ -146,8 +148,6 @@ module ysyx_24120009_bus_arbiter (
                         state <= IDLE;
                     end
                     // MEM read transaction
-                    arvalid_wire <= mem_arvalid;
-                    araddr_wire <= mem_araddr;
                     mem_arready <= arready_wire;
                     mem_rvalid <= rvalid_wire;
                     mem_rdata <= rdata_wire;
