@@ -328,6 +328,7 @@ VL_INLINE_OPT void VCore___024root___nba_sequent__TOP__0(VCore___024root* vlSelf
         vlSelf->Core__DOT__lsu__DOT__lsu_reg_wb_addr 
             = vlSelf->Core__DOT__exu__DOT__exu_reg_wb_addr;
     }
+    vlSelf->io_wbu_reg_dmem_rdata_debug = vlSelf->Core__DOT__wbu__DOT__wbu_reg_dmem_rdata;
     vlSelf->Core__DOT__idu__DOT___GEN = (0U == (IData)(vlSelf->Core__DOT__idu__DOT__state));
     vlSelf->Core__DOT__idu__DOT___GEN_0 = (1U == (IData)(vlSelf->Core__DOT__idu__DOT__state));
     vlSelf->Core__DOT__idu__DOT___GEN_1 = (2U == (IData)(vlSelf->Core__DOT__idu__DOT__state));
@@ -1241,7 +1242,7 @@ void VCore___024root___eval(VCore___024root* vlSelf) {
 #ifdef VL_DEBUG
             VCore___024root___dump_triggers__ico(vlSelf);
 #endif
-            VL_FATAL_MT("npc-chisel/generated/Core.sv", 974, "", "Input combinational region did not converge.");
+            VL_FATAL_MT("npc-chisel/generated/Core.sv", 976, "", "Input combinational region did not converge.");
         }
         __VicoIterCount = ((IData)(1U) + __VicoIterCount);
         __VicoContinue = 0U;
@@ -1257,7 +1258,7 @@ void VCore___024root___eval(VCore___024root* vlSelf) {
 #ifdef VL_DEBUG
             VCore___024root___dump_triggers__nba(vlSelf);
 #endif
-            VL_FATAL_MT("npc-chisel/generated/Core.sv", 974, "", "NBA region did not converge.");
+            VL_FATAL_MT("npc-chisel/generated/Core.sv", 976, "", "NBA region did not converge.");
         }
         __VnbaIterCount = ((IData)(1U) + __VnbaIterCount);
         __VnbaContinue = 0U;
@@ -1268,7 +1269,7 @@ void VCore___024root___eval(VCore___024root* vlSelf) {
 #ifdef VL_DEBUG
                 VCore___024root___dump_triggers__act(vlSelf);
 #endif
-                VL_FATAL_MT("npc-chisel/generated/Core.sv", 974, "", "Active region did not converge.");
+                VL_FATAL_MT("npc-chisel/generated/Core.sv", 976, "", "Active region did not converge.");
             }
             vlSelf->__VactIterCount = ((IData)(1U) 
                                        + vlSelf->__VactIterCount);

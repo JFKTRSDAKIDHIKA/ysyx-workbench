@@ -296,22 +296,23 @@ void VCore___024root__trace_chg_0_sub_0(VCore___024root* vlSelf, VerilatedVcd::B
     bufp->chgIData(oldp+135,(vlSelf->io_wb_data_debug),32);
     bufp->chgBit(oldp+136,(vlSelf->io_wb_wen_debug));
     bufp->chgCData(oldp+137,(vlSelf->io_wb_sel_debug),2);
-    bufp->chgCData(oldp+138,(vlSelf->io_Arbiter_state_debug),2);
-    bufp->chgIData(oldp+139,((((1U != (IData)(vlSelf->Core__DOT__arbiter__DOT__state)) 
+    bufp->chgIData(oldp+138,(vlSelf->io_wbu_reg_dmem_rdata_debug),32);
+    bufp->chgCData(oldp+139,(vlSelf->io_Arbiter_state_debug),2);
+    bufp->chgIData(oldp+140,((((1U != (IData)(vlSelf->Core__DOT__arbiter__DOT__state)) 
                                | (0U == (IData)(vlSelf->Core__DOT__arbiter__DOT__state)))
                                ? 0U : vlSelf->Core__DOT___sram_io_axi_r_data)),32);
-    bufp->chgIData(oldp+140,(((IData)(vlSelf->Core__DOT__lsu__DOT___GEN_3)
+    bufp->chgIData(oldp+141,(((IData)(vlSelf->Core__DOT__lsu__DOT___GEN_3)
                                ? 0U : vlSelf->io_dmem_wdata_debug)),32);
-    bufp->chgBit(oldp+141,(((IData)(vlSelf->Core__DOT__arbiter__DOT____VdfgTmp_h0d5fed69__0) 
+    bufp->chgBit(oldp+142,(((IData)(vlSelf->Core__DOT__arbiter__DOT____VdfgTmp_h0d5fed69__0) 
                             & ((~ (IData)(vlSelf->Core__DOT__sram__DOT____VdfgTmp_h93f383d4__0)) 
                                & ((1U == (IData)(vlSelf->Core__DOT__sram__DOT__state)) 
                                   & (IData)(vlSelf->Core__DOT__sram__DOT___sram_wt_res_valid))))));
-    bufp->chgBit(oldp+142,(((IData)(vlSelf->Core__DOT__arbiter__DOT____VdfgTmp_h0d5fed69__0) 
+    bufp->chgBit(oldp+143,(((IData)(vlSelf->Core__DOT__arbiter__DOT____VdfgTmp_h0d5fed69__0) 
                             & (IData)(vlSelf->Core__DOT___sram_io_axi_r_valid))));
-    bufp->chgIData(oldp+143,(((IData)(vlSelf->Core__DOT__arbiter__DOT___GEN_3)
+    bufp->chgIData(oldp+144,(((IData)(vlSelf->Core__DOT__arbiter__DOT___GEN_3)
                                ? 0U : ((IData)(vlSelf->Core__DOT__lsu__DOT___GEN_3)
                                         ? 0U : vlSelf->io_dmem_wdata_debug))),32);
-    bufp->chgBit(oldp+144,(((~ (IData)(vlSelf->Core__DOT__sram__DOT____VdfgTmp_h93f383d4__0)) 
+    bufp->chgBit(oldp+145,(((~ (IData)(vlSelf->Core__DOT__sram__DOT____VdfgTmp_h93f383d4__0)) 
                             & ((1U == (IData)(vlSelf->Core__DOT__sram__DOT__state)) 
                                & (IData)(vlSelf->Core__DOT__sram__DOT___sram_wt_res_valid)))));
 }

@@ -25,6 +25,7 @@ VCore::VCore(VerilatedContext* _vcontextp__, const char* _vcname__)
     , io_dmem_wdata_debug{vlSymsp->TOP.io_dmem_wdata_debug}
     , io_dmem_rdata_debug{vlSymsp->TOP.io_dmem_rdata_debug}
     , io_wb_data_debug{vlSymsp->TOP.io_wb_data_debug}
+    , io_wbu_reg_dmem_rdata_debug{vlSymsp->TOP.io_wbu_reg_dmem_rdata_debug}
     , rootp{&(vlSymsp->TOP)}
 {
     // Register model with the context

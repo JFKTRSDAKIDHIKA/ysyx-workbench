@@ -211,6 +211,7 @@ void tick(VCore* top, bool silent_mode ) {
                 << ", PC: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_pc_debug << "\n"
                 << "Write-Back Info: "
                 << "wb_data: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_wb_data_debug
+                << ", wbu_reg_dmem_rdata: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_wbu_reg_dmem_rdata_debug
                 << ", wb_wen: 0x" << std::hex << static_cast<int>(top->io_wb_wen_debug)
                 << ", wb_sel: 0x" << std::hex << static_cast<int>(top->io_wb_sel_debug) << "\n"
                 << "LSU Info: "
