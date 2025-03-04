@@ -224,7 +224,9 @@ VL_INLINE_OPT void VCore___024root___nba_sequent__TOP__0(VCore___024root* vlSelf
                                                     ((IData)(vlSelf->Core__DOT__lsu__DOT__isLoad) 
                                                      | (IData)(vlSelf->Core__DOT__lsu__DOT__isStore))) 
                                                    << 2U)) 
-                                            | (IData)(vlSelf->Core__DOT__lsu__DOT__state))));
+                                            | ((IData)(vlSelf->Core__DOT___exu_io_out_valid)
+                                                ? 1U
+                                                : (IData)(vlSelf->Core__DOT__lsu__DOT__state)))));
         __Vdly__Core__DOT__lsu__DOT__state = (3U & 
                                               ((IData)(vlSelf->Core__DOT__lsu__DOT__unnamedblk1__DOT___GEN_6) 
                                                >> (7U 
@@ -781,8 +783,11 @@ VL_INLINE_OPT void VCore___024root___nba_sequent__TOP__2(VCore___024root* vlSelf
     vlSelf->Core__DOT___arbiter_io_lsu_aw_ready = ((IData)(vlSelf->Core__DOT__arbiter__DOT____VdfgTmp_h0d5fed69__0) 
                                                    & (IData)(vlSelf->Core__DOT__sram__DOT__io_axi_w_ready_0));
     vlSelf->Core__DOT__lsu__DOT__io_in_ready_0 = ((0U 
-                                                   == (IData)(vlSelf->Core__DOT__lsu__DOT__state)) 
-                                                  & (IData)(vlSelf->Core__DOT___exu_io_out_valid));
+                                                   == (IData)(vlSelf->Core__DOT__lsu__DOT__state))
+                                                   ? (IData)(vlSelf->Core__DOT___exu_io_out_valid)
+                                                   : 
+                                                  (1U 
+                                                   == (IData)(vlSelf->Core__DOT__lsu__DOT__state)));
     if (((IData)(vlSelf->Core__DOT__exu__DOT__io_in_ready_0) 
          & (IData)(vlSelf->Core__DOT___idu_io_out_valid))) {
         vlSelf->Core__DOT__exu__DOT__exu_reg_rs2_data 
