@@ -426,7 +426,7 @@ int main(int argc, char **argv) {
     // Load program
     load_program(argv[1]);
 
-#ifdef DIFFTEST
+#ifdef DIFFTEST 
     // Initialize difftest
     init_difftest("/root/ysyx-workbench/nemu/build/riscv32-nemu-interpreter-so", 0);
     // Copy the program to the reference model
