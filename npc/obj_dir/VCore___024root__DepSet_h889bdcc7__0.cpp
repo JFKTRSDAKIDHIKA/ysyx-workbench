@@ -483,7 +483,10 @@ VL_INLINE_OPT void VCore___024root___nba_sequent__TOP__2(VCore___024root* vlSelf
                                                  & (IData)(vlSelf->Core__DOT__sram__DOT__wt_req_valid))));
         if (vlSelf->Core__DOT__lsu__DOT___GEN) {
             if (vlSelf->Core__DOT___exu_io_out_valid) {
-                vlSelf->Core__DOT__lsu__DOT__state = 1U;
+                vlSelf->Core__DOT__lsu__DOT__state 
+                    = (((3U == (0x7fU & vlSelf->Core__DOT__lsu__DOT__lsu_reg_inst)) 
+                        | (0x23U == (0x7fU & vlSelf->Core__DOT__lsu__DOT__lsu_reg_inst)))
+                        ? 1U : 2U);
             }
         } else if (vlSelf->Core__DOT__lsu__DOT___GEN_0) {
             if (((3U == (0x7fU & vlSelf->Core__DOT__lsu__DOT__lsu_reg_inst))
