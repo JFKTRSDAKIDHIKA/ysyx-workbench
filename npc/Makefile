@@ -1,23 +1,23 @@
 # 定义变量
 VERILATOR = verilator
-TOP_MODULE = vsrc/cpu/ysyx_24120009_core.v
+TOP_MODULE = npc-chisel/generated/Core.sv
 CSRC = $(wildcard csrc/*.cpp)
-VSRC = $(wildcard vsrc/**/*.v)
-INCLUDE_DIRS = -Ivsrc/include -Ivsrc/common -Ivsrc/cpu
+VSRC = $(wildcard npc-chisel/generated/*.sv)
 OBJ_DIR = obj_dir
-EXEC = $(OBJ_DIR)/Vysyx_24120009_core
+EXEC = $(OBJ_DIR)/VCore
 STEP_MODE = run
+FLAGS += -Wno-lint -Wno-style
 
 # 默认目标
 all: $(EXEC)
 
 # 编译 Verilator 模型并生成可执行文件
 $(EXEC): $(TOP_MODULE) $(CSRC) $(VSRC)
-	$(VERILATOR) --cc $(TOP_MODULE) --exe $(CSRC) $(INCLUDE_DIRS) \
-                    --build -j 0 --top-module ysyx_24120009_core \
+	$(VERILATOR) $(FLAGS) --cc $(TOP_MODULE) --exe $(CSRC) \
+                    --build -j 0 --top-module Core \
                     --Mdir $(OBJ_DIR) --trace \
                     -LDFLAGS "-lreadline" 
-	make -C $(OBJ_DIR) -f Vysyx_24120009_core.mk 
+	make -C $(OBJ_DIR) -f VCore.mk 
 
 # 运行仿真
 sim: $(EXEC)

@@ -1,4 +1,4 @@
-#include "Vysyx_24120009_core.h"
+#include "VCore.h"
 #include "verilated.h"
 #include "difftest.h"
 #include "registers.h"
@@ -23,7 +23,7 @@
 #define is_silent_mode 1
 
 // Declare global variables
-Vysyx_24120009_core* top;  // Top module (global)
+VCore* top;  // Top module (global)
 bool step_mode;  // Step mode flag (global)
 int total_cycle;
 
@@ -123,7 +123,7 @@ void print_memory(paddr_t start_addr, size_t size) {
 }
 
 #ifdef DIFFTEST
-int check_dut_and_ref(Vysyx_24120009_core* top, paddr_t start_addr, size_t size) {
+int check_dut_and_ref(VCore* top, paddr_t start_addr, size_t size) {
   // ----------- 检查寄存器 -----------
   // Compare DUT registers with REF registers
   for (int i = 0; i < 32; i++) {
@@ -149,8 +149,8 @@ int check_dut_and_ref(Vysyx_24120009_core* top, paddr_t start_addr, size_t size)
   }
 
   // Compare program counter (PC) between DUT and REF
-  if (top->imem_addr_debug != ref.pc) {
-      std::cerr << "PC mismatch - DUT: 0x" << std::hex << top->imem_addr_debug 
+  if (top->io_pc_debug != ref.pc) {
+      std::cerr << "PC mismatch - DUT: 0x" << std::hex << top->io_pc_debug 
                 << " REF: 0x" << std::hex << ref.pc << std::endl;
       
       // Print DUT and REF register values (optional)
@@ -200,41 +200,30 @@ int check_dut_and_ref(Vysyx_24120009_core* top, paddr_t start_addr, size_t size)
 }
 #endif
 
-void tick(Vysyx_24120009_core* top, bool silent_mode ) {
-    top->clk = 0;
+void tick(VCore* top, bool silent_mode ) {
+    top->clock = 0;
     top->eval();
     
     if (!silent_mode) {
       printf("------------------------------------------------------------------------------\n");
-      std::cout << "ALU Operands: "
-                << "Op1: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->Op1_debug
-                << ", Op2: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->Op2_debug << "\n"
-                << "Instruction Info: "
-                << "Instruction: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->inst_debug
-                << ", PC: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->pc_debug << "\n"
+      std::cout << "Instruction Info: "
+                << "Instruction: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_inst_debug
+                << ", PC: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_pc_debug << "\n"
                 << "Write-Back Info: "
-                << "wb_data: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->reg_write_data_debug
-                << ", rf_we_debug: 0x" << std::hex << static_cast<int>(top->rf_we_debug)
-                << ", wb_sel_debug: 0x" << std::hex << static_cast<int>(top->wb_sel_debug) << "\n"
-                << "Control Signals: "
-                << "pc_wen: 0x" << std::hex << static_cast<int>(top->pc_wen_debug)
-                << ", inst_valid: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->inst_valid_debug) << "\n"
-                << "Pipeline Results: "
-                << "EXU Result: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->result_from_EXU_to_MEM_debug
-                << ", MEM Result: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->result_from_MEM_to_WBU_debug
-                << ", WB Result: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->result_from_WB_debug << "\n"
-                << "Memory Info: "
-                << "dmem_rdata_from_MEM: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->dmem_rdata_from_MEM_to_WBU_debug
-                << ", mem_active: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->mem_active_debug)
-                << ", mem_access_done: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->mem_access_done_debug) << "\n"
+                << "wb_data: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_wb_data_debug
+                << ", wbu_reg_dmem_rdata: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_wbu_reg_dmem_rdata_debug
+                << ", wb_wen: 0x" << std::hex << static_cast<int>(top->io_wb_wen_debug)
+                << ", wb_sel: 0x" << std::hex << static_cast<int>(top->io_wb_sel_debug) << "\n"
+                << "LSU Info: "
+                << "lsu_reg_inst: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_lsu_reg_inst_debug
+                << ", dmem_rdata: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_dmem_rdata_debug
+                << ", dmem_wdata: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_dmem_wdata_debug
+                << ", lsu_is_ld_or_st: 0x" << std::hex << static_cast<int>(top->io_lsu_is_ld_or_st_debug) << "\n"
                 << "State Machines: "
-                << "ifu_state: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->ifu_state_debug)
-                << ", idu_state: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->idu_state_debug)
-                << ", mem_ctl_state: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->mem_ctl_state_debug)
-                << ", arbiter_state: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->arbiter_state_debug)
-                << ", axi4_lite_state: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->axi4_lite_state_debug) << "\n"
-                << "ALU Opcode: "
-                << "alu_op: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->alu_op_debug)
+                << "ifu_state: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->io_ifu_state_debug)
+                << ", lsu_state: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->io_lsu_state_debug)
+                << ", wbu_state: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->io_wbu_state_debug)
+                << ", Arbiter_state: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->io_Arbiter_state_debug)
                 << std::dec << std::endl;
   }
 /*
@@ -254,17 +243,17 @@ void tick(Vysyx_24120009_core* top, bool silent_mode ) {
     }
 */
 
-    top->clk = 1;
+    top->clock = 1;
     top->eval();
     Verilated::timeInc(1); // 增加仿真时间
 }
 
-void reset(Vysyx_24120009_core* top, int cycles) {
-    top->rst = 1;
+void reset(VCore* top, int cycles) {
+    top->reset = 1;
     for (int i = 0; i < cycles; ++i) {
         tick(top, true);  // forbidden single-step mode
     }
-    top->rst = 0;
+    top->reset = 0;
 }
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
@@ -284,15 +273,19 @@ static char* rl_gets() {
   
     return line_read;
   }
-  
+
+static int need_check;
+
 static int execute_single_step() {
   tick(top, is_silent_mode);  
 #ifdef DIFFTEST
-  if (top->wbu_active_debug == 1) {
-    ref_difftest_regcpy(&ref, DIFFTEST_TO_REF);
+  if (need_check) {
     ref_difftest_exec(1);
+    ref_difftest_regcpy(&ref, DIFFTEST_TO_REF);
+    need_check = static_cast<int>(top->io_wbu_state_debug) == 2;
     return check_dut_and_ref(top, 0x80000000, 0x1000);
   } else {
+    need_check = static_cast<int>(top->io_wbu_state_debug) == 2;
     return 0;
   }
 #else 
@@ -417,7 +410,7 @@ int sdb_mainloop() {
   
 int main(int argc, char **argv) {
     Verilated::commandArgs(argc, argv);
-    top = new Vysyx_24120009_core;
+    top = new VCore;
 
     // Default to single step mode (if no argument is provided)
     step_mode = true;
@@ -438,7 +431,7 @@ int main(int argc, char **argv) {
 
 #ifdef DIFFTEST
     // Initialize difftest
-    init_difftest("/root/ysyx-workbench/nemu/build/riscv32-nemu-interpreter-so", 0);
+    init_difftest("/home/jiashuao/Desktop/ysyx-workbench/nemu/build/riscv32-nemu-interpreter-so", 0);
     // Copy the program to the reference model
     ref_difftest_meminit(argv[1]);  
 #endif

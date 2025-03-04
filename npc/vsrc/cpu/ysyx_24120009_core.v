@@ -345,10 +345,6 @@ module ysyx_24120009_core (
         .mem_access_done(mem_access_done),
         // Signals passed to simulation environment
         .mem_active(mem_active_debug),
-        // Signals passed from IFU
-        .inst_from_IFU(inst_from_IFU_to_IDU),
-        // Signals passed from WBU
-        .inst_from_WBU(inst_from_WBU_to_MEM),
         // Memory interface
         .awvalid(mem_awvalid),
         .awaddr(mem_awaddr),
