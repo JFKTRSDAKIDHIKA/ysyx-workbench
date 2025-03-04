@@ -9,8 +9,6 @@ VL_INLINE_OPT void VCore___024root___ico_sequent__TOP__0(VCore___024root* vlSelf
     if (false && vlSelf) {}  // Prevent unused
     VCore__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     VL_DEBUG_IF(VL_DBG_MSGF("+    VCore___024root___ico_sequent__TOP__0\n"); );
-    // Init
-    VlWide<8>/*255:0*/ __Vtemp_5;
     // Body
     vlSelf->Core__DOT__sram__DOT__io_axi_w_ready_0 
         = ((~ (IData)(vlSelf->reset)) & (0U == (IData)(vlSelf->Core__DOT__sram__DOT__state)));
@@ -43,34 +41,6 @@ VL_INLINE_OPT void VCore___024root___ico_sequent__TOP__0(VCore___024root* vlSelf
         = (vlSelf->Core__DOT___arbiter_io_lsu_r_data 
            >> (0x18U & (vlSelf->Core__DOT__lsu__DOT__lsu_reg_dmem_addr 
                         << 3U)));
-    __Vtemp_5[0U] = (((- (IData)((1U & (vlSelf->Core__DOT__lsu__DOT__alignment_network__DOT__shifted_data 
-                                        >> 7U)))) << 8U) 
-                     | (0xffU & vlSelf->Core__DOT__lsu__DOT__alignment_network__DOT__shifted_data));
-    __Vtemp_5[1U] = (((- (IData)((1U & (vlSelf->Core__DOT__lsu__DOT__alignment_network__DOT__shifted_data 
-                                        >> 0xfU)))) 
-                      << 0x10U) | (0xffffU & vlSelf->Core__DOT__lsu__DOT__alignment_network__DOT__shifted_data));
-    __Vtemp_5[2U] = (IData)((QData)((IData)(vlSelf->Core__DOT___arbiter_io_lsu_r_data)));
-    __Vtemp_5[3U] = (IData)(((QData)((IData)(vlSelf->Core__DOT___arbiter_io_lsu_r_data)) 
-                             >> 0x20U));
-    __Vtemp_5[4U] = (0xffU & vlSelf->Core__DOT__lsu__DOT__alignment_network__DOT__shifted_data);
-    __Vtemp_5[5U] = (0xffffU & vlSelf->Core__DOT__lsu__DOT__alignment_network__DOT__shifted_data);
-    __Vtemp_5[6U] = 0U;
-    __Vtemp_5[7U] = 0U;
-    vlSelf->io_dmem_rdata_debug = (((0U == (0x1fU & 
-                                            VL_SHIFTL_III(8,8,32, (IData)(vlSelf->Core__DOT__lsu__DOT__mem_access_control), 5U)))
-                                     ? 0U : (__Vtemp_5[
-                                             (((IData)(0x1fU) 
-                                               + (0xffU 
-                                                  & VL_SHIFTL_III(8,8,32, (IData)(vlSelf->Core__DOT__lsu__DOT__mem_access_control), 5U))) 
-                                              >> 5U)] 
-                                             << ((IData)(0x20U) 
-                                                 - 
-                                                 (0x1fU 
-                                                  & VL_SHIFTL_III(8,8,32, (IData)(vlSelf->Core__DOT__lsu__DOT__mem_access_control), 5U))))) 
-                                   | (__Vtemp_5[(7U 
-                                                 & (VL_SHIFTL_III(8,8,32, (IData)(vlSelf->Core__DOT__lsu__DOT__mem_access_control), 5U) 
-                                                    >> 5U))] 
-                                      >> (0x1fU & VL_SHIFTL_III(8,8,32, (IData)(vlSelf->Core__DOT__lsu__DOT__mem_access_control), 5U))));
 }
 
 void VCore___024root___eval_ico(VCore___024root* vlSelf) {
@@ -124,8 +94,9 @@ VL_INLINE_OPT void VCore___024root___nba_sequent__TOP__0(VCore___024root* vlSelf
     __Vdlyvval__Core__DOT__regfile__DOT__rf__v0 = 0;
     CData/*0:0*/ __Vdlyvset__Core__DOT__regfile__DOT__rf__v0;
     __Vdlyvset__Core__DOT__regfile__DOT__rf__v0 = 0;
-    VlWide<4>/*127:0*/ __Vtemp_2;
-    VlWide<4>/*127:0*/ __Vtemp_6;
+    VlWide<8>/*255:0*/ __Vtemp_5;
+    VlWide<4>/*127:0*/ __Vtemp_7;
+    VlWide<4>/*127:0*/ __Vtemp_11;
     // Body
     __Vdly__Core__DOT__wbu__DOT__state = vlSelf->Core__DOT__wbu__DOT__state;
     __Vdly__Core__DOT__ifu__DOT__state = vlSelf->Core__DOT__ifu__DOT__state;
@@ -294,6 +265,28 @@ VL_INLINE_OPT void VCore___024root___nba_sequent__TOP__0(VCore___024root* vlSelf
         __Vdlyvdim0__Core__DOT__regfile__DOT__rf__v0 
             = vlSelf->Core__DOT__wbu__DOT__wbu_reg_wb_addr;
     }
+    __Vtemp_5[0U] = (((- (IData)((1U & (vlSelf->Core__DOT__lsu__DOT__alignment_network__DOT__shifted_data 
+                                        >> 7U)))) << 8U) 
+                     | (0xffU & vlSelf->Core__DOT__lsu__DOT__alignment_network__DOT__shifted_data));
+    __Vtemp_5[1U] = (((- (IData)((1U & (vlSelf->Core__DOT__lsu__DOT__alignment_network__DOT__shifted_data 
+                                        >> 0xfU)))) 
+                      << 0x10U) | (0xffffU & vlSelf->Core__DOT__lsu__DOT__alignment_network__DOT__shifted_data));
+    __Vtemp_5[2U] = (IData)((QData)((IData)(vlSelf->Core__DOT___arbiter_io_lsu_r_data)));
+    __Vtemp_5[3U] = (IData)(((QData)((IData)(vlSelf->Core__DOT___arbiter_io_lsu_r_data)) 
+                             >> 0x20U));
+    __Vtemp_5[4U] = (0xffU & vlSelf->Core__DOT__lsu__DOT__alignment_network__DOT__shifted_data);
+    __Vtemp_5[5U] = (0xffffU & vlSelf->Core__DOT__lsu__DOT__alignment_network__DOT__shifted_data);
+    __Vtemp_5[6U] = 0U;
+    __Vtemp_5[7U] = 0U;
+    vlSelf->Core__DOT__lsu__DOT__dmem_rdata_delay = 
+        (((0U == (0x1fU & VL_SHIFTL_III(8,8,32, (IData)(vlSelf->Core__DOT__lsu__DOT__mem_access_control), 5U)))
+           ? 0U : (__Vtemp_5[(((IData)(0x1fU) + (0xffU 
+                                                 & VL_SHIFTL_III(8,8,32, (IData)(vlSelf->Core__DOT__lsu__DOT__mem_access_control), 5U))) 
+                              >> 5U)] << ((IData)(0x20U) 
+                                          - (0x1fU 
+                                             & VL_SHIFTL_III(8,8,32, (IData)(vlSelf->Core__DOT__lsu__DOT__mem_access_control), 5U))))) 
+         | (__Vtemp_5[(7U & (VL_SHIFTL_III(8,8,32, (IData)(vlSelf->Core__DOT__lsu__DOT__mem_access_control), 5U) 
+                             >> 5U))] >> (0x1fU & VL_SHIFTL_III(8,8,32, (IData)(vlSelf->Core__DOT__lsu__DOT__mem_access_control), 5U))));
     vlSelf->Core__DOT__wbu__DOT__state = __Vdly__Core__DOT__wbu__DOT__state;
     if (__Vdlyvset__Core__DOT__regfile__DOT__rf__v0) {
         vlSelf->Core__DOT__regfile__DOT__rf[__Vdlyvdim0__Core__DOT__regfile__DOT__rf__v0] 
@@ -328,6 +321,7 @@ VL_INLINE_OPT void VCore___024root___nba_sequent__TOP__0(VCore___024root* vlSelf
         vlSelf->Core__DOT__lsu__DOT__lsu_reg_wb_addr 
             = vlSelf->Core__DOT__exu__DOT__exu_reg_wb_addr;
     }
+    vlSelf->io_dmem_rdata_debug = vlSelf->Core__DOT__lsu__DOT__dmem_rdata_delay;
     vlSelf->io_wbu_reg_dmem_rdata_debug = vlSelf->Core__DOT__wbu__DOT__wbu_reg_dmem_rdata;
     vlSelf->Core__DOT__idu__DOT___GEN = (0U == (IData)(vlSelf->Core__DOT__idu__DOT__state));
     vlSelf->Core__DOT__idu__DOT___GEN_0 = (1U == (IData)(vlSelf->Core__DOT__idu__DOT__state));
@@ -386,15 +380,15 @@ VL_INLINE_OPT void VCore___024root___nba_sequent__TOP__0(VCore___024root* vlSelf
     vlSelf->Core__DOT__ifu__DOT____VdfgTmp_h111114cf__0 
         = ((IData)(vlSelf->Core__DOT__ifu__DOT___GEN_2) 
            | (2U == (IData)(vlSelf->Core__DOT__ifu__DOT__state)));
-    __Vtemp_2[0U] = 0U;
-    __Vtemp_2[1U] = ((IData)(4U) + vlSelf->Core__DOT__wbu__DOT__wbu_reg_pc);
-    __Vtemp_2[2U] = (IData)((((QData)((IData)(vlSelf->Core__DOT__wbu__DOT__wbu_reg_dmem_rdata)) 
+    __Vtemp_7[0U] = 0U;
+    __Vtemp_7[1U] = ((IData)(4U) + vlSelf->Core__DOT__wbu__DOT__wbu_reg_pc);
+    __Vtemp_7[2U] = (IData)((((QData)((IData)(vlSelf->Core__DOT__wbu__DOT__wbu_reg_dmem_rdata)) 
                               << 0x20U) | (QData)((IData)(vlSelf->Core__DOT__wbu__DOT__wbu_reg_result))));
-    __Vtemp_2[3U] = (IData)(((((QData)((IData)(vlSelf->Core__DOT__wbu__DOT__wbu_reg_dmem_rdata)) 
+    __Vtemp_7[3U] = (IData)(((((QData)((IData)(vlSelf->Core__DOT__wbu__DOT__wbu_reg_dmem_rdata)) 
                                << 0x20U) | (QData)((IData)(vlSelf->Core__DOT__wbu__DOT__wbu_reg_result))) 
                              >> 0x20U));
     vlSelf->io_wb_data_debug = (((0U == (0x1fU & VL_SHIFTL_III(7,7,32, (IData)(vlSelf->io_wb_sel_debug), 5U)))
-                                  ? 0U : (__Vtemp_2[
+                                  ? 0U : (__Vtemp_7[
                                           (((IData)(0x1fU) 
                                             + (0x7fU 
                                                & VL_SHIFTL_III(7,7,32, (IData)(vlSelf->io_wb_sel_debug), 5U))) 
@@ -402,7 +396,7 @@ VL_INLINE_OPT void VCore___024root___nba_sequent__TOP__0(VCore___024root* vlSelf
                                           << ((IData)(0x20U) 
                                               - (0x1fU 
                                                  & VL_SHIFTL_III(7,7,32, (IData)(vlSelf->io_wb_sel_debug), 5U))))) 
-                                | (__Vtemp_2[(3U & 
+                                | (__Vtemp_7[(3U & 
                                               (VL_SHIFTL_III(7,7,32, (IData)(vlSelf->io_wb_sel_debug), 5U) 
                                                >> 5U))] 
                                    >> (0x1fU & VL_SHIFTL_III(7,7,32, (IData)(vlSelf->io_wb_sel_debug), 5U))));
@@ -536,28 +530,28 @@ VL_INLINE_OPT void VCore___024root___nba_sequent__TOP__0(VCore___024root* vlSelf
                                                    (0xfffff000U 
                                                     & vlSelf->Core__DOT__idu__DOT__idu_reg_inst)
                                                     : vlSelf->Core__DOT___regfile_rs1_data);
-    __Vtemp_6[0U] = (IData)((((QData)((IData)((((- (IData)(
-                                                           (vlSelf->Core__DOT__idu__DOT__idu_reg_inst 
-                                                            >> 0x1fU))) 
-                                                << 0xcU) 
-                                               | (vlSelf->Core__DOT__idu__DOT__idu_reg_inst 
-                                                  >> 0x14U)))) 
-                              << 0x20U) | (QData)((IData)(vlSelf->Core__DOT__idu__DOT__idu_reg_pc))));
-    __Vtemp_6[1U] = (IData)(((((QData)((IData)((((- (IData)(
+    __Vtemp_11[0U] = (IData)((((QData)((IData)((((- (IData)(
                                                             (vlSelf->Core__DOT__idu__DOT__idu_reg_inst 
                                                              >> 0x1fU))) 
                                                  << 0xcU) 
                                                 | (vlSelf->Core__DOT__idu__DOT__idu_reg_inst 
                                                    >> 0x14U)))) 
-                               << 0x20U) | (QData)((IData)(vlSelf->Core__DOT__idu__DOT__idu_reg_pc))) 
-                             >> 0x20U));
-    __Vtemp_6[2U] = (((- (IData)((vlSelf->Core__DOT__idu__DOT__idu_reg_inst 
-                                  >> 0x1fU))) << 0xcU) 
-                     | ((0xfe0U & (vlSelf->Core__DOT__idu__DOT__idu_reg_inst 
-                                   >> 0x14U)) | (0x1fU 
-                                                 & (vlSelf->Core__DOT__idu__DOT__idu_reg_inst 
-                                                    >> 7U))));
-    __Vtemp_6[3U] = vlSelf->Core__DOT___regfile_rs2_data;
+                               << 0x20U) | (QData)((IData)(vlSelf->Core__DOT__idu__DOT__idu_reg_pc))));
+    __Vtemp_11[1U] = (IData)(((((QData)((IData)((((- (IData)(
+                                                             (vlSelf->Core__DOT__idu__DOT__idu_reg_inst 
+                                                              >> 0x1fU))) 
+                                                  << 0xcU) 
+                                                 | (vlSelf->Core__DOT__idu__DOT__idu_reg_inst 
+                                                    >> 0x14U)))) 
+                                << 0x20U) | (QData)((IData)(vlSelf->Core__DOT__idu__DOT__idu_reg_pc))) 
+                              >> 0x20U));
+    __Vtemp_11[2U] = (((- (IData)((vlSelf->Core__DOT__idu__DOT__idu_reg_inst 
+                                   >> 0x1fU))) << 0xcU) 
+                      | ((0xfe0U & (vlSelf->Core__DOT__idu__DOT__idu_reg_inst 
+                                    >> 0x14U)) | (0x1fU 
+                                                  & (vlSelf->Core__DOT__idu__DOT__idu_reg_inst 
+                                                     >> 7U))));
+    __Vtemp_11[3U] = vlSelf->Core__DOT___regfile_rs2_data;
     vlSelf->Core__DOT___idu_io_out_bits_alu_op2 = (
                                                    ((0U 
                                                      == 
@@ -587,7 +581,7 @@ VL_INLINE_OPT void VCore___024root___nba_sequent__TOP__0(VCore___024root* vlSelf
                                                                            & vlSelf->Core__DOT__idu__DOT__idu_reg_inst))))), 5U)))
                                                      ? 0U
                                                      : 
-                                                    (__Vtemp_6[
+                                                    (__Vtemp_11[
                                                      (((IData)(0x1fU) 
                                                        + 
                                                        (0x7fU 
@@ -642,7 +636,7 @@ VL_INLINE_OPT void VCore___024root___nba_sequent__TOP__0(VCore___024root* vlSelf
                                                                            == 
                                                                            (0x7fU 
                                                                             & vlSelf->Core__DOT__idu__DOT__idu_reg_inst))))), 5U))))) 
-                                                   | (__Vtemp_6[
+                                                   | (__Vtemp_11[
                                                       (3U 
                                                        & (VL_SHIFTL_III(7,7,32, 
                                                                         ((0x13U 
@@ -881,10 +875,6 @@ VL_INLINE_OPT void VCore___024root___nba_sequent__TOP__2(VCore___024root* vlSelf
     }
     vlSelf->Core__DOT__sram__DOT__rd_req_valid = vlSelf->__Vdly__Core__DOT__sram__DOT__rd_req_valid;
     vlSelf->Core__DOT__sram__DOT__wt_req_valid = vlSelf->__Vdly__Core__DOT__sram__DOT__wt_req_valid;
-    vlSelf->Core__DOT___ifu_io_memory_r_ready = ((~ (IData)(vlSelf->Core__DOT__ifu__DOT___GEN_2)) 
-                                                 & (2U 
-                                                    == (IData)(vlSelf->Core__DOT__ifu__DOT__state)));
-    vlSelf->Core__DOT__ifu__DOT__pc = vlSelf->__Vdly__Core__DOT__ifu__DOT__pc;
     vlSelf->Core__DOT__lsu__DOT__mem_access_control 
         = ((0x119U == (IData)(vlSelf->Core__DOT__lsu__DOT___mem_access_control_T))
             ? 1U : ((0x118U == (IData)(vlSelf->Core__DOT__lsu__DOT___mem_access_control_T))
@@ -905,6 +895,10 @@ VL_INLINE_OPT void VCore___024root___nba_sequent__TOP__2(VCore___024root* vlSelf
                                                     ((0x1aU 
                                                       == (IData)(vlSelf->Core__DOT__lsu__DOT___mem_access_control_T)) 
                                                      << 1U))))))));
+    vlSelf->Core__DOT___ifu_io_memory_r_ready = ((~ (IData)(vlSelf->Core__DOT__ifu__DOT___GEN_2)) 
+                                                 & (2U 
+                                                    == (IData)(vlSelf->Core__DOT__ifu__DOT__state)));
+    vlSelf->Core__DOT__ifu__DOT__pc = vlSelf->__Vdly__Core__DOT__ifu__DOT__pc;
     vlSelf->Core__DOT__ifu__DOT___GEN_3 = ((IData)(vlSelf->Core__DOT__ifu__DOT____VdfgTmp_h111114cf__0) 
                                            | (3U == (IData)(vlSelf->Core__DOT__ifu__DOT__state)));
     vlSelf->Core__DOT__arbiter__DOT__state = vlSelf->__Vdly__Core__DOT__arbiter__DOT__state;
@@ -1011,12 +1005,12 @@ VL_INLINE_OPT void VCore___024root___nba_sequent__TOP__2(VCore___024root* vlSelf
                                                 | (1U 
                                                    == (IData)(vlSelf->Core__DOT__exu__DOT__state)))) 
                                             & (2U == (IData)(vlSelf->Core__DOT__exu__DOT__state)));
-    vlSelf->Core__DOT__arbiter__DOT____VdfgTmp_h0d5fed69__0 
-        = ((~ (IData)(vlSelf->Core__DOT__arbiter__DOT___GEN_2)) 
-           & (2U == (IData)(vlSelf->Core__DOT__arbiter__DOT__state)));
     vlSelf->Core__DOT__arbiter__DOT___GEN_3 = ((2U 
                                                 != (IData)(vlSelf->Core__DOT__arbiter__DOT__state)) 
                                                | (IData)(vlSelf->Core__DOT__arbiter__DOT___GEN_2));
+    vlSelf->Core__DOT__arbiter__DOT____VdfgTmp_h0d5fed69__0 
+        = ((~ (IData)(vlSelf->Core__DOT__arbiter__DOT___GEN_2)) 
+           & (2U == (IData)(vlSelf->Core__DOT__arbiter__DOT__state)));
     vlSelf->Core__DOT__sram__DOT___GEN_2 = ((IData)(vlSelf->Core__DOT__sram__DOT____VdfgTmp_h93f383d4__0) 
                                             | (1U == (IData)(vlSelf->Core__DOT__sram__DOT__state)));
     vlSelf->io_lsu_is_ld_or_st_debug = ((IData)(vlSelf->Core__DOT__lsu__DOT__isLoad) 
@@ -1100,8 +1094,6 @@ VL_INLINE_OPT void VCore___024root___nba_comb__TOP__0(VCore___024root* vlSelf) {
     if (false && vlSelf) {}  // Prevent unused
     VCore__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     VL_DEBUG_IF(VL_DBG_MSGF("+    VCore___024root___nba_comb__TOP__0\n"); );
-    // Init
-    VlWide<8>/*255:0*/ __Vtemp_5;
     // Body
     vlSelf->Core__DOT__sram__DOT____VdfgTmp_hb61e3587__0 
         = ((2U == (IData)(vlSelf->Core__DOT__sram__DOT__state)) 
@@ -1122,34 +1114,6 @@ VL_INLINE_OPT void VCore___024root___nba_comb__TOP__0(VCore___024root* vlSelf) {
         = (vlSelf->Core__DOT___arbiter_io_lsu_r_data 
            >> (0x18U & (vlSelf->Core__DOT__lsu__DOT__lsu_reg_dmem_addr 
                         << 3U)));
-    __Vtemp_5[0U] = (((- (IData)((1U & (vlSelf->Core__DOT__lsu__DOT__alignment_network__DOT__shifted_data 
-                                        >> 7U)))) << 8U) 
-                     | (0xffU & vlSelf->Core__DOT__lsu__DOT__alignment_network__DOT__shifted_data));
-    __Vtemp_5[1U] = (((- (IData)((1U & (vlSelf->Core__DOT__lsu__DOT__alignment_network__DOT__shifted_data 
-                                        >> 0xfU)))) 
-                      << 0x10U) | (0xffffU & vlSelf->Core__DOT__lsu__DOT__alignment_network__DOT__shifted_data));
-    __Vtemp_5[2U] = (IData)((QData)((IData)(vlSelf->Core__DOT___arbiter_io_lsu_r_data)));
-    __Vtemp_5[3U] = (IData)(((QData)((IData)(vlSelf->Core__DOT___arbiter_io_lsu_r_data)) 
-                             >> 0x20U));
-    __Vtemp_5[4U] = (0xffU & vlSelf->Core__DOT__lsu__DOT__alignment_network__DOT__shifted_data);
-    __Vtemp_5[5U] = (0xffffU & vlSelf->Core__DOT__lsu__DOT__alignment_network__DOT__shifted_data);
-    __Vtemp_5[6U] = 0U;
-    __Vtemp_5[7U] = 0U;
-    vlSelf->io_dmem_rdata_debug = (((0U == (0x1fU & 
-                                            VL_SHIFTL_III(8,8,32, (IData)(vlSelf->Core__DOT__lsu__DOT__mem_access_control), 5U)))
-                                     ? 0U : (__Vtemp_5[
-                                             (((IData)(0x1fU) 
-                                               + (0xffU 
-                                                  & VL_SHIFTL_III(8,8,32, (IData)(vlSelf->Core__DOT__lsu__DOT__mem_access_control), 5U))) 
-                                              >> 5U)] 
-                                             << ((IData)(0x20U) 
-                                                 - 
-                                                 (0x1fU 
-                                                  & VL_SHIFTL_III(8,8,32, (IData)(vlSelf->Core__DOT__lsu__DOT__mem_access_control), 5U))))) 
-                                   | (__Vtemp_5[(7U 
-                                                 & (VL_SHIFTL_III(8,8,32, (IData)(vlSelf->Core__DOT__lsu__DOT__mem_access_control), 5U) 
-                                                    >> 5U))] 
-                                      >> (0x1fU & VL_SHIFTL_III(8,8,32, (IData)(vlSelf->Core__DOT__lsu__DOT__mem_access_control), 5U))));
 }
 
 void VCore___024root___eval_nba(VCore___024root* vlSelf) {
@@ -1242,7 +1206,7 @@ void VCore___024root___eval(VCore___024root* vlSelf) {
 #ifdef VL_DEBUG
             VCore___024root___dump_triggers__ico(vlSelf);
 #endif
-            VL_FATAL_MT("npc-chisel/generated/Core.sv", 976, "", "Input combinational region did not converge.");
+            VL_FATAL_MT("npc-chisel/generated/Core.sv", 979, "", "Input combinational region did not converge.");
         }
         __VicoIterCount = ((IData)(1U) + __VicoIterCount);
         __VicoContinue = 0U;
@@ -1258,7 +1222,7 @@ void VCore___024root___eval(VCore___024root* vlSelf) {
 #ifdef VL_DEBUG
             VCore___024root___dump_triggers__nba(vlSelf);
 #endif
-            VL_FATAL_MT("npc-chisel/generated/Core.sv", 976, "", "NBA region did not converge.");
+            VL_FATAL_MT("npc-chisel/generated/Core.sv", 979, "", "NBA region did not converge.");
         }
         __VnbaIterCount = ((IData)(1U) + __VnbaIterCount);
         __VnbaContinue = 0U;
@@ -1269,7 +1233,7 @@ void VCore___024root___eval(VCore___024root* vlSelf) {
 #ifdef VL_DEBUG
                 VCore___024root___dump_triggers__act(vlSelf);
 #endif
-                VL_FATAL_MT("npc-chisel/generated/Core.sv", 976, "", "Active region did not converge.");
+                VL_FATAL_MT("npc-chisel/generated/Core.sv", 979, "", "Active region did not converge.");
             }
             vlSelf->__VactIterCount = ((IData)(1U) 
                                        + vlSelf->__VactIterCount);
