@@ -533,8 +533,10 @@ VL_INLINE_OPT void VCore___024root___nba_sequent__TOP__2(VCore___024root* vlSelf
     vlSelf->io_ifu_state_debug = vlSelf->Core__DOT__ifu__DOT__state;
     vlSelf->Core__DOT___ifu_io_memory_ar_valid = ((0U 
                                                    != (IData)(vlSelf->Core__DOT__ifu__DOT__state)) 
-                                                  & (1U 
-                                                     == (IData)(vlSelf->Core__DOT__ifu__DOT__state)));
+                                                  & ((1U 
+                                                      == (IData)(vlSelf->Core__DOT__ifu__DOT__state)) 
+                                                     | (2U 
+                                                        == (IData)(vlSelf->Core__DOT__ifu__DOT__state))));
     vlSelf->Core__DOT__ifu__DOT___GEN_2 = ((0U == (IData)(vlSelf->Core__DOT__ifu__DOT__state)) 
                                            | (1U == (IData)(vlSelf->Core__DOT__ifu__DOT__state)));
     vlSelf->Core__DOT__arbiter__DOT___GEN_3 = ((2U 

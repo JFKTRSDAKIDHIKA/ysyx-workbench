@@ -191,8 +191,10 @@ VL_ATTR_COLD void VCore___024root___stl_sequent__TOP__0(VCore___024root* vlSelf)
            & (1U == (IData)(vlSelf->Core__DOT__arbiter__DOT__state)));
     vlSelf->Core__DOT___ifu_io_memory_ar_valid = ((0U 
                                                    != (IData)(vlSelf->Core__DOT__ifu__DOT__state)) 
-                                                  & (1U 
-                                                     == (IData)(vlSelf->Core__DOT__ifu__DOT__state)));
+                                                  & ((1U 
+                                                      == (IData)(vlSelf->Core__DOT__ifu__DOT__state)) 
+                                                     | (2U 
+                                                        == (IData)(vlSelf->Core__DOT__ifu__DOT__state))));
     vlSelf->Core__DOT__exu__DOT____Vcellinp__alu_instance__io_aluOp 
         = (0x1fU & ((0x33U == (0x7fU & vlSelf->Core__DOT__exu__DOT__exu_reg_inst))
                      ? ((0x27U >= (0x3fU & ((IData)(5U) 
