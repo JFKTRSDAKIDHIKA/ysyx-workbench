@@ -276,6 +276,7 @@ static int need_check;
 static int execute_single_step() {
   tick(top, is_silent_mode);  
 #ifdef DIFFTEST
+  printf("need_check: %d\n", need_check);
   if (need_check) {
     ref_difftest_regcpy(&ref, DIFFTEST_TO_REF);
     ref_difftest_exec(1);
