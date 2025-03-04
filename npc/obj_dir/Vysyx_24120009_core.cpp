@@ -14,6 +14,17 @@ Vysyx_24120009_core::Vysyx_24120009_core(VerilatedContext* _vcontextp__, const c
     , vlSymsp{new Vysyx_24120009_core__Syms(contextp(), _vcname__, this)}
     , clock{vlSymsp->TOP.clock}
     , reset{vlSymsp->TOP.reset}
+    , io_ifu_state_debug{vlSymsp->TOP.io_ifu_state_debug}
+    , io_lsu_state_debug{vlSymsp->TOP.io_lsu_state_debug}
+    , io_lsu_is_ld_or_st_debug{vlSymsp->TOP.io_lsu_is_ld_or_st_debug}
+    , io_wbu_state_debug{vlSymsp->TOP.io_wbu_state_debug}
+    , io_wb_wen_debug{vlSymsp->TOP.io_wb_wen_debug}
+    , io_wb_sel_debug{vlSymsp->TOP.io_wb_sel_debug}
+    , io_Arbiter_state_debug{vlSymsp->TOP.io_Arbiter_state_debug}
+    , io_pc_debug{vlSymsp->TOP.io_pc_debug}
+    , io_inst_debug{vlSymsp->TOP.io_inst_debug}
+    , io_lsu_reg_inst_debug{vlSymsp->TOP.io_lsu_reg_inst_debug}
+    , io_wb_data_debug{vlSymsp->TOP.io_wb_data_debug}
     , rootp{&(vlSymsp->TOP)}
 {
     // Register model with the context
