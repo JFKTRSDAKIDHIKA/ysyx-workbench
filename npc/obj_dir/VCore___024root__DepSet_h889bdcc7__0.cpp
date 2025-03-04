@@ -105,7 +105,7 @@ VL_INLINE_OPT void VCore___024root___nba_sequent__TOP__0(VCore___024root* vlSelf
     if (vlSelf->reset) {
         __Vdly__Core__DOT__wbu__DOT__state = 0U;
         vlSelf->__Vdly__Core__DOT__arbiter__DOT__state = 0U;
-        vlSelf->__Vdly__Core__DOT__ifu__DOT__state = 0U;
+        vlSelf->__Vdly__Core__DOT__ifu__DOT__state = 1U;
         vlSelf->__Vdly__Core__DOT__ifu__DOT__pc = 0x80000000U;
         vlSelf->Core__DOT__idu__DOT__state = 0U;
         vlSelf->Core__DOT__exu__DOT__state = 0U;
