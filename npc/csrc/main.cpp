@@ -428,7 +428,7 @@ int main(int argc, char **argv) {
 
 #ifdef DIFFTEST
     // Initialize difftest
-    init_difftest("/home/jiashuao/Desktop/ysyx-workbench/nemu/build/riscv32-nemu-interpreter-so", 0);
+    init_difftest("/root/ysyx-workbench/nemu/build/riscv32-nemu-interpreter-so", 0);
     // Copy the program to the reference model
     ref_difftest_meminit(argv[1]);  
 #endif
