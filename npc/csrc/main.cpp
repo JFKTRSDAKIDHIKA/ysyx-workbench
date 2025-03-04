@@ -19,7 +19,7 @@
 #define UART_ADDR_LEN  8          
 
 // #define ENABLE_MEMORY_CHECK 1
-#define DIFFTEST 1
+// #define DIFFTEST 1
 #define is_silent_mode 1
 
 // Declare global variables
