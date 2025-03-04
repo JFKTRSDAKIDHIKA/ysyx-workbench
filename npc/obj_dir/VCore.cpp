@@ -18,6 +18,7 @@ VCore::VCore(VerilatedContext* _vcontextp__, const char* _vcname__)
     , io_wbu_state_debug{vlSymsp->TOP.io_wbu_state_debug}
     , io_wb_wen_debug{vlSymsp->TOP.io_wb_wen_debug}
     , io_wb_sel_debug{vlSymsp->TOP.io_wb_sel_debug}
+    , io_Arbiter_state_debug{vlSymsp->TOP.io_Arbiter_state_debug}
     , io_pc_debug{vlSymsp->TOP.io_pc_debug}
     , io_inst_debug{vlSymsp->TOP.io_inst_debug}
     , io_lsu_reg_inst_debug{vlSymsp->TOP.io_lsu_reg_inst_debug}

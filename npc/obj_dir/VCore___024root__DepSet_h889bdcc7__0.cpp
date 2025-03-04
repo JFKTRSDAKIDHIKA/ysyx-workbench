@@ -742,6 +742,7 @@ VL_INLINE_OPT void VCore___024root___nba_sequent__TOP__2(VCore___024root* vlSelf
         vlSelf->Core__DOT__lsu__DOT__lsu_reg_rs2_data 
             = vlSelf->Core__DOT__exu__DOT__exu_reg_rs2_data;
     }
+    vlSelf->io_Arbiter_state_debug = vlSelf->Core__DOT__arbiter__DOT__state;
     vlSelf->Core__DOT__arbiter__DOT____VdfgTmp_h4b16e7a1__0 
         = ((0U != (IData)(vlSelf->Core__DOT__arbiter__DOT__state)) 
            & (1U == (IData)(vlSelf->Core__DOT__arbiter__DOT__state)));
@@ -1201,7 +1202,7 @@ void VCore___024root___eval(VCore___024root* vlSelf) {
 #ifdef VL_DEBUG
             VCore___024root___dump_triggers__ico(vlSelf);
 #endif
-            VL_FATAL_MT("npc-chisel/generated/Core.sv", 969, "", "Input combinational region did not converge.");
+            VL_FATAL_MT("npc-chisel/generated/Core.sv", 971, "", "Input combinational region did not converge.");
         }
         __VicoIterCount = ((IData)(1U) + __VicoIterCount);
         __VicoContinue = 0U;
@@ -1217,7 +1218,7 @@ void VCore___024root___eval(VCore___024root* vlSelf) {
 #ifdef VL_DEBUG
             VCore___024root___dump_triggers__nba(vlSelf);
 #endif
-            VL_FATAL_MT("npc-chisel/generated/Core.sv", 969, "", "NBA region did not converge.");
+            VL_FATAL_MT("npc-chisel/generated/Core.sv", 971, "", "NBA region did not converge.");
         }
         __VnbaIterCount = ((IData)(1U) + __VnbaIterCount);
         __VnbaContinue = 0U;
@@ -1228,7 +1229,7 @@ void VCore___024root___eval(VCore___024root* vlSelf) {
 #ifdef VL_DEBUG
                 VCore___024root___dump_triggers__act(vlSelf);
 #endif
-                VL_FATAL_MT("npc-chisel/generated/Core.sv", 969, "", "Active region did not converge.");
+                VL_FATAL_MT("npc-chisel/generated/Core.sv", 971, "", "Active region did not converge.");
             }
             vlSelf->__VactIterCount = ((IData)(1U) 
                                        + vlSelf->__VactIterCount);
