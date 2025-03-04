@@ -69,7 +69,7 @@ class alignas(VL_CACHE_LINE_BYTES) VCore___024root final : public VerilatedModul
         CData/*0:0*/ Core__DOT__lsu__DOT__io_in_ready_0;
         CData/*0:0*/ Core__DOT__lsu__DOT__io_memory_w_valid_0;
         CData/*7:0*/ Core__DOT__lsu__DOT__unnamedblk1__DOT___GEN_6;
-        CData/*0:0*/ Core__DOT__lsu__DOT____VdfgTmp_hc8efc0c8__0;
+        CData/*0:0*/ Core__DOT__lsu__DOT____VdfgTmp_h235efdf4__0;
         CData/*0:0*/ Core__DOT__lsu__DOT____VdfgTmp_h0d5fed69__0;
         CData/*1:0*/ Core__DOT__wbu__DOT__state;
         CData/*0:0*/ Core__DOT__wbu__DOT__io_in_ready_0;
