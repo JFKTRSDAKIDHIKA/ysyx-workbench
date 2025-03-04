@@ -30,6 +30,7 @@ class alignas(VL_CACHE_LINE_BYTES) VCore VL_NOT_FINAL : public VerilatedModel {
     VL_IN8(&reset,0,0);
     VL_OUT8(&io_ifu_state_debug,1,0);
     VL_OUT8(&io_lsu_state_debug,1,0);
+    VL_OUT8(&io_lsu_is_ld_or_st_debug,0,0);
     VL_OUT8(&io_wbu_state_debug,1,0);
     VL_OUT8(&io_wb_wen_debug,0,0);
     VL_OUT8(&io_wb_sel_debug,1,0);

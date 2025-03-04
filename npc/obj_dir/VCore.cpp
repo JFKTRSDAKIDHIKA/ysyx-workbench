@@ -14,6 +14,7 @@ VCore::VCore(VerilatedContext* _vcontextp__, const char* _vcname__)
     , reset{vlSymsp->TOP.reset}
     , io_ifu_state_debug{vlSymsp->TOP.io_ifu_state_debug}
     , io_lsu_state_debug{vlSymsp->TOP.io_lsu_state_debug}
+    , io_lsu_is_ld_or_st_debug{vlSymsp->TOP.io_lsu_is_ld_or_st_debug}
     , io_wbu_state_debug{vlSymsp->TOP.io_wbu_state_debug}
     , io_wb_wen_debug{vlSymsp->TOP.io_wb_wen_debug}
     , io_wb_sel_debug{vlSymsp->TOP.io_wb_sel_debug}

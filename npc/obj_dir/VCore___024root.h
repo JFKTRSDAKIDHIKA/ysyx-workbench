@@ -20,6 +20,7 @@ class alignas(VL_CACHE_LINE_BYTES) VCore___024root final : public VerilatedModul
         VL_IN8(reset,0,0);
         VL_OUT8(io_ifu_state_debug,1,0);
         VL_OUT8(io_lsu_state_debug,1,0);
+        VL_OUT8(io_lsu_is_ld_or_st_debug,0,0);
         VL_OUT8(io_wbu_state_debug,1,0);
         VL_OUT8(io_wb_wen_debug,0,0);
         VL_OUT8(io_wb_sel_debug,1,0);
@@ -79,9 +80,9 @@ class alignas(VL_CACHE_LINE_BYTES) VCore___024root final : public VerilatedModul
         CData/*0:0*/ Core__DOT__arbiter__DOT___GEN_2;
         CData/*0:0*/ Core__DOT__arbiter__DOT___GEN_3;
         CData/*0:0*/ Core__DOT__arbiter__DOT__unnamedblk1__DOT__isIFUActive;
-        CData/*1:0*/ Core__DOT__arbiter__DOT__unnamedblk1__DOT___GEN_5;
     };
     struct {
+        CData/*1:0*/ Core__DOT__arbiter__DOT__unnamedblk1__DOT___GEN_5;
         CData/*7:0*/ Core__DOT__arbiter__DOT__unnamedblk1__DOT___GEN_6;
         CData/*0:0*/ Core__DOT__arbiter__DOT____VdfgTmp_h4b16e7a1__0;
         CData/*0:0*/ Core__DOT__arbiter__DOT____VdfgTmp_h0d5fed69__0;
@@ -145,9 +146,9 @@ class alignas(VL_CACHE_LINE_BYTES) VCore___024root final : public VerilatedModul
         IData/*31:0*/ Core__DOT__sram__DOT__sram__DOT__waddr_delayed;
         IData/*31:0*/ Core__DOT__sram__DOT__sram__DOT__wdata_delayed;
         IData/*31:0*/ __Vfunc_Core__DOT__sram__DOT__sram__DOT__pmem_read__2__Vfuncout;
-        IData/*31:0*/ __Vdly__Core__DOT__ifu__DOT__pc;
     };
     struct {
+        IData/*31:0*/ __Vdly__Core__DOT__ifu__DOT__pc;
         IData/*31:0*/ __VactIterCount;
         VlUnpacked<IData/*31:0*/, 32> Core__DOT__regfile__DOT__rf;
         VlUnpacked<CData/*0:0*/, 7> __Vm_traceActivity;
