@@ -28,9 +28,9 @@ class alignas(VL_CACHE_LINE_BYTES) VCore___024root final : public VerilatedModul
         CData/*0:0*/ Core__DOT___sram_io_axi_r_valid;
         CData/*0:0*/ Core__DOT___arbiter_io_ifu_r_valid;
         CData/*0:0*/ Core__DOT___arbiter_io_lsu_aw_ready;
+        CData/*0:0*/ Core__DOT___arbiter_io_axi_aw_valid;
         CData/*0:0*/ Core__DOT___arbiter_io_axi_ar_valid;
         CData/*0:0*/ Core__DOT___lsu_io_out_valid;
-        CData/*0:0*/ Core__DOT___lsu_io_memory_b_ready;
         CData/*0:0*/ Core__DOT___lsu_io_memory_ar_valid;
         CData/*0:0*/ Core__DOT___exu_io_out_valid;
         CData/*0:0*/ Core__DOT___idu_io_out_valid;
@@ -68,8 +68,8 @@ class alignas(VL_CACHE_LINE_BYTES) VCore___024root final : public VerilatedModul
         CData/*0:0*/ Core__DOT__lsu__DOT___GEN_3;
         CData/*0:0*/ Core__DOT__lsu__DOT___GEN_4;
         CData/*0:0*/ Core__DOT__lsu__DOT__io_in_ready_0;
-        CData/*0:0*/ Core__DOT__lsu__DOT__io_memory_w_valid_0;
-        CData/*7:0*/ Core__DOT__lsu__DOT__unnamedblk1__DOT___GEN_6;
+        CData/*0:0*/ Core__DOT__lsu__DOT__io_memory_b_ready_0;
+        CData/*7:0*/ Core__DOT__lsu__DOT__unnamedblk1__DOT___GEN_5;
         CData/*0:0*/ Core__DOT__lsu__DOT____VdfgTmp_h0d5fed69__0;
         CData/*1:0*/ Core__DOT__wbu__DOT__state;
         CData/*0:0*/ Core__DOT__wbu__DOT__io_in_ready_0;
