@@ -22,6 +22,8 @@ VCore::VCore(VerilatedContext* _vcontextp__, const char* _vcname__)
     , io_pc_debug{vlSymsp->TOP.io_pc_debug}
     , io_inst_debug{vlSymsp->TOP.io_inst_debug}
     , io_lsu_reg_inst_debug{vlSymsp->TOP.io_lsu_reg_inst_debug}
+    , io_dmem_wdata_debug{vlSymsp->TOP.io_dmem_wdata_debug}
+    , io_dmem_rdata_debug{vlSymsp->TOP.io_dmem_rdata_debug}
     , io_wb_data_debug{vlSymsp->TOP.io_wb_data_debug}
     , rootp{&(vlSymsp->TOP)}
 {
