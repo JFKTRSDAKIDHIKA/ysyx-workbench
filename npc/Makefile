@@ -5,7 +5,7 @@ CSRC = $(wildcard csrc/*.cpp)
 VSRC = $(wildcard npc-chisel/generated/*.sv)
 OBJ_DIR = obj_dir
 EXEC = $(OBJ_DIR)/VCore
-STEP_MODE = run
+STEP_MODE = step
 FLAGS += -Wno-lint -Wno-style
 
 # 默认目标
