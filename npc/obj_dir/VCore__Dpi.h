@@ -16,13 +16,13 @@ extern "C" {
 
 
     // DPI IMPORTS
-    // DPI import at npc-chisel/generated/Core.sv:1283:34
+    // DPI import at npc-chisel/generated/Core.sv:1290:34
     extern void get_register_values(const svLogicVecVal* rf);
-    // DPI import at npc-chisel/generated/Core.sv:1340:31
+    // DPI import at npc-chisel/generated/Core.sv:1347:31
     extern int pmem_read(int raddr);
-    // DPI import at npc-chisel/generated/Core.sv:1341:32
+    // DPI import at npc-chisel/generated/Core.sv:1348:32
     extern void pmem_write(int waddr, int wdata, char wmask);
-    // DPI import at npc-chisel/generated/Core.sv:1253:30
+    // DPI import at npc-chisel/generated/Core.sv:1260:30
     extern void simulation_exit();
 
 #ifdef __cplusplus
