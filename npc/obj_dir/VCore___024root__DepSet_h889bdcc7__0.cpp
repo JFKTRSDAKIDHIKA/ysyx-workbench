@@ -257,8 +257,7 @@ VL_INLINE_OPT void VCore___024root___nba_sequent__TOP__0(VCore___024root* vlSelf
                     ? 0U : vlSelf->Core__DOT___sram_io_axi_r_data);
         }
     }
-    if ((((IData)(vlSelf->io_wb_wen_debug) & (1U == (IData)(vlSelf->Core__DOT__wbu__DOT__state))) 
-         & (0U != (IData)(vlSelf->Core__DOT__wbu__DOT__wbu_reg_wb_addr)))) {
+    if (((IData)(vlSelf->io_wb_wen_debug) & (0U != (IData)(vlSelf->Core__DOT__wbu__DOT__wbu_reg_wb_addr)))) {
         __Vdlyvval__Core__DOT__regfile__DOT__rf__v0 
             = vlSelf->io_wb_data_debug;
         __Vdlyvset__Core__DOT__regfile__DOT__rf__v0 = 1U;
@@ -352,9 +351,10 @@ VL_INLINE_OPT void VCore___024root___nba_sequent__TOP__0(VCore___024root* vlSelf
             = (0x1fU & (vlSelf->Core__DOT__idu__DOT__idu_reg_inst 
                         >> 7U));
     }
-    vlSelf->io_wb_wen_debug = ((IData)(vlSelf->Core__DOT__wbu__DOT____VdfgTmp_he33a7f1b__0) 
-                               | ((3U == (0x7fU & vlSelf->Core__DOT__wbu__DOT__wbu_reg_inst)) 
-                                  | (IData)(vlSelf->Core__DOT__wbu__DOT____VdfgTmp_h00d1e98b__0)));
+    vlSelf->io_wb_wen_debug = (((IData)(vlSelf->Core__DOT__wbu__DOT____VdfgTmp_he33a7f1b__0) 
+                                | ((3U == (0x7fU & vlSelf->Core__DOT__wbu__DOT__wbu_reg_inst)) 
+                                   | (IData)(vlSelf->Core__DOT__wbu__DOT____VdfgTmp_h00d1e98b__0))) 
+                               & (1U == (IData)(vlSelf->Core__DOT__wbu__DOT__state)));
     vlSelf->io_wb_sel_debug = ((IData)(vlSelf->Core__DOT__wbu__DOT____VdfgTmp_he33a7f1b__0)
                                 ? 1U : (((0x73U == 
                                           (0x7fU & vlSelf->Core__DOT__wbu__DOT__wbu_reg_inst)) 

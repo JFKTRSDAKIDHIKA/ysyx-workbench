@@ -349,8 +349,6 @@ void VCore___024root__trace_chg_0_sub_0(VCore___024root* vlSelf, VerilatedVcd::B
                               | (__Vtemp_7[(7U & (VL_SHIFTL_III(8,8,32, (IData)(vlSelf->Core__DOT__lsu__DOT__mem_access_control), 5U) 
                                                   >> 5U))] 
                                  >> (0x1fU & VL_SHIFTL_III(8,8,32, (IData)(vlSelf->Core__DOT__lsu__DOT__mem_access_control), 5U))))),32);
-    bufp->chgBit(oldp+145,(((IData)(vlSelf->io_wb_wen_debug) 
-                            & (1U == (IData)(vlSelf->Core__DOT__wbu__DOT__state)))));
 }
 
 void VCore___024root__trace_cleanup(void* voidSelf, VerilatedVcd* /*unused*/) {

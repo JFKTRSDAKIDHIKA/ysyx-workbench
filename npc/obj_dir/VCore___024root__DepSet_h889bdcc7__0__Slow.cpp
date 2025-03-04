@@ -335,9 +335,10 @@ VL_ATTR_COLD void VCore___024root___stl_sequent__TOP__0(VCore___024root* vlSelf)
                                                    : 
                                                   (1U 
                                                    == (IData)(vlSelf->Core__DOT__lsu__DOT__state)));
-    vlSelf->io_wb_wen_debug = ((IData)(vlSelf->Core__DOT__wbu__DOT____VdfgTmp_he33a7f1b__0) 
-                               | ((3U == (0x7fU & vlSelf->Core__DOT__wbu__DOT__wbu_reg_inst)) 
-                                  | (IData)(vlSelf->Core__DOT__wbu__DOT____VdfgTmp_h00d1e98b__0)));
+    vlSelf->io_wb_wen_debug = (((IData)(vlSelf->Core__DOT__wbu__DOT____VdfgTmp_he33a7f1b__0) 
+                                | ((3U == (0x7fU & vlSelf->Core__DOT__wbu__DOT__wbu_reg_inst)) 
+                                   | (IData)(vlSelf->Core__DOT__wbu__DOT____VdfgTmp_h00d1e98b__0))) 
+                               & (1U == (IData)(vlSelf->Core__DOT__wbu__DOT__state)));
     vlSelf->io_wb_sel_debug = ((IData)(vlSelf->Core__DOT__wbu__DOT____VdfgTmp_he33a7f1b__0)
                                 ? 1U : (((0x73U == 
                                           (0x7fU & vlSelf->Core__DOT__wbu__DOT__wbu_reg_inst)) 
