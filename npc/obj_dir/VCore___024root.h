@@ -18,6 +18,7 @@ class alignas(VL_CACHE_LINE_BYTES) VCore___024root final : public VerilatedModul
     struct {
         VL_IN8(clock,0,0);
         VL_IN8(reset,0,0);
+        VL_OUT8(io_ifu_state_debug,1,0);
         VL_OUT8(io_lsu_state_debug,1,0);
         VL_OUT8(io_wbu_state_debug,1,0);
         VL_OUT8(io_wb_wen_debug,0,0);
@@ -79,9 +80,9 @@ class alignas(VL_CACHE_LINE_BYTES) VCore___024root final : public VerilatedModul
         CData/*7:0*/ Core__DOT__arbiter__DOT__unnamedblk1__DOT___GEN_6;
         CData/*0:0*/ Core__DOT__arbiter__DOT____VdfgTmp_h4b16e7a1__0;
         CData/*0:0*/ Core__DOT__arbiter__DOT____VdfgTmp_h0d5fed69__0;
-        CData/*0:0*/ Core__DOT__sram__DOT___sram_rd_res_valid;
     };
     struct {
+        CData/*0:0*/ Core__DOT__sram__DOT___sram_rd_res_valid;
         CData/*0:0*/ Core__DOT__sram__DOT___sram_wt_res_valid;
         CData/*1:0*/ Core__DOT__sram__DOT__state;
         CData/*7:0*/ Core__DOT__sram__DOT__wstrb_reg;
@@ -145,6 +146,8 @@ class alignas(VL_CACHE_LINE_BYTES) VCore___024root final : public VerilatedModul
         IData/*31:0*/ __Vdly__Core__DOT__ifu__DOT__pc;
         IData/*31:0*/ __VactIterCount;
         VlUnpacked<IData/*31:0*/, 32> Core__DOT__regfile__DOT__rf;
+    };
+    struct {
         VlUnpacked<CData/*0:0*/, 7> __Vm_traceActivity;
     };
     VlTriggerVec<1> __VstlTriggered;

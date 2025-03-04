@@ -12,6 +12,7 @@ VCore::VCore(VerilatedContext* _vcontextp__, const char* _vcname__)
     , vlSymsp{new VCore__Syms(contextp(), _vcname__, this)}
     , clock{vlSymsp->TOP.clock}
     , reset{vlSymsp->TOP.reset}
+    , io_ifu_state_debug{vlSymsp->TOP.io_ifu_state_debug}
     , io_lsu_state_debug{vlSymsp->TOP.io_lsu_state_debug}
     , io_wbu_state_debug{vlSymsp->TOP.io_wbu_state_debug}
     , io_wb_wen_debug{vlSymsp->TOP.io_wb_wen_debug}

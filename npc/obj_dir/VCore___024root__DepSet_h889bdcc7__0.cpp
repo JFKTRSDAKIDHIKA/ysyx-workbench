@@ -530,6 +530,7 @@ VL_INLINE_OPT void VCore___024root___nba_sequent__TOP__2(VCore___024root* vlSelf
                                                 == (IData)(vlSelf->Core__DOT__arbiter__DOT__state)) 
                                                | (1U 
                                                   == (IData)(vlSelf->Core__DOT__arbiter__DOT__state)));
+    vlSelf->io_ifu_state_debug = vlSelf->Core__DOT__ifu__DOT__state;
     vlSelf->Core__DOT___ifu_io_memory_ar_valid = ((0U 
                                                    != (IData)(vlSelf->Core__DOT__ifu__DOT__state)) 
                                                   & (1U 
@@ -1167,7 +1168,7 @@ void VCore___024root___eval(VCore___024root* vlSelf) {
 #ifdef VL_DEBUG
             VCore___024root___dump_triggers__ico(vlSelf);
 #endif
-            VL_FATAL_MT("npc-chisel/generated/Core.sv", 956, "", "Input combinational region did not converge.");
+            VL_FATAL_MT("npc-chisel/generated/Core.sv", 958, "", "Input combinational region did not converge.");
         }
         __VicoIterCount = ((IData)(1U) + __VicoIterCount);
         __VicoContinue = 0U;
@@ -1183,7 +1184,7 @@ void VCore___024root___eval(VCore___024root* vlSelf) {
 #ifdef VL_DEBUG
             VCore___024root___dump_triggers__nba(vlSelf);
 #endif
-            VL_FATAL_MT("npc-chisel/generated/Core.sv", 956, "", "NBA region did not converge.");
+            VL_FATAL_MT("npc-chisel/generated/Core.sv", 958, "", "NBA region did not converge.");
         }
         __VnbaIterCount = ((IData)(1U) + __VnbaIterCount);
         __VnbaContinue = 0U;
@@ -1194,7 +1195,7 @@ void VCore___024root___eval(VCore___024root* vlSelf) {
 #ifdef VL_DEBUG
                 VCore___024root___dump_triggers__act(vlSelf);
 #endif
-                VL_FATAL_MT("npc-chisel/generated/Core.sv", 956, "", "Active region did not converge.");
+                VL_FATAL_MT("npc-chisel/generated/Core.sv", 958, "", "Active region did not converge.");
             }
             vlSelf->__VactIterCount = ((IData)(1U) 
                                        + vlSelf->__VactIterCount);

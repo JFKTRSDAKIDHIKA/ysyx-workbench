@@ -214,6 +214,7 @@ void tick(VCore* top, bool silent_mode ) {
                 << ", wb_wen: 0x" << std::hex << static_cast<int>(top->io_wb_wen_debug)
                 << ", wb_sel: 0x" << std::hex << static_cast<int>(top->io_wb_sel_debug) << "\n"
                 << "State Machines: "
+                << "ifu_state: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->io_ifu_state_debug)
                 << "lsu_state: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->io_lsu_state_debug)
                 << ", wbu_state: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->io_wbu_state_debug)
                 << std::dec << std::endl;
