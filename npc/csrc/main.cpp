@@ -149,7 +149,7 @@ int check_dut_and_ref(VCore* top, paddr_t start_addr, size_t size) {
   }
 
   // Compare program counter (PC) between DUT and REF
-  if (top->io_pc_debug != ref.pc + 4) {
+  if (top->io_pc_debug != ref.pc) {
       std::cerr << "PC mismatch - DUT: 0x" << std::hex << top->io_pc_debug 
                 << " REF: 0x" << std::hex << ref.pc << std::endl;
       
@@ -277,8 +277,8 @@ static int execute_single_step() {
   tick(top, is_silent_mode);  
 #ifdef DIFFTEST
   if (need_check) {
-    ref_difftest_regcpy(&ref, DIFFTEST_TO_REF);
     ref_difftest_exec(1);
+    ref_difftest_regcpy(&ref, DIFFTEST_TO_REF);
     need_check = static_cast<int>(top->io_wbu_state_debug) == 2;
     return check_dut_and_ref(top, 0x80000000, 0x1000);
   } else {
