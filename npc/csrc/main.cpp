@@ -278,8 +278,8 @@ static int execute_single_step() {
 #ifdef DIFFTEST
   printf("need_check: %d\n", need_check);
   if (need_check) {
-    ref_difftest_regcpy(&ref, DIFFTEST_TO_REF);
     ref_difftest_exec(1);
+    ref_difftest_regcpy(&ref, DIFFTEST_TO_REF);
     need_check = static_cast<int>(top->io_wbu_state_debug) == 2;
     return check_dut_and_ref(top, 0x80000000, 0x1000);
   } else {
