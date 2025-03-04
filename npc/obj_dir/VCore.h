@@ -5,21 +5,21 @@
 // The class here is then constructed to instantiate the design.
 // See the Verilator manual for examples.
 
-#ifndef VERILATED_VYSYX_24120009_CORE_H_
-#define VERILATED_VYSYX_24120009_CORE_H_  // guard
+#ifndef VERILATED_VCORE_H_
+#define VERILATED_VCORE_H_  // guard
 
 #include "verilated.h"
 #include "svdpi.h"
 
-class Vysyx_24120009_core__Syms;
-class Vysyx_24120009_core___024root;
+class VCore__Syms;
+class VCore___024root;
 class VerilatedVcdC;
 
 // This class is the main interface to the Verilated model
-class Vysyx_24120009_core VL_NOT_FINAL : public VerilatedModel {
+class alignas(VL_CACHE_LINE_BYTES) VCore VL_NOT_FINAL : public VerilatedModel {
   private:
     // Symbol table holding complete model state (owned by this class)
-    Vysyx_24120009_core__Syms* const vlSymsp;
+    VCore__Syms* const vlSymsp;
 
   public:
 
@@ -28,6 +28,13 @@ class Vysyx_24120009_core VL_NOT_FINAL : public VerilatedModel {
     // propagate new values into/out from the Verilated model.
     VL_IN8(&clock,0,0);
     VL_IN8(&reset,0,0);
+    VL_OUT8(&io_lsu_state_debug,1,0);
+    VL_OUT8(&io_wbu_state_debug,1,0);
+    VL_OUT8(&io_wb_wen_debug,0,0);
+    VL_OUT8(&io_wb_sel_debug,1,0);
+    VL_OUT(&io_pc_debug,31,0);
+    VL_OUT(&io_inst_debug,31,0);
+    VL_OUT(&io_wb_data_debug,31,0);
 
     // CELLS
     // Public to allow access to /* verilator public */ items.
@@ -35,19 +42,19 @@ class Vysyx_24120009_core VL_NOT_FINAL : public VerilatedModel {
 
     // Root instance pointer to allow access to model internals,
     // including inlined /* verilator public_flat_* */ items.
-    Vysyx_24120009_core___024root* const rootp;
+    VCore___024root* const rootp;
 
     // CONSTRUCTORS
     /// Construct the model; called by application code
     /// If contextp is null, then the model will use the default global context
     /// If name is "", then makes a wrapper with a
     /// single model invisible with respect to DPI scope names.
-    explicit Vysyx_24120009_core(VerilatedContext* contextp, const char* name = "TOP");
-    explicit Vysyx_24120009_core(const char* name = "TOP");
+    explicit VCore(VerilatedContext* contextp, const char* name = "TOP");
+    explicit VCore(const char* name = "TOP");
     /// Destroy the model; called (often implicitly) by application code
-    virtual ~Vysyx_24120009_core();
+    virtual ~VCore();
   private:
-    VL_UNCOPYABLE(Vysyx_24120009_core);  ///< Copying not allowed
+    VL_UNCOPYABLE(VCore);  ///< Copying not allowed
 
   public:
     // API METHODS
@@ -73,7 +80,13 @@ class Vysyx_24120009_core VL_NOT_FINAL : public VerilatedModel {
     const char* hierName() const override final;
     const char* modelName() const override final;
     unsigned threads() const override final;
+    /// Prepare for cloning the model at the process level (e.g. fork in Linux)
+    /// Release necessary resources. Called before cloning.
+    void prepareClone() const;
+    /// Re-init after cloning the model at the process level (e.g. fork in Linux)
+    /// Re-allocate necessary resources. Called after cloning.
+    void atClone() const;
     std::unique_ptr<VerilatedTraceConfig> traceConfig() const override final;
-} VL_ATTR_ALIGNED(VL_CACHE_LINE_BYTES);
+};
 
 #endif  // guard

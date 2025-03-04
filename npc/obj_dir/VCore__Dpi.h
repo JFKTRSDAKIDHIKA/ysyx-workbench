@@ -5,8 +5,8 @@
 // Manually include this file where DPI .c import functions are declared to ensure
 // the C functions match the expectations of the DPI imports.
 
-#ifndef VERILATED_VYSYX_24120009_CORE__DPI_H_
-#define VERILATED_VYSYX_24120009_CORE__DPI_H_  // guard
+#ifndef VERILATED_VCORE__DPI_H_
+#define VERILATED_VCORE__DPI_H_  // guard
 
 #include "svdpi.h"
 
@@ -16,12 +16,14 @@ extern "C" {
 
 
     // DPI IMPORTS
-    // DPI import at vsrc/cpu/ysyx_24120009_core.v:1061:34
+    // DPI import at npc-chisel/generated/Core.sv:1274:34
     extern void get_register_values(const svLogicVecVal* rf);
-    // DPI import at vsrc/cpu/ysyx_24120009_core.v:1118:31
+    // DPI import at npc-chisel/generated/Core.sv:1331:31
     extern int pmem_read(int raddr);
-    // DPI import at vsrc/cpu/ysyx_24120009_core.v:1119:32
+    // DPI import at npc-chisel/generated/Core.sv:1332:32
     extern void pmem_write(int waddr, int wdata, char wmask);
+    // DPI import at npc-chisel/generated/Core.sv:1244:30
+    extern void simulation_exit();
 
 #ifdef __cplusplus
 }

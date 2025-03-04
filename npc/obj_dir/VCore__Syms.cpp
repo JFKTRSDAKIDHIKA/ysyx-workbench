@@ -1,16 +1,16 @@
 // Verilated -*- C++ -*-
 // DESCRIPTION: Verilator output: Symbol table implementation internals
 
-#include "Vysyx_24120009_core__Syms.h"
-#include "Vysyx_24120009_core.h"
-#include "Vysyx_24120009_core___024root.h"
+#include "VCore__pch.h"
+#include "VCore.h"
+#include "VCore___024root.h"
 
 // FUNCTIONS
-Vysyx_24120009_core__Syms::~Vysyx_24120009_core__Syms()
+VCore__Syms::~VCore__Syms()
 {
 }
 
-Vysyx_24120009_core__Syms::Vysyx_24120009_core__Syms(VerilatedContext* contextp, const char* namep, Vysyx_24120009_core* modelp)
+VCore__Syms::VCore__Syms(VerilatedContext* contextp, const char* namep, VCore* modelp)
     : VerilatedSyms{contextp}
     // Setup internal state of the Syms class
     , __Vm_modelp{modelp}
