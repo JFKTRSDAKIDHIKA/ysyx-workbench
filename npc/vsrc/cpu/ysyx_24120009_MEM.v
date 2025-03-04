@@ -21,10 +21,6 @@ module ysyx_24120009_MEM (
     output                                           mem_access_done,
     // Signals passed to simulation environment
     output  mem_active,
-    // Signals passed from IFU
-    input [`ysyx_24120009_DATA_WIDTH-1:0] inst_from_IFU,
-    // Signals passed from WBU
-    input [`ysyx_24120009_DATA_WIDTH-1:0] inst_from_WBU,
     // Memory interface
     // AXI4-Lite Write Channel
     output wire awvalid,

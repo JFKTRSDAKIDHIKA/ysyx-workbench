@@ -13,7 +13,7 @@ all: $(EXEC)
 
 # 编译 Verilator 模型并生成可执行文件
 $(EXEC): $(TOP_MODULE) $(CSRC) $(VSRC)
-	$(VERILATOR) --cc $(TOP_MODULE) --exe $(CSRC) $(INCLUDE_DIRS) \
+	$(VERILATOR) -Wno-lint -Wno-style --cc $(TOP_MODULE) --exe $(CSRC) $(INCLUDE_DIRS) \
                     --build -j 0 --top-module ysyx_24120009_core \
                     --Mdir $(OBJ_DIR) --trace \
                     -LDFLAGS "-lreadline" 
