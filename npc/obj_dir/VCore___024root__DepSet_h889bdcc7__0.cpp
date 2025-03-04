@@ -18,11 +18,8 @@ VL_INLINE_OPT void VCore___024root___ico_sequent__TOP__0(VCore___024root* vlSelf
                                                    & (IData)(vlSelf->Core__DOT__sram__DOT__io_axi_w_ready_0));
     vlSelf->Core__DOT__sram__DOT___GEN_2 = ((IData)(vlSelf->Core__DOT__sram__DOT____VdfgTmp_h93f383d4__0) 
                                             | (1U == (IData)(vlSelf->Core__DOT__sram__DOT__state)));
-    vlSelf->Core__DOT___lsu_io_memory_b_ready = ((IData)(vlSelf->Core__DOT__lsu__DOT____VdfgTmp_h235efdf4__0) 
+    vlSelf->Core__DOT___lsu_io_memory_b_ready = ((IData)(vlSelf->Core__DOT__lsu__DOT__io_memory_w_valid_0) 
                                                  & (IData)(vlSelf->Core__DOT___arbiter_io_lsu_aw_ready));
-    vlSelf->Core__DOT__lsu__DOT__io_memory_w_valid_0 
-        = ((~ (IData)(vlSelf->Core__DOT___arbiter_io_lsu_aw_ready)) 
-           & (IData)(vlSelf->Core__DOT__lsu__DOT____VdfgTmp_h235efdf4__0));
     vlSelf->Core__DOT___sram_io_axi_r_valid = ((~ (IData)(vlSelf->Core__DOT__sram__DOT___GEN_2)) 
                                                & (IData)(vlSelf->Core__DOT__sram__DOT____VdfgTmp_hb61e3587__0));
     vlSelf->Core__DOT___sram_io_axi_r_data = ((1U & 
@@ -768,16 +765,16 @@ VL_INLINE_OPT void VCore___024root___nba_sequent__TOP__2(VCore___024root* vlSelf
                                                   & (IData)(vlSelf->Core__DOT___lsu_io_out_valid));
     vlSelf->Core__DOT___lsu_io_memory_ar_valid = ((IData)(vlSelf->Core__DOT__lsu__DOT____VdfgTmp_h0d5fed69__0) 
                                                   & (IData)(vlSelf->Core__DOT__lsu__DOT__isLoad));
-    vlSelf->Core__DOT__lsu__DOT____VdfgTmp_h235efdf4__0 
+    vlSelf->Core__DOT__lsu__DOT__io_memory_w_valid_0 
         = ((IData)(vlSelf->Core__DOT__lsu__DOT____VdfgTmp_h0d5fed69__0) 
            & ((~ (IData)(vlSelf->Core__DOT__lsu__DOT__isLoad)) 
               & (IData)(vlSelf->Core__DOT__lsu__DOT__isStore)));
-    vlSelf->Core__DOT__arbiter__DOT___GEN_3 = ((2U 
-                                                != (IData)(vlSelf->Core__DOT__arbiter__DOT__state)) 
-                                               | (IData)(vlSelf->Core__DOT__arbiter__DOT___GEN_2));
     vlSelf->Core__DOT__arbiter__DOT____VdfgTmp_h0d5fed69__0 
         = ((~ (IData)(vlSelf->Core__DOT__arbiter__DOT___GEN_2)) 
            & (2U == (IData)(vlSelf->Core__DOT__arbiter__DOT__state)));
+    vlSelf->Core__DOT__arbiter__DOT___GEN_3 = ((2U 
+                                                != (IData)(vlSelf->Core__DOT__arbiter__DOT__state)) 
+                                               | (IData)(vlSelf->Core__DOT__arbiter__DOT___GEN_2));
     vlSelf->Core__DOT__sram__DOT___GEN_2 = ((IData)(vlSelf->Core__DOT__sram__DOT____VdfgTmp_h93f383d4__0) 
                                             | (1U == (IData)(vlSelf->Core__DOT__sram__DOT__state)));
     vlSelf->Core__DOT___exu_io_out_valid = ((~ ((0U 
@@ -808,11 +805,8 @@ VL_INLINE_OPT void VCore___024root___nba_sequent__TOP__2(VCore___024root* vlSelf
         vlSelf->Core__DOT__exu__DOT__exu_reg_rs2_data 
             = vlSelf->Core__DOT___regfile_rs2_data;
     }
-    vlSelf->Core__DOT___lsu_io_memory_b_ready = ((IData)(vlSelf->Core__DOT__lsu__DOT____VdfgTmp_h235efdf4__0) 
+    vlSelf->Core__DOT___lsu_io_memory_b_ready = ((IData)(vlSelf->Core__DOT__lsu__DOT__io_memory_w_valid_0) 
                                                  & (IData)(vlSelf->Core__DOT___arbiter_io_lsu_aw_ready));
-    vlSelf->Core__DOT__lsu__DOT__io_memory_w_valid_0 
-        = ((~ (IData)(vlSelf->Core__DOT___arbiter_io_lsu_aw_ready)) 
-           & (IData)(vlSelf->Core__DOT__lsu__DOT____VdfgTmp_h235efdf4__0));
     vlSelf->Core__DOT___idu_io_out_valid = ((~ ((0U 
                                                  == (IData)(vlSelf->Core__DOT__idu__DOT__state)) 
                                                 | (1U 
