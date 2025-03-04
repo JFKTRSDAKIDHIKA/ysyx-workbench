@@ -116,6 +116,7 @@ class alignas(VL_CACHE_LINE_BYTES) VCore___024root final : public VerilatedModul
         SData/*9:0*/ Core__DOT__lsu__DOT___mem_access_control_T;
         VL_OUT(io_pc_debug,31,0);
         VL_OUT(io_inst_debug,31,0);
+        VL_OUT(io_lsu_reg_inst_debug,31,0);
         VL_OUT(io_wb_data_debug,31,0);
         IData/*31:0*/ Core__DOT___sram_io_axi_r_data;
         IData/*31:0*/ Core__DOT___arbiter_io_lsu_r_data;
@@ -145,9 +146,9 @@ class alignas(VL_CACHE_LINE_BYTES) VCore___024root final : public VerilatedModul
         IData/*31:0*/ Core__DOT__sram__DOT__addr_reg;
         IData/*31:0*/ Core__DOT__sram__DOT__wdata_reg;
         IData/*31:0*/ Core__DOT__sram__DOT__sram__DOT__addr_delayed;
-        IData/*31:0*/ Core__DOT__sram__DOT__sram__DOT__waddr_delayed;
     };
     struct {
+        IData/*31:0*/ Core__DOT__sram__DOT__sram__DOT__waddr_delayed;
         IData/*31:0*/ Core__DOT__sram__DOT__sram__DOT__wdata_delayed;
         IData/*31:0*/ __Vfunc_Core__DOT__sram__DOT__sram__DOT__pmem_read__2__Vfuncout;
         IData/*31:0*/ __Vdly__Core__DOT__ifu__DOT__pc;

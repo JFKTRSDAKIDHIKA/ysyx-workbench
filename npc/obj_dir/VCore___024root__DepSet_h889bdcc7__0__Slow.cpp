@@ -97,7 +97,7 @@ VL_ATTR_COLD void VCore___024root___eval_settle(VCore___024root* vlSelf) {
 #ifdef VL_DEBUG
             VCore___024root___dump_triggers__stl(vlSelf);
 #endif
-            VL_FATAL_MT("npc-chisel/generated/Core.sv", 968, "", "Settle region did not converge.");
+            VL_FATAL_MT("npc-chisel/generated/Core.sv", 970, "", "Settle region did not converge.");
         }
         __VstlIterCount = ((IData)(1U) + __VstlIterCount);
         __VstlContinue = 0U;
@@ -140,6 +140,7 @@ VL_ATTR_COLD void VCore___024root___stl_sequent__TOP__0(VCore___024root* vlSelf)
     vlSelf->io_pc_debug = vlSelf->Core__DOT__ifu__DOT__pc;
     vlSelf->io_ifu_state_debug = vlSelf->Core__DOT__ifu__DOT__state;
     vlSelf->io_lsu_state_debug = vlSelf->Core__DOT__lsu__DOT__state;
+    vlSelf->io_lsu_reg_inst_debug = vlSelf->Core__DOT__lsu__DOT__lsu_reg_inst;
     vlSelf->io_wbu_state_debug = vlSelf->Core__DOT__wbu__DOT__state;
     vlSelf->Core__DOT__idu__DOT___GEN = (0U == (IData)(vlSelf->Core__DOT__idu__DOT__state));
     vlSelf->Core__DOT__idu__DOT___GEN_0 = (1U == (IData)(vlSelf->Core__DOT__idu__DOT__state));
@@ -819,6 +820,7 @@ VL_ATTR_COLD void VCore___024root___ctor_var_reset(VCore___024root* vlSelf) {
     vlSelf->io_ifu_state_debug = VL_RAND_RESET_I(2);
     vlSelf->io_lsu_state_debug = VL_RAND_RESET_I(2);
     vlSelf->io_lsu_is_ld_or_st_debug = VL_RAND_RESET_I(1);
+    vlSelf->io_lsu_reg_inst_debug = VL_RAND_RESET_I(32);
     vlSelf->io_wbu_state_debug = VL_RAND_RESET_I(2);
     vlSelf->io_wb_data_debug = VL_RAND_RESET_I(32);
     vlSelf->io_wb_wen_debug = VL_RAND_RESET_I(1);
