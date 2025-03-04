@@ -276,12 +276,13 @@ static int need_check;
 static int execute_single_step() {
   tick(top, is_silent_mode);  
 #ifdef DIFFTEST
-  need_check = (static_cast<int>(top->io_wbu_state_debug) == 2);
   if (need_check) {
+    need_check = (static_cast<int>(top->io_wbu_state_debug) == 2);
     ref_difftest_regcpy(&ref, DIFFTEST_TO_REF);
     ref_difftest_exec(1);
     return check_dut_and_ref(top, 0x80000000, 0x1000);
   } else {
+    need_check = (static_cast<int>(top->io_wbu_state_debug) == 2);
     return 0;
   }
 #else 
