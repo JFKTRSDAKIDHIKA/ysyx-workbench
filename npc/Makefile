@@ -5,7 +5,7 @@ CSRC = $(wildcard csrc/*.cpp)
 VSRC = $(shell find vsrc -name "*.v") $(wildcard npc-chisel/generated/*.sv)
 INCLUDE_DIRS = -Ivsrc/perip/uart16550/rtl -Ivsrc/perip/spi/rtl
 OBJ_DIR = obj_dir
-EXEC = $(OBJ_DIR)/ysyxSoCFull
+EXEC = $(OBJ_DIR)/VysyxSoCFull
 STEP_MODE = run
 FLAGS += -Wno-lint -Wno-style --timescale "1ns/1ns" --no-timing
 
