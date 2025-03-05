@@ -103,6 +103,9 @@ class alignas(VL_CACHE_LINE_BYTES) VCore___024root final : public VerilatedModul
         CData/*0:0*/ Core__DOT__arbiter__DOT____VdfgTmp_h41ece670__0;
         CData/*0:0*/ Core__DOT__arbiter__DOT____VdfgTmp_hd26a19fd__0;
         CData/*0:0*/ Core__DOT__xbar__DOT___GEN;
+        CData/*0:0*/ Core__DOT__xbar__DOT___GEN_0;
+        CData/*0:0*/ Core__DOT__xbar__DOT___GEN_1;
+        CData/*0:0*/ Core__DOT__xbar__DOT____VdfgTmp_h9f2d9de7__0;
         CData/*0:0*/ Core__DOT__sram__DOT___sram_rd_res_valid;
         CData/*0:0*/ Core__DOT__sram__DOT___sram_wt_res_valid;
         CData/*1:0*/ Core__DOT__sram__DOT__state;
@@ -143,11 +146,11 @@ class alignas(VL_CACHE_LINE_BYTES) VCore___024root final : public VerilatedModul
         IData/*31:0*/ Core__DOT___xbar_io_in_r_data;
         IData/*31:0*/ Core__DOT___xbar_io_uart_aw_addr;
         IData/*31:0*/ Core__DOT___xbar_io_uart_w_data;
+    };
+    struct {
         IData/*31:0*/ Core__DOT___arbiter_io_lsu_r_data;
         IData/*31:0*/ Core__DOT___arbiter_io_axi_w_data;
         IData/*31:0*/ Core__DOT___arbiter_io_axi_ar_addr;
-    };
-    struct {
         IData/*31:0*/ Core__DOT___regfile_rs1_data;
         IData/*31:0*/ Core__DOT___regfile_rs2_data;
         IData/*31:0*/ Core__DOT___idu_io_out_bits_alu_op1;
@@ -178,6 +181,7 @@ class alignas(VL_CACHE_LINE_BYTES) VCore___024root final : public VerilatedModul
         IData/*31:0*/ Core__DOT__sram__DOT__sram__DOT__waddr_delayed;
         IData/*31:0*/ Core__DOT__sram__DOT__sram__DOT__wdata_delayed;
         IData/*31:0*/ Core__DOT__uart__DOT__uartRaw__DOT__uart_reg;
+        IData/*31:0*/ __VdfgTmp_hd07d15e1__0;
         IData/*31:0*/ __Vfunc_Core__DOT__sram__DOT__sram__DOT__pmem_read__2__Vfuncout;
         IData/*31:0*/ __VactIterCount;
         VlUnpacked<IData/*31:0*/, 32> Core__DOT__regfile__DOT__rf;
