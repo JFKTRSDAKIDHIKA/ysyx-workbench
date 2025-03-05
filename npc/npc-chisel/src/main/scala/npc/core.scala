@@ -18,6 +18,7 @@ class Core extends Module with RISCVConstants {
         val lsu_reg_inst_debug = Output(UInt(32.W))
         val dmem_wdata_debug = Output(UInt(32.W))
         val dmem_rdata_debug = Output(UInt(32.W))
+        val lsu_reg_dmem_addr_debug = Output(UInt(32.W))
         // wbu
         val wbu_state_debug = Output(UInt(2.W))
         val wb_data_debug = Output(UInt(32.W))
@@ -96,6 +97,7 @@ class Core extends Module with RISCVConstants {
     io.lsu_reg_inst_debug := lsu.io.lsu_reg_inst_debug
     io.dmem_rdata_debug := lsu.io.dmem_rdata_debug
     io.dmem_wdata_debug := lsu.io.dmem_wdata_debug
+    io.lsu_reg_dmem_addr_debug := lsu.io.lsu_reg_dmem_addr_debug
     // wbu
     io.wbu_state_debug := wbu.io.wbu_state_debug
     io.wb_data_debug := wbu.io.wb_data_debug

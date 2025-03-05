@@ -31,6 +31,7 @@ class LSUIO extends Bundle {
   val lsu_reg_inst_debug = Output(UInt(32.W))
   val dmem_wdata_debug = Output(UInt(32.W))
   val dmem_rdata_debug = Output(UInt(32.W))
+  val lsu_reg_dmem_addr_debug = Output(UInt(32.W))
 }
 
 class LSU extends Module with RISCVConstants{
@@ -226,5 +227,6 @@ class LSU extends Module with RISCVConstants{
   io.lsu_reg_inst_debug := lsu_reg_inst
   io.dmem_wdata_debug := write_mask_gen.io.dmem_wdata
   io.dmem_rdata_debug := io.out.bits.dmem_rdata
+  io.lsu_reg_dmem_addr_debug := lsu_reg_dmem_addr
 }
 
