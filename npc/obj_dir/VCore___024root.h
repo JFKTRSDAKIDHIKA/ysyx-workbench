@@ -32,6 +32,7 @@ class alignas(VL_CACHE_LINE_BYTES) VCore___024root final : public VerilatedModul
         CData/*0:0*/ Core__DOT___lsu_io_out_valid;
         CData/*0:0*/ Core__DOT___lsu_io_memory_b_ready;
         CData/*0:0*/ Core__DOT___lsu_io_memory_ar_valid;
+        CData/*0:0*/ Core__DOT___lsu_io_memory_r_ready;
         CData/*0:0*/ Core__DOT___exu_io_out_valid;
         CData/*0:0*/ Core__DOT___idu_io_out_valid;
         CData/*2:0*/ Core__DOT___idu_io_pc_sel;
@@ -79,9 +80,9 @@ class alignas(VL_CACHE_LINE_BYTES) VCore___024root final : public VerilatedModul
         CData/*0:0*/ Core__DOT__wbu__DOT____VdfgTmp_he33a7f1b__0;
         CData/*0:0*/ Core__DOT__wbu__DOT____VdfgTmp_h00d1e98b__0;
         CData/*1:0*/ Core__DOT__arbiter__DOT__state;
-        CData/*0:0*/ Core__DOT__arbiter__DOT___GEN_2;
     };
     struct {
+        CData/*0:0*/ Core__DOT__arbiter__DOT___GEN_2;
         CData/*0:0*/ Core__DOT__arbiter__DOT___GEN_3;
         CData/*0:0*/ Core__DOT__arbiter__DOT__unnamedblk1__DOT__isIFUActive;
         CData/*1:0*/ Core__DOT__arbiter__DOT__unnamedblk1__DOT___GEN_5;
@@ -145,9 +146,9 @@ class alignas(VL_CACHE_LINE_BYTES) VCore___024root final : public VerilatedModul
         IData/*31:0*/ Core__DOT__wbu__DOT__wbu_reg_pc;
         IData/*31:0*/ Core__DOT__wbu__DOT__wbu_reg_result;
         IData/*31:0*/ Core__DOT__wbu__DOT__wbu_reg_dmem_rdata;
-        IData/*31:0*/ Core__DOT__regfile__DOT__unnamedblk1__DOT__i;
     };
     struct {
+        IData/*31:0*/ Core__DOT__regfile__DOT__unnamedblk1__DOT__i;
         IData/*31:0*/ Core__DOT__sram__DOT___sram_data_out;
         IData/*31:0*/ Core__DOT__sram__DOT__addr_reg;
         IData/*31:0*/ Core__DOT__sram__DOT__wdata_reg;

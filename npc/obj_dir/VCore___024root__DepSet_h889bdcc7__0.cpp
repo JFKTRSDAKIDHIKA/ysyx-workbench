@@ -125,8 +125,9 @@ VL_INLINE_OPT void VCore___024root___nba_sequent__TOP__0(VCore___024root* vlSelf
                | (IData)(vlSelf->Core__DOT___ifu_io_memory_r_ready));
         vlSelf->Core__DOT__arbiter__DOT__unnamedblk1__DOT___GEN_5 
             = ((IData)(vlSelf->Core__DOT__arbiter__DOT__unnamedblk1__DOT__isIFUActive)
-                ? 1U : ((((IData)(vlSelf->Core__DOT___lsu_io_memory_ar_valid) 
-                          | (IData)(vlSelf->Core__DOT__lsu__DOT__io_memory_w_valid_0)) 
+                ? 1U : (((((IData)(vlSelf->Core__DOT___lsu_io_memory_ar_valid) 
+                           | (IData)(vlSelf->Core__DOT__lsu__DOT__io_memory_w_valid_0)) 
+                          | (IData)(vlSelf->Core__DOT___lsu_io_memory_r_ready)) 
                          | ((IData)(vlSelf->Core__DOT___lsu_io_memory_b_ready) 
                             & (~ (IData)(vlSelf->Core__DOT__arbiter__DOT__unnamedblk1__DOT__isIFUActive)))) 
                         << 1U));
@@ -789,8 +790,7 @@ VL_INLINE_OPT void VCore___024root___nba_sequent__TOP__2(VCore___024root* vlSelf
                            & ((1U == (IData)(vlSelf->Core__DOT__arbiter__DOT__state))
                                ? (IData)(vlSelf->Core__DOT___ifu_io_memory_r_ready)
                                : ((2U == (IData)(vlSelf->Core__DOT__arbiter__DOT__state)) 
-                                  & ((IData)(vlSelf->Core__DOT__lsu__DOT____VdfgTmp_h0d5fed69__0) 
-                                     & (IData)(vlSelf->Core__DOT__lsu__DOT__isLoad)))))))) {
+                                  & (IData)(vlSelf->Core__DOT___lsu_io_memory_r_ready))))))) {
             vlSelf->Core__DOT__sram__DOT__state = 0U;
         }
         vlSelf->__Vdly__Core__DOT__sram__DOT__rd_req_valid 
@@ -1043,6 +1043,8 @@ VL_INLINE_OPT void VCore___024root___nba_sequent__TOP__2(VCore___024root* vlSelf
     vlSelf->Core__DOT__wbu__DOT__io_in_ready_0 = ((0U 
                                                    == (IData)(vlSelf->Core__DOT__wbu__DOT__state)) 
                                                   & (IData)(vlSelf->Core__DOT___lsu_io_out_valid));
+    vlSelf->Core__DOT___lsu_io_memory_r_ready = ((IData)(vlSelf->Core__DOT__lsu__DOT____VdfgTmp_h0d5fed69__0) 
+                                                 & (IData)(vlSelf->Core__DOT__lsu__DOT__isLoad));
     vlSelf->Core__DOT___arbiter_io_axi_ar_valid = (
                                                    (0U 
                                                     != (IData)(vlSelf->Core__DOT__arbiter__DOT__state)) 
@@ -1203,7 +1205,7 @@ void VCore___024root___eval(VCore___024root* vlSelf) {
 #ifdef VL_DEBUG
             VCore___024root___dump_triggers__ico(vlSelf);
 #endif
-            VL_FATAL_MT("npc-chisel/generated/Core.sv", 978, "", "Input combinational region did not converge.");
+            VL_FATAL_MT("npc-chisel/generated/Core.sv", 980, "", "Input combinational region did not converge.");
         }
         __VicoIterCount = ((IData)(1U) + __VicoIterCount);
         __VicoContinue = 0U;
@@ -1219,7 +1221,7 @@ void VCore___024root___eval(VCore___024root* vlSelf) {
 #ifdef VL_DEBUG
             VCore___024root___dump_triggers__nba(vlSelf);
 #endif
-            VL_FATAL_MT("npc-chisel/generated/Core.sv", 978, "", "NBA region did not converge.");
+            VL_FATAL_MT("npc-chisel/generated/Core.sv", 980, "", "NBA region did not converge.");
         }
         __VnbaIterCount = ((IData)(1U) + __VnbaIterCount);
         __VnbaContinue = 0U;
@@ -1230,7 +1232,7 @@ void VCore___024root___eval(VCore___024root* vlSelf) {
 #ifdef VL_DEBUG
                 VCore___024root___dump_triggers__act(vlSelf);
 #endif
-                VL_FATAL_MT("npc-chisel/generated/Core.sv", 978, "", "Active region did not converge.");
+                VL_FATAL_MT("npc-chisel/generated/Core.sv", 980, "", "Active region did not converge.");
             }
             vlSelf->__VactIterCount = ((IData)(1U) 
                                        + vlSelf->__VactIterCount);

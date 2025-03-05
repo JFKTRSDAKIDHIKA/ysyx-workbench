@@ -183,8 +183,7 @@ void VCore___024root__trace_chg_0_sub_0(VCore___024root* vlSelf, VerilatedVcd::B
                                             & (IData)(vlSelf->Core__DOT__lsu__DOT__isLoad))) 
                                         | (0U == (IData)(vlSelf->Core__DOT__lsu__DOT__state))))
                                   ? 0U : vlSelf->Core__DOT__lsu__DOT__lsu_reg_dmem_addr)),32);
-        bufp->chgBit(oldp+95,(((IData)(vlSelf->Core__DOT__lsu__DOT____VdfgTmp_h0d5fed69__0) 
-                               & (IData)(vlSelf->Core__DOT__lsu__DOT__isLoad))));
+        bufp->chgBit(oldp+95,(vlSelf->Core__DOT___lsu_io_memory_r_ready));
         bufp->chgBit(oldp+96,(((IData)(vlSelf->Core__DOT__arbiter__DOT____VdfgTmp_h0d5fed69__0) 
                                & (IData)(vlSelf->Core__DOT__lsu__DOT__io_memory_w_valid_0))));
         bufp->chgIData(oldp+97,(((IData)(vlSelf->Core__DOT__arbiter__DOT___GEN_3)
@@ -252,8 +251,7 @@ void VCore___024root__trace_chg_0_sub_0(VCore___024root* vlSelf, VerilatedVcd::B
                                 & ((1U == (IData)(vlSelf->Core__DOT__arbiter__DOT__state))
                                     ? (IData)(vlSelf->Core__DOT___ifu_io_memory_r_ready)
                                     : ((2U == (IData)(vlSelf->Core__DOT__arbiter__DOT__state)) 
-                                       & ((IData)(vlSelf->Core__DOT__lsu__DOT____VdfgTmp_h0d5fed69__0) 
-                                          & (IData)(vlSelf->Core__DOT__lsu__DOT__isLoad)))))));
+                                       & (IData)(vlSelf->Core__DOT___lsu_io_memory_r_ready))))));
         bufp->chgCData(oldp+103,(vlSelf->Core__DOT__arbiter__DOT__state),2);
         bufp->chgBit(oldp+104,(vlSelf->Core__DOT__lsu__DOT__io_in_ready_0));
         bufp->chgBit(oldp+105,(vlSelf->Core__DOT___exu_io_out_valid));

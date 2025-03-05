@@ -19,7 +19,7 @@ class MemoryArbiter extends Module {
 
   // Indicate which unit should be passed
   val isIFUActive = io.ifu.ar.valid || io.ifu.r.ready
-  val isLSUActive = io.lsu.ar.valid || io.lsu.aw.valid || io.lsu.b.ready && !isIFUActive 
+  val isLSUActive = io.lsu.ar.valid || io.lsu.aw.valid || io.lsu.r.ready || io.lsu.b.ready && !isIFUActive 
 
   // State machine state definition
   val sIdle :: sIFU :: sLSU :: Nil = Enum(3)
