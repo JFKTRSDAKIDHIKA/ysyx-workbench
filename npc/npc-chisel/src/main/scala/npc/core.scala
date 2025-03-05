@@ -26,6 +26,8 @@ class Core extends Module with RISCVConstants {
         val wbu_reg_dmem_rdata_debug = Output(UInt(32.W))
         // Arbiter
         val Arbiter_state_debug = Output(UInt(2.W))
+        // Xbar
+        val aw_addr_debug = Output(UInt(32.W))    
     })
 
     // Module instantiation
@@ -102,6 +104,8 @@ class Core extends Module with RISCVConstants {
     io.wbu_reg_dmem_rdata_debug := wbu.io.wbu_reg_dmem_rdata_debug
     // Arbiter
     io.Arbiter_state_debug := arbiter.io.Arbiter_state_debug
+    // Xbar
+    io.aw_addr_debug := xbar.io.aw_addr_debug
 }
 
 object Main extends App {
