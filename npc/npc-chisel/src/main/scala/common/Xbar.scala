@@ -20,13 +20,30 @@ class Xbar extends Module with RISCVConstants {
   AXI4LiteDefaults(io.uart)
   AXI4LiteDefaults(io.sram)
 
+  // Address range check functions
+  private def isUartAddress(addr: UInt): Bool = {
+    addr >= UART_BASE_ADDR && addr < (UART_BASE_ADDR + UART_ADDR_LEN)
+  }
+
+  private def isSramAddress(addr: UInt): Bool = {
+    addr >= MEM_BASE && addr < MEM_TOP
+  }
+
   // Bypass logic
-  when(io.in.aw.addr >= UART_BASE_ADDR && io.in.aw.addr <= UART_BASE_ADDR + UART_ADDR_LEN) {
+  when(isUartAddress(io.in.aw.addr) || isUartAddress(io.in.ar.addr)) {
     io.uart <> io.in
-  } .elsewhen(io.in.aw.addr >= MEM_BASE || io.in.ar.addr >= MEM_BASE) {
+  }.elsewhen(isSramAddress(io.in.aw.addr) || isSramAddress(io.in.ar.addr)) {
     io.sram <> io.in
-  } .otherwise {
-    io.uart <> io.in
+  }.otherwise {
+    // Unmapped address: return error response
+    io.in.b.resp := AXI4LiteParameters.ERROR
+    io.in.b.valid     := true.B
+    io.in.r.resp := AXI4LiteParameters.ERROR
+    io.in.r.valid     := true.B
+    // Ready signals for unhandled addresses
+    io.in.aw.ready    := true.B
+    io.in.ar.ready    := true.B
+    io.in.w.ready     := true.B
   }
 
   // Debug signal assignment

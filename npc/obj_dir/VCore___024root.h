@@ -104,7 +104,7 @@ class alignas(VL_CACHE_LINE_BYTES) VCore___024root final : public VerilatedModul
         CData/*0:0*/ Core__DOT__xbar__DOT___GEN;
         CData/*0:0*/ Core__DOT__xbar__DOT___GEN_0;
         CData/*0:0*/ Core__DOT__xbar__DOT___GEN_1;
-        CData/*0:0*/ Core__DOT__xbar__DOT____VdfgTmp_h9f2d9de7__0;
+        CData/*0:0*/ Core__DOT__xbar__DOT____VdfgTmp_h8781cc9f__0;
         CData/*0:0*/ Core__DOT__sram__DOT___sram_rd_res_valid;
         CData/*0:0*/ Core__DOT__sram__DOT___sram_wt_res_valid;
         CData/*1:0*/ Core__DOT__sram__DOT__state;
@@ -114,7 +114,6 @@ class alignas(VL_CACHE_LINE_BYTES) VCore___024root final : public VerilatedModul
         CData/*0:0*/ Core__DOT__sram__DOT___GEN;
         CData/*0:0*/ Core__DOT__sram__DOT___GEN_0;
         CData/*0:0*/ Core__DOT__sram__DOT___GEN_1;
-        CData/*0:0*/ Core__DOT__sram__DOT__io_axi_w_ready_0;
         CData/*0:0*/ Core__DOT__sram__DOT___GEN_2;
         CData/*0:0*/ Core__DOT__sram__DOT____VdfgTmp_h93f383d4__0;
         CData/*0:0*/ Core__DOT__sram__DOT____VdfgTmp_hb61e3587__0;
@@ -124,6 +123,7 @@ class alignas(VL_CACHE_LINE_BYTES) VCore___024root final : public VerilatedModul
         CData/*1:0*/ Core__DOT__uart__DOT__uartRaw__DOT__bresp;
         CData/*1:0*/ Core__DOT__uart__DOT__uartRaw__DOT__rresp;
         CData/*0:0*/ __VdfgTmp_h59efe890__0;
+        CData/*0:0*/ __VdfgTmp_h8feb4974__0;
         CData/*0:0*/ __Vdly__Core__DOT__sram__DOT__rd_req_valid;
         CData/*0:0*/ __Vdly__Core__DOT__sram__DOT__wt_req_valid;
         CData/*0:0*/ __VstlFirstIteration;

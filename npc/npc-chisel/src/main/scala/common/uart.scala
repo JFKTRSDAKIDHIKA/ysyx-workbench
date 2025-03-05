@@ -76,7 +76,7 @@ setInline("UartRaw.v",
        |        if (awaddr >= UART_BASE_ADDR && awaddr < (UART_BASE_ADDR + UART_ADDR_LEN)) begin
        |           if (wvalid && wready) begin
        |              write("%c", wdata[7:0]); 
-       |              bvalid <= 1'b1;
+       |              bvalid = 1'b1;
        |           end
        |        end
        |    end 
