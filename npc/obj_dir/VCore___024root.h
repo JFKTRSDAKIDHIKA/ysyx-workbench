@@ -25,10 +25,21 @@ class alignas(VL_CACHE_LINE_BYTES) VCore___024root final : public VerilatedModul
         VL_OUT8(io_wb_wen_debug,0,0);
         VL_OUT8(io_wb_sel_debug,1,0);
         VL_OUT8(io_Arbiter_state_debug,1,0);
-        CData/*0:0*/ Core__DOT___sram_io_axi_r_valid;
+        CData/*0:0*/ Core__DOT___uart_io_axi_aw_ready;
+        CData/*0:0*/ Core__DOT___uart_io_axi_w_ready;
+        CData/*0:0*/ Core__DOT___uart_io_axi_b_valid;
+        CData/*0:0*/ Core__DOT___uart_io_axi_ar_ready;
+        CData/*0:0*/ Core__DOT___uart_io_axi_r_valid;
+        CData/*0:0*/ Core__DOT___xbar_io_in_ar_ready;
+        CData/*0:0*/ Core__DOT___xbar_io_in_r_valid;
+        CData/*0:0*/ Core__DOT___xbar_io_uart_aw_valid;
+        CData/*0:0*/ Core__DOT___xbar_io_sram_ar_valid;
         CData/*0:0*/ Core__DOT___arbiter_io_ifu_r_valid;
-        CData/*0:0*/ Core__DOT___arbiter_io_lsu_aw_ready;
+        CData/*0:0*/ Core__DOT___arbiter_io_axi_aw_valid;
+        CData/*3:0*/ Core__DOT___arbiter_io_axi_w_strb;
+        CData/*0:0*/ Core__DOT___arbiter_io_axi_b_ready;
         CData/*0:0*/ Core__DOT___arbiter_io_axi_ar_valid;
+        CData/*0:0*/ Core__DOT___arbiter_io_axi_r_ready;
         CData/*0:0*/ Core__DOT___lsu_io_out_valid;
         CData/*0:0*/ Core__DOT___lsu_io_arbiter_valid;
         CData/*0:0*/ Core__DOT___exu_io_out_valid;
@@ -69,6 +80,8 @@ class alignas(VL_CACHE_LINE_BYTES) VCore___024root final : public VerilatedModul
         CData/*2:0*/ Core__DOT__lsu__DOT__state;
         CData/*0:0*/ Core__DOT__lsu__DOT___GEN;
         CData/*0:0*/ Core__DOT__lsu__DOT___GEN_0;
+    };
+    struct {
         CData/*0:0*/ Core__DOT__lsu__DOT___GEN_1;
         CData/*0:0*/ Core__DOT__lsu__DOT___GEN_2;
         CData/*0:0*/ Core__DOT__lsu__DOT___GEN_3;
@@ -80,8 +93,6 @@ class alignas(VL_CACHE_LINE_BYTES) VCore___024root final : public VerilatedModul
         CData/*0:0*/ Core__DOT__lsu__DOT____VdfgTmp_h4810bc75__0;
         CData/*0:0*/ Core__DOT__lsu__DOT____VdfgTmp_hbdad3c0b__0;
         CData/*1:0*/ Core__DOT__wbu__DOT__state;
-    };
-    struct {
         CData/*0:0*/ Core__DOT__wbu__DOT__io_in_ready_0;
         CData/*4:0*/ Core__DOT__wbu__DOT__wbu_reg_wb_addr;
         CData/*7:0*/ Core__DOT__wbu__DOT__unnamedblk1__DOT___GEN_0;
@@ -91,6 +102,10 @@ class alignas(VL_CACHE_LINE_BYTES) VCore___024root final : public VerilatedModul
         CData/*0:0*/ Core__DOT__arbiter__DOT___GEN_0;
         CData/*0:0*/ Core__DOT__arbiter__DOT____VdfgTmp_h41ece670__0;
         CData/*0:0*/ Core__DOT__arbiter__DOT____VdfgTmp_hd26a19fd__0;
+        CData/*0:0*/ Core__DOT__xbar__DOT___GEN;
+        CData/*0:0*/ Core__DOT__xbar__DOT___GEN_0;
+        CData/*0:0*/ Core__DOT__xbar__DOT___GEN_1;
+        CData/*0:0*/ Core__DOT__xbar__DOT____VdfgTmp_h23cc6972__0;
         CData/*0:0*/ Core__DOT__sram__DOT___sram_rd_res_valid;
         CData/*0:0*/ Core__DOT__sram__DOT___sram_wt_res_valid;
         CData/*1:0*/ Core__DOT__sram__DOT__state;
@@ -107,9 +122,10 @@ class alignas(VL_CACHE_LINE_BYTES) VCore___024root final : public VerilatedModul
         CData/*0:0*/ Core__DOT__sram__DOT__sram__DOT__rd_req_valid_delayed;
         CData/*7:0*/ Core__DOT__sram__DOT__sram__DOT__wmask_delayed;
         CData/*0:0*/ Core__DOT__sram__DOT__sram__DOT__wt_req_valid_delayed;
-        CData/*2:0*/ __Vdly__Core__DOT__lsu__DOT__state;
-        CData/*1:0*/ __Vdly__Core__DOT__wbu__DOT__state;
-        CData/*0:0*/ __Vdly__Core__DOT__arbiter__DOT__state;
+        CData/*1:0*/ Core__DOT__uart__DOT__uartRaw__DOT__rresp;
+        CData/*1:0*/ Core__DOT__uart__DOT__uartRaw__DOT__state;
+        CData/*1:0*/ Core__DOT__uart__DOT__uartRaw__DOT__next_state;
+        CData/*3:0*/ __Vtableidx1;
         CData/*0:0*/ __Vdly__Core__DOT__sram__DOT__rd_req_valid;
         CData/*0:0*/ __Vdly__Core__DOT__sram__DOT__wt_req_valid;
         CData/*0:0*/ __VstlFirstIteration;
@@ -125,8 +141,16 @@ class alignas(VL_CACHE_LINE_BYTES) VCore___024root final : public VerilatedModul
         VL_OUT(io_dmem_rdata_debug,31,0);
         VL_OUT(io_wb_data_debug,31,0);
         VL_OUT(io_wbu_reg_dmem_rdata_debug,31,0);
-        IData/*31:0*/ Core__DOT___sram_io_axi_r_data;
+        IData/*31:0*/ Core__DOT___uart_io_axi_r_data;
+        IData/*31:0*/ Core__DOT___xbar_io_in_r_data;
+        IData/*31:0*/ Core__DOT___xbar_io_uart_aw_addr;
+        IData/*31:0*/ Core__DOT___xbar_io_uart_w_data;
         IData/*31:0*/ Core__DOT___arbiter_io_lsu_r_data;
+    };
+    struct {
+        IData/*31:0*/ Core__DOT___arbiter_io_axi_aw_addr;
+        IData/*31:0*/ Core__DOT___arbiter_io_axi_w_data;
+        IData/*31:0*/ Core__DOT___arbiter_io_axi_ar_addr;
         IData/*31:0*/ Core__DOT___regfile_rs1_data;
         IData/*31:0*/ Core__DOT___regfile_rs2_data;
         IData/*31:0*/ Core__DOT___idu_io_out_bits_alu_op1;
@@ -146,8 +170,6 @@ class alignas(VL_CACHE_LINE_BYTES) VCore___024root final : public VerilatedModul
         IData/*31:0*/ Core__DOT__lsu__DOT__dmem_rdata_delay;
         IData/*31:0*/ Core__DOT__lsu__DOT__alignment_network__DOT__shifted_data;
         IData/*31:0*/ Core__DOT__wbu__DOT__wbu_reg_inst;
-    };
-    struct {
         IData/*31:0*/ Core__DOT__wbu__DOT__wbu_reg_pc;
         IData/*31:0*/ Core__DOT__wbu__DOT__wbu_reg_result;
         IData/*31:0*/ Core__DOT__wbu__DOT__wbu_reg_dmem_rdata;
@@ -158,16 +180,17 @@ class alignas(VL_CACHE_LINE_BYTES) VCore___024root final : public VerilatedModul
         IData/*31:0*/ Core__DOT__sram__DOT__sram__DOT__addr_delayed;
         IData/*31:0*/ Core__DOT__sram__DOT__sram__DOT__waddr_delayed;
         IData/*31:0*/ Core__DOT__sram__DOT__sram__DOT__wdata_delayed;
+        IData/*31:0*/ Core__DOT__uart__DOT__uartRaw__DOT__uart_reg;
+        IData/*31:0*/ __VdfgTmp_hd07d15e1__0;
         IData/*31:0*/ __Vfunc_Core__DOT__sram__DOT__sram__DOT__pmem_read__2__Vfuncout;
-        IData/*31:0*/ __Vdly__Core__DOT__ifu__DOT__pc;
         IData/*31:0*/ __VactIterCount;
         VlUnpacked<IData/*31:0*/, 32> Core__DOT__regfile__DOT__rf;
-        VlUnpacked<CData/*0:0*/, 7> __Vm_traceActivity;
+        VlUnpacked<CData/*0:0*/, 8> __Vm_traceActivity;
     };
     VlTriggerVec<1> __VstlTriggered;
     VlTriggerVec<1> __VicoTriggered;
-    VlTriggerVec<2> __VactTriggered;
-    VlTriggerVec<2> __VnbaTriggered;
+    VlTriggerVec<3> __VactTriggered;
+    VlTriggerVec<3> __VnbaTriggered;
 
     // INTERNAL VARIABLES
     VCore__Syms* const vlSymsp;

@@ -63,15 +63,25 @@ class Core extends Module with RISCVConstants {
     ifu.io.pc_wen          := wbu.io.pc_wen
 
     // Memory interface
+    // Module instantiation
     val arbiter = Module(new MemoryArbiter)
+    val xbar    = Module(new Xbar)
     val sram = Module(new SramAxi4LiteWrapper)
+    val uart = Module(new Uart)
+    // Connect sram and uart to clock and reset
     sram.io.clk := clock
     sram.io.rst := reset
+    uart.io.clk := clock
+    uart.io.rst := reset
+    // Connect arbiter to ifu, lsu and sram
     arbiter.io.ifu <> ifu.io.memory
     arbiter.io.lsu <> lsu.io.memory
-    arbiter.io.axi <> sram.io.axi
     arbiter.io.ifu_handshake <> ifu.io.arbiter
     arbiter.io.lsu_handshake <> lsu.io.arbiter
+    arbiter.io.axi <> xbar.io.in
+    xbar.io.uart <> uart.io.axi
+    xbar.io.sram <> sram.io.axi
+
 
     // Debus signals
     // ifu

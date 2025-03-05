@@ -5,7 +5,7 @@ import chisel3.util._
 
 class MemoryArbiter extends Module {
   val io = IO(new Bundle {
-    // ???
+    // AXI4Lite buddle signals
     val ifu = Flipped(new AXI4LiteIO) // Instruction Fetch Unit
     val lsu = Flipped(new AXI4LiteIO) // Load Store Unit
     val axi = new AXI4LiteIO
