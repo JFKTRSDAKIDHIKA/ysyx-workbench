@@ -11,13 +11,14 @@ class Core extends Module with RISCVConstants {
         // ifu
         val pc_debug = Output(UInt(32.W))
         val inst_debug = Output(UInt(32.W))
-        val ifu_state_debug = Output(UInt(2.W))
+        val ifu_state_debug = Output(UInt(3.W))
         // lsu
-        val lsu_state_debug = Output(UInt(2.W))
+        val lsu_state_debug = Output(UInt(3.W))
         val lsu_is_ld_or_st_debug = Output(Bool())
         val lsu_reg_inst_debug = Output(UInt(32.W))
         val dmem_wdata_debug = Output(UInt(32.W))
         val dmem_rdata_debug = Output(UInt(32.W))
+        val lsu_reg_dmem_addr_debug = Output(UInt(32.W))
         // wbu
         val wbu_state_debug = Output(UInt(2.W))
         val wb_data_debug = Output(UInt(32.W))
@@ -26,6 +27,8 @@ class Core extends Module with RISCVConstants {
         val wbu_reg_dmem_rdata_debug = Output(UInt(32.W))
         // Arbiter
         val Arbiter_state_debug = Output(UInt(2.W))
+        // Xbar
+        val aw_addr_debug = Output(UInt(32.W))    
     })
 
     // Module instantiation
@@ -63,13 +66,26 @@ class Core extends Module with RISCVConstants {
     ifu.io.pc_wen          := wbu.io.pc_wen
 
     // Memory interface
+    // Module instantiation
     val arbiter = Module(new MemoryArbiter)
+    val xbar    = Module(new Xbar)
     val sram = Module(new SramAxi4LiteWrapper)
+    val uart = Module(new Uart)
+    // Connect sram and uart to clock and reset
     sram.io.clk := clock
     sram.io.rst := reset
+    uart.io.clk := clock
+    uart.io.rst := reset
+    // Connect arbiter to ifu, lsu and xbar
     arbiter.io.ifu <> ifu.io.memory
     arbiter.io.lsu <> lsu.io.memory
-    arbiter.io.axi <> sram.io.axi
+    arbiter.io.ifu_handshake <> ifu.io.arbiter
+    arbiter.io.lsu_handshake <> lsu.io.arbiter
+    arbiter.io.axi <> xbar.io.in
+    // Connect xbar to uart and sram
+    xbar.io.uart <> uart.io.axi
+    xbar.io.sram <> sram.io.axi
+
 
     // Debus signals
     // ifu
@@ -82,6 +98,7 @@ class Core extends Module with RISCVConstants {
     io.lsu_reg_inst_debug := lsu.io.lsu_reg_inst_debug
     io.dmem_rdata_debug := lsu.io.dmem_rdata_debug
     io.dmem_wdata_debug := lsu.io.dmem_wdata_debug
+    io.lsu_reg_dmem_addr_debug := lsu.io.lsu_reg_dmem_addr_debug
     // wbu
     io.wbu_state_debug := wbu.io.wbu_state_debug
     io.wb_data_debug := wbu.io.wb_data_debug
@@ -90,6 +107,8 @@ class Core extends Module with RISCVConstants {
     io.wbu_reg_dmem_rdata_debug := wbu.io.wbu_reg_dmem_rdata_debug
     // Arbiter
     io.Arbiter_state_debug := arbiter.io.Arbiter_state_debug
+    // Xbar
+    io.aw_addr_debug := xbar.io.aw_addr_debug
 }
 
 object Main extends App {

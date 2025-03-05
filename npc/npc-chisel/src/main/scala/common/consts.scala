@@ -128,8 +128,16 @@ trait RISCVConstants
    val WB_X    = 0.asUInt(2.W)
 
    // PC reset vector
-   val RESET_VECTOR = 0x80000000L.U(32.W) // 32位宽度，支持大整数
+   val RESET_VECTOR = 0x80000000L.U(32.W) 
 
+   // Device
+   val UART_BASE_ADDR = 0xA00003F8L.U(32.W)
+   val UART_ADDR_LEN  = 8.U
+
+   // Memoey config
+   val MEM_BASE   = 0x80000000L.U(32.W) 
+   val MEM_TOP    = 0x80ffffffL.U(32.W)
+   
    // The Bubble Instruction (Machine generated NOP)
    // Insert (XOR x0,x0,x0) which is different from software compiler
    // generated NOPs which are (ADDI x0, x0, 0).

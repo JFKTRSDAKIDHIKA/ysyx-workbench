@@ -1,7 +1,7 @@
 # Generate Verilog code
 doit:
 	sbt run
-
+	./init.sh	
 # Run the test
 test:
 	sbt test

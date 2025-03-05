@@ -21,10 +21,13 @@ class IFU extends Module with RISCVConstants {
     // AXI4-Lite memory interface
     val memory = new AXI4LiteIO
 
+    // Arbiter handshake
+    val arbiter = new ValidReadyBundle
+
     // Degus signals
     val pc_debug = Output(UInt(32.W))
     val inst_debug = Output(UInt(32.W))
-    val ifu_state_debug = Output(UInt(2.W))
+    val ifu_state_debug = Output(UInt(3.W))
   })
 
   // Degus signals assignment
@@ -37,6 +40,7 @@ class IFU extends Module with RISCVConstants {
   // Set default values
   io.out.valid := false.B
   io.out.bits.inst := 0.U 
+  io.arbiter.valid := false.B
 
   // Internal signals and registers declaration
   val pc = RegInit(RESET_VECTOR) // Program Counter
@@ -67,12 +71,14 @@ class IFU extends Module with RISCVConstants {
   }
 
   // State machine state definition
-  val sIdle :: sFetchReq :: sFetchWait :: sFetchDone :: Nil = Enum(4)
+  val sIdle :: sFetchReq :: sFetchPrepare :: sFetchWait :: sFetchDone :: Nil = Enum(5)
   val state = RegInit(sFetchReq)
 
   // State machine logic
   switch(state) {
     is(sIdle) {
+      // Arbiter interface
+      io.arbiter.valid := false.B
       // Forward signals
       io.out.valid := false.B
       io.out.bits.inst := if_inst_buffer 
@@ -83,11 +89,22 @@ class IFU extends Module with RISCVConstants {
       io.memory.r.ready := false.B
       // Start fetch instruction
       when(io.pc_wen) {
-        state := sFetchReq
+        state := sFetchPrepare
       }
     }
 
+    is(sFetchPrepare) {
+      // Arbiter interface
+      io.arbiter.valid := true.B
+      // Wait arbiter ready
+      when(io.arbiter.ready) {
+        state := sFetchReq
+      }      
+    }
+
     is(sFetchReq) {
+      // Arbiter interface
+      io.arbiter.valid := true.B
       // Forward signals
       io.out.valid := false.B
       io.out.bits.inst := if_inst_buffer 
@@ -103,6 +120,8 @@ class IFU extends Module with RISCVConstants {
     }
 
     is(sFetchWait) {
+      // Arbiter interface
+      io.arbiter.valid := true.B
       // Forward signals
       io.out.valid := false.B
       io.out.bits.inst := if_inst_buffer 
@@ -119,6 +138,8 @@ class IFU extends Module with RISCVConstants {
     }
 
     is(sFetchDone) {
+      // Arbiter interface
+      io.arbiter.valid := false.B  // arbiter.valid signal maintains hign during instruction fetch
       // Forward signals
       io.out.valid := true.B
       io.out.bits.inst := if_inst_buffer 

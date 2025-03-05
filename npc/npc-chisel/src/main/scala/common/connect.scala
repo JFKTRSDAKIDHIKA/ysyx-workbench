@@ -18,3 +18,9 @@ object StageConnect {
   }
 }
 
+class ValidReadyBundle extends Bundle {
+  val valid = Output(Bool())  
+  val ready = Input(Bool()) 
+}
+
+

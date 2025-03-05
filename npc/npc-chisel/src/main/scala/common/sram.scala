@@ -164,6 +164,9 @@ class SramAxi4LiteWrapper(addrWidth: Int = 32, dataWidth: Int = 32) extends Modu
     val axi = Flipped(new AXI4LiteIO)
   })
 
+  // Default assignments for AXI4-Lite signals
+  AXI4LiteFlippedDefaults(io.axi)
+
   // Internal state machine states
   val sIdle :: sWrite :: sRead :: Nil = Enum(3)
   val state = RegInit(sIdle)
@@ -186,9 +189,6 @@ class SramAxi4LiteWrapper(addrWidth: Int = 32, dataWidth: Int = 32) extends Modu
   val sram_data_out      = sram.io.data_out
   val sram_rd_res_valid  = sram.io.rd_res_valid
   val sram_wt_res_valid  = sram.io.wt_res_valid
-
-  // Default assignments for AXI4-Lite signals
-  AXI4LiteFlippedDefaults(io.axi)
 
   // State machine logic
   when(io.rst) {

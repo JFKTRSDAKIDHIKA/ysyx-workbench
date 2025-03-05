@@ -72,3 +72,12 @@ object AXI4LiteFlippedDefaults {
     axi.r.resp := 0.U
   }
 }
+
+object AXI4LiteParameters {
+  val OKAY   = 0.U(2.W)  
+  val EXOKAY = 1.U(2.W)  
+  val SLVERR = 2.U(2.W)  
+  val DECERR = 3.U(2.W)  
+
+  val ERROR = SLVERR  
+}
