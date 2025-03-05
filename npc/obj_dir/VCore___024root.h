@@ -25,14 +25,11 @@ class alignas(VL_CACHE_LINE_BYTES) VCore___024root final : public VerilatedModul
         VL_OUT8(io_wb_wen_debug,0,0);
         VL_OUT8(io_wb_sel_debug,1,0);
         VL_OUT8(io_Arbiter_state_debug,1,0);
-        CData/*0:0*/ Core__DOT___uart_io_axi_aw_ready;
-        CData/*0:0*/ Core__DOT___uart_io_axi_w_ready;
         CData/*0:0*/ Core__DOT___uart_io_axi_b_valid;
         CData/*0:0*/ Core__DOT___uart_io_axi_ar_ready;
         CData/*0:0*/ Core__DOT___uart_io_axi_r_valid;
         CData/*0:0*/ Core__DOT___xbar_io_in_ar_ready;
         CData/*0:0*/ Core__DOT___xbar_io_in_r_valid;
-        CData/*0:0*/ Core__DOT___xbar_io_uart_aw_valid;
         CData/*0:0*/ Core__DOT___xbar_io_sram_ar_valid;
         CData/*0:0*/ Core__DOT___arbiter_io_ifu_r_valid;
         CData/*0:0*/ Core__DOT___arbiter_io_axi_aw_valid;
@@ -80,11 +77,11 @@ class alignas(VL_CACHE_LINE_BYTES) VCore___024root final : public VerilatedModul
         CData/*2:0*/ Core__DOT__lsu__DOT__state;
         CData/*0:0*/ Core__DOT__lsu__DOT___GEN;
         CData/*0:0*/ Core__DOT__lsu__DOT___GEN_0;
-    };
-    struct {
         CData/*0:0*/ Core__DOT__lsu__DOT___GEN_1;
         CData/*0:0*/ Core__DOT__lsu__DOT___GEN_2;
         CData/*0:0*/ Core__DOT__lsu__DOT___GEN_3;
+    };
+    struct {
         CData/*0:0*/ Core__DOT__lsu__DOT___GEN_4;
         CData/*0:0*/ Core__DOT__lsu__DOT___GEN_5;
         CData/*0:0*/ Core__DOT__lsu__DOT___GEN_6;
@@ -124,11 +121,9 @@ class alignas(VL_CACHE_LINE_BYTES) VCore___024root final : public VerilatedModul
         CData/*0:0*/ Core__DOT__sram__DOT__sram__DOT__rd_req_valid_delayed;
         CData/*7:0*/ Core__DOT__sram__DOT__sram__DOT__wmask_delayed;
         CData/*0:0*/ Core__DOT__sram__DOT__sram__DOT__wt_req_valid_delayed;
+        CData/*1:0*/ Core__DOT__uart__DOT__uartRaw__DOT__bresp;
         CData/*1:0*/ Core__DOT__uart__DOT__uartRaw__DOT__rresp;
-        CData/*1:0*/ Core__DOT__uart__DOT__uartRaw__DOT__state;
-        CData/*1:0*/ Core__DOT__uart__DOT__uartRaw__DOT__next_state;
         CData/*0:0*/ __VdfgTmp_h59efe890__0;
-        CData/*3:0*/ __Vtableidx1;
         CData/*0:0*/ __Vdly__Core__DOT__sram__DOT__rd_req_valid;
         CData/*0:0*/ __Vdly__Core__DOT__sram__DOT__wt_req_valid;
         CData/*0:0*/ __VstlFirstIteration;
@@ -146,14 +141,13 @@ class alignas(VL_CACHE_LINE_BYTES) VCore___024root final : public VerilatedModul
         VL_OUT(io_wb_data_debug,31,0);
         VL_OUT(io_wbu_reg_dmem_rdata_debug,31,0);
         VL_OUT(io_aw_addr_debug,31,0);
-    };
-    struct {
         IData/*31:0*/ Core__DOT___uart_io_axi_r_data;
         IData/*31:0*/ Core__DOT___xbar_io_in_r_data;
         IData/*31:0*/ Core__DOT___xbar_io_uart_aw_addr;
-        IData/*31:0*/ Core__DOT___xbar_io_uart_w_data;
         IData/*31:0*/ Core__DOT___arbiter_io_lsu_r_data;
         IData/*31:0*/ Core__DOT___arbiter_io_axi_w_data;
+    };
+    struct {
         IData/*31:0*/ Core__DOT___arbiter_io_axi_ar_addr;
         IData/*31:0*/ Core__DOT___regfile_rs1_data;
         IData/*31:0*/ Core__DOT___regfile_rs2_data;
@@ -184,17 +178,16 @@ class alignas(VL_CACHE_LINE_BYTES) VCore___024root final : public VerilatedModul
         IData/*31:0*/ Core__DOT__sram__DOT__sram__DOT__addr_delayed;
         IData/*31:0*/ Core__DOT__sram__DOT__sram__DOT__waddr_delayed;
         IData/*31:0*/ Core__DOT__sram__DOT__sram__DOT__wdata_delayed;
-        IData/*31:0*/ Core__DOT__uart__DOT__uartRaw__DOT__uart_reg;
         IData/*31:0*/ __VdfgTmp_h0600ed0d__0;
         IData/*31:0*/ __Vfunc_Core__DOT__sram__DOT__sram__DOT__pmem_read__2__Vfuncout;
         IData/*31:0*/ __VactIterCount;
         VlUnpacked<IData/*31:0*/, 32> Core__DOT__regfile__DOT__rf;
-        VlUnpacked<CData/*0:0*/, 8> __Vm_traceActivity;
+        VlUnpacked<CData/*0:0*/, 7> __Vm_traceActivity;
     };
     VlTriggerVec<1> __VstlTriggered;
     VlTriggerVec<1> __VicoTriggered;
-    VlTriggerVec<3> __VactTriggered;
-    VlTriggerVec<3> __VnbaTriggered;
+    VlTriggerVec<2> __VactTriggered;
+    VlTriggerVec<2> __VnbaTriggered;
 
     // INTERNAL VARIABLES
     VCore__Syms* const vlSymsp;

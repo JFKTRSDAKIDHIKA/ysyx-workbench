@@ -19,7 +19,6 @@ VL_ATTR_COLD void VCore___024root___eval_initial(VCore___024root* vlSelf) {
     VL_DEBUG_IF(VL_DBG_MSGF("+    VCore___024root___eval_initial\n"); );
     // Body
     VCore___024root___eval_initial__TOP(vlSelf);
-    vlSelf->__Vm_traceActivity[7U] = 1U;
     vlSelf->__Vm_traceActivity[6U] = 1U;
     vlSelf->__Vm_traceActivity[5U] = 1U;
     vlSelf->__Vm_traceActivity[4U] = 1U;
@@ -128,7 +127,6 @@ void VCore___024root____Vdpiimwrap_Core__DOT__regfile__DOT__get_register_values_
 void VCore___024root____Vdpiimwrap_Core__DOT__sram__DOT__sram__DOT__pmem_read_TOP(IData/*31:0*/ raddr, IData/*31:0*/ &pmem_read__Vfuncrtn);
 void VCore___024root____Vdpiimwrap_Core__DOT__sram__DOT__sram__DOT__pmem_write_TOP(IData/*31:0*/ waddr, IData/*31:0*/ wdata, CData/*7:0*/ wmask);
 void VCore___024root____Vdpiimwrap_Core__DOT__ifu__DOT__ebreakHandler__DOT__simulation_exit_TOP();
-extern const VlUnpacked<CData/*1:0*/, 16> VCore__ConstPool__TABLE_hb3d9fb77_0;
 
 VL_ATTR_COLD void VCore___024root___stl_sequent__TOP__0(VCore___024root* vlSelf) {
     if (false && vlSelf) {}  // Prevent unused
@@ -139,14 +137,6 @@ VL_ATTR_COLD void VCore___024root___stl_sequent__TOP__0(VCore___024root* vlSelf)
     VlWide<4>/*127:0*/ __Vtemp_6;
     // Body
     VCore___024root____Vdpiimwrap_Core__DOT__regfile__DOT__get_register_values_TOP(vlSelf->Core__DOT__regfile__DOT__rf);
-    vlSelf->Core__DOT___uart_io_axi_w_ready = 0U;
-    if ((1U == (IData)(vlSelf->Core__DOT__uart__DOT__uartRaw__DOT__state))) {
-        vlSelf->Core__DOT___uart_io_axi_w_ready = 1U;
-    }
-    vlSelf->Core__DOT___uart_io_axi_b_valid = 0U;
-    if ((2U == (IData)(vlSelf->Core__DOT__uart__DOT__uartRaw__DOT__state))) {
-        vlSelf->Core__DOT___uart_io_axi_b_valid = 1U;
-    }
     vlSelf->io_pc_debug = vlSelf->Core__DOT__ifu__DOT__pc;
     vlSelf->io_ifu_state_debug = vlSelf->Core__DOT__ifu__DOT__state;
     vlSelf->io_lsu_state_debug = vlSelf->Core__DOT__lsu__DOT__state;
@@ -309,10 +299,10 @@ VL_ATTR_COLD void VCore___024root___stl_sequent__TOP__0(VCore___024root* vlSelf)
     vlSelf->Core__DOT__lsu__DOT____VdfgTmp_h3e507b8b__0 
         = ((2U == (IData)(vlSelf->Core__DOT__lsu__DOT__state)) 
            | (3U == (IData)(vlSelf->Core__DOT__lsu__DOT__state)));
-    vlSelf->Core__DOT__ifu__DOT___GEN_3 = ((2U == (IData)(vlSelf->Core__DOT__ifu__DOT__state)) 
-                                           | (1U == (IData)(vlSelf->Core__DOT__ifu__DOT__state)));
     vlSelf->Core__DOT__lsu__DOT___GEN_7 = ((1U == (IData)(vlSelf->Core__DOT__lsu__DOT__state)) 
                                            | (2U == (IData)(vlSelf->Core__DOT__lsu__DOT__state)));
+    vlSelf->Core__DOT__ifu__DOT___GEN_3 = ((2U == (IData)(vlSelf->Core__DOT__ifu__DOT__state)) 
+                                           | (1U == (IData)(vlSelf->Core__DOT__ifu__DOT__state)));
     vlSelf->Core__DOT__lsu__DOT___GEN_3 = ((0U == (IData)(vlSelf->Core__DOT__lsu__DOT__state)) 
                                            | (1U == (IData)(vlSelf->Core__DOT__lsu__DOT__state)));
     vlSelf->Core__DOT__exu__DOT__io_in_ready_0 = ((0U 
@@ -577,13 +567,6 @@ VL_ATTR_COLD void VCore___024root___stl_sequent__TOP__0(VCore___024root* vlSelf)
     vlSelf->io_inst_debug = ((IData)(vlSelf->Core__DOT__ifu__DOT___GEN_6)
                               ? vlSelf->Core__DOT__ifu__DOT__if_inst_buffer
                               : 0U);
-    vlSelf->Core__DOT__ifu__DOT___GEN_4 = ((0U == (IData)(vlSelf->Core__DOT__ifu__DOT__state)) 
-                                           | (IData)(vlSelf->Core__DOT__ifu__DOT___GEN_3));
-    vlSelf->Core__DOT___ifu_io_arbiter_valid = ((0U 
-                                                 != (IData)(vlSelf->Core__DOT__ifu__DOT__state)) 
-                                                & ((IData)(vlSelf->Core__DOT__ifu__DOT___GEN_3) 
-                                                   | (3U 
-                                                      == (IData)(vlSelf->Core__DOT__ifu__DOT__state))));
     vlSelf->Core__DOT__lsu__DOT____VdfgTmp_hbdad3c0b__0 
         = ((~ ((0U == (IData)(vlSelf->Core__DOT__lsu__DOT__state)) 
                | (IData)(vlSelf->Core__DOT__lsu__DOT___GEN_7))) 
@@ -593,6 +576,13 @@ VL_ATTR_COLD void VCore___024root___stl_sequent__TOP__0(VCore___024root* vlSelf)
                                                 & ((IData)(vlSelf->Core__DOT__lsu__DOT___GEN_7) 
                                                    | (3U 
                                                       == (IData)(vlSelf->Core__DOT__lsu__DOT__state))));
+    vlSelf->Core__DOT__ifu__DOT___GEN_4 = ((0U == (IData)(vlSelf->Core__DOT__ifu__DOT__state)) 
+                                           | (IData)(vlSelf->Core__DOT__ifu__DOT___GEN_3));
+    vlSelf->Core__DOT___ifu_io_arbiter_valid = ((0U 
+                                                 != (IData)(vlSelf->Core__DOT__ifu__DOT__state)) 
+                                                & ((IData)(vlSelf->Core__DOT__ifu__DOT___GEN_3) 
+                                                   | (3U 
+                                                      == (IData)(vlSelf->Core__DOT__ifu__DOT__state))));
     vlSelf->Core__DOT___lsu_io_out_valid = ((~ ((IData)(vlSelf->Core__DOT__lsu__DOT___GEN_3) 
                                                 | (IData)(vlSelf->Core__DOT__lsu__DOT____VdfgTmp_h3e507b8b__0))) 
                                             & (4U == (IData)(vlSelf->Core__DOT__lsu__DOT__state)));
@@ -836,41 +826,36 @@ VL_ATTR_COLD void VCore___024root___stl_sequent__TOP__0(VCore___024root* vlSelf)
     vlSelf->Core__DOT___xbar_io_sram_ar_valid = ((IData)(vlSelf->Core__DOT__xbar__DOT____VdfgTmp_h9f2d9de7__0) 
                                                  & (IData)(vlSelf->Core__DOT___arbiter_io_axi_ar_valid));
     if (vlSelf->Core__DOT__xbar__DOT___GEN_1) {
-        vlSelf->Core__DOT___xbar_io_uart_aw_addr = vlSelf->io_aw_addr_debug;
-        vlSelf->Core__DOT___xbar_io_uart_w_data = vlSelf->Core__DOT___arbiter_io_axi_w_data;
         vlSelf->Core__DOT___xbar_io_in_ar_ready = vlSelf->Core__DOT___uart_io_axi_ar_ready;
         vlSelf->Core__DOT___xbar_io_in_r_valid = vlSelf->Core__DOT___uart_io_axi_r_valid;
+        vlSelf->Core__DOT___xbar_io_uart_aw_addr = vlSelf->io_aw_addr_debug;
         vlSelf->Core__DOT___xbar_io_in_r_data = vlSelf->Core__DOT___uart_io_axi_r_data;
     } else {
-        vlSelf->Core__DOT___xbar_io_uart_aw_addr = 0U;
-        vlSelf->Core__DOT___xbar_io_uart_w_data = 0U;
         vlSelf->Core__DOT___xbar_io_in_ar_ready = vlSelf->Core__DOT__sram__DOT__io_axi_w_ready_0;
         vlSelf->Core__DOT___xbar_io_in_r_valid = ((~ (IData)(vlSelf->Core__DOT__sram__DOT___GEN_2)) 
                                                   & (IData)(vlSelf->Core__DOT__sram__DOT____VdfgTmp_hb61e3587__0));
+        vlSelf->Core__DOT___xbar_io_uart_aw_addr = 0U;
         vlSelf->Core__DOT___xbar_io_in_r_data = ((1U 
                                                   & ((~ (IData)(vlSelf->Core__DOT__sram__DOT____VdfgTmp_hb61e3587__0)) 
                                                      | (IData)(vlSelf->Core__DOT__sram__DOT___GEN_2)))
                                                   ? 0U
                                                   : vlSelf->Core__DOT__sram__DOT___sram_data_out);
     }
+    vlSelf->Core__DOT___arbiter_io_ifu_r_valid = ((IData)(vlSelf->Core__DOT__arbiter__DOT____VdfgTmp_h41ece670__0) 
+                                                  & (IData)(vlSelf->Core__DOT___xbar_io_in_r_valid));
+    if (((0xa00003f8U <= vlSelf->Core__DOT___xbar_io_uart_aw_addr) 
+         & (0xa0000400U > vlSelf->Core__DOT___xbar_io_uart_aw_addr))) {
+        if (VL_UNLIKELY(((IData)(vlSelf->Core__DOT__xbar__DOT___GEN_1) 
+                         & (IData)(vlSelf->Core__DOT___arbiter_io_axi_aw_valid)))) {
+            VL_WRITEF("%c",8,((IData)(vlSelf->Core__DOT__xbar__DOT___GEN_1)
+                               ? (0xffU & vlSelf->Core__DOT___arbiter_io_axi_w_data)
+                               : 0U));
+            vlSelf->Core__DOT___uart_io_axi_b_valid = 1U;
+        }
+    }
     vlSelf->Core__DOT___arbiter_io_lsu_r_data = ((IData)(vlSelf->Core__DOT__arbiter__DOT___GEN_0)
                                                   ? 0U
                                                   : vlSelf->Core__DOT___xbar_io_in_r_data);
-    vlSelf->Core__DOT___xbar_io_uart_aw_valid = ((IData)(vlSelf->Core__DOT__xbar__DOT___GEN_1) 
-                                                 & (IData)(vlSelf->Core__DOT___arbiter_io_axi_aw_valid));
-    vlSelf->Core__DOT___arbiter_io_ifu_r_valid = ((IData)(vlSelf->Core__DOT__arbiter__DOT____VdfgTmp_h41ece670__0) 
-                                                  & (IData)(vlSelf->Core__DOT___xbar_io_in_r_valid));
-    vlSelf->Core__DOT___uart_io_axi_aw_ready = 0U;
-    if ((IData)(((0U == (IData)(vlSelf->Core__DOT__uart__DOT__uartRaw__DOT__state)) 
-                 & (IData)(vlSelf->Core__DOT___xbar_io_uart_aw_valid)))) {
-        vlSelf->Core__DOT___uart_io_axi_aw_ready = 1U;
-    }
-    vlSelf->__Vtableidx1 = (((IData)(vlSelf->Core__DOT___xbar_io_uart_aw_valid) 
-                             << 3U) | ((((IData)(vlSelf->Core__DOT__xbar__DOT___GEN_1) 
-                                         & (IData)(vlSelf->Core__DOT___arbiter_io_axi_b_ready)) 
-                                        << 2U) | (IData)(vlSelf->Core__DOT__uart__DOT__uartRaw__DOT__state)));
-    vlSelf->Core__DOT__uart__DOT__uartRaw__DOT__next_state 
-        = VCore__ConstPool__TABLE_hb3d9fb77_0[vlSelf->__Vtableidx1];
     vlSelf->Core__DOT__lsu__DOT__alignment_network__DOT__shifted_data 
         = (vlSelf->Core__DOT___arbiter_io_lsu_r_data 
            >> (0x18U & (vlSelf->Core__DOT__lsu__DOT__lsu_reg_dmem_addr 
@@ -884,7 +869,6 @@ VL_ATTR_COLD void VCore___024root___eval_stl(VCore___024root* vlSelf) {
     // Body
     if ((1ULL & vlSelf->__VstlTriggered.word(0U))) {
         VCore___024root___stl_sequent__TOP__0(vlSelf);
-        vlSelf->__Vm_traceActivity[7U] = 1U;
         vlSelf->__Vm_traceActivity[6U] = 1U;
         vlSelf->__Vm_traceActivity[5U] = 1U;
         vlSelf->__Vm_traceActivity[4U] = 1U;
@@ -942,9 +926,6 @@ VL_ATTR_COLD void VCore___024root___dump_triggers__act(VCore___024root* vlSelf) 
     if ((2ULL & vlSelf->__VactTriggered.word(0U))) {
         VL_DBG_MSGF("         'act' region trigger index 1 is active: @(posedge clock or posedge reset)\n");
     }
-    if ((4ULL & vlSelf->__VactTriggered.word(0U))) {
-        VL_DBG_MSGF("         'act' region trigger index 2 is active: @(posedge clock or negedge reset)\n");
-    }
 }
 #endif  // VL_DEBUG
 
@@ -962,9 +943,6 @@ VL_ATTR_COLD void VCore___024root___dump_triggers__nba(VCore___024root* vlSelf) 
     }
     if ((2ULL & vlSelf->__VnbaTriggered.word(0U))) {
         VL_DBG_MSGF("         'nba' region trigger index 1 is active: @(posedge clock or posedge reset)\n");
-    }
-    if ((4ULL & vlSelf->__VnbaTriggered.word(0U))) {
-        VL_DBG_MSGF("         'nba' region trigger index 2 is active: @(posedge clock or negedge reset)\n");
     }
 }
 #endif  // VL_DEBUG
@@ -992,8 +970,6 @@ VL_ATTR_COLD void VCore___024root___ctor_var_reset(VCore___024root* vlSelf) {
     vlSelf->io_wbu_reg_dmem_rdata_debug = VL_RAND_RESET_I(32);
     vlSelf->io_Arbiter_state_debug = VL_RAND_RESET_I(2);
     vlSelf->io_aw_addr_debug = VL_RAND_RESET_I(32);
-    vlSelf->Core__DOT___uart_io_axi_aw_ready = VL_RAND_RESET_I(1);
-    vlSelf->Core__DOT___uart_io_axi_w_ready = VL_RAND_RESET_I(1);
     vlSelf->Core__DOT___uart_io_axi_b_valid = VL_RAND_RESET_I(1);
     vlSelf->Core__DOT___uart_io_axi_ar_ready = VL_RAND_RESET_I(1);
     vlSelf->Core__DOT___uart_io_axi_r_valid = VL_RAND_RESET_I(1);
@@ -1001,9 +977,7 @@ VL_ATTR_COLD void VCore___024root___ctor_var_reset(VCore___024root* vlSelf) {
     vlSelf->Core__DOT___xbar_io_in_ar_ready = VL_RAND_RESET_I(1);
     vlSelf->Core__DOT___xbar_io_in_r_valid = VL_RAND_RESET_I(1);
     vlSelf->Core__DOT___xbar_io_in_r_data = VL_RAND_RESET_I(32);
-    vlSelf->Core__DOT___xbar_io_uart_aw_valid = VL_RAND_RESET_I(1);
     vlSelf->Core__DOT___xbar_io_uart_aw_addr = VL_RAND_RESET_I(32);
-    vlSelf->Core__DOT___xbar_io_uart_w_data = VL_RAND_RESET_I(32);
     vlSelf->Core__DOT___xbar_io_sram_ar_valid = VL_RAND_RESET_I(1);
     vlSelf->Core__DOT___arbiter_io_ifu_r_valid = VL_RAND_RESET_I(1);
     vlSelf->Core__DOT___arbiter_io_lsu_r_data = VL_RAND_RESET_I(32);
@@ -1129,19 +1103,16 @@ VL_ATTR_COLD void VCore___024root___ctor_var_reset(VCore___024root* vlSelf) {
     vlSelf->Core__DOT__sram__DOT__sram__DOT__wdata_delayed = VL_RAND_RESET_I(32);
     vlSelf->Core__DOT__sram__DOT__sram__DOT__wmask_delayed = VL_RAND_RESET_I(8);
     vlSelf->Core__DOT__sram__DOT__sram__DOT__wt_req_valid_delayed = VL_RAND_RESET_I(1);
+    vlSelf->Core__DOT__uart__DOT__uartRaw__DOT__bresp = VL_RAND_RESET_I(2);
     vlSelf->Core__DOT__uart__DOT__uartRaw__DOT__rresp = VL_RAND_RESET_I(2);
-    vlSelf->Core__DOT__uart__DOT__uartRaw__DOT__uart_reg = VL_RAND_RESET_I(32);
-    vlSelf->Core__DOT__uart__DOT__uartRaw__DOT__state = VL_RAND_RESET_I(2);
-    vlSelf->Core__DOT__uart__DOT__uartRaw__DOT__next_state = VL_RAND_RESET_I(2);
     vlSelf->__VdfgTmp_h59efe890__0 = 0;
     vlSelf->__VdfgTmp_h0600ed0d__0 = 0;
     vlSelf->__Vfunc_Core__DOT__sram__DOT__sram__DOT__pmem_read__2__Vfuncout = 0;
-    vlSelf->__Vtableidx1 = 0;
     vlSelf->__Vdly__Core__DOT__sram__DOT__rd_req_valid = VL_RAND_RESET_I(1);
     vlSelf->__Vdly__Core__DOT__sram__DOT__wt_req_valid = VL_RAND_RESET_I(1);
     vlSelf->__Vtrigprevexpr___TOP__clock__0 = VL_RAND_RESET_I(1);
     vlSelf->__Vtrigprevexpr___TOP__reset__0 = VL_RAND_RESET_I(1);
-    for (int __Vi0 = 0; __Vi0 < 8; ++__Vi0) {
+    for (int __Vi0 = 0; __Vi0 < 7; ++__Vi0) {
         vlSelf->__Vm_traceActivity[__Vi0] = 0;
     }
 }

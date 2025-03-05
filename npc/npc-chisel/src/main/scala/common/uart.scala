@@ -36,7 +36,7 @@ class UartRaw extends BlackBox with HasBlackBoxInline {
     val rresp = Output(UInt(2.W))    
   })  
 
-  setInline("UartRaw.v",
+setInline("UartRaw.v",
     s"""
        |module UartRaw (
        |    input  wire        clk,
@@ -44,12 +44,12 @@ class UartRaw extends BlackBox with HasBlackBoxInline {
        |    // Write Address Channel
        |    input  wire [31:0] awaddr,
        |    input  wire        awvalid,
-       |    output reg         awready,
+       |    output wire        awready,
        |    // Write Data Channel
        |    input  wire [31:0] wdata,
        |    input  wire [3:0]  wstrb,
        |    input  wire        wvalid,
-       |    output reg         wready,
+       |    output wire        wready,
        |    // Write Response Channel
        |    output reg [1:0]   bresp,
        |    output reg         bvalid,
@@ -68,82 +68,18 @@ class UartRaw extends BlackBox with HasBlackBoxInline {
        |    localparam UART_BASE_ADDR = 32'hA00003F8;
        |    localparam UART_ADDR_LEN  = 8;
        |
-       |    reg [31:0] uart_reg;
-       |
-       |    typedef enum logic [1:0] {
-       |        IDLE,
-       |        ADDR_READY,
-       |        DATA_READY,
-       |        RESP_READY
-       |    } state_t;
-       |
-       |    state_t state, next_state;
-       |
-       |    always @(posedge clk or negedge rst) begin
-       |        if (!rst) begin
-       |            state <= IDLE;
-       |        end else begin
-       |            state <= next_state;
-       |        end
-       |    end
+       |    assign awready = 1'b1;
+       |    assign wready  = 1'b1;
        |
        |    always @(*) begin
-       |        next_state = state;
-       |        case (state)
-       |            IDLE: begin
-       |                if (awvalid && wvalid) begin
-       |                    next_state = ADDR_READY;
-       |                end
-       |            end
-       |            ADDR_READY: begin
-       |                next_state = DATA_READY;
-       |            end
-       |            DATA_READY: begin
-       |                if (bready) begin
-       |                    next_state = RESP_READY;
-       |                end
-       |            end
-       |            RESP_READY: begin
-       |                next_state = IDLE;
-       |            end
-       |            default: begin
-       |                next_state = IDLE;
-       |            end
-       |        endcase
-       |    end
-       |
-       |    always @(*) begin
-       |        awready = 1'b0;
-       |        if (state == IDLE && awvalid && wvalid) begin
-       |            awready = 1'b1;
+       |        // 寄存器更新逻辑
+       |        if (awaddr >= UART_BASE_ADDR && awaddr < (UART_BASE_ADDR + UART_ADDR_LEN)) begin
+       |           if (wvalid && wready) begin
+       |              write("%c", wdata[7:0]); 
+       |              bvalid <= 1'b1;
+       |           end
        |        end
-       |    end
-       |
-       |    always @(*) begin
-       |        wready = 1'b0;
-       |        if (state == ADDR_READY) begin
-       |            wready = 1'b1;
-       |        end
-       |    end
-       |
-       |    always @(*) begin
-       |        bvalid = 1'b0;
-       |        bresp = 2'b00; // OKAY 响应
-       |        if (state == DATA_READY) begin
-       |            bvalid = 1'b1;
-       |        end
-       |    end
-       |
-       |    always @(posedge clk or negedge rst) begin
-       |        if (!rst) begin
-       |            uart_reg <= 32'b0;
-       |        end else if (state == ADDR_READY && awaddr >= UART_BASE_ADDR && awaddr < (UART_BASE_ADDR + UART_ADDR_LEN)) begin
-       |            if (wvalid && wready) begin
-       |                uart_reg <= wdata; // 更新寄存器值
-       |                write("%c", wdata[7:0]); // 输出低 8 位作为字符
-       |            end
-       |        end
-       |    end
+       |    end 
        |
        |endmodule
        |""".stripMargin)
