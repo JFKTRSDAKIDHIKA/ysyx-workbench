@@ -78,25 +78,25 @@ class WBU extends Module with RISCVConstants{
 
   // Write back select signal generation
   val wb_sel = Wire(UInt(2.W))
-  wb_sel := MuxLookup(opcode, 0.U)(Seq(
-    OPCODE_LUI    -> 2.U, // LUI
-    OPCODE_AUIPC  -> 2.U, // AUIPC
-    OPCODE_RTYPE  -> 2.U, // R-type
-    OPCODE_ITYPE  -> 2.U, // I-type
-    OPCODE_LOAD   -> 3.U, // LOAD
-    OPCODE_BRANCH -> 0.U, // Branch
-    OPCODE_CSR    -> 0.U, // CSR
-    OPCODE_JAL    -> 1.U, // JAL
-    OPCODE_JALR   -> 1.U  // JALR
+  wb_sel := MuxLookup(opcode, WB_X)(Seq(
+    OPCODE_LUI    -> WB_ALU, // LUI
+    OPCODE_AUIPC  -> WB_ALU, // AUIPC
+    OPCODE_RTYPE  -> WB_ALU, // R-type
+    OPCODE_ITYPE  -> WB_ALU, // I-type
+    OPCODE_LOAD   -> WB_MEM, // LOAD
+    OPCODE_BRANCH -> WB_X, // Branch
+    OPCODE_CSR    -> WB_X, // CSR
+    OPCODE_JAL    -> WB_PC4, // JAL
+    OPCODE_JALR   -> WB_PC4  // JALR
   ))
 
   // Write back data selection
   val wb_data = Wire(UInt(32.W))
-  wb_data := MuxLookup(wb_sel, 0.U)(Seq(
-    0.U -> 0.U,             
-    1.U -> pc_plus4,        
-    2.U -> wbu_reg_result,     
-    3.U -> wbu_reg_dmem_rdata   
+  wb_data := MuxLookup(wb_sel, WB_X)(Seq(
+    WB_X   -> 0.U,             
+    WB_PC4 -> pc_plus4,        
+    WB_ALU -> wbu_reg_result,     
+    WB_MEM -> wbu_reg_dmem_rdata   
   ))
 
   // Register file write enable signal generation

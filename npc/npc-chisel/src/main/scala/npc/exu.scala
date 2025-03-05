@@ -63,6 +63,11 @@ class EXU extends Module with RISCVConstants {
   val exu_reg_rs2_data = RegEnable(io.in.bits.rs2_data, io.in.fire)
   val exu_reg_wb_addr = RegEnable(io.in.bits.wb_addr, io.in.fire)
 
+  // Control logic
+  val opcode = exu_reg_inst(OPCODE_MSB, OPCODE_LSB)
+  val funct3 = exu_reg_inst(FUNCT3_MSB, FUNCT3_LSB)
+  val funct7 = exu_reg_inst(FUNCT7_MSB, FUNCT7_LSB)
+
   // ALU oprand
   val alu_op1 = io.in.bits.alu_op1
   val alu_op2 = io.in.bits.alu_op2
@@ -70,39 +75,43 @@ class EXU extends Module with RISCVConstants {
   // ALU operation selection
   val alu_op = Wire(UInt(5.W))
 
-  // Control logic
-  val opcode = exu_reg_inst(OPCODE_MSB, OPCODE_LSB)
-  val funct3 = exu_reg_inst(FUNCT3_MSB, FUNCT3_LSB)
-  val funct7 = exu_reg_inst(FUNCT7_MSB, FUNCT7_LSB)
-
   alu_op := MuxLookup(opcode, 0.U)(Seq(
     OPCODE_LUI   -> ALU_COPY1, // LUI: PASS_A
     OPCODE_AUIPC -> ALU_ADD, // AUIPC: ADD
     OPCODE_LOAD  -> ALU_ADD, // LOAD: ADD
     OPCODE_STORE -> ALU_ADD, // STORE: ADD
-    OPCODE_ITYPE -> MuxLookup(funct3, 0.U)(Seq( // I-type
-      0.U -> ALU_ADD, // ADD
-      1.U -> ALU_SLL, // SLL
-      2.U -> ALU_SLT, // SLT
-      3.U -> ALU_SLTU, // SLTU
-      4.U -> ALU_XOR, // XOR
-      5.U -> Mux(funct7 === 0.U, ALU_SRL, ALU_SRA), // SRL/SRA
-      6.U -> ALU_OR, // OR
-      7.U -> ALU_AND // AND
+    OPCODE_ITYPE -> MuxLookup(funct3, ALU_ADD)(Seq( // I-type
+      FUNCT3_ADDI -> ALU_ADD, // ADD
+      FUNCT3_SLLI -> ALU_SLL, // SLL
+      FUNCT3_SLTI -> ALU_SLT, // SLT
+      FUNCT3_SLTIU -> ALU_SLTU, // SLTU
+      FUNCT3_XORI -> ALU_XOR, // XOR
+      FUNCT3_SRLI_SRAI -> MuxLookup(funct7, ALU_SRL)(Seq(
+        FUNCT7_SRLI -> ALU_SRL,
+        FUNCT7_SRAI -> ALU_SRA
+      )), // SRL/SRA
+      FUNCT3_ORI -> ALU_OR, // OR
+      FUNCT3_ANDI -> ALU_AND // AND
     )),
-    OPCODE_RTYPE -> MuxLookup(funct3, 0.U)(Seq( // R-type
-      0.U -> Mux(funct7 === 0.U, ALU_ADD, ALU_SUB), // ADD/SUB
-      1.U -> ALU_SLL, // SLL
-      2.U -> ALU_SLT, // SLT
-      3.U -> ALU_SLTU, // SLTU
-      4.U -> ALU_XOR, // XOR
-      5.U -> Mux(funct7 === 0.U, ALU_SRL, ALU_SRA), // SRL/SRA
-      6.U -> ALU_OR, // OR
-      7.U -> ALU_AND // AND
+    OPCODE_RTYPE -> MuxLookup(funct3, ALU_ADD)(Seq( // R-type
+      FUNCT3_ADD_SUB -> MuxLookup(funct7, ALU_ADD)(Seq(
+          FUNCT7_ADD -> ALU_ADD,
+          FUNCT7_SUB -> ALU_SUB
+      )),
+      FUNCT3_SLL -> ALU_SLL, // SLL
+      FUNCT3_SLT -> ALU_SLT, // SLT
+      FUNCT3_SLTU -> ALU_SLTU, // SLTU
+      FUNCT3_XOR -> ALU_XOR, // XOR
+      FUNCT3_SRL_SRA -> MuxLookup(funct7, ALU_SRL)(Seq( // SRL/SRA
+        FUNCT7_SRL -> ALU_SRL,
+        FUNCT7_SRA -> ALU_SRA
+      )),
+      FUNCT3_OR -> ALU_OR, // OR
+      FUNCT3_AND -> ALU_AND // AND
     ))
   ))
 
-  // Instantiate ALU
+  // Instantiate ALU module
   val alu_instance = Module(new ALU)
   alu_instance.io.a := alu_op1
   alu_instance.io.b := alu_op2

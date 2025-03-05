@@ -96,30 +96,30 @@ class IDU extends Module with RISCVConstants{
     io.br_target := idu_reg_pc + imm_b_sext
     io.jmp_target := idu_reg_pc + imm_j_sext 
 
+    // Control signals
+    val opcode = idu_reg_inst(OPCODE_MSB, OPCODE_LSB)
+    val funct3 = idu_reg_inst(FUNCT3_MSB, FUNCT3_LSB)
+
     // Generate branch condition
     val br_eq = io.rs1_data === io.rs2_data 
     val br_lt = io.rs1_data.asSInt < io.rs2_data.asSInt 
     val br_ltu = io.rs1_data.asUInt < io.rs2_data.asUInt 
 
-    // Control signals
-    val opcode = idu_reg_inst(OPCODE_MSB, OPCODE_LSB)
-    val funct3 = idu_reg_inst(FUNCT3_MSB, FUNCT3_LSB)
-
     // Mux for branch taken signal
     val branch_taken = MuxLookup(funct3, false.B)(Seq(
-        0.U -> br_eq,
-        1.U -> !br_eq,
-        4.U -> br_lt,
-        5.U -> !br_lt,
-        6.U -> br_ltu,
-        7.U -> !br_ltu
+        FUNCT3_BEQ -> br_eq,
+        FUNCT3_BNE -> !br_eq,
+        FUNCT3_BLT -> br_lt,
+        FUNCT3_BGE -> !br_lt,
+        FUNCT3_BLTU -> br_ltu,
+        FUNCT3_BGEU -> !br_ltu
     ))
 
     // pc_sel signal generation
-    io.pc_sel := MuxLookup(opcode, 0.U)(Seq(
-        OPCODE_JALR -> 1.U,
-        OPCODE_JAL  -> 3.U,
-        OPCODE_BRANCH -> Mux(branch_taken, 2.U, 0.U)
+    io.pc_sel := MuxLookup(opcode, PC_4)(Seq(
+        OPCODE_JALR -> PC_JR,
+        OPCODE_JAL  -> PC_J,
+        OPCODE_BRANCH -> Mux(branch_taken, PC_BR, PC_4)
     ))
 
     // Mux for alu_op1 and alu_op2 selection
@@ -151,7 +151,11 @@ class IDU extends Module with RISCVConstants{
     ))
 
     // Mux for alu_op1 and alu_op2
-    val alu_op1 = Mux(alu_op1Sel === 1.U, imm_u_sext, io.rs1_data)
+    val alu_op1 = MuxLookup(alu_op1Sel, 0.U)(Seq(
+      0.U -> io.rs1_data,
+      1.U -> imm_u_sext
+    ))
+
     val alu_op2 = MuxLookup(alu_op2Sel, 0.U)(Seq(
         0.U -> idu_reg_pc,
         1.U -> imm_i_sext,

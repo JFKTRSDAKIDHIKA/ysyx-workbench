@@ -8,6 +8,14 @@ import scala.math._
 
 trait RISCVConstants
 {
+   
+   // PC Select Signal
+   val PC_4   = 0.asUInt(3.W)  // PC + 4
+   val PC_BR  = 1.asUInt(3.W)  // branch_target
+   val PC_J   = 2.asUInt(3.W)  // jump_target
+   val PC_JR  = 3.asUInt(3.W)  // jump_reg_target
+   val PC_EXC = 4.asUInt(3.W)  // exception
+
    // abstract out instruction decode magic numbers
    val RD_MSB  = 11
    val RD_LSB  = 7
@@ -55,6 +63,44 @@ trait RISCVConstants
    val FUNCT3_SH       = "b001".U(3.W) // Store Halfword
    val FUNCT3_SW       = "b010".U(3.W) // Store Word
 
+   // Funct3 constants for branch instructions 
+   val FUNCT3_BEQ      = "b000".U(3.W) // Branch if Equal
+   val FUNCT3_BNE      = "b001".U(3.W) // Branch if Not Equal
+   val FUNCT3_BLT      = "b100".U(3.W) // Branch if Less Than
+   val FUNCT3_BGE      = "b101".U(3.W) // Branch if Greater Than or Equal
+   val FUNCT3_BLTU     = "b110".U(3.W) // Branch if Less Than (Unsigned)
+   val FUNCT3_BGEU     = "b111".U(3.W) // Branch if Greater Than or Equal (Unsigned)
+
+   // Funct3 constants for I-type instructions
+   val FUNCT3_ADDI     = "b000".U(3.W) // Add Immediate
+   val FUNCT3_SLLI     = "b001".U(3.W) // Shift Left Logical Immediate
+   val FUNCT3_SLTI     = "b010".U(3.W) // Set Less Than Immediate
+   val FUNCT3_SLTIU    = "b011".U(3.W) // Set Less Than Immediate Unsigned
+   val FUNCT3_XORI     = "b100".U(3.W) // XOR Immediate
+   val FUNCT3_SRLI_SRAI = "b101".U(3.W) // Shift Right Logical/Arithmetic Immediate
+   val FUNCT3_ORI      = "b110".U(3.W) // OR Immediate
+   val FUNCT3_ANDI     = "b111".U(3.W) // AND Immediate
+
+   // Funct7 constants for Logical/Arithmetic Immediate instructions
+   val FUNCT7_SRLI = "b0000000".U(7.W) // Shift Right Logical Immediate
+   val FUNCT7_SRAI = "b0100000".U(7.W) // Shift Right Arithmetic Immediate
+
+   // Funct3 constants for R-type instructions
+   val FUNCT3_ADD_SUB  = "b000".U(3.W) // Add and Subtract
+   val FUNCT3_SLL      = "b001".U(3.W) // Shift Left Logical
+   val FUNCT3_SLT      = "b010".U(3.W) // Set Less Than
+   val FUNCT3_SLTU     = "b011".U(3.W) // Set Less Than Unsigned
+   val FUNCT3_XOR      = "b100".U(3.W) // XOR
+   val FUNCT3_SRL_SRA  = "b101".U(3.W) // Shift Right Logical and Shift Right Arithmetic
+   val FUNCT3_OR       = "b110".U(3.W) // OR
+   val FUNCT3_AND      = "b111".U(3.W) // AND
+
+   // Funct7 constants for R-type instructions
+   val FUNCT7_ADD = "b0000000".U(7.W) // Add
+   val FUNCT7_SUB = "b0100000".U(7.W) // Subtract
+   val FUNCT7_SRL = "b0000000".U(7.W) // Shift Right Logical
+   val FUNCT7_SRA = "b0100000".U(7.W) // Shift Right Arithmetic
+
    // Define ALU opcode constants
    val ALU_ADD  = "b00000".U(5.W) // Addition
    val ALU_SUB  = "b00001".U(5.W) // Subtraction
@@ -67,6 +113,19 @@ trait RISCVConstants
    val ALU_SRA  = "b01000".U(5.W) // Arithmetic right shift
    val ALU_SRL  = "b01001".U(5.W) // Logical right shift
    val ALU_COPY1 = "b01111".U(5.W) // Copy operand A
+
+   // Define meaningful constants
+   val MEM_ACCESS_WORD   = 2.U  // Word (32-bit)
+   val MEM_ACCESS_BYTE   = 0.U  // Byte (8-bit)
+   val MEM_ACCESS_BYTE_U = 4.U  // Byte unsigned (8-bit)
+   val MEM_ACCESS_HALF   = 1.U  // Halfword (16-bit)
+   val MEM_ACCESS_HALF_U = 5.U  // Halfword unsigned (16-bit)
+
+   // Writeback Select Signal
+   val WB_ALU  = 2.asUInt(2.W)
+   val WB_MEM  = 3.asUInt(2.W)
+   val WB_PC4  = 1.asUInt(2.W)
+   val WB_X    = 0.asUInt(2.W)
 
    // PC reset vector
    val RESET_VECTOR = 0x80000000L.U(32.W) // 32位宽度，支持大整数

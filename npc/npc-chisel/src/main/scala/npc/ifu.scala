@@ -47,11 +47,11 @@ class IFU extends Module with RISCVConstants {
 
   // Calculate next pc
   pc_next := MuxLookup(io.pc_sel, pc_plus4)(Seq(
-    0.U -> pc_plus4,
-    1.U -> io.jump_reg_target,
-    2.U -> io.br_target,
-    3.U -> io.jmp_target,
-    4.U -> exception
+    PC_4 -> pc_plus4,
+    PC_JR -> io.jump_reg_target,
+    PC_BR -> io.br_target,
+    PC_J -> io.jmp_target,
+    PC_EXC -> exception
   ))
 
   // Output current pc
@@ -73,33 +73,45 @@ class IFU extends Module with RISCVConstants {
   // State machine logic
   switch(state) {
     is(sIdle) {
+      // Forward signals
       io.out.valid := false.B
       io.out.bits.inst := if_inst_buffer 
+      // Read Address Channel
       io.memory.ar.addr := pc 
       io.memory.ar.valid := false.B
+      // Read Data Channel
       io.memory.r.ready := false.B
+      // Start fetch instruction
       when(io.pc_wen) {
         state := sFetchReq
       }
     }
 
     is(sFetchReq) {
+      // Forward signals
       io.out.valid := false.B
       io.out.bits.inst := if_inst_buffer 
+      // Read Address Channel
       io.memory.ar.addr := pc 
-      io.memory.ar.valid := true.B
+      io.memory.ar.valid := true.B  // Send memory read request
+      // Read Data Channel
       io.memory.r.ready := false.B
+      // Wait memory ready to process request
       when(io.memory.ar.ready) {
         state := sFetchWait
       }
     }
 
     is(sFetchWait) {
+      // Forward signals
       io.out.valid := false.B
       io.out.bits.inst := if_inst_buffer 
+      // Read Address Channel
       io.memory.ar.addr := pc 
-      io.memory.ar.valid := false.B
-      io.memory.r.ready := true.B
+      io.memory.ar.valid := false.B // Clear memory read request
+      // Read Data Channel
+      io.memory.r.ready := true.B // Ready to read data from memory
+      // Wait fetched instruction data valid
       when(io.memory.r.valid) {
         if_inst_buffer := io.memory.r.data 
         state := sFetchDone
@@ -107,11 +119,15 @@ class IFU extends Module with RISCVConstants {
     }
 
     is(sFetchDone) {
+      // Forward signals
       io.out.valid := true.B
       io.out.bits.inst := if_inst_buffer 
+      // Read Address Channel
       io.memory.ar.addr := pc 
       io.memory.ar.valid := false.B
+      // Read Data Channel
       io.memory.r.ready := false.B
+      // Wait idu ready to process instruction
       when(io.out.ready) {
         state := sIdle
       }
