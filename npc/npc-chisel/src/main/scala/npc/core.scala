@@ -11,9 +11,9 @@ class Core extends Module with RISCVConstants {
         // ifu
         val pc_debug = Output(UInt(32.W))
         val inst_debug = Output(UInt(32.W))
-        val ifu_state_debug = Output(UInt(2.W))
+        val ifu_state_debug = Output(UInt(3.W))
         // lsu
-        val lsu_state_debug = Output(UInt(2.W))
+        val lsu_state_debug = Output(UInt(3.W))
         val lsu_is_ld_or_st_debug = Output(Bool())
         val lsu_reg_inst_debug = Output(UInt(32.W))
         val dmem_wdata_debug = Output(UInt(32.W))
@@ -70,6 +70,8 @@ class Core extends Module with RISCVConstants {
     arbiter.io.ifu <> ifu.io.memory
     arbiter.io.lsu <> lsu.io.memory
     arbiter.io.axi <> sram.io.axi
+    arbiter.io.ifu_handshake <> ifu.io.arbiter
+    arbiter.io.lsu_handshake <> lsu.io.arbiter
 
     // Debus signals
     // ifu

@@ -5,9 +5,15 @@ import chisel3.util._
 
 class MemoryArbiter extends Module {
   val io = IO(new Bundle {
+    // ???
     val ifu = Flipped(new AXI4LiteIO) // Instruction Fetch Unit
     val lsu = Flipped(new AXI4LiteIO) // Load Store Unit
     val axi = new AXI4LiteIO
+
+    // Handshake signals
+    val ifu_handshake = Flipped(new ValidReadyBundle)
+    val lsu_handshake = Flipped(new ValidReadyBundle)
+
     // Debug signals
     val Arbiter_state_debug = Output(UInt(2.W))
   })
@@ -16,48 +22,41 @@ class MemoryArbiter extends Module {
   AXI4LiteFlippedDefaults(io.ifu)
   AXI4LiteFlippedDefaults(io.lsu)
   AXI4LiteDefaults(io.axi)
-
-  // Indicate which unit should be passed
-  val isIFUActive = io.ifu.ar.valid || io.ifu.r.ready
-  val isLSUActive = io.lsu.ar.valid || io.lsu.aw.valid || io.lsu.r.ready || io.lsu.b.ready && !isIFUActive 
+  io.ifu_handshake.ready := false.B
+  io.lsu_handshake.ready := false.B
 
   // State machine state definition
-  val sIdle :: sIFU :: sLSU :: Nil = Enum(3)
+  val sIdle :: sBusy :: Nil = Enum(2)
   val state = RegInit(sIdle)
 
   // State machine logic
   switch(state) {
     is(sIdle) {
-      when(isIFUActive) {
-        state := sIFU
-      } .elsewhen(isLSUActive) {
-        state := sLSU
+      // Arbiter is ready when state is idle
+      io.ifu_handshake.ready := true.B
+      io.lsu_handshake.ready := true.B
+      // Switch state
+      when(io.ifu_handshake.valid || io.lsu_handshake.valid) {
+        state := sBusy
       } .otherwise {
         state := sIdle
       }
     }
 
-    is(sIFU) {
-      io.axi <> io.ifu
-      when(isIFUActive) {
-        state := sIFU
-      } .elsewhen(isLSUActive) {
-        state := sLSU
+    is(sBusy) {
+      // Arbiter is not ready when state is busy
+      io.ifu_handshake.ready := false.B
+      io.lsu_handshake.ready := false.B
+      // Bypass signals
+      when(io.ifu_handshake.valid) {
+        io.axi <> io.ifu
+        state := sBusy
+      } .elsewhen(io.lsu_handshake.valid) {
+        io.axi <> io.lsu
+        state := sBusy
       } .otherwise {
         state := sIdle
       }
-    }
-
-    is(sLSU) {
-      io.axi <> io.lsu
-      when(isIFUActive) {
-        state := sIFU
-      } .elsewhen(isLSUActive) {
-        state := sLSU
-      } .otherwise {
-        state := sIdle
-      }
-      
     }
   }
 

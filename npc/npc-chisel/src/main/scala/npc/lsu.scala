@@ -18,10 +18,15 @@ class LSUIO extends Bundle {
   val in = Flipped(Decoupled(new ExecuteMessage))
   // Signals passed to WBU
   val out = Decoupled(new LoadStoreMessage)
+
   // Memory interface
   val memory = new AXI4LiteIO
+
+  // Arbiter handshake
+  val arbiter = new ValidReadyBundle
+
   // Debug signals
-  val lsu_state_debug = Output(UInt(2.W))
+  val lsu_state_debug = Output(UInt(3.W))
   val lsu_is_ld_or_st_debug = Output(Bool())
   val lsu_reg_inst_debug = Output(UInt(32.W))
   val dmem_wdata_debug = Output(UInt(32.W))
@@ -37,6 +42,7 @@ class LSU extends Module with RISCVConstants{
   // Set default values
   io.in.ready := false.B
   io.out.valid := false.B
+  io.arbiter.valid := false.B
 
   // Pipeline registers
   val lsu_reg_inst = RegEnable(io.in.bits.inst, io.in.fire)
@@ -81,12 +87,14 @@ class LSU extends Module with RISCVConstants{
   write_mask_gen.io.dmem_wdata_raw := lsu_reg_rs2_data
 
   // State machine state definition
-  val sIdle :: sPrepare :: sMemAccess :: sDone :: Nil = Enum(4)
+  val sIdle :: sArbiterPrepare :: sPrepare :: sMemAccess :: sDone :: Nil = Enum(5)
   val state = RegInit(sIdle)
 
   // State machine logic
   switch(state) {
     is(sIdle) {
+      // Arbiter interface
+      io.arbiter.valid := false.B
       // Forward signals
       io.in.ready := false.B
       io.out.valid := false.B
@@ -103,11 +111,22 @@ class LSU extends Module with RISCVConstants{
       // Start memory access
       when(io.in.valid) {
         io.in.ready := true.B
-        state := sPrepare
+        state := sArbiterPrepare
       }
     }
 
+    is(sArbiterPrepare) {
+      // Arbiter interface
+      io.arbiter.valid := true.B
+      // Wait arbiter ready
+      when(io.arbiter.ready) {
+        state := sPrepare
+      }      
+    }
+
     is(sPrepare) {
+        // Arbiter interface
+        io.arbiter.valid := true.B
         // Forward signals
         io.in.ready := false.B
         io.out.valid := false.B
@@ -139,6 +158,8 @@ class LSU extends Module with RISCVConstants{
     }
 
     is(sMemAccess) {
+      // Arbiter interface
+      io.arbiter.valid := true.B
       // Forward signals
       io.in.ready := false.B
       io.out.valid := false.B
@@ -168,6 +189,8 @@ class LSU extends Module with RISCVConstants{
     }
 
     is(sDone) {
+      // Arbiter interface
+      io.arbiter.valid := false.B
       // Forward signals
       io.in.ready := false.B
       io.out.valid := true.B  // Lsu finish
