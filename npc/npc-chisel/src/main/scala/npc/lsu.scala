@@ -169,8 +169,6 @@ class LSU extends Module with RISCVConstants{
       isStore := opcode === OPCODE_STORE
       // Read channel
       when(isLoad) {
-        // ???
-        io.memory.ar.addr := lsu_reg_dmem_addr
         // Read channel
         io.memory.ar.valid := false.B
         io.memory.r.ready := true.B
@@ -180,8 +178,6 @@ class LSU extends Module with RISCVConstants{
         }
       // Write channel
       }.elsewhen(isStore) {
-        // ???
-        io.memory.aw.addr := lsu_reg_dmem_addr
         // Write channel
         io.memory.aw.valid := false.B
         io.memory.w.valid := false.B
