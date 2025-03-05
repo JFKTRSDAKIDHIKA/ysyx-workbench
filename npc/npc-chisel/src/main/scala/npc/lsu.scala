@@ -55,14 +55,14 @@ class LSU extends Module with RISCVConstants{
   // 'mem_access_control' signal generation
   val mem_access_control = Wire(UInt(3.W))
   mem_access_control := MuxLookup(Cat(opcode, funct3), 0.U)(Seq(
-    Cat(OPCODE_LOAD, FUNCT3_LW)  -> 2.U, // LW
-    Cat(OPCODE_LOAD, FUNCT3_LB)  -> 0.U, // LB
-    Cat(OPCODE_LOAD, FUNCT3_LBU) -> 4.U, // LBU
-    Cat(OPCODE_LOAD, FUNCT3_LH)  -> 1.U, // LH
-    Cat(OPCODE_LOAD, FUNCT3_LHU) -> 5.U, // LHU
-    Cat(OPCODE_STORE, FUNCT3_SW) -> 2.U, // SW
-    Cat(OPCODE_STORE, FUNCT3_SB) -> 0.U, // SB
-    Cat(OPCODE_STORE, FUNCT3_SH) -> 1.U  // SH
+    Cat(OPCODE_LOAD, FUNCT3_LW)  -> MEM_ACCESS_WORD,   // LW
+    Cat(OPCODE_LOAD, FUNCT3_LB)  -> MEM_ACCESS_BYTE,   // LB
+    Cat(OPCODE_LOAD, FUNCT3_LBU) -> MEM_ACCESS_BYTE_U, // LBU
+    Cat(OPCODE_LOAD, FUNCT3_LH)  -> MEM_ACCESS_HALF,   // LH
+    Cat(OPCODE_LOAD, FUNCT3_LHU) -> MEM_ACCESS_HALF_U, // LHU
+    Cat(OPCODE_STORE, FUNCT3_SW) -> MEM_ACCESS_WORD,   // SW
+    Cat(OPCODE_STORE, FUNCT3_SB) -> MEM_ACCESS_BYTE,   // SB
+    Cat(OPCODE_STORE, FUNCT3_SH) -> MEM_ACCESS_HALF    // SH
   ))
 
   // Instantiate alignment_network
@@ -70,6 +70,7 @@ class LSU extends Module with RISCVConstants{
   alignment_network.io.data_in := io.memory.r.data
   alignment_network.io.dmem_addr := lsu_reg_dmem_addr
   alignment_network.io.control := mem_access_control
+  // Coordinate between wbu and lsu
   val dmem_rdata_delay = ShiftRegister(alignment_network.io.data_out, 1, true.B)
   io.out.bits.dmem_rdata := dmem_rdata_delay
 

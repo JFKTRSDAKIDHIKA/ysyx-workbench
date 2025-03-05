@@ -409,13 +409,13 @@ VL_INLINE_OPT void VCore___024root___nba_sequent__TOP__0(VCore___024root* vlSelf
                          ? (IData)(((0x10d0000000ULL 
                                      | (QData)((IData)(
                                                        (0x4314e0U 
-                                                        | (((0U 
-                                                             == 
+                                                        | (((0x20U 
+                                                             != 
                                                              (vlSelf->Core__DOT__exu__DOT__exu_reg_inst 
                                                               >> 0x19U)) 
                                                             << 0x19U) 
-                                                           | (0U 
-                                                              != 
+                                                           | (0x20U 
+                                                              == 
                                                               (vlSelf->Core__DOT__exu__DOT__exu_reg_inst 
                                                                >> 0x19U))))))) 
                                     >> (0x3fU & ((IData)(5U) 
@@ -434,8 +434,8 @@ VL_INLINE_OPT void VCore___024root___nba_sequent__TOP__0(VCore___024root* vlSelf
                                        ? (IData)(((0x10d0000000ULL 
                                                    | (QData)((IData)(
                                                                      (0x4314e0U 
-                                                                      | ((0U 
-                                                                          == 
+                                                                      | ((0x20U 
+                                                                          != 
                                                                           (vlSelf->Core__DOT__exu__DOT__exu_reg_inst 
                                                                            >> 0x19U)) 
                                                                          << 0x19U))))) 
@@ -962,44 +962,41 @@ VL_INLINE_OPT void VCore___024root___nba_sequent__TOP__2(VCore___024root* vlSelf
         VCore___024root____Vdpiimwrap_Core__DOT__ifu__DOT__ebreakHandler__DOT__simulation_exit_TOP();
     }
     vlSelf->Core__DOT__exu__DOT___alu_instance_io_result 
-        = ((0U == (IData)(vlSelf->Core__DOT__exu__DOT____Vcellinp__alu_instance__io_aluOp))
-            ? (vlSelf->Core__DOT___idu_io_out_bits_alu_op1 
-               + vlSelf->Core__DOT___idu_io_out_bits_alu_op2)
-            : ((1U == (IData)(vlSelf->Core__DOT__exu__DOT____Vcellinp__alu_instance__io_aluOp))
-                ? (vlSelf->Core__DOT___idu_io_out_bits_alu_op1 
-                   - vlSelf->Core__DOT___idu_io_out_bits_alu_op2)
-                : ((2U == (IData)(vlSelf->Core__DOT__exu__DOT____Vcellinp__alu_instance__io_aluOp))
+        = ((0xfU == (IData)(vlSelf->Core__DOT__exu__DOT____Vcellinp__alu_instance__io_aluOp))
+            ? vlSelf->Core__DOT___idu_io_out_bits_alu_op1
+            : ((8U == (IData)(vlSelf->Core__DOT__exu__DOT____Vcellinp__alu_instance__io_aluOp))
+                ? VL_SHIFTRS_III(32,32,5, vlSelf->Core__DOT___idu_io_out_bits_alu_op1, 
+                                 (0x1fU & vlSelf->Core__DOT___idu_io_out_bits_alu_op2))
+                : ((9U == (IData)(vlSelf->Core__DOT__exu__DOT____Vcellinp__alu_instance__io_aluOp))
                     ? (vlSelf->Core__DOT___idu_io_out_bits_alu_op1 
-                       & vlSelf->Core__DOT___idu_io_out_bits_alu_op2)
-                    : ((3U == (IData)(vlSelf->Core__DOT__exu__DOT____Vcellinp__alu_instance__io_aluOp))
+                       >> (0x1fU & vlSelf->Core__DOT___idu_io_out_bits_alu_op2))
+                    : ((7U == (IData)(vlSelf->Core__DOT__exu__DOT____Vcellinp__alu_instance__io_aluOp))
                         ? (vlSelf->Core__DOT___idu_io_out_bits_alu_op1 
-                           | vlSelf->Core__DOT___idu_io_out_bits_alu_op2)
-                        : ((4U == (IData)(vlSelf->Core__DOT__exu__DOT____Vcellinp__alu_instance__io_aluOp))
+                           << (0x1fU & vlSelf->Core__DOT___idu_io_out_bits_alu_op2))
+                        : ((6U == (IData)(vlSelf->Core__DOT__exu__DOT____Vcellinp__alu_instance__io_aluOp))
                             ? (vlSelf->Core__DOT___idu_io_out_bits_alu_op1 
-                               ^ vlSelf->Core__DOT___idu_io_out_bits_alu_op2)
+                               < vlSelf->Core__DOT___idu_io_out_bits_alu_op2)
                             : ((5U == (IData)(vlSelf->Core__DOT__exu__DOT____Vcellinp__alu_instance__io_aluOp))
                                 ? VL_LTS_III(32, vlSelf->Core__DOT___idu_io_out_bits_alu_op1, vlSelf->Core__DOT___idu_io_out_bits_alu_op2)
-                                : ((6U == (IData)(vlSelf->Core__DOT__exu__DOT____Vcellinp__alu_instance__io_aluOp))
+                                : ((4U == (IData)(vlSelf->Core__DOT__exu__DOT____Vcellinp__alu_instance__io_aluOp))
                                     ? (vlSelf->Core__DOT___idu_io_out_bits_alu_op1 
-                                       < vlSelf->Core__DOT___idu_io_out_bits_alu_op2)
-                                    : ((7U == (IData)(vlSelf->Core__DOT__exu__DOT____Vcellinp__alu_instance__io_aluOp))
+                                       ^ vlSelf->Core__DOT___idu_io_out_bits_alu_op2)
+                                    : ((3U == (IData)(vlSelf->Core__DOT__exu__DOT____Vcellinp__alu_instance__io_aluOp))
                                         ? (vlSelf->Core__DOT___idu_io_out_bits_alu_op1 
-                                           << (0x1fU 
-                                               & vlSelf->Core__DOT___idu_io_out_bits_alu_op2))
-                                        : ((8U == (IData)(vlSelf->Core__DOT__exu__DOT____Vcellinp__alu_instance__io_aluOp))
-                                            ? VL_SHIFTRS_III(32,32,5, vlSelf->Core__DOT___idu_io_out_bits_alu_op1, 
-                                                             (0x1fU 
-                                                              & vlSelf->Core__DOT___idu_io_out_bits_alu_op2))
-                                            : ((9U 
+                                           | vlSelf->Core__DOT___idu_io_out_bits_alu_op2)
+                                        : ((2U == (IData)(vlSelf->Core__DOT__exu__DOT____Vcellinp__alu_instance__io_aluOp))
+                                            ? (vlSelf->Core__DOT___idu_io_out_bits_alu_op1 
+                                               & vlSelf->Core__DOT___idu_io_out_bits_alu_op2)
+                                            : ((1U 
                                                 == (IData)(vlSelf->Core__DOT__exu__DOT____Vcellinp__alu_instance__io_aluOp))
                                                 ? (vlSelf->Core__DOT___idu_io_out_bits_alu_op1 
-                                                   >> 
-                                                   (0x1fU 
-                                                    & vlSelf->Core__DOT___idu_io_out_bits_alu_op2))
+                                                   - vlSelf->Core__DOT___idu_io_out_bits_alu_op2)
                                                 : (
-                                                   (0xfU 
+                                                   (0U 
                                                     == (IData)(vlSelf->Core__DOT__exu__DOT____Vcellinp__alu_instance__io_aluOp))
-                                                    ? vlSelf->Core__DOT___idu_io_out_bits_alu_op1
+                                                    ? 
+                                                   (vlSelf->Core__DOT___idu_io_out_bits_alu_op1 
+                                                    + vlSelf->Core__DOT___idu_io_out_bits_alu_op2)
                                                     : 0U)))))))))));
     vlSelf->Core__DOT___exu_io_out_valid = ((~ ((0U 
                                                  == (IData)(vlSelf->Core__DOT__exu__DOT__state)) 
