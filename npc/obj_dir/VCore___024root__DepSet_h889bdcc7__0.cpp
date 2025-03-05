@@ -1021,11 +1021,8 @@ VL_INLINE_OPT void VCore___024root___nba_sequent__TOP__2(VCore___024root* vlSelf
         = ((~ (IData)(vlSelf->Core__DOT__lsu__DOT___GEN_2)) 
            & (2U == (IData)(vlSelf->Core__DOT__lsu__DOT__state)));
     vlSelf->Core__DOT__lsu__DOT__io_in_ready_0 = ((0U 
-                                                   == (IData)(vlSelf->Core__DOT__lsu__DOT__state))
-                                                   ? (IData)(vlSelf->Core__DOT___exu_io_out_valid)
-                                                   : 
-                                                  (1U 
-                                                   == (IData)(vlSelf->Core__DOT__lsu__DOT__state)));
+                                                   == (IData)(vlSelf->Core__DOT__lsu__DOT__state)) 
+                                                  & (IData)(vlSelf->Core__DOT___exu_io_out_valid));
     vlSelf->io_dmem_wdata_debug = (vlSelf->Core__DOT__lsu__DOT__lsu_reg_rs2_data 
                                    << (0x18U & (vlSelf->Core__DOT__lsu__DOT__lsu_reg_dmem_addr 
                                                 << 3U)));

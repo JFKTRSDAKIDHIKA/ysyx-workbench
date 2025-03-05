@@ -87,7 +87,7 @@ class LSU extends Module with RISCVConstants{
   // State machine logic
   switch(state) {
     is(sIdle) {
-      //Clear
+      // Clear
       isLoad := false.B
       isStore := false.B
       // Read channel
@@ -97,7 +97,7 @@ class LSU extends Module with RISCVConstants{
       io.memory.aw.valid := false.B
       io.memory.w.valid := false.B
       io.memory.b.ready := false.B
-      // Handshake
+      // Wait exu finish process
       when(io.in.valid) {
         io.in.ready := true.B
         state := sPrepare
@@ -105,7 +105,8 @@ class LSU extends Module with RISCVConstants{
     }
 
     is(sPrepare) {
-        io.in.ready := true.B
+        // Clear
+        io.in.ready := false.B
         isLoad := opcode === OPCODE_LOAD
         isStore := opcode === OPCODE_STORE
         state := Mux(isLoad || isStore, sMemAccess, sDone)

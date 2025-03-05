@@ -209,15 +209,20 @@ class SramAxi4LiteWrapper(addrWidth: Int = 32, dataWidth: Int = 32) extends Modu
           io.axi.aw.ready := true.B
           io.axi.w.ready  := true.B
           io.axi.ar.ready := true.B
+          // Clear some signals
+          io.axi.b.valid := false.B
+          io.axi.b.resp  := 0.U
+          io.axi.r.valid := false.B
+          io.axi.r.resp  := 0.U
         when(io.axi.aw.valid && io.axi.w.valid) {
-          // Capture sWrite request
+          // Sent Write request
           addr_reg  := io.axi.aw.addr
           wdata_reg := io.axi.w.data
           wstrb_reg := io.axi.w.strb
-          state     := sWrite
           wt_req_valid := true.B
+          state     := sWrite
         }.elsewhen(io.axi.ar.valid) {
-          // Capture sRead request
+          // Sent Read request
           rd_req_valid := true.B
           addr_reg := io.axi.ar.addr
           state    := sRead
@@ -225,11 +230,14 @@ class SramAxi4LiteWrapper(addrWidth: Int = 32, dataWidth: Int = 32) extends Modu
       }
 
       is(sWrite) {
+        // Clear ready signals
         io.axi.aw.ready := false.B
         io.axi.w.ready  := false.B
+        // Clear Write request signal
         wt_req_valid := false.B
+        // Wait sram response signal ready
         when(sram_wt_res_valid) {
-          // Send sWrite response
+          // Send Write response
           io.axi.b.valid := true.B
           io.axi.b.resp  := 0.U // OKAY response
           when(io.axi.b.ready) {
@@ -239,10 +247,15 @@ class SramAxi4LiteWrapper(addrWidth: Int = 32, dataWidth: Int = 32) extends Modu
       }
 
       is(sRead) {
+        // Clear ready signals
+        io.axi.aw.ready := false.B
+        io.axi.w.ready  := false.B
+        // Clear Write request signal
         rd_req_valid := false.B
         io.axi.ar.ready := false.B
+        // Wait sram response signal ready
         when(sram_rd_res_valid) {
-          // Send sRead response
+          // Send Read response
           io.axi.r.data  := sram_data_out
           io.axi.r.valid := true.B
           io.axi.r.resp  := 0.U // OKAY response

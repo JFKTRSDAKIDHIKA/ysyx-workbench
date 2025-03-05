@@ -94,8 +94,8 @@ class alignas(VL_CACHE_LINE_BYTES) VCore___024root final : public VerilatedModul
         CData/*0:0*/ Core__DOT__sram__DOT__wt_req_valid;
         CData/*0:0*/ Core__DOT__sram__DOT___GEN;
         CData/*0:0*/ Core__DOT__sram__DOT___GEN_0;
-        CData/*0:0*/ Core__DOT__sram__DOT__io_axi_w_ready_0;
         CData/*0:0*/ Core__DOT__sram__DOT___GEN_1;
+        CData/*0:0*/ Core__DOT__sram__DOT__io_axi_w_ready_0;
         CData/*0:0*/ Core__DOT__sram__DOT___GEN_2;
         CData/*0:0*/ Core__DOT__sram__DOT____VdfgTmp_h93f383d4__0;
         CData/*0:0*/ Core__DOT__sram__DOT____VdfgTmp_hb61e3587__0;
