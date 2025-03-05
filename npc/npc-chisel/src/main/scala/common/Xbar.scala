@@ -23,7 +23,7 @@ class Xbar extends Module with RISCVConstants {
   } .elsewhen(io.in.aw.addr >= MEM_BASE || io.in.ar.addr >= MEM_BASE) {
     io.sram <> io.in
   } .otherwise {
-    io.uart <> io.in
+    io.sram <> io.in
   }
 
 }
