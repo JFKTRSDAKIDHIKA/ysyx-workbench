@@ -111,7 +111,7 @@ class IFU extends Module with RISCVConstants {
       io.memory.ar.valid := false.B // Clear memory read request
       // Read Data Channel
       io.memory.r.ready := true.B // Ready to read data from memory
-      // Wait fetched instruction data ready
+      // Wait fetched instruction data valid
       when(io.memory.r.valid) {
         if_inst_buffer := io.memory.r.data 
         state := sFetchDone

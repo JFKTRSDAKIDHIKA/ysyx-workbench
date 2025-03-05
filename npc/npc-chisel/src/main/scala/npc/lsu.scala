@@ -87,7 +87,10 @@ class LSU extends Module with RISCVConstants{
   // State machine logic
   switch(state) {
     is(sIdle) {
-      // Clear
+      // Forward signals
+      io.in.ready := false.B
+      io.out.valid := false.B
+      // Clear some signals
       isLoad := false.B
       isStore := false.B
       // Read channel
@@ -97,7 +100,7 @@ class LSU extends Module with RISCVConstants{
       io.memory.aw.valid := false.B
       io.memory.w.valid := false.B
       io.memory.b.ready := false.B
-      // Wait exu finish process
+      // Start memory access
       when(io.in.valid) {
         io.in.ready := true.B
         state := sPrepare
@@ -105,40 +108,59 @@ class LSU extends Module with RISCVConstants{
     }
 
     is(sPrepare) {
-        // Clear
+        // Forward signals
         io.in.ready := false.B
+        io.out.valid := false.B
+        // tell if the instruction is a load or stor
         isLoad := opcode === OPCODE_LOAD
         isStore := opcode === OPCODE_STORE
-        state := Mux(isLoad || isStore, sMemAccess, sDone)
+        // Start memory access
+        when(isLoad) {
+          // Read channel
+          io.memory.ar.valid := true.B
+          io.memory.ar.addr := lsu_reg_dmem_addr
+          // Wait memory ready to process request
+          when(io.memory.ar.ready) {
+            state := sMemAccess
+          }
+        } .elsewhen(isStore) {
+          // Write channel
+          io.memory.aw.valid := true.B
+          io.memory.w.valid := true.B
+          io.memory.aw.addr := lsu_reg_dmem_addr
+          io.memory.w.data := write_mask_gen.io.dmem_wdata
+          io.memory.w.strb := write_mask_gen.io.wmask
+          when(io.memory.aw.ready && io.memory.w.ready) {
+            state := sMemAccess
+          }
+        } .otherwise {
+          state := sDone
+        }
     }
 
     is(sMemAccess) {
-      // Handshake
+      // Forward signals
       io.in.ready := false.B
+      io.out.valid := false.B
+      // tell if the instruction is a load or stor
       isLoad := opcode === OPCODE_LOAD
       isStore := opcode === OPCODE_STORE
       // Read channel
       when(isLoad) {
-        io.memory.ar.valid := true.B
-        when(io.memory.ar.ready) {
-          io.memory.ar.addr := lsu_reg_dmem_addr
-        }
+        // Read channel
+        io.memory.ar.valid := false.B
         io.memory.r.ready := true.B
+        // Wait memory return data valid
         when(io.memory.r.valid) {
-
           state := sDone
         }
       // Write channel
       }.elsewhen(isStore) {
-        io.memory.aw.valid := true.B
-        io.memory.w.valid := true.B
-        when(io.memory.aw.ready && io.memory.w.ready) {
-          io.memory.aw.addr := lsu_reg_dmem_addr
-          io.memory.w.data := write_mask_gen.io.dmem_wdata
-          io.memory.w.strb := write_mask_gen.io.wmask
-        }
-        // Ensure mem write request maintain one cycle
+        // Write channel
+        io.memory.aw.valid := false.B
+        io.memory.w.valid := false.B
         io.memory.b.ready := true.B
+        // Wait memeory finish write
         when(io.memory.b.valid) {
           state := sDone
         }
@@ -146,12 +168,12 @@ class LSU extends Module with RISCVConstants{
     }
 
     is(sDone) {
+      // Forward signals
+      io.in.ready := false.B
+      io.out.valid := true.B  // Lsu finish
       // Clear
       isLoad := false.B
       isStore := false.B
-      // Handshake
-      io.in.ready := false.B
-      io.out.valid := true.B
       // Read channel
       io.memory.ar.valid := false.B
       io.memory.r.ready := false.B
