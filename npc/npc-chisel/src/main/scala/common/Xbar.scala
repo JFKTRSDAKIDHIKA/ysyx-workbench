@@ -20,10 +20,10 @@ class Xbar extends Module with RISCVConstants {
   // Bypass logic
   when(io.in.aw.addr >= UART_BASE_ADDR && io.in.aw.addr <= UART_BASE_ADDR + UART_ADDR_LEN) {
     io.uart <> io.in
-  } .elsewhen((io.in.aw.addr >= MEM_BASE && io.in.aw.addr <= MEM_TOP) || (io.in.ar.addr >= MEM_BASE && io.in.ar.addr <= MEM_TOP)) {
+  } .elsewhen(io.in.aw.addr >= MEM_BASE || io.in.ar.addr >= MEM_BASE) {
     io.sram <> io.in
   } .otherwise {
-    io.sram <> io.in
+    io.uart <> io.in
   }
 
 }

@@ -706,20 +706,20 @@ VL_ATTR_COLD void VCore___024root__trace_full_0_sub_0(VCore___024root* vlSelf, V
     bufp->fullBit(oldp+121,(vlSelf->Core__DOT___arbiter_io_axi_b_ready));
     bufp->fullIData(oldp+122,(vlSelf->Core__DOT___arbiter_io_axi_ar_addr),32);
     bufp->fullBit(oldp+123,(vlSelf->Core__DOT___arbiter_io_axi_r_ready));
-    bufp->fullBit(oldp+124,(((~ (IData)(vlSelf->Core__DOT__xbar__DOT___GEN)) 
+    bufp->fullBit(oldp+124,(((IData)(vlSelf->Core__DOT__xbar__DOT____VdfgTmp_h9f2d9de7__0) 
                              & (IData)(vlSelf->Core__DOT___arbiter_io_axi_aw_valid))));
-    bufp->fullIData(oldp+125,(((IData)(vlSelf->Core__DOT__xbar__DOT___GEN)
+    bufp->fullIData(oldp+125,(((IData)(vlSelf->Core__DOT__xbar__DOT___GEN_1)
                                 ? 0U : vlSelf->Core__DOT___arbiter_io_axi_aw_addr)),32);
-    bufp->fullIData(oldp+126,(((IData)(vlSelf->Core__DOT__xbar__DOT___GEN)
+    bufp->fullIData(oldp+126,(((IData)(vlSelf->Core__DOT__xbar__DOT___GEN_1)
                                 ? 0U : vlSelf->Core__DOT___arbiter_io_axi_w_data)),32);
-    bufp->fullCData(oldp+127,(((IData)(vlSelf->Core__DOT__xbar__DOT___GEN)
+    bufp->fullCData(oldp+127,(((IData)(vlSelf->Core__DOT__xbar__DOT___GEN_1)
                                 ? 0U : (IData)(vlSelf->Core__DOT___arbiter_io_axi_w_strb))),4);
-    bufp->fullBit(oldp+128,(((~ (IData)(vlSelf->Core__DOT__xbar__DOT___GEN)) 
+    bufp->fullBit(oldp+128,(((IData)(vlSelf->Core__DOT__xbar__DOT____VdfgTmp_h9f2d9de7__0) 
                              & (IData)(vlSelf->Core__DOT___arbiter_io_axi_b_ready))));
     bufp->fullBit(oldp+129,(vlSelf->Core__DOT___xbar_io_sram_ar_valid));
-    bufp->fullIData(oldp+130,(((IData)(vlSelf->Core__DOT__xbar__DOT___GEN)
+    bufp->fullIData(oldp+130,(((IData)(vlSelf->Core__DOT__xbar__DOT___GEN_1)
                                 ? 0U : vlSelf->Core__DOT___arbiter_io_axi_ar_addr)),32);
-    bufp->fullBit(oldp+131,(((~ (IData)(vlSelf->Core__DOT__xbar__DOT___GEN)) 
+    bufp->fullBit(oldp+131,(((IData)(vlSelf->Core__DOT__xbar__DOT____VdfgTmp_h9f2d9de7__0) 
                              & (IData)(vlSelf->Core__DOT___arbiter_io_axi_r_ready))));
     bufp->fullCData(oldp+132,(vlSelf->Core__DOT__sram__DOT__state),2);
     bufp->fullIData(oldp+133,(vlSelf->Core__DOT__sram__DOT__addr_reg),32);
@@ -730,15 +730,15 @@ VL_ATTR_COLD void VCore___024root__trace_full_0_sub_0(VCore___024root* vlSelf, V
     bufp->fullBit(oldp+138,(vlSelf->Core__DOT___xbar_io_uart_aw_valid));
     bufp->fullIData(oldp+139,(vlSelf->Core__DOT___xbar_io_uart_aw_addr),32);
     bufp->fullIData(oldp+140,(vlSelf->Core__DOT___xbar_io_uart_w_data),32);
-    bufp->fullCData(oldp+141,(((IData)(vlSelf->Core__DOT__xbar__DOT___GEN)
+    bufp->fullCData(oldp+141,(((IData)(vlSelf->Core__DOT__xbar__DOT___GEN_1)
                                 ? (IData)(vlSelf->Core__DOT___arbiter_io_axi_w_strb)
                                 : 0U)),4);
-    bufp->fullBit(oldp+142,(((IData)(vlSelf->Core__DOT__xbar__DOT___GEN) 
+    bufp->fullBit(oldp+142,(((IData)(vlSelf->Core__DOT__xbar__DOT___GEN_1) 
                              & (IData)(vlSelf->Core__DOT___arbiter_io_axi_b_ready))));
-    bufp->fullIData(oldp+143,(((IData)(vlSelf->Core__DOT__xbar__DOT___GEN)
+    bufp->fullIData(oldp+143,(((IData)(vlSelf->Core__DOT__xbar__DOT___GEN_1)
                                 ? vlSelf->Core__DOT___arbiter_io_axi_ar_addr
                                 : 0U)),32);
-    bufp->fullBit(oldp+144,(((IData)(vlSelf->Core__DOT__xbar__DOT___GEN) 
+    bufp->fullBit(oldp+144,(((IData)(vlSelf->Core__DOT__xbar__DOT___GEN_1) 
                              & (IData)(vlSelf->Core__DOT___arbiter_io_axi_r_ready))));
     bufp->fullIData(oldp+145,(vlSelf->Core__DOT__sram__DOT___sram_data_out),32);
     bufp->fullBit(oldp+146,(vlSelf->Core__DOT__sram__DOT___sram_rd_res_valid));
@@ -765,17 +765,17 @@ VL_ATTR_COLD void VCore___024root__trace_full_0_sub_0(VCore___024root* vlSelf, V
                                 ? vlSelf->Core__DOT___xbar_io_in_r_data
                                 : 0U)),32);
     bufp->fullBit(oldp+166,(((IData)(vlSelf->Core__DOT__arbiter__DOT____VdfgTmp_hd26a19fd__0) 
-                             & ((IData)(vlSelf->Core__DOT__xbar__DOT___GEN)
+                             & ((IData)(vlSelf->Core__DOT__xbar__DOT___GEN_1)
                                  ? (IData)(vlSelf->Core__DOT___uart_io_axi_aw_ready)
                                  : (IData)(vlSelf->Core__DOT__sram__DOT__io_axi_w_ready_0)))));
     bufp->fullBit(oldp+167,(((IData)(vlSelf->Core__DOT__arbiter__DOT____VdfgTmp_hd26a19fd__0) 
-                             & ((IData)(vlSelf->Core__DOT__xbar__DOT___GEN)
+                             & ((IData)(vlSelf->Core__DOT__xbar__DOT___GEN_1)
                                  ? (IData)(vlSelf->Core__DOT___uart_io_axi_w_ready)
                                  : (IData)(vlSelf->Core__DOT__sram__DOT__io_axi_w_ready_0)))));
     bufp->fullIData(oldp+168,(((IData)(vlSelf->Core__DOT__lsu__DOT___GEN_4)
                                 ? 0U : vlSelf->io_dmem_wdata_debug)),32);
     bufp->fullBit(oldp+169,(((IData)(vlSelf->Core__DOT__arbiter__DOT____VdfgTmp_hd26a19fd__0) 
-                             & ((IData)(vlSelf->Core__DOT__xbar__DOT___GEN)
+                             & ((IData)(vlSelf->Core__DOT__xbar__DOT___GEN_1)
                                  ? (IData)(vlSelf->Core__DOT___uart_io_axi_b_valid)
                                  : ((~ (IData)(vlSelf->Core__DOT__sram__DOT____VdfgTmp_h93f383d4__0)) 
                                     & ((1U == (IData)(vlSelf->Core__DOT__sram__DOT__state)) 
@@ -784,13 +784,13 @@ VL_ATTR_COLD void VCore___024root__trace_full_0_sub_0(VCore___024root* vlSelf, V
                              & (IData)(vlSelf->Core__DOT___xbar_io_in_ar_ready))));
     bufp->fullBit(oldp+171,(((IData)(vlSelf->Core__DOT__arbiter__DOT____VdfgTmp_hd26a19fd__0) 
                              & (IData)(vlSelf->Core__DOT___xbar_io_in_r_valid))));
-    bufp->fullBit(oldp+172,(((IData)(vlSelf->Core__DOT__xbar__DOT___GEN)
+    bufp->fullBit(oldp+172,(((IData)(vlSelf->Core__DOT__xbar__DOT___GEN_1)
                               ? (IData)(vlSelf->Core__DOT___uart_io_axi_aw_ready)
                               : (IData)(vlSelf->Core__DOT__sram__DOT__io_axi_w_ready_0))));
-    bufp->fullBit(oldp+173,(((IData)(vlSelf->Core__DOT__xbar__DOT___GEN)
+    bufp->fullBit(oldp+173,(((IData)(vlSelf->Core__DOT__xbar__DOT___GEN_1)
                               ? (IData)(vlSelf->Core__DOT___uart_io_axi_w_ready)
                               : (IData)(vlSelf->Core__DOT__sram__DOT__io_axi_w_ready_0))));
-    bufp->fullBit(oldp+174,(((IData)(vlSelf->Core__DOT__xbar__DOT___GEN)
+    bufp->fullBit(oldp+174,(((IData)(vlSelf->Core__DOT__xbar__DOT___GEN_1)
                               ? (IData)(vlSelf->Core__DOT___uart_io_axi_b_valid)
                               : ((~ (IData)(vlSelf->Core__DOT__sram__DOT____VdfgTmp_h93f383d4__0)) 
                                  & ((1U == (IData)(vlSelf->Core__DOT__sram__DOT__state)) 
@@ -832,7 +832,7 @@ VL_ATTR_COLD void VCore___024root__trace_full_0_sub_0(VCore___024root* vlSelf, V
                                       | (IData)(vlSelf->Core__DOT__sram__DOT___GEN_2)))
                                 ? 0U : vlSelf->Core__DOT__sram__DOT___sram_data_out)),32);
     bufp->fullBit(oldp+181,(vlSelf->Core__DOT___uart_io_axi_aw_ready));
-    bufp->fullBit(oldp+182,(((IData)(vlSelf->Core__DOT__xbar__DOT___GEN) 
+    bufp->fullBit(oldp+182,(((IData)(vlSelf->Core__DOT__xbar__DOT___GEN_1) 
                              & (IData)(vlSelf->Core__DOT___arbiter_io_axi_ar_valid))));
     bufp->fullCData(oldp+183,(vlSelf->Core__DOT__uart__DOT__uartRaw__DOT__next_state),2);
 }
