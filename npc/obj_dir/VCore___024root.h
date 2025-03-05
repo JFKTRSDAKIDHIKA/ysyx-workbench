@@ -102,7 +102,19 @@ class alignas(VL_CACHE_LINE_BYTES) VCore___024root final : public VerilatedModul
         CData/*0:0*/ Core__DOT__arbiter__DOT___GEN_0;
         CData/*0:0*/ Core__DOT__arbiter__DOT____VdfgTmp_h41ece670__0;
         CData/*0:0*/ Core__DOT__arbiter__DOT____VdfgTmp_hd26a19fd__0;
-        CData/*0:0*/ Core__DOT__xbar__DOT___GEN;
+        CData/*0:0*/ Core__DOT__xbar__DOT__isUart;
+        CData/*0:0*/ Core__DOT__xbar__DOT__isMem;
+        CData/*1:0*/ Core__DOT__xbar__DOT__state;
+        CData/*0:0*/ Core__DOT__xbar__DOT___GEN_0;
+        CData/*0:0*/ Core__DOT__xbar__DOT___GEN_1;
+        CData/*0:0*/ Core__DOT__xbar__DOT___GEN_3;
+        CData/*0:0*/ Core__DOT__xbar__DOT___GEN_5;
+        CData/*0:0*/ Core__DOT__xbar__DOT___GEN_8;
+        CData/*0:0*/ Core__DOT__xbar__DOT___GEN_9;
+        CData/*0:0*/ Core__DOT__xbar__DOT___GEN_10;
+        CData/*7:0*/ Core__DOT__xbar__DOT__unnamedblk1__DOT___GEN_11;
+        CData/*0:0*/ Core__DOT__xbar__DOT____VdfgTmp_h7e119c30__0;
+        CData/*0:0*/ Core__DOT__xbar__DOT____VdfgTmp_h9f2d9de7__0;
         CData/*0:0*/ Core__DOT__sram__DOT___sram_rd_res_valid;
         CData/*0:0*/ Core__DOT__sram__DOT___sram_wt_res_valid;
         CData/*1:0*/ Core__DOT__sram__DOT__state;
@@ -112,7 +124,6 @@ class alignas(VL_CACHE_LINE_BYTES) VCore___024root final : public VerilatedModul
         CData/*0:0*/ Core__DOT__sram__DOT___GEN;
         CData/*0:0*/ Core__DOT__sram__DOT___GEN_0;
         CData/*0:0*/ Core__DOT__sram__DOT___GEN_1;
-        CData/*0:0*/ Core__DOT__sram__DOT__io_axi_w_ready_0;
         CData/*0:0*/ Core__DOT__sram__DOT___GEN_2;
         CData/*0:0*/ Core__DOT__sram__DOT____VdfgTmp_h93f383d4__0;
         CData/*0:0*/ Core__DOT__sram__DOT____VdfgTmp_hb61e3587__0;
@@ -123,6 +134,7 @@ class alignas(VL_CACHE_LINE_BYTES) VCore___024root final : public VerilatedModul
         CData/*1:0*/ Core__DOT__uart__DOT__uartRaw__DOT__state;
         CData/*1:0*/ Core__DOT__uart__DOT__uartRaw__DOT__next_state;
         CData/*3:0*/ __Vtableidx1;
+        CData/*1:0*/ __Vdly__Core__DOT__xbar__DOT__state;
         CData/*0:0*/ __Vdly__Core__DOT__sram__DOT__rd_req_valid;
         CData/*0:0*/ __Vdly__Core__DOT__sram__DOT__wt_req_valid;
         CData/*0:0*/ __VstlFirstIteration;
@@ -134,6 +146,8 @@ class alignas(VL_CACHE_LINE_BYTES) VCore___024root final : public VerilatedModul
         VL_OUT(io_pc_debug,31,0);
         VL_OUT(io_inst_debug,31,0);
         VL_OUT(io_lsu_reg_inst_debug,31,0);
+    };
+    struct {
         VL_OUT(io_dmem_wdata_debug,31,0);
         VL_OUT(io_dmem_rdata_debug,31,0);
         VL_OUT(io_wb_data_debug,31,0);
@@ -146,8 +160,6 @@ class alignas(VL_CACHE_LINE_BYTES) VCore___024root final : public VerilatedModul
         IData/*31:0*/ Core__DOT___arbiter_io_axi_aw_addr;
         IData/*31:0*/ Core__DOT___arbiter_io_axi_w_data;
         IData/*31:0*/ Core__DOT___arbiter_io_axi_ar_addr;
-    };
-    struct {
         IData/*31:0*/ Core__DOT___regfile_rs1_data;
         IData/*31:0*/ Core__DOT___regfile_rs2_data;
         IData/*31:0*/ Core__DOT___idu_io_out_bits_alu_op1;
@@ -171,6 +183,7 @@ class alignas(VL_CACHE_LINE_BYTES) VCore___024root final : public VerilatedModul
         IData/*31:0*/ Core__DOT__wbu__DOT__wbu_reg_result;
         IData/*31:0*/ Core__DOT__wbu__DOT__wbu_reg_dmem_rdata;
         IData/*31:0*/ Core__DOT__regfile__DOT__unnamedblk1__DOT__i;
+        IData/*31:0*/ Core__DOT__xbar__DOT___GEN_6;
         IData/*31:0*/ Core__DOT__sram__DOT___sram_data_out;
         IData/*31:0*/ Core__DOT__sram__DOT__addr_reg;
         IData/*31:0*/ Core__DOT__sram__DOT__wdata_reg;
@@ -178,6 +191,7 @@ class alignas(VL_CACHE_LINE_BYTES) VCore___024root final : public VerilatedModul
         IData/*31:0*/ Core__DOT__sram__DOT__sram__DOT__waddr_delayed;
         IData/*31:0*/ Core__DOT__sram__DOT__sram__DOT__wdata_delayed;
         IData/*31:0*/ Core__DOT__uart__DOT__uartRaw__DOT__uart_reg;
+        IData/*31:0*/ __VdfgTmp_hd07d15e1__0;
         IData/*31:0*/ __Vfunc_Core__DOT__sram__DOT__sram__DOT__pmem_read__2__Vfuncout;
         IData/*31:0*/ __VactIterCount;
         VlUnpacked<IData/*31:0*/, 32> Core__DOT__regfile__DOT__rf;

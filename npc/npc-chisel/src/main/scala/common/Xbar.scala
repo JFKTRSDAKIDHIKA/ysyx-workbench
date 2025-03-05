@@ -17,13 +17,47 @@ class Xbar extends Module with RISCVConstants {
   AXI4LiteDefaults(io.uart)
   AXI4LiteDefaults(io.sram)
 
-  // Bypass logic
-  when(io.in.aw.addr >= UART_BASE_ADDR && io.in.aw.addr <= UART_BASE_ADDR + UART_ADDR_LEN) {
-    io.uart <> io.in
-  } .elsewhen(io.in.aw.addr >= MEM_BASE || io.in.ar.addr >= MEM_BASE) {
-    io.sram <> io.in
-  } .otherwise {
-    io.sram <> io.in
+  // ???
+  val isUart = Wire(Bool())
+  val isMem  = Wire(Bool())
+  isUart := (io.in.aw.addr >= UART_BASE_ADDR) && (io.in.aw.addr <= UART_BASE_ADDR + UART_ADDR_LEN)
+  isMem  := (io.in.aw.addr >= MEM_BASE) || (io.in.ar.addr >= MEM_BASE)
+
+  // State machine state definition
+  val sIdle :: sUart :: sMem :: Nil = Enum(3)
+  val state = RegInit(sIdle)
+
+  // State machine logic
+  switch(state) {
+    is(sIdle) {
+        when(isUart) {
+            state := sUart
+            io.uart <> io.in
+        } .elsewhen(isMem) {
+            state := sMem
+            io.sram <> io.in
+        } .otherwise {
+            state := sIdle
+        }
+    }
+
+    is(sUart) {
+        when(isMem) {
+            state := sMem
+            io.sram <> io.in
+        } .otherwise {
+            state := sUart
+        }
+    }
+
+    is(sMem) {
+        when(isUart) {
+            state := sUart
+            io.uart <> io.in
+        } .otherwise {
+            state := sMem
+        }
+    }
   }
 
 }
