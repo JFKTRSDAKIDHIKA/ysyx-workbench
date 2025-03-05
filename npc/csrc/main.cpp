@@ -1,4 +1,4 @@
-#include "VCore.h"
+#include "VysyxSoCFull.h"
 #include "verilated.h"
 #include "difftest.h"
 #include "registers.h"
@@ -23,12 +23,16 @@
 #define is_silent_mode 1
 
 // Declare global variables
-VCore* top;  // Top module (global)
+VysyxSoCFull* top;  // Top module (global)
 bool step_mode;  // Step mode flag (global)
 int total_cycle;
 
 // define the DPI-C functions
 // note: extern "C" 是 C++ 中的一个声明方式，用来告诉编译器，函数使用 C 的链接方式，而不是 C++ 默认的链接方式。
+extern "C" void flash_read(int32_t addr, int32_t *data) { assert(0); }
+
+extern "C" void mrom_read(int32_t addr, int32_t *data) { assert(0); }
+
 extern "C" void simulation_exit() {
     Verilated::gotFinish(true); 
 }
@@ -123,7 +127,7 @@ void print_memory(paddr_t start_addr, size_t size) {
 }
 
 #ifdef DIFFTEST
-int check_dut_and_ref(VCore* top, paddr_t start_addr, size_t size) {
+int check_dut_and_ref(VysyxSoCFull* top, paddr_t start_addr, size_t size) {
   // ----------- 检查寄存器 -----------
   // Compare DUT registers with REF registers
   for (int i = 0; i < 32; i++) {
@@ -200,10 +204,10 @@ int check_dut_and_ref(VCore* top, paddr_t start_addr, size_t size) {
 }
 #endif
 
-void tick(VCore* top, bool silent_mode ) {
+void tick(VysyxSoCFull* top, bool silent_mode ) {
     top->clock = 0;
     top->eval();
-    
+/*
     if (!silent_mode) {
       printf("------------------------------------------------------------------------------\n");
       std::cout << "Instruction Info: "
@@ -220,8 +224,6 @@ void tick(VCore* top, bool silent_mode ) {
                 << ", dmem_rdata: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_dmem_rdata_debug
                 << ", dmem_wdata: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_dmem_wdata_debug
                 << ", lsu_is_ld_or_st: 0x" << std::hex << static_cast<int>(top->io_lsu_is_ld_or_st_debug) << "\n"
-                << "Xbar: "
-                << "aw_addr: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_aw_addr_debug << "\n"
                 << "State Machines: "
                 << "ifu_state: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->io_ifu_state_debug)
                 << ", lsu_state: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->io_lsu_state_debug)
@@ -229,6 +231,7 @@ void tick(VCore* top, bool silent_mode ) {
                 << ", Arbiter_state: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->io_Arbiter_state_debug)
                 << std::dec << std::endl;
   }
+*/
 /*
     // print some debug info of memory write
     if (top->mem_wen_debug == 1 && !silent_mode ) {  
@@ -251,7 +254,7 @@ void tick(VCore* top, bool silent_mode ) {
     Verilated::timeInc(1); // 增加仿真时间
 }
 
-void reset(VCore* top, int cycles) {
+void reset(VysyxSoCFull* top, int cycles) {
     top->reset = 1;
     for (int i = 0; i < cycles; ++i) {
         tick(top, true);  // forbidden single-step mode
@@ -413,7 +416,7 @@ int sdb_mainloop() {
   
 int main(int argc, char **argv) {
     Verilated::commandArgs(argc, argv);
-    top = new VCore;
+    top = new VysyxSoCFull;
 
     // Default to single step mode (if no argument is provided)
     step_mode = true;

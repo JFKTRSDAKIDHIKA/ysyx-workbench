@@ -20,7 +20,7 @@ class LSUIO extends Bundle {
   val out = Decoupled(new LoadStoreMessage)
 
   // Memory interface
-  val memory = new AXI4LiteIO
+  val memory = new AXI4IO
 
   // Arbiter handshake
   val arbiter = new ValidReadyBundle
@@ -38,7 +38,7 @@ class LSU extends Module with RISCVConstants{
   val io = IO(new LSUIO)
 
   // Set AXI4-Lite default values
-  AXI4LiteDefaults(io.memory)
+  AXI4Defaults(io.memory)
 
   // Set default values
   io.in.ready := false.B
@@ -105,10 +105,19 @@ class LSU extends Module with RISCVConstants{
       // Read channel
       io.memory.ar.valid := false.B
       io.memory.r.ready := false.B
+      io.memory.ar.len := 0.U
+      io.memory.ar.size := 2.U
+      io.memory.ar.burst := AXI4Constants.BURST_INCR
+      io.memory.ar.id := 0.U
       // Write channel
       io.memory.aw.valid := false.B
       io.memory.w.valid := false.B
       io.memory.b.ready := false.B
+      io.memory.aw.len := 0.U
+      io.memory.aw.size := 2.U
+      io.memory.aw.burst := AXI4Constants.BURST_INCR
+      io.memory.aw.id := 0.U
+      io.memory.w.last := 1.B
       // Start memory access
       when(io.in.valid) {
         io.in.ready := true.B
@@ -139,6 +148,16 @@ class LSU extends Module with RISCVConstants{
           // Read channel
           io.memory.ar.valid := true.B
           io.memory.ar.addr := lsu_reg_dmem_addr
+          io.memory.ar.len := 0.U
+          io.memory.ar.size := MuxLookup(mem_access_control, 2.U(3.W))(Seq(
+            MEM_ACCESS_WORD -> 2.U(3.W), 
+            MEM_ACCESS_BYTE -> 0.U(3.W), 
+            MEM_ACCESS_BYTE_U -> 0.U(3.W), 
+            MEM_ACCESS_HALF -> 1.U(3.W), 
+            MEM_ACCESS_HALF_U -> 1.U(3.W) 
+          ))
+          io.memory.ar.burst := AXI4Constants.BURST_INCR
+          io.memory.ar.id := 0.U
           // Wait memory ready to process request
           when(io.memory.ar.ready) {
             state := sMemAccess
@@ -150,6 +169,11 @@ class LSU extends Module with RISCVConstants{
           io.memory.aw.addr := lsu_reg_dmem_addr
           io.memory.w.data := write_mask_gen.io.dmem_wdata
           io.memory.w.strb := write_mask_gen.io.wmask
+          io.memory.aw.len := 0.U
+          io.memory.aw.size := 2.U
+          io.memory.aw.burst := AXI4Constants.BURST_INCR
+          io.memory.aw.id := 0.U
+          io.memory.w.last := 1.B
           when(io.memory.aw.ready && io.memory.w.ready) {
             state := sMemAccess
           }
@@ -174,6 +198,16 @@ class LSU extends Module with RISCVConstants{
         // Read channel
         io.memory.ar.valid := false.B
         io.memory.r.ready := true.B
+        io.memory.ar.len := 0.U
+        io.memory.ar.size := MuxLookup(mem_access_control, 2.U(3.W))(Seq(
+          MEM_ACCESS_WORD -> 2.U(3.W), 
+          MEM_ACCESS_BYTE -> 0.U(3.W), 
+          MEM_ACCESS_BYTE_U -> 0.U(3.W), 
+          MEM_ACCESS_HALF -> 1.U(3.W), 
+          MEM_ACCESS_HALF_U -> 1.U(3.W) 
+        ))
+        io.memory.ar.burst := AXI4Constants.BURST_INCR
+        io.memory.ar.id := 0.U
         // Wait memory return data valid
         when(io.memory.r.valid) {
           state := sDone
@@ -186,6 +220,11 @@ class LSU extends Module with RISCVConstants{
         io.memory.aw.valid := false.B
         io.memory.w.valid := false.B
         io.memory.b.ready := true.B
+        io.memory.aw.len := 0.U
+        io.memory.aw.size := 2.U
+        io.memory.aw.burst := AXI4Constants.BURST_INCR
+        io.memory.aw.id := 0.U
+        io.memory.w.last := 1.B
         // Wait memeory finish write
         when(io.memory.b.valid) {
           state := sDone
@@ -205,10 +244,19 @@ class LSU extends Module with RISCVConstants{
       // Read channel
       io.memory.ar.valid := false.B
       io.memory.r.ready := false.B
+      io.memory.ar.len := 0.U
+      io.memory.ar.size := 2.U
+      io.memory.ar.burst := AXI4Constants.BURST_INCR
+      io.memory.ar.id := 0.U
       // Write channel
       io.memory.aw.valid := false.B
       io.memory.w.valid := false.B
       io.memory.b.ready := false.B
+      io.memory.aw.len := 0.U
+      io.memory.aw.size := 2.U
+      io.memory.aw.burst := AXI4Constants.BURST_INCR
+      io.memory.aw.id := 0.U
+      io.memory.w.last := 1.B
       when(io.out.ready) {
         state := sIdle
       }

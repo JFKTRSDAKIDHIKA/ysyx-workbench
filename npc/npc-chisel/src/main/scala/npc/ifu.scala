@@ -19,7 +19,7 @@ class IFU extends Module with RISCVConstants {
     val pc_wen = Input(Bool())
 
     // AXI4-Lite memory interface
-    val memory = new AXI4LiteIO
+    val memory = new AXI4IO
 
     // Arbiter handshake
     val arbiter = new ValidReadyBundle
@@ -34,8 +34,8 @@ class IFU extends Module with RISCVConstants {
   io.pc_debug := io.out.bits.pc
   io.inst_debug := io.out.bits.inst
 
-  // Set AXI4-Lite default values
-  AXI4LiteDefaults(io.memory)
+  // Set AXI4 default values
+  AXI4Defaults(io.memory)
 
   // Set default values
   io.out.valid := false.B
@@ -85,6 +85,10 @@ class IFU extends Module with RISCVConstants {
       // Read Address Channel
       io.memory.ar.addr := pc 
       io.memory.ar.valid := false.B
+      io.memory.ar.len := 0.U
+      io.memory.ar.size := 2.U
+      io.memory.ar.burst := AXI4Constants.BURST_INCR
+      io.memory.ar.id := 0.U
       // Read Data Channel
       io.memory.r.ready := false.B
       // Start fetch instruction
@@ -111,6 +115,10 @@ class IFU extends Module with RISCVConstants {
       // Read Address Channel
       io.memory.ar.addr := pc 
       io.memory.ar.valid := true.B  // Send memory read request
+      io.memory.ar.len := 0.U
+      io.memory.ar.size := 2.U
+      io.memory.ar.burst := AXI4Constants.BURST_INCR
+      io.memory.ar.id := 0.U
       // Read Data Channel
       io.memory.r.ready := false.B
       // Wait memory ready to process request
@@ -128,6 +136,10 @@ class IFU extends Module with RISCVConstants {
       // Read Address Channel
       io.memory.ar.addr := pc 
       io.memory.ar.valid := false.B // Clear memory read request
+      io.memory.ar.len := 0.U
+      io.memory.ar.size := 2.U
+      io.memory.ar.burst := AXI4Constants.BURST_INCR
+      io.memory.ar.id := 0.U
       // Read Data Channel
       io.memory.r.ready := true.B // Ready to read data from memory
       // Wait fetched instruction data valid
@@ -146,6 +158,10 @@ class IFU extends Module with RISCVConstants {
       // Read Address Channel
       io.memory.ar.addr := pc 
       io.memory.ar.valid := false.B
+      io.memory.ar.len := 0.U
+      io.memory.ar.size := 2.U
+      io.memory.ar.burst := AXI4Constants.BURST_INCR
+      io.memory.ar.id := 0.U
       // Read Data Channel
       io.memory.r.ready := false.B
       // Wait idu ready to process instruction

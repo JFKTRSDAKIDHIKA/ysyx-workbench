@@ -6,9 +6,9 @@ import chisel3.util._
 class MemoryArbiter extends Module {
   val io = IO(new Bundle {
     // AXI4Lite buddle signals
-    val ifu = Flipped(new AXI4LiteIO) // Instruction Fetch Unit
-    val lsu = Flipped(new AXI4LiteIO) // Load Store Unit
-    val axi = new AXI4LiteIO
+    val ifu = Flipped(new AXI4IO) // Instruction Fetch Unit
+    val lsu = Flipped(new AXI4IO) // Load Store Unit
+    val axi = new AXI4IO
 
     // Handshake signals
     val ifu_handshake = Flipped(new ValidReadyBundle)
@@ -19,9 +19,9 @@ class MemoryArbiter extends Module {
   })
 
   // Set default output values
-  AXI4LiteFlippedDefaults(io.ifu)
-  AXI4LiteFlippedDefaults(io.lsu)
-  AXI4LiteDefaults(io.axi)
+  AXI4FlippedDefaults(io.ifu)
+  AXI4FlippedDefaults(io.lsu)
+  AXI4Defaults(io.axi)
   io.ifu_handshake.ready := false.B
   io.lsu_handshake.ready := false.B
 
