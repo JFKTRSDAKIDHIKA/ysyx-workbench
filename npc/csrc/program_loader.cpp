@@ -12,10 +12,8 @@ void load_program(const char *program_path) {
 
     uint32_t address = 0x20000000; 
     uint32_t data;
-    int t = 0;
+
     while (program_file.read(reinterpret_cast<char*>(&data), sizeof(data))) {
-        t++;
-        if(t!=2)
         Memory::pmem_write(address, data, 0xf);
         address += sizeof(data); 
     }
