@@ -15,7 +15,7 @@ uint32_t Memory::pmem_read(uint32_t address) {
         // std::cerr << "Memory read out of bounds at address: " << address << std::endl;
         return 0; // Return 0 if the address is out of bounds
     }
-    printf("ok\n");
+
     // Read 4 bytes of data in little-endian format
     return memory[offset] | (memory[offset + 1] << 8) | 
            (memory[offset + 2] << 16) | (memory[offset + 3] << 24);
