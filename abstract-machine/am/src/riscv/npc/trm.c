@@ -1,15 +1,14 @@
 #include <am.h>
 #include <klib-macros.h>
-#include </root/ysyx-workbench/abstract-machine/am/src/riscv/riscv.h>
+#include </home/jiashuao/Desktop/ysyx-workbench/abstract-machine/am/src/riscv/riscv.h>
 
-#define DEVICE_BASE 0xa0000000
-#define SERIAL_PORT     (DEVICE_BASE + 0x00003f8)
+#define SERIAL_PORT 0x10000000
 
 extern char _heap_start;
 int main(const char *args);
 
 extern char _pmem_start;
-#define PMEM_SIZE (128 * 1024 * 1024)
+#define PMEM_SIZE 8192
 #define PMEM_END  ((uintptr_t)&_pmem_start + PMEM_SIZE)
 
 Area heap = RANGE(&_heap_start, PMEM_END);
