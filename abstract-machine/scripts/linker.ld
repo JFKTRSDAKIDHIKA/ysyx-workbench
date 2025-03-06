@@ -33,7 +33,7 @@ SECTIONS {
     } > sram AT> sram : data
 
     _stack_top = ORIGIN(sram) + LENGTH(sram);
-    . = _stack_top - 0x8000; 
+    . = _stack_top - 0x1000; 
     _stack_pointer = .;
 
     _heap_start = .;
