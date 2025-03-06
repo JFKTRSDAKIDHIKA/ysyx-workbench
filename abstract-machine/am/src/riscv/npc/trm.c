@@ -1,14 +1,11 @@
 #include <am.h>
 #include <klib-macros.h>
 #include "../riscv.h"
-
-#define SERIAL_PORT 0x10000000
+#include "include/npc.h"
 
 extern char _heap_start;
-int main(const char *args);
-
 extern char _pmem_start;
-#define PMEM_SIZE 8192
+int main(const char *args);
 #define PMEM_END  ((uintptr_t)&_pmem_start + PMEM_SIZE)
 
 Area heap = RANGE(&_heap_start, PMEM_END);
