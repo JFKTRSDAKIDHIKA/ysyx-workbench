@@ -2,25 +2,39 @@
 #include <fstream>
 #include "include/memory.h"
 #include "include/program_loader.h"
+#include "ELFIO/elfio/elfio.hpp"
+
 
 void load_program(const char *program_path) {
-    std::ifstream program_file(program_path, std::ios::binary);
-    if (!program_file) {
-        std::cerr << "Error opening program file: " << program_path << std::endl;
-        return;
+
+    ELFIO::elfio reader;
+
+    if (!reader.load(program_path)) {
+        std::cerr << "Failed to load ELF file: " << program_path << std::endl;
     }
 
-    uint32_t address = 0x20000000; 
-    uint32_t data;
-    bool start = false;
+    for (int i = 0; i < reader.sections.size(); ++i) {
+        ELFIO::section* sec = reader.sections[i];
 
-    while (program_file.read(reinterpret_cast<char*>(&data), sizeof(data))) {
-        if(data == 0x00000413 && start == false) {
-            start = true;
-        }
-        if (start) {
-            Memory::pmem_write(address, data, 0xf);
-            address += sizeof(data); 
+        if (sec->get_name() == ".text") {
+            std::cout << "Found .text section!" << std::endl;
+            std::cout << "Size: " << sec->get_size() << " bytes" << std::endl;
+
+            const char* code = sec->get_data();
+            if (code == nullptr) {
+                std::cerr << "Failed to get .text section data!" << std::endl;
+            }
+
+            uint32_t address = 0x20000000; 
+
+            for (int j = 0; j < sec->get_size(); ++j) {
+                // printf("%02X ", (unsigned char)code[j]);
+                Memory::pmem_write(address, code[j], 0x1);
+                address += sizeof(code[j]); 
+            }
+            std::cout << std::endl;
+            break;
         }
     }
+
 }
