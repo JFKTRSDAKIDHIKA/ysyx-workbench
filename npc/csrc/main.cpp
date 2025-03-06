@@ -436,7 +436,7 @@ int main(int argc, char **argv) {
     }
 
     // Load program
-    load_program("/home/jiashuao/Desktop/ysyx-workbench/npc/csrc/test/char-test.bin");
+    load_program("/home/jiashuao/Desktop/ysyx-workbench/am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.bin");
 
 #ifdef DIFFTEST
     // Initialize difftest
