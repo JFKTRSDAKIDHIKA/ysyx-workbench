@@ -8,7 +8,7 @@ PHDRS {
 
 MEMORY {
     mrom (rx) : ORIGIN = 0x20000000, LENGTH = 4K
-    sram (rwx) : ORIGIN = 0x0F000000, LENGTH = 1M
+    sram (rwx) : ORIGIN = 0x0F000000, LENGTH = 8k
 }
 
 SECTIONS {
