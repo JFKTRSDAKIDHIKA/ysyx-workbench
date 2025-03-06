@@ -433,7 +433,7 @@ int main(int argc, char **argv) {
     }
 
     // Load program
-    // load_program(argv[1]);
+    load_program("/home/jiashuao/Desktop/ysyx-workbench/npc/csrc/test/char-test.bin");
 
 #ifdef DIFFTEST
     // Initialize difftest
@@ -451,54 +451,7 @@ int main(int argc, char **argv) {
       if (cmd_c(NULL) < 0) return -1;
       printf("Total Cycle: %5d\n", total_cycle);
     }
-/*
-    while(!Verilated::gotFinish()) {
-        if (step_mode) {
-            std::string input;
-            std::cout << "(npc) : ";
-            std::getline(std::cin, input);
 
-            // 根据用户输入的命令来决定行为
-            if (input == "si") {
-                // 执行单步操作
-                tick(top, step_mode, false);  // 执行一次 tick
-                // ref execute one instruction
-                ref_difftest_exec(1);
-                // Copy registers from DUT to REF and compare them
-                ref_difftest_regcpy(&ref, DIFFTEST_TO_REF);
-                // Check if the registers are consistent
-                int ret = check_reg(top);
-                if (ret < 0) return -1;                 
-                // Check memory consistency
-                ret = check_memory(0x80000000, 0x1000); 
-                if (ret < 0) return -1;
-            } 
-            else if (input == "info r") {
-                // 打印寄存器信息，不进行 tick
-                print_register_values();  // 打印寄存器
-            } 
-            else if (input == "q") {
-                // 退出仿真
-                Verilated::gotFinish(true);  
-            }
-            else {
-                std::cout << "Unknown command!" << std::endl;
-            }
-        } else {
-            tick(top, step_mode, true);  
-            // ref execute one instruction
-            ref_difftest_exec(1);
-            // Copy registers from DUT to REF and compare them
-            ref_difftest_regcpy(&ref, DIFFTEST_TO_REF);
-            // Check if the registers are consistent
-            int ret = check_reg(top);
-            if (ret < 0) return -1;
-            // Check memory consistency
-            ret = check_memory(0x80000000, 0x1000); 
-            if (ret < 0) return -1;
-        }
-    } 
-*/
     delete top;
     return 0;
 }

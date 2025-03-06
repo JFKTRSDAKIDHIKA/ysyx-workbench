@@ -1,8 +1,8 @@
 #include "memory.h"
 #include <iostream>
 
-const uint32_t BASE_ADDR = 0x80000000;                // Base address of the memory
-const int MEMORY_SIZE = 1024 * 1024 * 64;                    // 64KB memory
+const uint32_t BASE_ADDR = 0x20000000;                // Base address of the memory
+const int MEMORY_SIZE = 4096;                    // 64KB memory
 std::vector<uint8_t> Memory::memory(MEMORY_SIZE, 0);  // Initialize memory with size MEMORY_SIZE and set all elements to 0
 
 
