@@ -7,12 +7,12 @@ MEMORY {
 
 SECTIONS {
   . = ORIGIN(mrom);
-  _etext = .;
   .text : {
     *(entry)
     *(.text*)
     *(.rodata*)
   } > mrom AT> mrom : text
+  _etext = .;
   etext = .;
   .data : {
     *(.data)
