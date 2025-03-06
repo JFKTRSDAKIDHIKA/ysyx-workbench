@@ -435,9 +435,8 @@ int main(int argc, char **argv) {
         }
     }
 
-    printf("%s\n", argv[1]);
     // Load program
-    load_program("/home/jiashuao/Desktop/ysyx-workbench/am-kernels/tests/cpu-tests/build/dummy-test.bin");
+    load_program(argv[1]);
 
 #ifdef DIFFTEST
     // Initialize difftest
