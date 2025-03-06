@@ -31,7 +31,7 @@ int total_cycle;
 // note: extern "C" 是 C++ 中的一个声明方式，用来告诉编译器，函数使用 C 的链接方式，而不是 C++ 默认的链接方式。
 extern "C" void flash_read(int32_t addr, int32_t *data) { assert(0); }
 
-extern "C" void mrom_read(int32_t addr, int32_t *data) { assert(0); }
+extern "C" void mrom_read(int32_t addr, int32_t *data) { *data = 0x00100073; }
 
 extern "C" void simulation_exit() {
     Verilated::gotFinish(true); 
