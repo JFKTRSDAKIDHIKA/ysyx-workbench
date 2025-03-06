@@ -10,12 +10,12 @@ SECTIONS {
   .text : {
     *(entry)
     *(.text*)
-  } > sram AT> sram : text
+  } > sram AT> mrom : text
   etext = .;
   _etext = .;
   .rodata : {
     *(.rodata*)
-  }
+  } > mrom AT> mrom
   .data : {
     *(.data)
   } : data
