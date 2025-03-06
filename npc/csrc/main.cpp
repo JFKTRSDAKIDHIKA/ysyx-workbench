@@ -433,7 +433,7 @@ int main(int argc, char **argv) {
     }
 
     // Load program
-    load_program(argv[1]);
+    // load_program(argv[1]);
 
 #ifdef DIFFTEST
     // Initialize difftest
