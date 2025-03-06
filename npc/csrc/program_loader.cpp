@@ -1,7 +1,7 @@
-#include "program_loader.h"
 #include <iostream>
 #include <fstream>
-#include "memory.h"
+#include "include/memory.h"
+#include "include/program_loader.h"
 
 void load_program(const char *program_path) {
     std::ifstream program_file(program_path, std::ios::binary);

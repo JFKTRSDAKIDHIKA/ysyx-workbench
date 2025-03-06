@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdint.h>
-#include "difftest.h"
+#include "include/difftest.h"
 
 void (*ref_difftest_memcpy)(paddr_t dest, void *src, size_t n, bool direction) = NULL;
 void (*ref_difftest_meminit)(const char *img_file) = NULL;

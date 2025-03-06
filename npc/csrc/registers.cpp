@@ -1,6 +1,6 @@
-#include "registers.h"
 #include <iostream>
 #include <iomanip>
+#include "include/registers.h"
 
 uint32_t rf_values[32];  // define the register values array
 
