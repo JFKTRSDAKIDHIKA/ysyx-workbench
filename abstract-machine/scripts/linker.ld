@@ -33,7 +33,7 @@ SECTIONS {
     } > mrom AT> mrom : data
 
     _stack_top = ORIGIN(sram) + LENGTH(sram);
-    . = _stack_top - 0x2000; 
+    . = _stack_top - 0x1000; 
     _stack_pointer = .;
 
     _heap_start = .;
