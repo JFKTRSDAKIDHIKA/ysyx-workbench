@@ -5,7 +5,6 @@ const uint32_t BASE_ADDR = 0x20000000;                // Base address of the mem
 const int MEMORY_SIZE = 4096;                    // 64KB memory
 std::vector<uint8_t> Memory::memory(MEMORY_SIZE, 0);  // Initialize memory with size MEMORY_SIZE and set all elements to 0
 
-
 // Function to read data from memory
 uint32_t Memory::pmem_read(uint32_t address) {
     uint32_t offset = address - BASE_ADDR; // Calculate the offset
