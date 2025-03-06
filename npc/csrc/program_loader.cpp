@@ -12,9 +12,15 @@ void load_program(const char *program_path) {
 
     uint32_t address = 0x20000000; 
     uint32_t data;
+    bool start = false;
 
     while (program_file.read(reinterpret_cast<char*>(&data), sizeof(data))) {
-        Memory::pmem_write(address, data, 0xf);
-        address += sizeof(data); 
+        if(data == 0x00000413 && start == false) {
+            start = true;
+        }
+        if (start) {
+            Memory::pmem_write(address, data, 0xf);
+            address += sizeof(data); 
+        }
     }
 }
