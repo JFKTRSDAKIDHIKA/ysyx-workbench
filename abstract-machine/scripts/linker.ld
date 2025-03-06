@@ -8,7 +8,7 @@ PHDRS {
 
 MEMORY {
     mrom (rx) : ORIGIN = 0x20000000, LENGTH = 4K
-    sram (rwx) : ORIGIN = 0x0F000000, LENGTH = 8k
+    sram (rwx) : ORIGIN = 0x0F000000, LENGTH = 1M
 }
 
 SECTIONS {
@@ -33,7 +33,7 @@ SECTIONS {
     } > mrom AT> mrom : data
 
     _stack_top = ORIGIN(sram) + LENGTH(sram);
-    . = _stack_top - 0x1000; 
+    . = _stack_top - 0x8000; 
     _stack_pointer = .;
 
     _heap_start = .;
