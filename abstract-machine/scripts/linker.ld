@@ -22,7 +22,7 @@ SECTIONS {
     .data : {
         *(.data*)
         *(.sdata*)
-    } > mrom AT> mrom : data
+    } > sram AT> sram : data
 
     .bss : {
         _bss_start = .;
@@ -30,7 +30,7 @@ SECTIONS {
         *(.sbss*)
         *(.scommon*)
         _bss_end = .;
-    } > mrom AT> mrom : data
+    } > sram AT> sram : data
 
     _stack_top = ORIGIN(sram) + LENGTH(sram);
     . = _stack_top - 0x8000; 
