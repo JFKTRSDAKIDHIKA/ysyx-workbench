@@ -10,7 +10,7 @@ SECTIONS {
   .text : {
     *(entry)
     *(.text*)
-  } > sram AT> mrom : text
+  } > mrom AT> mrom : text
   etext = .;
   _etext = .;
   .rodata : {
@@ -26,7 +26,7 @@ SECTIONS {
     *(.bss*)
     *(.sbss*)
     *(.scommon)
-  }
+  } > sram AT> mrom
   _stack_top = ALIGN(0x1000);
   . = _stack_top + 0x8000;
   _stack_pointer = .;
