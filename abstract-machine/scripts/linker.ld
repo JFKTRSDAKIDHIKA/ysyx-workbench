@@ -15,7 +15,7 @@ SECTIONS {
   _etext = .;
   .rodata : {
     *(.rodata*)
-  } 
+  } > mrom AT> mrom
   .data : {
     *(.data)
   } : data
