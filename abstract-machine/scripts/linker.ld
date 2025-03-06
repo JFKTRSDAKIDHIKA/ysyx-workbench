@@ -5,6 +5,9 @@ MEMORY {
   sram : ORIGIN = 0x0f000000, LENGTH = 8K
 }
 
+PROVIDE(_etext = .);
+PROVIDE(etext = .);
+
 SECTIONS {
   . = ORIGIN(mrom);
   .text : {
