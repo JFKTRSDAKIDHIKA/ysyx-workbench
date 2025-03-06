@@ -7,13 +7,13 @@ MEMORY {
 
 SECTIONS {
   . = ORIGIN(mrom);
+  _etext = .;
   .text : {
     *(entry)
     *(.text*)
     *(.rodata*)
   } > mrom AT> mrom : text
   etext = .;
-  _etext = .;
   .data : {
     *(.data)
   } > sram AT> mrom : data
