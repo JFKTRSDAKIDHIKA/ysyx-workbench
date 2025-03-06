@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip> 
 #include <fstream>
 #include "include/memory.h"
 #include "include/program_loader.h"
@@ -23,7 +24,7 @@ void load_program(const char *program_path) {
                 std::cerr << "Failed to get .text section data!" << std::endl;
             }
 
-            std::cout << "Loading .text section to MROM: " << address <<std::endl;
+            std::cout << "Loading .text section to MROM: " << std::setw(8) << std::setfill('0') << std::hex << address <<std::endl;
             for (int j = 0; j < sec->get_size(); ++j) {
                 // printf("%02X ", (unsigned char)code[j]);
                 Memory::pmem_write(address, code[j], 0x1);
@@ -43,7 +44,7 @@ void load_program(const char *program_path) {
                 std::cerr << "Failed to get .rodata section data!" << std::endl;
             }
 
-            std::cout << "Loading .rodata section to MROM: " << address <<std::endl;
+            std::cout << "Loading .rodata section to MROM: " << std::setw(8) << std::setfill('0') << std::hex << address <<std::endl;
             for (int j = 0; j < sec->get_size(); ++j) {
                 // printf("%02X ", (unsigned char)code[j]);
                 Memory::pmem_write(address, code[j], 0x1);
