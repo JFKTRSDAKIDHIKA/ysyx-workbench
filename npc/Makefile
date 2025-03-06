@@ -2,8 +2,9 @@
 VERILATOR = verilator
 TOP_MODULE = ../ysyxSoC/build/ysyxSoCFull.v
 CSRC = $(wildcard csrc/*.cpp)
-VSRC = $(shell find vsrc -name "*.v") $(wildcard npc-chisel/generated/*.sv)
+VSRC = $(shell find vsrc -name "*.v")
 INCLUDE_DIRS = -Ivsrc/perip/uart16550/rtl -Ivsrc/perip/spi/rtl
+CHISEL_DIR := ./npc-chisel
 OBJ_DIR = obj_dir
 EXEC = $(OBJ_DIR)/VysyxSoCFull
 STEP_MODE = run
@@ -19,6 +20,9 @@ $(EXEC): $(TOP_MODULE) $(CSRC) $(VSRC)
                     --Mdir $(OBJ_DIR) --trace \
                     -LDFLAGS "-lreadline" 
 	make -C $(OBJ_DIR) -f VysyxSoCFull.mk 
+
+$(VSRC):
+	$(MAKE) -C $(CHISEL_DIR)
 
 # 运行仿真
 sim: $(EXEC)

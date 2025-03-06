@@ -109,5 +109,5 @@ class Core extends Module with RISCVConstants {
 
 object Main extends App {
     println("Generating the core hardware")
-    emitVerilog(new Core(), Array("--target-dir", "generated"))
+    emitVerilog(new Core(), Array("--target-dir", "../vsrc/generated"))
 }
