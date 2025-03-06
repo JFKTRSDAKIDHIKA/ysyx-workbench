@@ -15,7 +15,7 @@ void load_program(const char *program_path) {
     }
 
     uint32_t address = 0x20000000; 
-    printf("End of .text section (_etext): %p\n", (void*)_etext);
+    printf("End of .text section (_etext): %p\n", &_etext);
 
     for (int i = 0; i < reader.sections.size(); ++i) {
         ELFIO::section* sec = reader.sections[i];
