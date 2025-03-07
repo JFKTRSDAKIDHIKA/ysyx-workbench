@@ -24,7 +24,6 @@ SECTIONS {
     *(.scommon)
   } > sram AT> mrom
   edata = .;
-  _data_len = edata - _data;
   _stack_top = ALIGN(0x1000);
   . = _stack_top + 0x8000;
   _stack_pointer = .;
