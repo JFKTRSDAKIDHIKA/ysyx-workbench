@@ -20,7 +20,7 @@ $(EXEC): $(TOP_MODULE) $(CSRC) $(VSRC)
 	$(VERILATOR) $(FLAGS) --cc $(TOP_MODULE) --exe $(CSRC) $(VSRC) $(INCLUDE_DIRS) \
                     --build -j 0 --top-module ysyxSoCFull \
                     --Mdir $(OBJ_DIR) --trace \
-                    -LDFLAGS "-lreadline" 
+                    -LDFLAGS "-lreadline -lcapstone"
 	make -C $(OBJ_DIR) -f VysyxSoCFull.mk 
 
 verilog: 
