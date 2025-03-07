@@ -20,9 +20,10 @@ SECTIONS {
   .data : {
     _data_lma = LOADADDR(.data);  /* LMA（加载地址）来自 mrom */
     _data = .;                    /* VMA（运行时地址）在 sram */
-    *(.data .data.* .sdata.*)  /* 匹配所有 .data 和 .data.* 子段 */
+    *(.data .data.*)              /* 匹配所有 .data 和 .data.* 子段 */
     _edata = .;
   } > sram AT> mrom : data
+  _data_len = _edata - _data;
 
   .bss : {
 	  _bss_start = .;
@@ -30,7 +31,7 @@ SECTIONS {
     *(.sbss*)
     *(.scommon)
     ebbs = .;
-  } > sram AT> sram  
+  } > sram AT> mrom
 
   _stack_top = ALIGN(0x1000);
   . = _stack_top + 0x1000;
