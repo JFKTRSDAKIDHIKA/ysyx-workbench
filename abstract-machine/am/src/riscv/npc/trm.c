@@ -23,7 +23,7 @@ void halt(int code) {
 }
 
 void _trm_init() {
-  printf("%p\n", (void *)&_etext);
+  printf("_etext: %x\n", (void *)&_etext);
   int ret = main(mainargs);
   halt(ret);
 }
