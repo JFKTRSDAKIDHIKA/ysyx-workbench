@@ -25,6 +25,12 @@
 VysyxSoCFull* top;  // Top module (global)
 bool step_mode;  // Step mode flag (global)
 static riscv32_CPU_state ref;
+const char *regs[] = {
+  "$0", "ra", "sp", "gp", "tp", "t0", "t1", "t2",
+  "s0", "s1", "a0", "a1", "a2", "a3", "a4", "a5",
+  "a6", "a7", "s2", "s3", "s4", "s5", "s6", "s7",
+  "s8", "s9", "s10", "s11", "t3", "t4", "t5", "t6"
+};
 
 // define the DPI-C functions
 // note: extern "C" 是 C++ 中的一个声明方式，用来告诉编译器，函数使用 C 的链接方式，而不是 C++ 默认的链接方式。
@@ -85,7 +91,7 @@ int check_dut_and_ref(VysyxSoCFull* top, paddr_t start_addr, size_t size) {
   // Compare DUT registers with REF registers
   for (int i = 0; i < 32; i++) {
       if (rf_values[i] != ref.gpr[i]) {
-          std::cerr << "Register mismatch at x" << i 
+          std::cerr << "Register mismatch at " << regs[i]
                     << " - DUT: 0x" << std::hex << rf_values[i] 
                     << " REF: 0x" << ref.gpr[i] 
                     << std::endl;
@@ -93,11 +99,11 @@ int check_dut_and_ref(VysyxSoCFull* top, paddr_t start_addr, size_t size) {
           // Print all registers of DUT (rf_values) and REF (ref.gpr)
           std::cerr << "DUT Registers (rf_values):" << std::endl;
           for (int j = 0; j < 32; j++) {
-              std::cerr << "x" << j << ": 0x" << std::hex << rf_values[j] << std::endl;
+              std::cerr << regs[i] << ": 0x" << std::hex << rf_values[j] << std::endl;
           }
           std::cerr << "REF Registers (ref.gpr):" << std::endl;
           for (int j = 0; j < 32; j++) {
-              std::cerr << "x" << j << ": 0x" << std::hex << ref.gpr[j] << std::endl;
+              std::cerr << regs[i] << ": 0x" << std::hex << ref.gpr[j] << std::endl;
           }
 
           // Stop the simulation on a mismatch
