@@ -33,6 +33,7 @@ VysyxSoCFull::VysyxSoCFull(VerilatedContext* _vcontextp__, const char* _vcname__
     , io_wbu_state_debug{vlSymsp->TOP.io_wbu_state_debug}
     , externalPins_gpio_out{vlSymsp->TOP.externalPins_gpio_out}
     , externalPins_gpio_in{vlSymsp->TOP.externalPins_gpio_in}
+    , io_pc_debug{vlSymsp->TOP.io_pc_debug}
     , __PVT____024unit{vlSymsp->TOP.__PVT____024unit}
     , rootp{&(vlSymsp->TOP)}
 {
