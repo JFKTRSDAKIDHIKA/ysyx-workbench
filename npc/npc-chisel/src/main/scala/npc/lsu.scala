@@ -211,6 +211,9 @@ class LSU extends Module with RISCVConstants{
         io.memory.ar.id := 0.U
         // Wait memory return data valid
         when(io.memory.r.valid) {
+          // Forward signals
+          io.in.ready := false.B
+          io.out.valid := true.B  // Lsu finish
           state := sDone
         }
       // Write channel
@@ -238,7 +241,7 @@ class LSU extends Module with RISCVConstants{
       io.arbiter.valid := false.B
       // Forward signals
       io.in.ready := false.B
-      io.out.valid := true.B  // Lsu finish
+      io.out.valid := false.B  // Lsu finish
       // Clear
       isLoad := false.B
       isStore := false.B
