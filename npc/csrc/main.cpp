@@ -119,11 +119,11 @@ int check_dut_and_ref(VysyxSoCFull* top, paddr_t start_addr, size_t size) {
       // Print DUT and REF register values (optional)
       std::cerr << "DUT Registers (rf_values):" << std::endl;
       for (int j = 0; j < 32; j++) {
-          std::cerr << "x" << j << ": 0x" << std::hex << rf_values[j] << std::endl;
+          std::cerr << regs[j] << ": 0x" << std::hex << rf_values[j] << std::endl;
       }
       std::cerr << "REF Registers (ref.gpr):" << std::endl;
       for (int j = 0; j < 32; j++) {
-          std::cerr << "x" << j << ": 0x" << std::hex << ref.gpr[j] << std::endl;
+          std::cerr << regs[j] << ": 0x" << std::hex << ref.gpr[j] << std::endl;
       }
 
       return -1;  // End simulation
@@ -242,7 +242,7 @@ static char* rl_gets() {
 static int execute_single_step() {
   tick(top, is_silent_mode);  
 #ifdef DIFFTEST
-  if (top->io_ifu_state_debug == 1) {
+  if (top->io_wbu_state_debug == 2) {
     ref_difftest_exec(1);
     ref_difftest_regcpy(&ref, DIFFTEST_TO_REF);
     return check_dut_and_ref(top, 0x80000000, 0x1000);
