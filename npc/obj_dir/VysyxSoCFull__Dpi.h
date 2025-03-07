@@ -18,11 +18,11 @@ extern "C" {
     // DPI IMPORTS
     // DPI import at vsrc/perip/flash/flash.v:84:30
     extern void flash_read(int addr, int* data);
-    // DPI import at vsrc/generated/Core.sv:1326:34
+    // DPI import at vsrc/generated/Core.sv:1330:34
     extern void get_register_values(const svLogicVecVal* rf);
     // DPI import at ../ysyxSoC/build/ysyxSoCFull.v:4708:30
     extern void mrom_read(int raddr, int* rdata);
-    // DPI import at vsrc/generated/Core.sv:1296:30
+    // DPI import at vsrc/generated/Core.sv:1300:30
     extern void simulation_exit();
 
 #ifdef __cplusplus
