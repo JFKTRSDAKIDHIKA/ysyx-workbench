@@ -106,6 +106,9 @@ int check_dut_and_ref(VysyxSoCFull* top, paddr_t start_addr, size_t size) {
               std::cerr << regs[j] << ": 0x" << std::hex << ref.gpr[j] << std::endl;
           }
 
+          // Dump memory
+          print_memory(start_addr, size);
+
           // Stop the simulation on a mismatch
           return -1;  
       }
