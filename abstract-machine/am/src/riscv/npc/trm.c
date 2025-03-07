@@ -9,6 +9,8 @@ extern char _pmem_start;
 extern char _data_lma;    /* LMA（加载地址）来自 mrom */
 extern char _data;        /* VMA（运行时地址）在 sram */
 extern char _edata;    
+extern char _ebss;
+extern char _bss_start;
 
 int main(const char *args);
 #define PMEM_END  ((uintptr_t)&_pmem_start + PMEM_SIZE)
@@ -26,10 +28,17 @@ void halt(int code) {
 }
 
 void Bootloader() {
-  uint32_t *src = (uint32_t *)&_data_lma;
-  uint32_t *dst = (uint32_t *)&_data;
-  uint32_t len = &_edata - &_data;
-  memcpy((void *)dst, (void *)src, len);
+  // Copy .data section
+  if (&_edata > &_data) {
+    size_t data_size = (uintptr_t)&_edata - (uintptr_t)&_data;
+    memcpy(&_data, &_data_lma, data_size);
+  }
+
+  // Zero out .bss section
+  if (&_ebss > &_bss_start) {
+    size_t bss_size = (uintptr_t)&_ebss - (uintptr_t)&_bss_start;
+    memset(&_bss_start, 0, bss_size);
+  }
 }
 
 void _trm_init() {

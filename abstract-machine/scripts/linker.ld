@@ -30,7 +30,7 @@ SECTIONS {
     *(.bss*)
     *(.sbss*)
     *(.scommon)
-    ebbs = .;
+    _ebss = .;
   } > sram AT> mrom
 
   _stack_top = ALIGN(0x1000);
