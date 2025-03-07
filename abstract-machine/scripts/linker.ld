@@ -11,9 +11,8 @@ SECTIONS {
     *(entry)
     *(.text*)
     *(.rodata*)
+    _etext = .;
   } > mrom AT> mrom : text
-  _etext = .;
-  etext = .;
   .data : {
     _data = .;
     *(.data)
