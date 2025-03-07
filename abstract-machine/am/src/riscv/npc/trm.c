@@ -27,7 +27,7 @@ void halt(int code) {
   while (1);
 }
 
-void Bootloader() {
+void crt0_init() {
   // Copy .data section
   if (&_edata > &_data) {
     size_t data_size = (uintptr_t)&_edata - (uintptr_t)&_data;
@@ -42,7 +42,7 @@ void Bootloader() {
 }
 
 void _trm_init() {
-  Bootloader();
+  crt0_init();
   int ret = main(mainargs);
   halt(ret);
 }
