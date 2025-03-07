@@ -6,7 +6,6 @@
 
 extern char _heap_start;
 extern char _pmem_start;
-extern char _etext;
 int main(const char *args);
 #define PMEM_END  ((uintptr_t)&_pmem_start + PMEM_SIZE)
 
@@ -23,7 +22,6 @@ void halt(int code) {
 }
 
 void _trm_init() {
-  printf("_etext: %x\n", (void *)&_etext);
   int ret = main(mainargs);
   halt(ret);
 }
