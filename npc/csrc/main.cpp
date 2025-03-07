@@ -107,7 +107,7 @@ int check_dut_and_ref(VysyxSoCFull* top, paddr_t start_addr, size_t size) {
           }
 
           // Dump memory
-          print_memory(top->io_lsu_reg_dmem_addr_debug, size);
+          print_memory(top->io_lsu_reg_dmem_addr_debug, 20);
 
           // Stop the simulation on a mismatch
           return -1;  
