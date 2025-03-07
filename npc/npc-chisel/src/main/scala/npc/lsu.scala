@@ -80,7 +80,10 @@ class LSU extends Module with RISCVConstants{
   // Coordinate between wbu and lsu
   // val dmem_rdata_delay = ShiftRegister(alignment_network.io.data_out, 1, false.B)
   // io.out.bits.dmem_rdata := dmem_rdata_delay
-  io.out.bits.dmem_rdata := alignment_network.io.data_out
+  // io.out.bits.dmem_rdata := alignment_network.io.data_out
+  val delayedData = RegInit(0.U(32.W))
+  delayedData := alignment_network.io.data_out
+  io.out.bits.dmem_rdata := delayedData
 
   // Instantiate write_mask_gen
   val write_mask_gen = Module(new WriteMaskGenerator)
