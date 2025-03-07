@@ -27,7 +27,7 @@ void halt(int code) {
 void copy_data() {
   uint32_t *src = (uint32_t *)&_data_lma;
   uint32_t *dst = (uint32_t *)&_data;
-  uint32_t len = &_edata - &_data_lma;
+  uint32_t len = &_edata - &_data;
 
   memcpy((void *)dst, (void *)src, len);
 }
