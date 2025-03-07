@@ -18,10 +18,9 @@
 #define is_silent_mode 1
 
 // Declare global variables
-static VysyxSoCFull* top;  // Top module (global)
-static bool step_mode;  // Step mode flag (global)
-static riscv32_CPU_state ref;
-
+VysyxSoCFull* top;  // Top module (global)
+bool step_mode;  // Step mode flag (global)
+riscv32_CPU_state ref;
 
 // define the DPI-C functions
 // note: extern "C" 是 C++ 中的一个声明方式，用来告诉编译器，函数使用 C 的链接方式，而不是 C++ 默认的链接方式。
