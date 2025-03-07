@@ -21,7 +21,7 @@ $(EXEC): $(TOP_MODULE) $(CSRC) $(VSRC)
                     --build -j 0 --top-module ysyxSoCFull \
                     --Mdir $(OBJ_DIR) --trace \
                     -LDFLAGS "-lreadline -L/usr/local/lib -lcapstone"
-	make -C $(OBJ_DIR) -f VysyxSoCFull.mk 
+	+make -C $(OBJ_DIR) -f VysyxSoCFull.mk 
 
 verilog: 
 	$(MAKE) -C $(CHISEL_DIR)
