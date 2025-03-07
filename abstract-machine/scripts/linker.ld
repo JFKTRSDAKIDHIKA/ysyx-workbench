@@ -23,7 +23,6 @@ SECTIONS {
     *(.data .data.*)              /* 匹配所有 .data 和 .data.* 子段 */
     _edata = .;
   } > sram AT> mrom : data
-  _data_len = _edata - _data;
 
   .bss : {
 	  _bss_start = .;
@@ -31,7 +30,7 @@ SECTIONS {
     *(.sbss*)
     *(.scommon)
     ebbs = .;
-  } > sram AT> mrom
+  } > sram AT> sram  
 
   _stack_top = ALIGN(0x1000);
   . = _stack_top + 0x1000;
