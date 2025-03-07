@@ -18,7 +18,7 @@
 #define is_silent_mode 1
 
 // Declare global variables
-VysyxSoCFull* top;  // Top module (global)
+static VysyxSoCFull* top;  // Top module (global)
 static bool step_mode;  // Step mode flag (global)
 static riscv32_CPU_state ref;
 const char *regs[] = {
