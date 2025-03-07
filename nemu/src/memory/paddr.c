@@ -125,7 +125,7 @@ word_t paddr_read(paddr_t addr, int len) {
 }
 
 void paddr_write(paddr_t addr, int len, word_t data) {
-  if (likely(in_pmem(addr)) || IS_SRAM_ADDR(addr)) {
+  if (likely(in_pmem(addr)) || IS_SRAM_ADDR(addr) || IS_MROM_ADDR(addr)) {
     pmem_write(addr, len, data);
 
 #ifdef CONFIG_MTRACE
