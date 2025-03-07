@@ -19,7 +19,7 @@
 
 // Declare global variables
 VysyxSoCFull* top;  // Top module (global)
-bool step_mode;  // Step mode flag (global)
+static bool step_mode;  // Step mode flag (global)
 static riscv32_CPU_state ref;
 const char *regs[] = {
   "$0", "ra", "sp", "gp", "tp", "t0", "t1", "t2",
