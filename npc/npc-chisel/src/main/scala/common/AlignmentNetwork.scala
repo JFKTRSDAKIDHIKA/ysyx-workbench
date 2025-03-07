@@ -11,6 +11,10 @@ class AlignmentNetwork extends Module {
     val data_out = Output(UInt(32.W))
   })
 
+  /*
+  
+  */
+
   // signed/unsigned extent logic
   val zero_ext_byte = Cat(0.U(24.W), io.data_in(7, 0))
   val zero_ext_half = Cat(0.U(16.W), io.data_in(15, 0))
