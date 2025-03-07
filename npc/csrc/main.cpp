@@ -17,7 +17,7 @@
 #define CLOCK_ADDR_LEN 8  
 #define UART_ADDR_LEN  8          
 
-// #define ENABLE_MEMORY_CHECK 1
+#define ENABLE_MEMORY_CHECK 1
 #define DIFFTEST 1
 #define is_silent_mode 0
 
@@ -245,7 +245,7 @@ static int execute_single_step() {
   if (top->io_wbu_state_debug == 2) {
     ref_difftest_exec(1);
     ref_difftest_regcpy(&ref, DIFFTEST_TO_REF);
-    return check_dut_and_ref(top, 0x80000000, 0x1000);
+    return check_dut_and_ref(top, BASE_ADDR, MEMORY_SIZE);
   } else {
     return 0;
   }
