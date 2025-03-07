@@ -5,8 +5,6 @@
 #include "include/program_loader.h"
 #include "ELFIO/elfio/elfio.hpp"
 
-extern char edata;
-
 void load_program(const char *program_path) {
     ELFIO::elfio reader;
 
@@ -15,8 +13,8 @@ void load_program(const char *program_path) {
     }
 
     uint32_t address = 0x20000000; 
-    std::cout << "End of .data section (edata): " << static_cast<void*>(&edata) << std::endl;
 
+    // Load .text from elf to MROM
     for (int i = 0; i < reader.sections.size(); ++i) {
         ELFIO::section* sec = reader.sections[i];
 
@@ -27,26 +25,6 @@ void load_program(const char *program_path) {
             }
 
             std::cout << "Loading .text section to MROM: 0x" << std::setw(8) << std::setfill('0') << std::hex << address <<std::endl;
-            for (int j = 0; j < sec->get_size(); ++j) {
-                // printf("%02X ", (unsigned char)code[j]);
-                Memory::pmem_write(address, code[j], 0x1);
-                address += sizeof(code[j]); 
-            }
-            break;
-        }
-    }
-
-    // Load .rodata from elf to MROM
-    for (int i = 0; i < reader.sections.size(); ++i) {
-        ELFIO::section* sec = reader.sections[i];
-
-        if (sec->get_name() == ".rodata") {
-            const char* code = sec->get_data();
-            if (code == nullptr) {
-                std::cerr << "Failed to get .rodata section data!" << std::endl;
-            }
-
-            std::cout << "Loading .rodata section to MROM: " << std::setw(8) << std::setfill('0') << std::hex << address <<std::endl;
             for (int j = 0; j < sec->get_size(); ++j) {
                 // printf("%02X ", (unsigned char)code[j]);
                 Memory::pmem_write(address, code[j], 0x1);

@@ -7,16 +7,19 @@ MEMORY {
 
 SECTIONS {
   . = ORIGIN(mrom);
+
   .text : {
     *(entry)
     *(.text*)
     *(.rodata*)
     _etext = .;
   } > mrom AT> mrom : text
+
   .data : {
     _data = .;
     *(.data)
   } > sram AT> mrom : data
+
   .bss : {
 	_bss_start = .;
     *(.bss*)
@@ -24,6 +27,7 @@ SECTIONS {
     *(.scommon)
     edata = .;
   } > sram AT> mrom
+  
   _stack_top = ALIGN(0x1000);
   . = _stack_top + 0x8000;
   _stack_pointer = .;

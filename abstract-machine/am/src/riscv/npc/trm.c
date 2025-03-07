@@ -1,10 +1,12 @@
 #include <am.h>
 #include <klib-macros.h>
+#include <klib.h>
 #include "../riscv.h"
 #include "include/npc.h"
 
 extern char _heap_start;
 extern char _pmem_start;
+extern char _etext;
 int main(const char *args);
 #define PMEM_END  ((uintptr_t)&_pmem_start + PMEM_SIZE)
 
@@ -21,6 +23,7 @@ void halt(int code) {
 }
 
 void _trm_init() {
+  printf("%p\n", (void *)&_etext);
   int ret = main(mainargs);
   halt(ret);
 }
