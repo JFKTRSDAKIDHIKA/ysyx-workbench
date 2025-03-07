@@ -99,11 +99,11 @@ int check_dut_and_ref(VysyxSoCFull* top, paddr_t start_addr, size_t size) {
           // Print all registers of DUT (rf_values) and REF (ref.gpr)
           std::cerr << "DUT Registers (rf_values):" << std::endl;
           for (int j = 0; j < 32; j++) {
-              std::cerr << regs[i] << ": 0x" << std::hex << rf_values[j] << std::endl;
+              std::cerr << regs[j] << ": 0x" << std::hex << rf_values[j] << std::endl;
           }
           std::cerr << "REF Registers (ref.gpr):" << std::endl;
           for (int j = 0; j < 32; j++) {
-              std::cerr << regs[i] << ": 0x" << std::hex << ref.gpr[j] << std::endl;
+              std::cerr << regs[j] << ": 0x" << std::hex << ref.gpr[j] << std::endl;
           }
 
           // Stop the simulation on a mismatch
