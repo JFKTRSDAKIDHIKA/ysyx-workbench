@@ -38,9 +38,6 @@ extern "C" void flash_read(int32_t addr, int32_t *data) { assert(0); }
 
 extern "C" void mrom_read(int32_t addr, int32_t *data) { 
   *data = Memory::pmem_read(addr); 
-  std::cout << 
-  "address: 0x " << std::setw(8) << std::setfill('0') << std::hex << addr <<
-  ", data: 0x" << std::setw(8) << std::setfill('0') << std::hex << *data << "\n";
 }
 
 extern "C" void simulation_exit() {
