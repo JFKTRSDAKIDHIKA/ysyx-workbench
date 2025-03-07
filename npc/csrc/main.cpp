@@ -107,7 +107,7 @@ int check_dut_and_ref(VysyxSoCFull* top, paddr_t start_addr, size_t size) {
           }
 
           // Dump memory
-          print_memory(top->io_lsu_reg_dmem_addr_debug, 20);
+          print_memory(top->io_lsu_reg_dmem_addr_debug, size);
 
           // Stop the simulation on a mismatch
           return -1;  
@@ -242,14 +242,17 @@ static char* rl_gets() {
     return line_read;
   }
 
+static int need_check = 0;
 static int execute_single_step() {
   tick(top, is_silent_mode);  
 #ifdef DIFFTEST
-  if (top->io_wbu_state_debug == 2) {
+  if (need_check) {
+    need_check = (top->io_wbu_state_debug == 2);
     ref_difftest_exec(1);
     ref_difftest_regcpy(&ref, DIFFTEST_TO_REF);
     return check_dut_and_ref(top, BASE_ADDR, MEMORY_SIZE);
   } else {
+    need_check = (top->io_wbu_state_debug == 2);
     return 0;
   }
 #else 
