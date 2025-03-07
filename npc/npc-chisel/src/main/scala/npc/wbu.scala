@@ -51,7 +51,7 @@ class WBU extends Module with RISCVConstants{
     }
 
     is(sWB) {
-      io.in.ready := true.B
+      io.in.ready := false.B
       state := sDone
     }
 
