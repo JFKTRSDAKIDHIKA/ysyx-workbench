@@ -82,7 +82,7 @@ class LSU extends Module with RISCVConstants{
   // io.out.bits.dmem_rdata := dmem_rdata_delay
   // io.out.bits.dmem_rdata := alignment_network.io.data_out
   val delayedData = RegInit(0.U(32.W))
-  delayedData := io.memory.r.data
+  delayedData := alignment_network.io.data_out
   io.out.bits.dmem_rdata := delayedData
 
   // Instantiate write_mask_gen
