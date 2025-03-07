@@ -1,5 +1,7 @@
 ENTRY(_start)
+
 PHDRS { text PT_LOAD; data PT_LOAD; }
+
 MEMORY {
   mrom : ORIGIN = 0x20000000, LENGTH = 4K
   sram : ORIGIN = 0x0f000000, LENGTH = 8K
@@ -12,24 +14,27 @@ SECTIONS {
     *(entry)
     *(.text*)
     *(.rodata*)
-    _etext = .;
+    _etext = .;   /* .text段在mrom的结束地址 */
   } > mrom AT> mrom : text
 
   .data : {
-    _data = .;
-    *(.data)
+    _data_lma = LOADADDR(.data);  /* LMA（加载地址）来自 mrom */
+    _data = .;                    /* VMA（运行时地址）在 sram */
+    *(.data .data.*)              /* 匹配所有 .data 和 .data.* 子段 */
+    _edata = .;
   } > sram AT> mrom : data
+  _data_len = _edata - _data;
 
   .bss : {
-	_bss_start = .;
+	  _bss_start = .;
     *(.bss*)
     *(.sbss*)
     *(.scommon)
-    edata = .;
+    ebbs = .;
   } > sram AT> mrom
-  
+
   _stack_top = ALIGN(0x1000);
-  . = _stack_top + 0x8000;
+  . = _stack_top + 0x1000;
   _stack_pointer = .;
   end = .;
   _end = .;
