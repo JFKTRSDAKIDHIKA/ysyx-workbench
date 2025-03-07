@@ -37,6 +37,7 @@ VysyxSoCFull::VysyxSoCFull(VerilatedContext* _vcontextp__, const char* _vcname__
     , io_wb_wen_debug{vlSymsp->TOP.io_wb_wen_debug}
     , io_wb_sel_debug{vlSymsp->TOP.io_wb_sel_debug}
     , io_Arbiter_state_debug{vlSymsp->TOP.io_Arbiter_state_debug}
+    , io_lsu_memory_ar_size{vlSymsp->TOP.io_lsu_memory_ar_size}
     , externalPins_gpio_out{vlSymsp->TOP.externalPins_gpio_out}
     , externalPins_gpio_in{vlSymsp->TOP.externalPins_gpio_in}
     , io_pc_debug{vlSymsp->TOP.io_pc_debug}

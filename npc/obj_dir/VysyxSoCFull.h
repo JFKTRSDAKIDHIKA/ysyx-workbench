@@ -55,6 +55,7 @@ class alignas(VL_CACHE_LINE_BYTES) VysyxSoCFull VL_NOT_FINAL : public VerilatedM
     VL_OUT8(&io_wb_wen_debug,0,0);
     VL_OUT8(&io_wb_sel_debug,1,0);
     VL_OUT8(&io_Arbiter_state_debug,1,0);
+    VL_OUT8(&io_lsu_memory_ar_size,2,0);
     VL_OUT16(&externalPins_gpio_out,15,0);
     VL_IN16(&externalPins_gpio_in,15,0);
     VL_OUT(&io_pc_debug,31,0);
