@@ -150,6 +150,9 @@ class LSU extends Module with RISCVConstants{
           io.memory.ar.valid := true.B
           io.memory.ar.addr := lsu_reg_dmem_addr
           io.memory.ar.len := 0.U
+          // Sram may not support narrow transfer.
+          io.memory.ar.size := 2.U(3.W)
+          /*
           io.memory.ar.size := MuxLookup(mem_access_control, 2.U(3.W))(Seq(
             MEM_ACCESS_WORD -> 2.U(3.W), 
             MEM_ACCESS_BYTE -> 0.U(3.W), 
@@ -157,6 +160,7 @@ class LSU extends Module with RISCVConstants{
             MEM_ACCESS_HALF -> 1.U(3.W), 
             MEM_ACCESS_HALF_U -> 1.U(3.W) 
           ))
+          */
           io.memory.ar.burst := AXI4Constants.BURST_INCR
           io.memory.ar.id := 0.U
           // Wait memory ready to process request
@@ -197,9 +201,12 @@ class LSU extends Module with RISCVConstants{
         // Keep addr valid during memory access to facilitate address forwarding in the Xbar module.
         io.memory.ar.addr := lsu_reg_dmem_addr
         // Read channel
-        io.memory.ar.valid := true.B
+        io.memory.ar.valid := false.B
         io.memory.r.ready := true.B
         io.memory.ar.len := 0.U
+        // Sram may not support narrow transfer.
+        io.memory.ar.size := 2.U(3.W)
+        /*
         io.memory.ar.size := MuxLookup(mem_access_control, 2.U(3.W))(Seq(
           MEM_ACCESS_WORD -> 2.U(3.W), 
           MEM_ACCESS_BYTE -> 0.U(3.W), 
@@ -207,6 +214,7 @@ class LSU extends Module with RISCVConstants{
           MEM_ACCESS_HALF -> 1.U(3.W), 
           MEM_ACCESS_HALF_U -> 1.U(3.W) 
         ))
+        */
         io.memory.ar.burst := AXI4Constants.BURST_INCR
         io.memory.ar.id := 0.U
         // Wait memory return data valid
