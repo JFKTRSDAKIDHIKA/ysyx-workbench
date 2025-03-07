@@ -5,22 +5,26 @@
 #include "include/program_loader.h"
 #include "include/memory.h"
 #include "include/disassemble.h"
-#include "include/device.h"
 #include <iostream>
 #include <svdpi.h>
 #include <iomanip> 
 #include <readline/readline.h>
 #include <readline/history.h>
-#include <cassert>    
+#include <cassert>
+
+#define CLOCK_ADDRESS 0xa0000048 
+#define UART_BASE_ADDR 0xa00003F8  
+#define CLOCK_ADDR_LEN 8  
+#define UART_ADDR_LEN  8          
 
 #define ENABLE_MEMORY_CHECK 1
 #define DIFFTEST 1
-#define is_silent_mode 1
+#define is_silent_mode 0
 
 // Declare global variables
 VysyxSoCFull* top;  // Top module (global)
 bool step_mode;  // Step mode flag (global)
-riscv32_CPU_state ref;
+static riscv32_CPU_state ref;
 const char *regs[] = {
   "$0", "ra", "sp", "gp", "tp", "t0", "t1", "t2",
   "s0", "s1", "a0", "a1", "a2", "a3", "a4", "a5",
