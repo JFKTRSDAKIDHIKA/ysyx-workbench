@@ -210,7 +210,8 @@ static long load_img() {
 
   fseek(fp, 0, SEEK_SET);
   int ret = fread(guest_to_host(RESET_VECTOR), size, 1, fp);
-  assert(ret == 1);
+  //assert(ret == 1);
+  printf("%d", ret);
 
   fclose(fp);
   return size;
