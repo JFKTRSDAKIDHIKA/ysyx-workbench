@@ -9,7 +9,6 @@
 #include <iomanip> 
 #include <readline/readline.h>
 #include <readline/history.h>
-#include <sys/time.h> 
 #include <cassert>
 
 #define CLOCK_ADDRESS 0xa0000048 
@@ -42,56 +41,6 @@ extern "C" void simulation_exit() {
 
 extern "C" void get_register_values(uint32_t rf[32]) {
     set_register_values(rf);  // set the register values
-}
-
-static uint64_t boot_time = 0;
-
-static uint64_t get_time_internal() {
-  struct timeval now;
-  gettimeofday(&now, NULL);
-  uint64_t us = now.tv_sec * 1000000 + now.tv_usec;
-  return us;
-}
-
-static uint64_t get_time() {
-  if (boot_time == 0) boot_time = get_time_internal();
-  uint64_t now = get_time_internal();
-  return now - boot_time;
-}
-
-// fundamental memory access unit is 4 bytes, and the address is aligned to 4 bytes
-extern "C" int pmem_read(int raddr) {
-    raddr = raddr & ~0x3u;  // 清除低两位，确保按4字节对齐
-
-    // 时钟
-    if (raddr >= CLOCK_ADDRESS && raddr < CLOCK_ADDRESS + CLOCK_ADDR_LEN ) {
-      uint64_t us = get_time();
-      
-      if (raddr == CLOCK_ADDRESS) {
-        return (uint32_t)(us & 0xFFFFFFFF); // 返回低 32 位
-      } else if (raddr == CLOCK_ADDRESS + 4) {
-        return (uint32_t)((us >> 32) & 0xFFFFFFFF); // 返回高 32 位
-      }
-    }
-
-    // 串口
-    if (raddr >= UART_BASE_ADDR && raddr < UART_BASE_ADDR + UART_ADDR_LEN) {
-      return 0;
-    }
-
-    return Memory::pmem_read(raddr);
-}
-
-extern "C" void pmem_write(int waddr, int wdata, char wmask) {
-    waddr = waddr & ~0x3u;  // 清除低两位，确保按4字节对齐
-
-    // 串口
-    if (waddr >= UART_BASE_ADDR && waddr < UART_BASE_ADDR + UART_ADDR_LEN) {
-      putchar(static_cast<char>(wdata & 0xFF));  
-      return;  
-    }
-
-    Memory::pmem_write(waddr, wdata, wmask);
 }
 
 static riscv32_CPU_state ref;
