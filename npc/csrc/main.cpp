@@ -5,32 +5,23 @@
 #include "include/program_loader.h"
 #include "include/memory.h"
 #include "include/disassemble.h"
+#include "include/device.h"
 #include <iostream>
 #include <svdpi.h>
 #include <iomanip> 
 #include <readline/readline.h>
 #include <readline/history.h>
-#include <cassert>
-
-#define CLOCK_ADDRESS 0xa0000048 
-#define UART_BASE_ADDR 0xa00003F8  
-#define CLOCK_ADDR_LEN 8  
-#define UART_ADDR_LEN  8          
+#include <cassert>    
 
 #define ENABLE_MEMORY_CHECK 1
 #define DIFFTEST 1
-#define is_silent_mode 0
+#define is_silent_mode 1
 
 // Declare global variables
-VysyxSoCFull* top;  // Top module (global)
-bool step_mode;  // Step mode flag (global)
+static VysyxSoCFull* top;  // Top module (global)
+static bool step_mode;  // Step mode flag (global)
 static riscv32_CPU_state ref;
-const char *regs[] = {
-  "$0", "ra", "sp", "gp", "tp", "t0", "t1", "t2",
-  "s0", "s1", "a0", "a1", "a2", "a3", "a4", "a5",
-  "a6", "a7", "s2", "s3", "s4", "s5", "s6", "s7",
-  "s8", "s9", "s10", "s11", "t3", "t4", "t5", "t6"
-};
+
 
 // define the DPI-C functions
 // note: extern "C" 是 C++ 中的一个声明方式，用来告诉编译器，函数使用 C 的链接方式，而不是 C++ 默认的链接方式。
