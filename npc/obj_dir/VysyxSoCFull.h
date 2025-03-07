@@ -49,9 +49,22 @@ class alignas(VL_CACHE_LINE_BYTES) VysyxSoCFull VL_NOT_FINAL : public VerilatedM
     VL_IN8(&externalPins_uart_rx,0,0);
     VL_OUT8(&externalPins_uart_tx,0,0);
     VL_OUT8(&io_wbu_state_debug,1,0);
+    VL_OUT8(&io_ifu_state_debug,2,0);
+    VL_OUT8(&io_lsu_state_debug,2,0);
+    VL_OUT8(&io_lsu_is_ld_or_st_debug,0,0);
+    VL_OUT8(&io_wb_wen_debug,0,0);
+    VL_OUT8(&io_wb_sel_debug,1,0);
+    VL_OUT8(&io_Arbiter_state_debug,1,0);
     VL_OUT16(&externalPins_gpio_out,15,0);
     VL_IN16(&externalPins_gpio_in,15,0);
     VL_OUT(&io_pc_debug,31,0);
+    VL_OUT(&io_inst_debug,31,0);
+    VL_OUT(&io_lsu_reg_inst_debug,31,0);
+    VL_OUT(&io_dmem_wdata_debug,31,0);
+    VL_OUT(&io_dmem_rdata_debug,31,0);
+    VL_OUT(&io_lsu_reg_dmem_addr_debug,31,0);
+    VL_OUT(&io_wbu_reg_dmem_rdata_debug,31,0);
+    VL_OUT(&io_wb_data_debug,31,0);
 
     // CELLS
     // Public to allow access to /* verilator public */ items.

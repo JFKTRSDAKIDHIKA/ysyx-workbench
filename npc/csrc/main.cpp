@@ -159,7 +159,7 @@ int check_dut_and_ref(VysyxSoCFull* top, paddr_t start_addr, size_t size) {
 void tick(VysyxSoCFull* top, bool silent_mode ) {
     top->clock = 0;
     top->eval();
-/*
+
     if (!silent_mode) {
       printf("------------------------------------------------------------------------------\n");
       std::cout << "Instruction Info: "
@@ -183,7 +183,7 @@ void tick(VysyxSoCFull* top, bool silent_mode ) {
                 << ", Arbiter_state: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->io_Arbiter_state_debug)
                 << std::dec << std::endl;
   }
-*/
+
 /*
     // print some debug info of memory write
     if (top->mem_wen_debug == 1 && !silent_mode ) {  

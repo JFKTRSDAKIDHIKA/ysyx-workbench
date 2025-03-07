@@ -31,9 +31,22 @@ VysyxSoCFull::VysyxSoCFull(VerilatedContext* _vcontextp__, const char* _vcname__
     , externalPins_uart_rx{vlSymsp->TOP.externalPins_uart_rx}
     , externalPins_uart_tx{vlSymsp->TOP.externalPins_uart_tx}
     , io_wbu_state_debug{vlSymsp->TOP.io_wbu_state_debug}
+    , io_ifu_state_debug{vlSymsp->TOP.io_ifu_state_debug}
+    , io_lsu_state_debug{vlSymsp->TOP.io_lsu_state_debug}
+    , io_lsu_is_ld_or_st_debug{vlSymsp->TOP.io_lsu_is_ld_or_st_debug}
+    , io_wb_wen_debug{vlSymsp->TOP.io_wb_wen_debug}
+    , io_wb_sel_debug{vlSymsp->TOP.io_wb_sel_debug}
+    , io_Arbiter_state_debug{vlSymsp->TOP.io_Arbiter_state_debug}
     , externalPins_gpio_out{vlSymsp->TOP.externalPins_gpio_out}
     , externalPins_gpio_in{vlSymsp->TOP.externalPins_gpio_in}
     , io_pc_debug{vlSymsp->TOP.io_pc_debug}
+    , io_inst_debug{vlSymsp->TOP.io_inst_debug}
+    , io_lsu_reg_inst_debug{vlSymsp->TOP.io_lsu_reg_inst_debug}
+    , io_dmem_wdata_debug{vlSymsp->TOP.io_dmem_wdata_debug}
+    , io_dmem_rdata_debug{vlSymsp->TOP.io_dmem_rdata_debug}
+    , io_lsu_reg_dmem_addr_debug{vlSymsp->TOP.io_lsu_reg_dmem_addr_debug}
+    , io_wbu_reg_dmem_rdata_debug{vlSymsp->TOP.io_wbu_reg_dmem_rdata_debug}
+    , io_wb_data_debug{vlSymsp->TOP.io_wb_data_debug}
     , __PVT____024unit{vlSymsp->TOP.__PVT____024unit}
     , rootp{&(vlSymsp->TOP)}
 {
