@@ -11,6 +11,14 @@ class AlignmentNetwork extends Module {
     val data_out = Output(UInt(32.W))
   })
 
+/*
+  AXI4-Lite does not support the 'ar.size' parameter, and the data width for each transfer is fixed at 32 bits. 
+  Therefore, when reading data, it is necessary to select the corresponding Byte or Half from the 32-bit data read. 
+  However, since AXI4 supports the `ar.size` parameter, the "select the corresponding Byte or Half" functionality 
+  needs to be removed from the AlignmentNetwork module. The software can ensure that the addresses accessed by the 
+  compiled instructions meet specific alignment requirements.
+*/
+
   // shift logic
   val shift_amount = io.dmem_addr(1, 0)
   val shifted_data = io.data_in >> (shift_amount * 8.U)

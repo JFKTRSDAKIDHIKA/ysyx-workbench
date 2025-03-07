@@ -1,10 +1,7 @@
-#include "memory.h"
+#include "include/memory.h"
 #include <iostream>
 
-const uint32_t BASE_ADDR = 0x80000000;                // Base address of the memory
-const int MEMORY_SIZE = 1024 * 1024 * 64;                    // 64KB memory
 std::vector<uint8_t> Memory::memory(MEMORY_SIZE, 0);  // Initialize memory with size MEMORY_SIZE and set all elements to 0
-
 
 // Function to read data from memory
 uint32_t Memory::pmem_read(uint32_t address) {
@@ -20,7 +17,6 @@ uint32_t Memory::pmem_read(uint32_t address) {
     return memory[offset] | (memory[offset + 1] << 8) | 
            (memory[offset + 2] << 16) | (memory[offset + 3] << 24);
 }
-
 
 // Function to write data to memory
 void Memory::pmem_write(uint32_t address, uint32_t data, char wmask) {
