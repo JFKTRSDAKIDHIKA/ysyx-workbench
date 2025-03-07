@@ -23,6 +23,7 @@
 // Declare global variables
 VysyxSoCFull* top;  // Top module (global)
 bool step_mode;  // Step mode flag (global)
+static riscv32_CPU_state ref;
 
 // define the DPI-C functions
 // note: extern "C" 是 C++ 中的一个声明方式，用来告诉编译器，函数使用 C 的链接方式，而不是 C++ 默认的链接方式。
@@ -43,7 +44,6 @@ extern "C" void get_register_values(uint32_t rf[32]) {
     set_register_values(rf);  // set the register values
 }
 
-static riscv32_CPU_state ref;
 
 void print_memory(paddr_t start_addr, size_t size) {
     // Allocate buffers for memory data
@@ -389,8 +389,6 @@ int main(int argc, char **argv) {
 #ifdef DIFFTEST
     // Initialize difftest
     init_difftest("/home/jiashuao/Desktop/ysyx-workbench/nemu/build/riscv32-nemu-interpreter-so", 0);
-    // Copy the program to the reference model
-    ref_difftest_meminit(argv[1]);  
 #endif
 
     // Reset

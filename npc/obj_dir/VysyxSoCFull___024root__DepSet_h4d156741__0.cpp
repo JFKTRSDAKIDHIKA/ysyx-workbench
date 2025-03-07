@@ -417,12 +417,12 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__1(VysyxSoCFull___0
                                                           & (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__axi4frag__DOT__nodeOut_wvalid))) 
                                                         << 9U)) 
                                                     | (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__axi4frag__DOT__w_todo)))))) {
-        VL_WRITEF("[%0t] %%Error: ysyxSoCFull.v:3202: Assertion failed in %NysyxSoCFull.asic.axi4frag: Assertion failed at Fragmenter.scala:181\n\n",
+        VL_WRITEF("[%0t] %%Error: ysyxSoCFull.v:3206: Assertion failed in %NysyxSoCFull.asic.axi4frag: Assertion failed at Fragmenter.scala:181\n\n",
                   64,VL_TIME_UNITED_Q(1000),-9,vlSymsp->name());
-        VL_STOP_MT("../ysyxSoC/build/ysyxSoCFull.v", 3202, "");
-        VL_WRITEF("[%0t] %%Fatal: ysyxSoCFull.v:3204: Assertion failed in %NysyxSoCFull.asic.axi4frag\n",
+        VL_STOP_MT("../ysyxSoC/build/ysyxSoCFull.v", 3206, "");
+        VL_WRITEF("[%0t] %%Fatal: ysyxSoCFull.v:3208: Assertion failed in %NysyxSoCFull.asic.axi4frag\n",
                   64,VL_TIME_UNITED_Q(1000),-9,vlSymsp->name());
-        VL_STOP_MT("../ysyxSoC/build/ysyxSoCFull.v", 3204, "");
+        VL_STOP_MT("../ysyxSoC/build/ysyxSoCFull.v", 3208, "");
     }
     if (VL_UNLIKELY((1U & ((~ (IData)(vlSelf->reset)) 
                            & (~ (((~ (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__axi4frag__DOT__nodeOut_wvalid)) 
@@ -430,12 +430,12 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__1(VysyxSoCFull___0
                                          ? (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__axi4frag__DOT__in_wdeq_q__DOT__ram)
                                          : (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT___cpu_auto_master_out_wlast)))) 
                                  | (1U == (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__axi4frag__DOT__w_todo)))))))) {
-        VL_WRITEF("[%0t] %%Error: ysyxSoCFull.v:3208: Assertion failed in %NysyxSoCFull.asic.axi4frag: Assertion failed at Fragmenter.scala:190\n\n",
+        VL_WRITEF("[%0t] %%Error: ysyxSoCFull.v:3212: Assertion failed in %NysyxSoCFull.asic.axi4frag: Assertion failed at Fragmenter.scala:190\n\n",
                   64,VL_TIME_UNITED_Q(1000),-9,vlSymsp->name());
-        VL_STOP_MT("../ysyxSoC/build/ysyxSoCFull.v", 3208, "");
-        VL_WRITEF("[%0t] %%Fatal: ysyxSoCFull.v:3210: Assertion failed in %NysyxSoCFull.asic.axi4frag\n",
+        VL_STOP_MT("../ysyxSoC/build/ysyxSoCFull.v", 3212, "");
+        VL_WRITEF("[%0t] %%Fatal: ysyxSoCFull.v:3214: Assertion failed in %NysyxSoCFull.asic.axi4frag\n",
                   64,VL_TIME_UNITED_Q(1000),-9,vlSymsp->name());
-        VL_STOP_MT("../ysyxSoC/build/ysyxSoCFull.v", 3210, "");
+        VL_STOP_MT("../ysyxSoC/build/ysyxSoCFull.v", 3214, "");
     }
     if (VL_UNLIKELY((1U & ((~ (IData)(vlSelf->reset)) 
                            & (~ ((~ (((IData)(1U) << (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__axi4xbar_1__DOT___in_0_rT_20)) 
@@ -1364,22 +1364,22 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__1(VysyxSoCFull___0
                                                              | (1U 
                                                                 & (vlSelf->ysyxSoCFull__DOT__asic__DOT___axi4frag_auto_out_awaddr 
                                                                    >> 0xcU)))))))))) {
-        VL_WRITEF("[%0t] %%Error: ysyxSoCFull.v:1785: Assertion failed in %NysyxSoCFull.asic.lmrom: Assertion failed: do not support write operations\n\n",
+        VL_WRITEF("[%0t] %%Error: ysyxSoCFull.v:1789: Assertion failed in %NysyxSoCFull.asic.lmrom: Assertion failed: do not support write operations\n\n",
                   64,VL_TIME_UNITED_Q(1000),-9,vlSymsp->name());
-        VL_STOP_MT("../ysyxSoC/build/ysyxSoCFull.v", 1785, "");
-        VL_WRITEF("[%0t] %%Fatal: ysyxSoCFull.v:1787: Assertion failed in %NysyxSoCFull.asic.lmrom\n",
+        VL_STOP_MT("../ysyxSoC/build/ysyxSoCFull.v", 1789, "");
+        VL_WRITEF("[%0t] %%Fatal: ysyxSoCFull.v:1791: Assertion failed in %NysyxSoCFull.asic.lmrom\n",
                   64,VL_TIME_UNITED_Q(1000),-9,vlSymsp->name());
-        VL_STOP_MT("../ysyxSoC/build/ysyxSoCFull.v", 1787, "");
+        VL_STOP_MT("../ysyxSoC/build/ysyxSoCFull.v", 1791, "");
     }
     if (VL_UNLIKELY(((~ (IData)(vlSelf->reset)) & ((IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__axi4xbar_1__DOT__in_0_wvalid) 
                                                    & ((IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__axi4xbar_1__DOT___awIn_0_io_deq_bits) 
                                                       >> 1U))))) {
-        VL_WRITEF("[%0t] %%Error: ysyxSoCFull.v:1791: Assertion failed in %NysyxSoCFull.asic.lmrom: Assertion failed: do not support write operations\n\n",
+        VL_WRITEF("[%0t] %%Error: ysyxSoCFull.v:1795: Assertion failed in %NysyxSoCFull.asic.lmrom: Assertion failed: do not support write operations\n\n",
                   64,VL_TIME_UNITED_Q(1000),-9,vlSymsp->name());
-        VL_STOP_MT("../ysyxSoC/build/ysyxSoCFull.v", 1791, "");
-        VL_WRITEF("[%0t] %%Fatal: ysyxSoCFull.v:1793: Assertion failed in %NysyxSoCFull.asic.lmrom\n",
+        VL_STOP_MT("../ysyxSoC/build/ysyxSoCFull.v", 1795, "");
+        VL_WRITEF("[%0t] %%Fatal: ysyxSoCFull.v:1797: Assertion failed in %NysyxSoCFull.asic.lmrom\n",
                   64,VL_TIME_UNITED_Q(1000),-9,vlSymsp->name());
-        VL_STOP_MT("../ysyxSoC/build/ysyxSoCFull.v", 1793, "");
+        VL_STOP_MT("../ysyxSoC/build/ysyxSoCFull.v", 1797, "");
     }
     __Vdlyvset__ysyxSoCFull__DOT__asic__DOT__axi4xbar_1__DOT__awIn_0__DOT__ram_ext__DOT__Memory__v0 = 0U;
     __Vdly__ysyxSoCFull__DOT__asic__DOT__axi4yank__DOT__Queue1_BundleMap_31__DOT__full 
@@ -1416,21 +1416,21 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__1(VysyxSoCFull___0
         = vlSelf->ysyxSoCFull__DOT__asic__DOT__axi4yank__DOT__Queue1_BundleMap_16__DOT__full;
     if (VL_UNLIKELY((((~ (IData)(vlSelf->reset)) & (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT___axi4xbar_1_auto_anon_out_0_arvalid)) 
                      & (2U < (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__axi4frag__DOT___deq_q_io_deq_bits_size))))) {
-        VL_WRITEF("[%0t] %%Error: ysyxSoCFull.v:2120: Assertion failed in %NysyxSoCFull.asic.axi42apb: Assertion failed at AXI4ToAPB.scala:64\n\n",
+        VL_WRITEF("[%0t] %%Error: ysyxSoCFull.v:2124: Assertion failed in %NysyxSoCFull.asic.axi42apb: Assertion failed at AXI4ToAPB.scala:64\n\n",
                   64,VL_TIME_UNITED_Q(1000),-9,vlSymsp->name());
-        VL_STOP_MT("../ysyxSoC/build/ysyxSoCFull.v", 2120, "");
-        VL_WRITEF("[%0t] %%Fatal: ysyxSoCFull.v:2122: Assertion failed in %NysyxSoCFull.asic.axi42apb\n",
+        VL_STOP_MT("../ysyxSoC/build/ysyxSoCFull.v", 2124, "");
+        VL_WRITEF("[%0t] %%Fatal: ysyxSoCFull.v:2126: Assertion failed in %NysyxSoCFull.asic.axi42apb\n",
                   64,VL_TIME_UNITED_Q(1000),-9,vlSymsp->name());
-        VL_STOP_MT("../ysyxSoC/build/ysyxSoCFull.v", 2122, "");
+        VL_STOP_MT("../ysyxSoC/build/ysyxSoCFull.v", 2126, "");
     }
     if (VL_UNLIKELY((((~ (IData)(vlSelf->reset)) & (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT___axi4xbar_1_auto_anon_out_0_awvalid)) 
                      & (2U < (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__axi4frag__DOT___deq_q_1_io_deq_bits_size))))) {
-        VL_WRITEF("[%0t] %%Error: ysyxSoCFull.v:2126: Assertion failed in %NysyxSoCFull.asic.axi42apb: Assertion failed at AXI4ToAPB.scala:65\n\n",
+        VL_WRITEF("[%0t] %%Error: ysyxSoCFull.v:2130: Assertion failed in %NysyxSoCFull.asic.axi42apb: Assertion failed at AXI4ToAPB.scala:65\n\n",
                   64,VL_TIME_UNITED_Q(1000),-9,vlSymsp->name());
-        VL_STOP_MT("../ysyxSoC/build/ysyxSoCFull.v", 2126, "");
-        VL_WRITEF("[%0t] %%Fatal: ysyxSoCFull.v:2128: Assertion failed in %NysyxSoCFull.asic.axi42apb\n",
+        VL_STOP_MT("../ysyxSoC/build/ysyxSoCFull.v", 2130, "");
+        VL_WRITEF("[%0t] %%Fatal: ysyxSoCFull.v:2132: Assertion failed in %NysyxSoCFull.asic.axi42apb\n",
                   64,VL_TIME_UNITED_Q(1000),-9,vlSymsp->name());
-        VL_STOP_MT("../ysyxSoC/build/ysyxSoCFull.v", 2128, "");
+        VL_STOP_MT("../ysyxSoC/build/ysyxSoCFull.v", 2132, "");
     }
     __Vdly__ysyxSoCFull__DOT__asic__DOT__axi4xbar_1__DOT__awIn_0__DOT__wrap 
         = vlSelf->ysyxSoCFull__DOT__asic__DOT__axi4xbar_1__DOT__awIn_0__DOT__wrap;
@@ -1509,23 +1509,23 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__1(VysyxSoCFull___0
                            & (~ ((~ (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__axi4xbar_1__DOT__in_0_rvalid)) 
                                  | ((IData)(ysyxSoCFull__DOT__asic__DOT__axi4yank__DOT__unnamedblk1__DOT___GEN_4) 
                                     >> (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__axi4xbar_1__DOT___in_0_rT_20)))))))) {
-        VL_WRITEF("[%0t] %%Error: ysyxSoCFull.v:2526: Assertion failed in %NysyxSoCFull.asic.axi4yank.unnamedblk1: Assertion failed at UserYanker.scala:69\n\n",
+        VL_WRITEF("[%0t] %%Error: ysyxSoCFull.v:2530: Assertion failed in %NysyxSoCFull.asic.axi4yank.unnamedblk1: Assertion failed at UserYanker.scala:69\n\n",
                   64,VL_TIME_UNITED_Q(1000),-9,vlSymsp->name());
-        VL_STOP_MT("../ysyxSoC/build/ysyxSoCFull.v", 2526, "");
-        VL_WRITEF("[%0t] %%Fatal: ysyxSoCFull.v:2528: Assertion failed in %NysyxSoCFull.asic.axi4yank.unnamedblk1\n",
+        VL_STOP_MT("../ysyxSoC/build/ysyxSoCFull.v", 2530, "");
+        VL_WRITEF("[%0t] %%Fatal: ysyxSoCFull.v:2532: Assertion failed in %NysyxSoCFull.asic.axi4yank.unnamedblk1\n",
                   64,VL_TIME_UNITED_Q(1000),-9,vlSymsp->name());
-        VL_STOP_MT("../ysyxSoC/build/ysyxSoCFull.v", 2528, "");
+        VL_STOP_MT("../ysyxSoC/build/ysyxSoCFull.v", 2532, "");
     }
     if (VL_UNLIKELY((1U & ((~ (IData)(vlSelf->reset)) 
                            & (~ ((~ (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__axi4xbar_1__DOT__in_0_bvalid)) 
                                  | ((IData)(ysyxSoCFull__DOT__asic__DOT__axi4yank__DOT__unnamedblk1__DOT___GEN_5) 
                                     >> (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__axi4xbar_1__DOT___in_0_bT_9)))))))) {
-        VL_WRITEF("[%0t] %%Error: ysyxSoCFull.v:2532: Assertion failed in %NysyxSoCFull.asic.axi4yank.unnamedblk1: Assertion failed at UserYanker.scala:98\n\n",
+        VL_WRITEF("[%0t] %%Error: ysyxSoCFull.v:2536: Assertion failed in %NysyxSoCFull.asic.axi4yank.unnamedblk1: Assertion failed at UserYanker.scala:98\n\n",
                   64,VL_TIME_UNITED_Q(1000),-9,vlSymsp->name());
-        VL_STOP_MT("../ysyxSoC/build/ysyxSoCFull.v", 2532, "");
-        VL_WRITEF("[%0t] %%Fatal: ysyxSoCFull.v:2534: Assertion failed in %NysyxSoCFull.asic.axi4yank.unnamedblk1\n",
+        VL_STOP_MT("../ysyxSoC/build/ysyxSoCFull.v", 2536, "");
+        VL_WRITEF("[%0t] %%Fatal: ysyxSoCFull.v:2538: Assertion failed in %NysyxSoCFull.asic.axi4yank.unnamedblk1\n",
                   64,VL_TIME_UNITED_Q(1000),-9,vlSymsp->name());
-        VL_STOP_MT("../ysyxSoC/build/ysyxSoCFull.v", 2534, "");
+        VL_STOP_MT("../ysyxSoC/build/ysyxSoCFull.v", 2538, "");
     }
     if (((0x14U <= (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__lpsram__DOT__mpsram__DOT__u0__DOT__MR__DOT__counter)) 
          & (0x1bU >= (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__lpsram__DOT__mpsram__DOT__u0__DOT__MR__DOT__counter)))) {
@@ -4182,14 +4182,15 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__1(VysyxSoCFull___0
                                                     & vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__idu__DOT__idu_reg_inst))
                                                    ? 3U
                                                    : 0U)));
-    vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__wbu__DOT__state 
-        = __Vdly__ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__wbu__DOT__state;
     vlSelf->ysyxSoCFull__DOT__asic__DOT____Vcellinp__cpu__reset 
         = ((IData)(vlSelf->reset) | (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu_reset_chain__DOT__output_chain__DOT__sync_0));
+    vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__wbu__DOT__state 
+        = __Vdly__ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__wbu__DOT__state;
     vlSelf->ysyxSoCFull__DOT__asic__DOT__axi4frag__DOT__deq_q__DOT__full 
         = __Vdly__ysyxSoCFull__DOT__asic__DOT__axi4frag__DOT__deq_q__DOT__full;
     vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__arbiter__DOT__state 
         = __Vdly__ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__arbiter__DOT__state;
+    vlSelf->io_wbu_state_debug = vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__wbu__DOT__state;
     vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__wbu__DOT__io_in_ready_0 
         = ((0U == (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__wbu__DOT__state)) 
            & (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT___lsu_io_out_valid));

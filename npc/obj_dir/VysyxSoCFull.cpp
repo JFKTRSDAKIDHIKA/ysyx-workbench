@@ -30,6 +30,7 @@ VysyxSoCFull::VysyxSoCFull(VerilatedContext* _vcontextp__, const char* _vcname__
     , externalPins_vga_valid{vlSymsp->TOP.externalPins_vga_valid}
     , externalPins_uart_rx{vlSymsp->TOP.externalPins_uart_rx}
     , externalPins_uart_tx{vlSymsp->TOP.externalPins_uart_tx}
+    , io_wbu_state_debug{vlSymsp->TOP.io_wbu_state_debug}
     , externalPins_gpio_out{vlSymsp->TOP.externalPins_gpio_out}
     , externalPins_gpio_in{vlSymsp->TOP.externalPins_gpio_in}
     , __PVT____024unit{vlSymsp->TOP.__PVT____024unit}
