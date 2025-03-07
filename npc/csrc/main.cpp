@@ -1,35 +1,34 @@
-#include "VysyxSoCFull.h"
+#include "VCore.h"
 #include "verilated.h"
-#include "include/difftest.h"
-#include "include/registers.h"
-#include "include/program_loader.h"
-#include "include/memory.h"
-#include "include/disassemble.h"
-#include "include/device.h"
+#include "difftest.h"
+#include "registers.h"
+#include "program_loader.h"
+#include "memory.h"
+#include "difftest.h"
 #include <iostream>
 #include <svdpi.h>
 #include <iomanip> 
 #include <readline/readline.h>
 #include <readline/history.h>
-#include <cassert>    
+#include <sys/time.h> // 包含 gettimeofday
+#include <cassert>
 
-#define ENABLE_MEMORY_CHECK 1
-#define DIFFTEST 1
+#define CLOCK_ADDRESS 0xa0000048 
+#define UART_BASE_ADDR 0xa00003F8  
+#define CLOCK_ADDR_LEN 8  
+#define UART_ADDR_LEN  8          
+
+// #define ENABLE_MEMORY_CHECK 1
+// #define DIFFTEST 1
 #define is_silent_mode 1
 
 // Declare global variables
-VysyxSoCFull* top;  // Top module (global)
-static bool step_mode;  // Step mode flag (global)
-static riscv32_CPU_state ref;
+VCore* top;  // Top module (global)
+bool step_mode;  // Step mode flag (global)
+int total_cycle;
 
 // define the DPI-C functions
 // note: extern "C" 是 C++ 中的一个声明方式，用来告诉编译器，函数使用 C 的链接方式，而不是 C++ 默认的链接方式。
-extern "C" void flash_read(int32_t addr, int32_t *data) { assert(0); }
-
-extern "C" void mrom_read(int32_t addr, int32_t *data) { 
-  *data = Memory::pmem_read(addr); 
-}
-
 extern "C" void simulation_exit() {
     Verilated::gotFinish(true); 
 }
@@ -38,6 +37,57 @@ extern "C" void get_register_values(uint32_t rf[32]) {
     set_register_values(rf);  // set the register values
 }
 
+static uint64_t boot_time = 0;
+
+static uint64_t get_time_internal() {
+  struct timeval now;
+  gettimeofday(&now, NULL);
+  uint64_t us = now.tv_sec * 1000000 + now.tv_usec;
+  return us;
+}
+
+static uint64_t get_time() {
+  if (boot_time == 0) boot_time = get_time_internal();
+  uint64_t now = get_time_internal();
+  return now - boot_time;
+}
+
+// fundamental memory access unit is 4 bytes, and the address is aligned to 4 bytes
+extern "C" int pmem_read(int raddr) {
+    raddr = raddr & ~0x3u;  // 清除低两位，确保按4字节对齐
+
+    // 时钟
+    if (raddr >= CLOCK_ADDRESS && raddr < CLOCK_ADDRESS + CLOCK_ADDR_LEN ) {
+      uint64_t us = get_time();
+      
+      if (raddr == CLOCK_ADDRESS) {
+        return (uint32_t)(us & 0xFFFFFFFF); // 返回低 32 位
+      } else if (raddr == CLOCK_ADDRESS + 4) {
+        return (uint32_t)((us >> 32) & 0xFFFFFFFF); // 返回高 32 位
+      }
+    }
+
+    // 串口
+    if (raddr >= UART_BASE_ADDR && raddr < UART_BASE_ADDR + UART_ADDR_LEN) {
+      return 0;
+    }
+
+    return Memory::pmem_read(raddr);
+}
+
+extern "C" void pmem_write(int waddr, int wdata, char wmask) {
+    waddr = waddr & ~0x3u;  // 清除低两位，确保按4字节对齐
+
+    // 串口
+    if (waddr >= UART_BASE_ADDR && waddr < UART_BASE_ADDR + UART_ADDR_LEN) {
+      putchar(static_cast<char>(wdata & 0xFF));  
+      return;  
+    }
+
+    Memory::pmem_write(waddr, wdata, wmask);
+}
+
+static riscv32_CPU_state ref;
 
 void print_memory(paddr_t start_addr, size_t size) {
     // Allocate buffers for memory data
@@ -73,12 +123,12 @@ void print_memory(paddr_t start_addr, size_t size) {
 }
 
 #ifdef DIFFTEST
-int check_dut_and_ref(VysyxSoCFull* top, paddr_t start_addr, size_t size) {
+int check_dut_and_ref(VCore* top, paddr_t start_addr, size_t size) {
   // ----------- 检查寄存器 -----------
   // Compare DUT registers with REF registers
   for (int i = 0; i < 32; i++) {
       if (rf_values[i] != ref.gpr[i]) {
-          std::cerr << "Register mismatch at " << regs[i]
+          std::cerr << "Register mismatch at x" << i 
                     << " - DUT: 0x" << std::hex << rf_values[i] 
                     << " REF: 0x" << ref.gpr[i] 
                     << std::endl;
@@ -86,15 +136,12 @@ int check_dut_and_ref(VysyxSoCFull* top, paddr_t start_addr, size_t size) {
           // Print all registers of DUT (rf_values) and REF (ref.gpr)
           std::cerr << "DUT Registers (rf_values):" << std::endl;
           for (int j = 0; j < 32; j++) {
-              std::cerr << regs[j] << ": 0x" << std::hex << rf_values[j] << std::endl;
+              std::cerr << "x" << j << ": 0x" << std::hex << rf_values[j] << std::endl;
           }
           std::cerr << "REF Registers (ref.gpr):" << std::endl;
           for (int j = 0; j < 32; j++) {
-              std::cerr << regs[j] << ": 0x" << std::hex << ref.gpr[j] << std::endl;
+              std::cerr << "x" << j << ": 0x" << std::hex << ref.gpr[j] << std::endl;
           }
-
-          // Dump memory
-          print_memory(top->io_lsu_reg_dmem_addr_debug, 20);
 
           // Stop the simulation on a mismatch
           return -1;  
@@ -109,11 +156,11 @@ int check_dut_and_ref(VysyxSoCFull* top, paddr_t start_addr, size_t size) {
       // Print DUT and REF register values (optional)
       std::cerr << "DUT Registers (rf_values):" << std::endl;
       for (int j = 0; j < 32; j++) {
-          std::cerr << regs[j] << ": 0x" << std::hex << rf_values[j] << std::endl;
+          std::cerr << "x" << j << ": 0x" << std::hex << rf_values[j] << std::endl;
       }
       std::cerr << "REF Registers (ref.gpr):" << std::endl;
       for (int j = 0; j < 32; j++) {
-          std::cerr << regs[j] << ": 0x" << std::hex << ref.gpr[j] << std::endl;
+          std::cerr << "x" << j << ": 0x" << std::hex << ref.gpr[j] << std::endl;
       }
 
       return -1;  // End simulation
@@ -153,14 +200,14 @@ int check_dut_and_ref(VysyxSoCFull* top, paddr_t start_addr, size_t size) {
 }
 #endif
 
-void tick(VysyxSoCFull* top, bool silent_mode ) {
+void tick(VCore* top, bool silent_mode ) {
     top->clock = 0;
     top->eval();
-
+    
     if (!silent_mode) {
       printf("------------------------------------------------------------------------------\n");
       std::cout << "Instruction Info: "
-                << "Instruction: " << std::setw(8) << std::setfill('0') << disassemble_instruction(top->io_inst_debug)
+                << "Instruction: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_inst_debug
                 << ", PC: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_pc_debug << "\n"
                 << "Write-Back Info: "
                 << "wb_data: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_wb_data_debug
@@ -172,8 +219,9 @@ void tick(VysyxSoCFull* top, bool silent_mode ) {
                 << ", lsu_reg_dmem_addr: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_lsu_reg_dmem_addr_debug
                 << ", dmem_rdata: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_dmem_rdata_debug
                 << ", dmem_wdata: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_dmem_wdata_debug
-                << ", lsu_is_ld_or_st: 0x" << std::hex << static_cast<int>(top->io_lsu_is_ld_or_st_debug) 
-                << ", lsu_memory_ar_size 0x:" << std::hex << static_cast<int>(top->io_lsu_memory_ar_size) << "\n"
+                << ", lsu_is_ld_or_st: 0x" << std::hex << static_cast<int>(top->io_lsu_is_ld_or_st_debug) << "\n"
+                << "Xbar: "
+                << "aw_addr: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_aw_addr_debug << "\n"
                 << "State Machines: "
                 << "ifu_state: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->io_ifu_state_debug)
                 << ", lsu_state: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->io_lsu_state_debug)
@@ -181,7 +229,6 @@ void tick(VysyxSoCFull* top, bool silent_mode ) {
                 << ", Arbiter_state: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->io_Arbiter_state_debug)
                 << std::dec << std::endl;
   }
-
 /*
     // print some debug info of memory write
     if (top->mem_wen_debug == 1 && !silent_mode ) {  
@@ -204,7 +251,7 @@ void tick(VysyxSoCFull* top, bool silent_mode ) {
     Verilated::timeInc(1); // 增加仿真时间
 }
 
-void reset(VysyxSoCFull* top, int cycles) {
+void reset(VCore* top, int cycles) {
     top->reset = 1;
     for (int i = 0; i < cycles; ++i) {
         tick(top, true);  // forbidden single-step mode
@@ -230,17 +277,18 @@ static char* rl_gets() {
     return line_read;
   }
 
-static int need_check = 0;
+static int need_check;
+
 static int execute_single_step() {
   tick(top, is_silent_mode);  
 #ifdef DIFFTEST
   if (need_check) {
-    need_check = (top->io_wbu_state_debug == 2);
     ref_difftest_exec(1);
     ref_difftest_regcpy(&ref, DIFFTEST_TO_REF);
-    return check_dut_and_ref(top, BASE_ADDR, MEMORY_SIZE);
+    need_check = static_cast<int>(top->io_wbu_state_debug) == 2;
+    return check_dut_and_ref(top, 0x80000000, 0x1000);
   } else {
-    need_check = (top->io_wbu_state_debug == 2);
+    need_check = static_cast<int>(top->io_wbu_state_debug) == 2;
     return 0;
   }
 #else 
@@ -252,6 +300,7 @@ static int cmd_c(char *args) {
   while(!Verilated::gotFinish()) {
     int ret = execute_single_step();
     if (ret < 0) return -1;
+    total_cycle++;
   }
   return 0;
 }
@@ -364,7 +413,7 @@ int sdb_mainloop() {
   
 int main(int argc, char **argv) {
     Verilated::commandArgs(argc, argv);
-    top = new VysyxSoCFull;
+    top = new VCore;
 
     // Default to single step mode (if no argument is provided)
     step_mode = true;
@@ -386,6 +435,8 @@ int main(int argc, char **argv) {
 #ifdef DIFFTEST
     // Initialize difftest
     init_difftest("/home/jiashuao/Desktop/ysyx-workbench/nemu/build/riscv32-nemu-interpreter-so", 0);
+    // Copy the program to the reference model
+    ref_difftest_meminit(argv[1]);  
 #endif
 
     // Reset
@@ -395,8 +446,56 @@ int main(int argc, char **argv) {
       if (sdb_mainloop() < 0) return -1;
     } else {
       if (cmd_c(NULL) < 0) return -1;
+      printf("Total Cycle: %5d\n", total_cycle);
     }
+/*
+    while(!Verilated::gotFinish()) {
+        if (step_mode) {
+            std::string input;
+            std::cout << "(npc) : ";
+            std::getline(std::cin, input);
 
+            // 根据用户输入的命令来决定行为
+            if (input == "si") {
+                // 执行单步操作
+                tick(top, step_mode, false);  // 执行一次 tick
+                // ref execute one instruction
+                ref_difftest_exec(1);
+                // Copy registers from DUT to REF and compare them
+                ref_difftest_regcpy(&ref, DIFFTEST_TO_REF);
+                // Check if the registers are consistent
+                int ret = check_reg(top);
+                if (ret < 0) return -1;                 
+                // Check memory consistency
+                ret = check_memory(0x80000000, 0x1000); 
+                if (ret < 0) return -1;
+            } 
+            else if (input == "info r") {
+                // 打印寄存器信息，不进行 tick
+                print_register_values();  // 打印寄存器
+            } 
+            else if (input == "q") {
+                // 退出仿真
+                Verilated::gotFinish(true);  
+            }
+            else {
+                std::cout << "Unknown command!" << std::endl;
+            }
+        } else {
+            tick(top, step_mode, true);  
+            // ref execute one instruction
+            ref_difftest_exec(1);
+            // Copy registers from DUT to REF and compare them
+            ref_difftest_regcpy(&ref, DIFFTEST_TO_REF);
+            // Check if the registers are consistent
+            int ret = check_reg(top);
+            if (ret < 0) return -1;
+            // Check memory consistency
+            ret = check_memory(0x80000000, 0x1000); 
+            if (ret < 0) return -1;
+        }
+    } 
+*/
     delete top;
     return 0;
 }
