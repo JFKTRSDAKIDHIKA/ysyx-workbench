@@ -6,6 +6,7 @@
 #include "ELFIO/elfio/elfio.hpp"
 
 extern char _etext;
+extern char __etext;
 
 void load_program(const char *program_path) {
     ELFIO::elfio reader;
@@ -16,6 +17,7 @@ void load_program(const char *program_path) {
 
     uint32_t address = 0x20000000; 
     printf("End of .text section (_etext): %p\n", (void*)&_etext);
+    printf("__etext: %p\n", (void*)&__etext);
 
     for (int i = 0; i < reader.sections.size(); ++i) {
         ELFIO::section* sec = reader.sections[i];
