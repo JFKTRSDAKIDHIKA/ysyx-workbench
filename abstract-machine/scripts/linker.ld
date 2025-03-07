@@ -5,9 +5,6 @@ MEMORY {
   sram : ORIGIN = 0x0f000000, LENGTH = 8K
 }
 
-PROVIDE(_etext = .);
-PROVIDE(etext = .);
-
 SECTIONS {
   . = ORIGIN(mrom);
   .text : {
@@ -18,16 +15,17 @@ SECTIONS {
   _etext = .;
   etext = .;
   .data : {
+    _data = .;
     *(.data)
   } > sram AT> mrom : data
-  edata = .;
-  _data = .;
   .bss : {
 	_bss_start = .;
     *(.bss*)
     *(.sbss*)
     *(.scommon)
   } > sram AT> mrom
+  edata = .;
+  _data_len = edata - _data;
   _stack_top = ALIGN(0x1000);
   . = _stack_top + 0x8000;
   _stack_pointer = .;
