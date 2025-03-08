@@ -20,6 +20,7 @@ if idx == -1:
     exit(1)
 fp.seek(idx)
 mainargs_pad = str.encode(mainargs)+ ((max_len - len(mainargs)) * str.encode("\0"))
+print(mainargs_pad)
 if len(mainargs_pad) != max_len:
     print("Error: len(mainargs_pad) != max_len\n")
     exit(1)
