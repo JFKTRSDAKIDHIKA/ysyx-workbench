@@ -82,11 +82,11 @@ class LSU extends Module with RISCVConstants{
   delayedData := alignment_network.io.data_out
   io.out.bits.dmem_rdata := delayedData
 
-  // Instantiate write_mask_gen
-  val write_mask_gen = Module(new WriteMaskGenerator)
-  write_mask_gen.io.dmem_addr := lsu_reg_dmem_addr
-  write_mask_gen.io.control := mem_access_control
-  write_mask_gen.io.dmem_wdata_raw := lsu_reg_rs2_data
+  // Instantiate memory_write_ctl
+  val memory_write_ctl = Module(new MemoryWriteController)
+  memory_write_ctl.io.dmem_addr := lsu_reg_dmem_addr
+  memory_write_ctl.io.control := mem_access_control
+  memory_write_ctl.io.dmem_wdata_raw := lsu_reg_rs2_data
 
   // State machine state definition
   val sIdle :: sArbiterPrepare :: sPrepare :: sMemAccess :: sDone :: Nil = Enum(5)
@@ -172,10 +172,10 @@ class LSU extends Module with RISCVConstants{
           io.memory.aw.valid := true.B
           io.memory.w.valid := true.B
           io.memory.aw.addr := lsu_reg_dmem_addr
-          io.memory.w.data := write_mask_gen.io.dmem_wdata
-          io.memory.w.strb := write_mask_gen.io.wmask
+          io.memory.w.data := memory_write_ctl.io.dmem_wdata
+          io.memory.w.strb := memory_write_ctl.io.wmask
           io.memory.aw.len := 0.U
-          io.memory.aw.size := write_mask_gen.io.awsize
+          io.memory.aw.size := memory_write_ctl.io.awsize
           io.memory.aw.burst := AXI4Constants.BURST_INCR
           io.memory.aw.id := 0.U
           io.memory.w.last := 1.B
@@ -230,7 +230,7 @@ class LSU extends Module with RISCVConstants{
         io.memory.w.valid := false.B
         io.memory.b.ready := true.B
         io.memory.aw.len := 0.U
-        io.memory.aw.size := write_mask_gen.io.awsize
+        io.memory.aw.size := memory_write_ctl.io.awsize
         io.memory.aw.burst := AXI4Constants.BURST_INCR
         io.memory.aw.id := 0.U
         io.memory.w.last := 1.B
@@ -282,7 +282,7 @@ class LSU extends Module with RISCVConstants{
   io.lsu_state_debug := state
   io.lsu_is_ld_or_st_debug := isLoad || isStore
   io.lsu_reg_inst_debug := lsu_reg_inst
-  io.dmem_wdata_debug := write_mask_gen.io.dmem_wdata
+  io.dmem_wdata_debug := memory_write_ctl.io.dmem_wdata
   io.dmem_rdata_debug := io.memory.r.data
   io.lsu_reg_dmem_addr_debug := lsu_reg_dmem_addr
 }

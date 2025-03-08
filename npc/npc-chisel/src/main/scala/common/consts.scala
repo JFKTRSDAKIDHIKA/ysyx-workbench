@@ -127,6 +127,11 @@ trait RISCVConstants
    val WB_PC4  = 1.asUInt(2.W)
    val WB_X    = 0.asUInt(2.W)
 
+   // Define write address types
+   val UART_W_ADDR = 0.U(2.W)
+   val SRAM_W_ADDR = 1.U(2.W)
+   val OTHER_W_ADDR = 2.U(2.W)
+
    // PC reset vector
    val RESET_VECTOR = 0x20000000L.U(32.W) 
 
