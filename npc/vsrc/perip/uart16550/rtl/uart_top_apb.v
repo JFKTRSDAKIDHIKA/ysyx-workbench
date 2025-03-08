@@ -35,6 +35,9 @@ module uart_top_apb (
    assign in_pready = in_psel && in_penable;
    assign in_pslverr = 1'b0;
    assign reg_we  = ~reset & in_psel & ~in_penable &  in_pwrite;
+   always @(*) begin
+      $write("reg_we: %d", reg_we);
+   end
    assign reg_re  = ~reset & in_psel & ~in_penable & ~in_pwrite;
    assign reg_adr = in_paddr[2:0]; //assign adr_o   = in_paddr[2:0];
    assign in_prdata  = (in_psel) ? {4{reg_dat8_r}} : 'h0;
