@@ -52,7 +52,7 @@ void init_uart() {
   outb(UART_DLL, 0x01); 
 
   // Exit DLAB, and set 8-N-1 configration
-  outb(UART_LCR, 0x03);
+  outb(UART_LCR, 0x00);
 
   // Clear fifo
   outb(UART_FCR, UART_FCR_CLEAR_RX | UART_FCR_CLEAR_TX);
