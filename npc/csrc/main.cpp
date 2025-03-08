@@ -381,7 +381,7 @@ int main(int argc, char **argv) {
     }
 
     // Load program
-    load_program(argv[1]);
+    load_program("/home/jiashuao/Desktop/ysyx-workbench/npc/csrc/test/char-test.bin");
 
 #ifdef DIFFTEST
     // Initialize difftest
