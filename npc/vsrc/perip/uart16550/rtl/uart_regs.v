@@ -485,7 +485,7 @@ always @(posedge clk or posedge wb_rst_i)
         $write("ccc");
         lcr <= #1 wb_dat_i;
     end else if (wb_we_i && wb_addr_i!=`UART_REG_LC) begin
-        $write("ccc%d: ", wb_addr_i);
+        $write("addr: %d\n", wb_addr_i);
     end
 
 // Interrupt Enable Register or UART_DL2
