@@ -42,9 +42,7 @@ void crt0_init() {
   }
 }
 
-void init_uart() {
-  outb(UART_LCR, 0x03);
-  
+void init_uart() {  
   // Set the 7th (DLAB) bit of the Line Control Register to ‘1’.
   // The divisor latches can be accessed.
   outb(UART_LCR, 0x80);
@@ -55,6 +53,9 @@ void init_uart() {
 
   // Exit DLAB, and set 8-N-1 configration
   outb(UART_LCR, 0x03);
+
+  // Clear fifo
+  outb(UART_FCR, UART_FCR_CLEAR_RX | UART_FCR_CLEAR_TX);
 }
 
 void _trm_init() {
