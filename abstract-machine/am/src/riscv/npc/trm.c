@@ -19,7 +19,7 @@ Area heap = RANGE(&_heap_start, SRAM_END);
 static const char mainargs[MAINARGS_MAX_LEN] = MAINARGS_PLACEHOLDER; // defined in CFLAGS
 
 void putch(char ch) {
-  while ((*(volatile uint8_t *)UART_LSR & UART_LSR_THRE));
+  // while ((*(volatile uint8_t *)UART_LSR & UART_LSR_THRE) == 0);
   outb(UART_TX, ch);
 }
 
@@ -43,6 +43,8 @@ void crt0_init() {
 }
 
 void init_uart() {
+  outb(UART_LCR, 0x03);
+  
   // Set the 7th (DLAB) bit of the Line Control Register to ‘1’.
   // The divisor latches can be accessed.
   outb(UART_LCR, 0x80);
