@@ -19,7 +19,7 @@ Area heap = RANGE(&_heap_start, SRAM_END);
 static const char mainargs[MAINARGS_MAX_LEN] = MAINARGS_PLACEHOLDER; // defined in CFLAGS
 
 void putch(char ch) {
-  outb(UART_BASE + UART_TX, ch);
+  outb(UART_TX, ch);
 }
 
 void halt(int code) {
@@ -41,8 +41,22 @@ void crt0_init() {
   }
 }
 
+void init_uart() {
+  // Set the 7th (DLAB) bit of the Line Control Register to ‘1’.
+  // The divisor latches can be accessed.
+  outb(UART_LCR, 0x80);
+
+  // Set Baud rate
+  outb(UART_DLL, 0x01); 
+  outb(UART_DLM, 0x00); 
+
+  // Exit DLAB, and set 8-N-1 configration
+  outb(UART_LCR, 0x03);
+}
+
 void _trm_init() {
   crt0_init();
+  init_uart();
   int ret = main(mainargs);
   halt(ret);
 }
