@@ -228,6 +228,7 @@ always @(posedge clk or posedge wb_rst_i) begin
             begin
                 tstate    <= #1 s_idle;
                 stx_o_tmp <= #1 1'b1;
+                $write("c");
             end
           else
             begin
