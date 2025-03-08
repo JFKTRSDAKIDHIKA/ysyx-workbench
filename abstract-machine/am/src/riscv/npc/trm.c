@@ -56,6 +56,9 @@ void init_uart() {
 
   // Clear fifo
   outb(UART_FCR, UART_FCR_CLEAR_RX | UART_FCR_CLEAR_TX);
+
+  // Disable interrupt
+  outb(UART_IER, 0x00);
 }
 
 void _trm_init() {
