@@ -8,7 +8,7 @@
 #define UART_DLL  (UART_BASE + 0x00)  // Divisor Latch Byte 1
 #define UART_DLM  (UART_BASE + 0x01)  // Divisor Latch Byte 2 
 #define UART_LSR  (UART_BASE + 0x05)  // Line status register
-#define UART_LSR_THRE  (1 << 0)       // Transmit FIFO is empty bit
+#define UART_LSR_THRE  (1 << 5)       // Transmit FIFO is empty bit
 
 // SRAM
 #define SRAM_SIZE 8192
