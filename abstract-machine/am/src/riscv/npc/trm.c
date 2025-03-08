@@ -51,7 +51,7 @@ void init_uart() {
   outb(UART_DLM, 0x00); 
 
   // Exit DLAB, and set 8-N-1 configration
-  outb(UART_LCR, 0x03);
+  // outb(UART_LCR, 0x03);
 }
 
 void _trm_init() {
