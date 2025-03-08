@@ -97,6 +97,8 @@ void init_mem() {
   assert(pmem);
 #endif
   IFDEF(CONFIG_MEM_RANDOM, memset(pmem, rand(), CONFIG_MSIZE));
+  memset(sram, 0, CONFIG_SRAM_SIZE_KB * 1024);
+  memset(mrom, 0, CONFIG_MROM_SIZE_KB * 1024);
   Log("Memory layout: "
     "Physical Memory [" FMT_PADDR ", " FMT_PADDR "], "
     "SRAM [" FMT_PADDR ", " FMT_PADDR "], "
