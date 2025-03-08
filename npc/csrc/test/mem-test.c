@@ -29,7 +29,7 @@ void write_memory(uintptr_t start, uintptr_t end, uint8_t len) {
 int main() {
     void *start_addr = malloc(100);
 
-    write_memory((uintptr_t)start_addr, (uintptr_t)SRAM_END, 1);
+    write_memory((uintptr_t)start_addr+ 100, (uintptr_t)SRAM_END, 1);
 
     return 0;
 }
