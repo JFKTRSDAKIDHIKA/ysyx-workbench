@@ -714,7 +714,7 @@ always @(posedge clk or posedge wb_rst_i) begin
             enable <= #1 1'b1;
         else
             enable <= #1 1'b0;
-            $write("c");
+            $write("dl: %d, dlc: %d", dl, dlc);
 end
 
 // Delaying THRE status for one character cycle after a character is written to an empty fifo.
