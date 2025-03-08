@@ -48,7 +48,7 @@ void init_uart() {
 
   // Set Baud rate
   outb(UART_DLL, 0x11); 
-  outb(UART_DLM, 0x00); 
+  outb(UART_DLM, 0x11); 
 
   // Exit DLAB, and set 8-N-1 configration
   outb(UART_LCR, 0x03);
