@@ -55,7 +55,7 @@ void init_uart() {
   outb(UART_LCR, (char)0x03);
 
   // Clear fifo
-  outb(UART_FCR, UART_FCR_CLEAR_RX | UART_FCR_CLEAR_TX);
+  // outb(UART_FCR, UART_FCR_CLEAR_RX | UART_FCR_CLEAR_TX);
 
   // Disable interrupt
   outb(UART_IER, (char)0x00);
