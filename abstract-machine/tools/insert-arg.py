@@ -28,5 +28,5 @@ written_bytes = fp.write(mainargs_pad)
 if written_bytes != len(mainargs_pad):
     print(f"Error: Only {written_bytes} bytes were written, expected {len(mainargs_pad)}")
     exit(1)
-print(written_bytes)
+print(f"{written_bytes}")
 fp.close()
