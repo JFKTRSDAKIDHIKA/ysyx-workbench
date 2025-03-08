@@ -27,8 +27,7 @@ void write_memory(uintptr_t start, uintptr_t end, uint8_t len) {
 }
 
 int main() {
-    int heap_size = SRAM_END - _heap_start;
-    void *start_addr = malloc(heap_size);
+    void *start_addr = malloc(100);
 
     write_memory((uintptr_t)start_addr, (uintptr_t)SRAM_END, 1);
 
