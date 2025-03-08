@@ -3,7 +3,6 @@
 #include <fstream>
 #include "include/memory.h"
 #include "include/program_loader.h"
-#include "ELFIO/elfio/elfio.hpp"
 
 void load_program(const char *program_path) {
     std::ifstream program_file(program_path, std::ios::binary);
