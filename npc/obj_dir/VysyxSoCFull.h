@@ -13,7 +13,6 @@
 
 class VysyxSoCFull__Syms;
 class VysyxSoCFull___024root;
-class VerilatedVcdC;
 class VysyxSoCFull___024unit;
 
 
@@ -118,7 +117,6 @@ class alignas(VL_CACHE_LINE_BYTES) VysyxSoCFull VL_NOT_FINAL : public VerilatedM
     /// Re-init after cloning the model at the process level (e.g. fork in Linux)
     /// Re-allocate necessary resources. Called after cloning.
     void atClone() const;
-    std::unique_ptr<VerilatedTraceConfig> traceConfig() const override final;
 };
 
 #endif  // guard
