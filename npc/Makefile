@@ -10,14 +10,14 @@ CHISEL_DIR := ./npc-chisel
 OBJ_DIR = obj_dir
 EXEC = $(OBJ_DIR)/VysyxSoCFull
 STEP_MODE = run
-FLAGS += -Wno-lint -Wno-style --timescale "1ns/1ns" --no-timing  --trace --no-line-buffered +verilator+uart
+FLAGS += -Wno-lint -Wno-style --timescale "1ns/1ns" --no-timing  --trace --no-line-buffered +verilator+uart --l2-name
 
 # 默认目标
 all: $(EXEC)
 
 # 编译 Verilator 模型并生成可执行文件
 $(EXEC): $(TOP_MODULE) $(CSRC) $(VSRC)
-	$(VERILATOR)  --no-line-buffered $(FLAGS) --cc $(TOP_MODULE) --exe $(CSRC) $(VSRC) $(INCLUDE_DIRS) \
+	$(VERILATOR) $(FLAGS) --cc $(TOP_MODULE) --exe $(CSRC) $(VSRC) $(INCLUDE_DIRS) \
                     --build -j 0 --top-module ysyxSoCFull \
                     --Mdir $(OBJ_DIR)  \
                     -LDFLAGS "-lreadline -L/usr/local/lib -lcapstone"
