@@ -17,7 +17,7 @@ all: $(EXEC)
 
 # 编译 Verilator 模型并生成可执行文件
 $(EXEC): $(TOP_MODULE) $(CSRC) $(VSRC)
-	$(VERILATOR) $(FLAGS) --cc $(TOP_MODULE) --exe $(CSRC) $(VSRC) $(INCLUDE_DIRS) \
+	$(VERILATOR)  --no-line-buffered $(FLAGS) --cc $(TOP_MODULE) --exe $(CSRC) $(VSRC) $(INCLUDE_DIRS) \
                     --build -j 0 --top-module ysyxSoCFull \
                     --Mdir $(OBJ_DIR)  \
                     -LDFLAGS "-lreadline -L/usr/local/lib -lcapstone"
