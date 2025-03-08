@@ -175,7 +175,7 @@ class LSU extends Module with RISCVConstants{
           io.memory.w.data := write_mask_gen.io.dmem_wdata
           io.memory.w.strb := write_mask_gen.io.wmask
           io.memory.aw.len := 0.U
-          io.memory.aw.size := 2.U
+          io.memory.aw.size := write_mask_gen.io.awsize
           io.memory.aw.burst := AXI4Constants.BURST_INCR
           io.memory.aw.id := 0.U
           io.memory.w.last := 1.B
@@ -230,7 +230,7 @@ class LSU extends Module with RISCVConstants{
         io.memory.w.valid := false.B
         io.memory.b.ready := true.B
         io.memory.aw.len := 0.U
-        io.memory.aw.size := 2.U
+        io.memory.aw.size := write_mask_gen.io.awsize
         io.memory.aw.burst := AXI4Constants.BURST_INCR
         io.memory.aw.id := 0.U
         io.memory.w.last := 1.B

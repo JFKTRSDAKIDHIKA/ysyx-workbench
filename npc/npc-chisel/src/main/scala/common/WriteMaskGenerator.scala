@@ -12,6 +12,7 @@ class WriteMaskGenerator extends Module with RISCVConstants {
     val control = Input(UInt(3.W))    
     val wmask = Output(UInt(8.W))    
     val dmem_wdata = Output(UInt(32.W))  
+    val awsize = Output(UInt(3.W))  
   })
 
   // base mask
@@ -32,4 +33,14 @@ class WriteMaskGenerator extends Module with RISCVConstants {
   // Output assignments
   io.wmask := Mux(is_uart_addr, 1.U(8.W), base_mask << (shift_amount * 1.U))
   io.dmem_wdata := Mux(is_uart_addr, io.dmem_wdata_raw, io.dmem_wdata_raw << (shift_amount * 8.U))
+  io.awsize := MuxLookup(Cat(is_uart_addr, is_mem_addr), 2.U(3.W))(Seq(
+    2.U -> MuxLookup(io.control, 2.U(3.W))(Seq(
+          MEM_ACCESS_WORD -> 2.U(3.W), 
+          MEM_ACCESS_BYTE -> 0.U(3.W), 
+          MEM_ACCESS_BYTE_U -> 0.U(3.W), 
+          MEM_ACCESS_HALF -> 1.U(3.W), 
+          MEM_ACCESS_HALF_U -> 1.U(3.W) 
+        )),
+    1.U -> 2.U(3.W)
+  ))
 }
