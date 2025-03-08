@@ -44,11 +44,11 @@ void crt0_init() {
 void init_uart() {
   // Set the 7th (DLAB) bit of the Line Control Register to ‘1’.
   // The divisor latches can be accessed.
-  //outb(UART_LCR, 0x80);
+  outb(UART_LCR, 0x80);
 
   // Set Baud rate
-  //outb(UART_DLL, 0x00); 
-  //outb(UART_DLM, 0x00); 
+  outb(UART_DLM, 0x00); 
+  outb(UART_DLL, 0x00); 
 
   // Exit DLAB, and set 8-N-1 configration
   outb(UART_LCR, 0x03);
