@@ -48,22 +48,22 @@ void init_uart() {
   outb(UART_LCR, (char)0x83);
 
   // Set Baud rate
-  outb(UART_DLM, (char)0x01); 
-  outb(UART_DLL, (char)0x01); 
+  // outb(UART_DLM, (char)0x01); 
+  //outb(UART_DLL, (char)0x01); 
 
   // Exit DLAB, and set 8-N-1 configration
-  outb(UART_LCR, (char)0x03);
+  //outb(UART_LCR, (char)0x03);
 
   // Clear fifo
   // outb(UART_FCR, UART_FCR_CLEAR_RX | UART_FCR_CLEAR_TX);
 
   // Disable interrupt
-  outb(UART_IER, (char)0x00);
+  //outb(UART_IER, (char)0x00);
 }
 
 void _trm_init() {
   crt0_init();
-  //init_uart();
+  init_uart();
   int ret = main(mainargs);
   halt(ret);
 }
