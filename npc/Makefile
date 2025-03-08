@@ -19,7 +19,7 @@ all: $(EXEC)
 $(EXEC): $(TOP_MODULE) $(CSRC) $(VSRC)
 	$(VERILATOR) $(FLAGS) --cc $(TOP_MODULE) --exe $(CSRC) $(VSRC) $(INCLUDE_DIRS) \
                     --build -j 0 --top-module ysyxSoCFull \
-                    --Mdir $(OBJ_DIR) --trace \
+                    --Mdir $(OBJ_DIR)  \
                     -LDFLAGS "-lreadline -L/usr/local/lib -lcapstone"
 	+make -C $(OBJ_DIR) -f VysyxSoCFull.mk 
 
