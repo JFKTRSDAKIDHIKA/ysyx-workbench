@@ -9,7 +9,7 @@ class AlignmentNetwork extends Module {
     val dmem_addr = Input(UInt(32.W)) 
     val control = Input(UInt(3.W))    
     val data_out = Output(UInt(32.W))
-  })
+})
 
 /*
   AXI4-Lite does not support the 'ar.size' parameter, and the data width for each transfer is fixed at 32 bits. 

@@ -22,7 +22,7 @@ class Xbar extends Module with RISCVConstants {
 
   // Address range check functions
   private def isUartAddress(addr: UInt): Bool = {
-    addr >= UART_BASE_ADDR && addr < (UART_BASE_ADDR + UART_ADDR_LEN)
+    addr >= UART_BASE_ADDR && addr < UART_TOP_ADDR
   }
 
   private def isSramAddress(addr: UInt): Bool = {
