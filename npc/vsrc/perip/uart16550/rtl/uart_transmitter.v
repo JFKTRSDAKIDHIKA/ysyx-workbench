@@ -343,7 +343,6 @@ always @(posedge clk or posedge wb_rst_i) begin
     endcase
   end // end if enable
   else
-    $write("c");
     tf_pop <= #1 1'b0;  // tf_pop must be 1 cycle width
 end // transmitter logic
 
