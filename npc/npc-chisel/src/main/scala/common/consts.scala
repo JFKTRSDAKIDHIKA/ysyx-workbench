@@ -131,8 +131,12 @@ trait RISCVConstants
    val RESET_VECTOR = 0x20000000L.U(32.W) 
 
    // Device
-   val UART_BASE_ADDR = 0xA00003F8L.U(32.W)
-   val UART_ADDR_LEN  = 8.U
+   val UART_BASE_ADDR = 0x10000000L.U(32.W)
+   val UART_TOP_ADDR  = 0x10000fffL.U(32.W)
+
+   // SRAM
+   val SRAM_BASE   = 0x0f000000L.U(32.W) 
+   val SRAM_TOP    = 0x0fffffffL.U(32.W)
 
    // Memoey config
    val MEM_BASE   = 0x80000000L.U(32.W) 

@@ -3,7 +3,9 @@ package common
 import chisel3._
 import chisel3.util._
 
-class WriteMaskGenerator extends Module {
+import common.constants.RISCVConstants 
+
+class WriteMaskGenerator extends Module with RISCVConstants {
   val io = IO(new Bundle {
     val dmem_addr = Input(UInt(32.W)) 
     val dmem_wdata_raw = Input(UInt(32.W)) 
@@ -21,7 +23,13 @@ class WriteMaskGenerator extends Module {
 
   // 根据地址偏移量调整掩码
   val shift_amount = io.dmem_addr(1, 0)
-  io.wmask := base_mask << (shift_amount * 1.U)
 
-  io.dmem_wdata := io.dmem_wdata_raw << (shift_amount * 8.U)
+  // Check if the address is within the UART range
+  val is_uart_addr = (io.dmem_addr >= UART_BASE_ADDR) && (io.dmem_addr <= UART_TOP_ADDR)
+  // Check if the address is within the SRAM range
+  val is_mem_addr = (io.dmem_addr >= SRAM_BASE) && (io.dmem_addr <= SRAM_TOP)
+
+  // Output assignments
+  io.wmask := Mux(is_uart_addr, 1.U(8.W), base_mask << (shift_amount * 1.U))
+  io.dmem_wdata := Mux(is_uart_addr, io.dmem_wdata_raw, io.dmem_wdata_raw << (shift_amount * 8.U))
 }
