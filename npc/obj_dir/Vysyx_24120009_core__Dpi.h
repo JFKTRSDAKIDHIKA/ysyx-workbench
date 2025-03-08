@@ -16,13 +16,13 @@ extern "C" {
 
 
     // DPI IMPORTS
-    // DPI import at vsrc/cpu/ysyx_24120009_core.v:1295:34
+    // DPI import at vsrc/common/ysyx_24120009_RegisterFile.v:14:34
     extern void get_register_values(const svLogicVecVal* rf);
-    // DPI import at vsrc/cpu/ysyx_24120009_core.v:1352:31
+    // DPI import at vsrc/common/ysyx_24120009_SRAM.v:25:31
     extern int pmem_read(int raddr);
-    // DPI import at vsrc/cpu/ysyx_24120009_core.v:1353:32
+    // DPI import at vsrc/common/ysyx_24120009_SRAM.v:26:32
     extern void pmem_write(int waddr, int wdata, char wmask);
-    // DPI import at vsrc/cpu/ysyx_24120009_core.v:1265:30
+    // DPI import at vsrc/cpu/ysyx_24120009_IFU.v:99:32
     extern void simulation_exit();
 
 #ifdef __cplusplus

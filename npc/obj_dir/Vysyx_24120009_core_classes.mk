@@ -29,6 +29,7 @@ VM_CLASSES_FAST += \
 
 # Generated module classes, non-fast-path, compile with low/medium optimization
 VM_CLASSES_SLOW += \
+	Vysyx_24120009_core__ConstPool_0 \
 	Vysyx_24120009_core___024root__Slow \
 	Vysyx_24120009_core___024root__DepSet_h26fb9313__0__Slow \
 	Vysyx_24120009_core___024root__DepSet_h6838f9e1__0__Slow \

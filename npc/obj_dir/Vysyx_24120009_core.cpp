@@ -12,19 +12,41 @@
 Vysyx_24120009_core::Vysyx_24120009_core(VerilatedContext* _vcontextp__, const char* _vcname__)
     : VerilatedModel{*_vcontextp__}
     , vlSymsp{new Vysyx_24120009_core__Syms(contextp(), _vcname__, this)}
-    , clock{vlSymsp->TOP.clock}
-    , reset{vlSymsp->TOP.reset}
-    , io_ifu_state_debug{vlSymsp->TOP.io_ifu_state_debug}
-    , io_lsu_state_debug{vlSymsp->TOP.io_lsu_state_debug}
-    , io_lsu_is_ld_or_st_debug{vlSymsp->TOP.io_lsu_is_ld_or_st_debug}
-    , io_wbu_state_debug{vlSymsp->TOP.io_wbu_state_debug}
-    , io_wb_wen_debug{vlSymsp->TOP.io_wb_wen_debug}
-    , io_wb_sel_debug{vlSymsp->TOP.io_wb_sel_debug}
-    , io_Arbiter_state_debug{vlSymsp->TOP.io_Arbiter_state_debug}
-    , io_pc_debug{vlSymsp->TOP.io_pc_debug}
-    , io_inst_debug{vlSymsp->TOP.io_inst_debug}
-    , io_lsu_reg_inst_debug{vlSymsp->TOP.io_lsu_reg_inst_debug}
-    , io_wb_data_debug{vlSymsp->TOP.io_wb_data_debug}
+    , clk{vlSymsp->TOP.clk}
+    , rst{vlSymsp->TOP.rst}
+    , waddr_debug{vlSymsp->TOP.waddr_debug}
+    , mem_wen_debug{vlSymsp->TOP.mem_wen_debug}
+    , mem_en_debug{vlSymsp->TOP.mem_en_debug}
+    , rf_we_debug{vlSymsp->TOP.rf_we_debug}
+    , wbu_active_debug{vlSymsp->TOP.wbu_active_debug}
+    , wb_sel_debug{vlSymsp->TOP.wb_sel_debug}
+    , opcode_debug{vlSymsp->TOP.opcode_debug}
+    , pc_wen_debug{vlSymsp->TOP.pc_wen_debug}
+    , mem_active_debug{vlSymsp->TOP.mem_active_debug}
+    , alu_op_debug{vlSymsp->TOP.alu_op_debug}
+    , mem_access_done_debug{vlSymsp->TOP.mem_access_done_debug}
+    , wt_res_valid_debug{vlSymsp->TOP.wt_res_valid_debug}
+    , ifu_state_debug{vlSymsp->TOP.ifu_state_debug}
+    , rd_res_valid_debug{vlSymsp->TOP.rd_res_valid_debug}
+    , mem_ctl_state_debug{vlSymsp->TOP.mem_ctl_state_debug}
+    , axi4_mem_state_debug{vlSymsp->TOP.axi4_mem_state_debug}
+    , idu_state_debug{vlSymsp->TOP.idu_state_debug}
+    , inst_valid_debug{vlSymsp->TOP.inst_valid_debug}
+    , arbiter_state_debug{vlSymsp->TOP.arbiter_state_debug}
+    , axi4_lite_state_debug{vlSymsp->TOP.axi4_lite_state_debug}
+    , pc_debug{vlSymsp->TOP.pc_debug}
+    , inst_debug{vlSymsp->TOP.inst_debug}
+    , reg_write_data_debug{vlSymsp->TOP.reg_write_data_debug}
+    , x2_debug{vlSymsp->TOP.x2_debug}
+    , Op1_debug{vlSymsp->TOP.Op1_debug}
+    , Op2_debug{vlSymsp->TOP.Op2_debug}
+    , imem_addr_debug{vlSymsp->TOP.imem_addr_debug}
+    , pc_plus4_debug{vlSymsp->TOP.pc_plus4_debug}
+    , result_from_EXU_to_MEM_debug{vlSymsp->TOP.result_from_EXU_to_MEM_debug}
+    , result_from_MEM_to_WBU_debug{vlSymsp->TOP.result_from_MEM_to_WBU_debug}
+    , result_from_WB_debug{vlSymsp->TOP.result_from_WB_debug}
+    , inst_from_EXU_to_MEM_debug{vlSymsp->TOP.inst_from_EXU_to_MEM_debug}
+    , dmem_rdata_from_MEM_to_WBU_debug{vlSymsp->TOP.dmem_rdata_from_MEM_to_WBU_debug}
     , rootp{&(vlSymsp->TOP)}
 {
     // Register model with the context

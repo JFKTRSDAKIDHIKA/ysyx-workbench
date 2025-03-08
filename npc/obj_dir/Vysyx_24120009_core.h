@@ -26,19 +26,41 @@ class Vysyx_24120009_core VL_NOT_FINAL : public VerilatedModel {
     // PORTS
     // The application code writes and reads these signals to
     // propagate new values into/out from the Verilated model.
-    VL_IN8(&clock,0,0);
-    VL_IN8(&reset,0,0);
-    VL_OUT8(&io_ifu_state_debug,1,0);
-    VL_OUT8(&io_lsu_state_debug,1,0);
-    VL_OUT8(&io_lsu_is_ld_or_st_debug,0,0);
-    VL_OUT8(&io_wbu_state_debug,1,0);
-    VL_OUT8(&io_wb_wen_debug,0,0);
-    VL_OUT8(&io_wb_sel_debug,1,0);
-    VL_OUT8(&io_Arbiter_state_debug,1,0);
-    VL_OUT(&io_pc_debug,31,0);
-    VL_OUT(&io_inst_debug,31,0);
-    VL_OUT(&io_lsu_reg_inst_debug,31,0);
-    VL_OUT(&io_wb_data_debug,31,0);
+    VL_IN8(&clk,0,0);
+    VL_IN8(&rst,0,0);
+    VL_OUT8(&waddr_debug,4,0);
+    VL_OUT8(&mem_wen_debug,0,0);
+    VL_OUT8(&mem_en_debug,0,0);
+    VL_OUT8(&rf_we_debug,0,0);
+    VL_OUT8(&wbu_active_debug,0,0);
+    VL_OUT8(&wb_sel_debug,1,0);
+    VL_OUT8(&opcode_debug,6,0);
+    VL_OUT8(&pc_wen_debug,0,0);
+    VL_OUT8(&mem_active_debug,0,0);
+    VL_OUT8(&alu_op_debug,4,0);
+    VL_OUT8(&mem_access_done_debug,0,0);
+    VL_OUT8(&wt_res_valid_debug,0,0);
+    VL_OUT8(&ifu_state_debug,2,0);
+    VL_OUT8(&rd_res_valid_debug,0,0);
+    VL_OUT8(&mem_ctl_state_debug,1,0);
+    VL_OUT8(&axi4_mem_state_debug,1,0);
+    VL_OUT8(&idu_state_debug,1,0);
+    VL_OUT8(&inst_valid_debug,0,0);
+    VL_OUT8(&arbiter_state_debug,1,0);
+    VL_OUT8(&axi4_lite_state_debug,1,0);
+    VL_OUT(&pc_debug,31,0);
+    VL_OUT(&inst_debug,31,0);
+    VL_OUT(&reg_write_data_debug,31,0);
+    VL_OUT(&x2_debug,31,0);
+    VL_OUT(&Op1_debug,31,0);
+    VL_OUT(&Op2_debug,31,0);
+    VL_OUT(&imem_addr_debug,31,0);
+    VL_OUT(&pc_plus4_debug,31,0);
+    VL_OUT(&result_from_EXU_to_MEM_debug,31,0);
+    VL_OUT(&result_from_MEM_to_WBU_debug,31,0);
+    VL_OUT(&result_from_WB_debug,31,0);
+    VL_OUT(&inst_from_EXU_to_MEM_debug,31,0);
+    VL_OUT(&dmem_rdata_from_MEM_to_WBU_debug,31,0);
 
     // CELLS
     // Public to allow access to /* verilator public */ items.

@@ -11,7 +11,7 @@ SECTIONS {
   etext = .;
   _etext = .;
   .rodata : {
-    *(.rodata*)
+    *(.rodata*) 
   }
   .data : {
     *(.data)
