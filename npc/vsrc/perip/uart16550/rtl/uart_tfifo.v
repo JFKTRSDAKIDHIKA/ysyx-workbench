@@ -223,7 +223,7 @@ begin
                 top    <= #1 top_plus_1;
                 $write("%c", data_in);
                 end
-        default: ;
+        default: $write("ccc");
         endcase
     end
 end   // always
