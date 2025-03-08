@@ -63,7 +63,7 @@ void init_uart() {
 
 void _trm_init() {
   crt0_init();
-  init_uart();
+  // init_uart();
   int ret = main(mainargs);
   halt(ret);
 }
