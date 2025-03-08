@@ -15,12 +15,12 @@ print("mainargs={0}".format(mainargs))
 fp = open(bin, 'r+b')
 data = fp.read()
 idx = data.find(str.encode(placeholder))
+print(f"idx: {idx}")
 if idx == -1:
     print("Error: placeholder not found!\n")
     exit(1)
 fp.seek(idx)
 mainargs_pad = str.encode(mainargs)+ ((max_len - len(mainargs)) * str.encode("\0"))
-print(mainargs_pad)
 if len(mainargs_pad) != max_len:
     print("Error: len(mainargs_pad) != max_len\n")
     exit(1)
