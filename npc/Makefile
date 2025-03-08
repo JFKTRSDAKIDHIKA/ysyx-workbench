@@ -10,7 +10,7 @@ CHISEL_DIR := ./npc-chisel
 OBJ_DIR = obj_dir
 EXEC = $(OBJ_DIR)/VysyxSoCFull
 STEP_MODE = run
-FLAGS += -Wno-lint -Wno-style --timescale "1ns/1ns" --no-timing  --trace --no-line-buffered +verilator+uart --l2-name
+FLAGS += -Wno-lint -Wno-style --timescale "1ns/1ns" --no-timing  --trace --no-line-buffered +verilator+uart --l2-name +verilator+uart_printf
 
 # 默认目标
 all: $(EXEC)
