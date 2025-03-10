@@ -9,6 +9,7 @@ MEMORY {
 
 SECTIONS {
   . = ORIGIN(mrom);
+  _sram_start = ORIGIN(sram);
 
   .text : {
     *(entry)

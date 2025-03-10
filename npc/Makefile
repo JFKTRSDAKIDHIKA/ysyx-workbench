@@ -10,7 +10,8 @@ CHISEL_DIR := ./npc-chisel
 OBJ_DIR = obj_dir
 EXEC = $(OBJ_DIR)/VysyxSoCFull
 STEP_MODE = run
-FLAGS += -Wno-lint -Wno-style --timescale "1ns/1ns" --no-timing
+FLAGS += -Wno-lint -Wno-style --timescale "1ns/1ns" --no-timing  --autoflush 
+
 
 # 默认目标
 all: $(EXEC)
@@ -19,7 +20,7 @@ all: $(EXEC)
 $(EXEC): $(TOP_MODULE) $(CSRC) $(VSRC)
 	$(VERILATOR) $(FLAGS) --cc $(TOP_MODULE) --exe $(CSRC) $(VSRC) $(INCLUDE_DIRS) \
                     --build -j 0 --top-module ysyxSoCFull \
-                    --Mdir $(OBJ_DIR) --trace \
+                    --Mdir $(OBJ_DIR)  \
                     -LDFLAGS "-lreadline -L/usr/local/lib -lcapstone"
 	+make -C $(OBJ_DIR) -f VysyxSoCFull.mk 
 

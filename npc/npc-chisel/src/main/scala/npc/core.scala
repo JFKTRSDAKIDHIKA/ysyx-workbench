@@ -68,12 +68,14 @@ class Core extends Module with RISCVConstants {
 
     // Feedback signals
     // IDU -> IFU
-    ifu.io.jump_reg_target := idu.io.jump_reg_target
-    ifu.io.br_target       := idu.io.br_target
-    ifu.io.jmp_target      := idu.io.jmp_target
-    ifu.io.pc_sel          := idu.io.pc_sel
+    ifu.io.jump_reg_target  := idu.io.jump_reg_target
+    ifu.io.br_target        := idu.io.br_target
+    ifu.io.jmp_target       := idu.io.jmp_target
+    ifu.io.pc_sel           := idu.io.pc_sel
+    // LSU -> IFU
+    ifu.io.lsu_axi_resp_err := lsu.io.lsu_axi_resp_err
     // WBU -> IFU
-    ifu.io.pc_wen          := wbu.io.pc_wen
+    ifu.io.pc_wen           := wbu.io.pc_wen
 
     // Memory interface
     // Module instantiation
