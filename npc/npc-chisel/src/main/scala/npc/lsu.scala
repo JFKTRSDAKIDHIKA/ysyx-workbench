@@ -5,6 +5,7 @@ import chisel3._
 import chisel3.util._
 import common._
 import common.constants.RISCVConstants 
+import common.AXI4Constants
 
 class LoadStoreMessage extends Message {
   val dmem_rdata = Output(UInt(32.W)) 
@@ -18,6 +19,10 @@ class LSUIO extends Bundle {
   val in = Flipped(Decoupled(new ExecuteMessage))
   // Signals passed to WBU
   val out = Decoupled(new LoadStoreMessage)
+
+  // Feedback signals
+  // Signals pass backed to IFU
+  val lsu_axi_resp_err = Output(Bool())
 
   // Memory interface
   val memory = new AXI4IO
@@ -44,6 +49,7 @@ class LSU extends Module with RISCVConstants{
   io.in.ready := false.B
   io.out.valid := false.B
   io.arbiter.valid := false.B
+  io.lsu_axi_resp_err := false.B
 
   // Pipeline registers
   val lsu_reg_inst = RegEnable(io.in.bits.inst, io.in.fire)
@@ -199,6 +205,12 @@ class LSU extends Module with RISCVConstants{
         io.memory.ar.id := 0.U
         // Wait memory return data valid
         when(io.memory.r.valid) {
+          io.lsu_axi_resp_err := MuxLookup(io.memory.r.resp, false.B)(Seq(
+            AXI4Constants.RESP_OKAY -> false.B,
+            AXI4Constants.RESP_EXOKAY -> false.B,
+            AXI4Constants.RESP_SLVERR -> true.B,
+            AXI4Constants.RESP_DECERR -> true.B
+          ))
           state := sDone
         }
       // Write channel
@@ -216,6 +228,12 @@ class LSU extends Module with RISCVConstants{
         io.memory.w.last := 1.B
         // Wait memeory finish write
         when(io.memory.b.valid) {
+            io.lsu_axi_resp_err := MuxLookup(io.memory.b.resp, false.B)(Seq(
+              AXI4Constants.RESP_OKAY -> false.B,
+              AXI4Constants.RESP_EXOKAY -> false.B,
+              AXI4Constants.RESP_SLVERR -> true.B,
+              AXI4Constants.RESP_DECERR -> true.B
+          ))
           state := sDone
         }
        }

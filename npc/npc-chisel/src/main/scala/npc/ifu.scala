@@ -11,12 +11,13 @@ class IFU extends Module with RISCVConstants {
     // Forward signals
     val out = Decoupled(new Message)
 
-    // Feedback signals from IDU and WBU
+    // Feedback signals from IDU, LSU and WBU
     val pc_sel = Input(UInt(3.W))
     val jump_reg_target = Input(UInt(32.W))
     val br_target = Input(UInt(32.W))
     val jmp_target = Input(UInt(32.W))
     val pc_wen = Input(Bool())
+    val lsu_axi_resp_err = Input(Bool())
 
     // AXI4-Lite memory interface
     val memory = new AXI4IO
@@ -61,9 +62,10 @@ class IFU extends Module with RISCVConstants {
   // Output current pc
   io.out.bits.pc := pc
 
-  // Handle ebreak instruction
+  // Handle ebreak instruction and lsu memory access error
   val ebreakHandler = Module(new EBreakHandler)
   ebreakHandler.io.inst := io.out.bits.inst
+  ebreakHandler.io.lsu_axi_resp_err := io.lsu_axi_resp_err
 
   // Update pc value
   when(io.pc_wen) {
@@ -178,13 +180,15 @@ class IFU extends Module with RISCVConstants {
 class EBreakHandler extends BlackBox with HasBlackBoxInline {
   val io = IO(new Bundle {
     val inst = Input(UInt(32.W)) 
+    val lsu_axi_resp_err = Input(Bool())
   })
 
   setInline("EBreakHandler.v",
     """
       |
       |module EBreakHandler(
-      |    input wire [31:0] inst
+      |    input wire [31:0] inst,
+      |    input wire        lsu_axi_resp_err
       |);
       |
       |import "DPI-C" function void simulation_exit();
@@ -192,6 +196,13 @@ class EBreakHandler extends BlackBox with HasBlackBoxInline {
       |    always @(*) begin
       |        if (inst == 32'h00100073) begin
       |            $display("EBREAK: Simulation exiting...");
+      |            simulation_exit(); // 通知仿真环境结束
+      |        end
+      |    end
+      |
+      |    always @(*) begin
+      |        if (lsu_axi_resp_err == 1'b1) begin
+      |            $display("LSU memory access error...");
       |            simulation_exit(); // 通知仿真环境结束
       |        end
       |    end
