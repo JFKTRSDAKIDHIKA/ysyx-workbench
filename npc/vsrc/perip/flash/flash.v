@@ -40,8 +40,8 @@ module flash (
 
         default: begin
           state <= state;
-          $fwrite(32'h80000002, "Assertion failed: Unsupported command `%xh`, only support `03h` read command\n", cmd);
-          $fatal;
+          //$fwrite(32'h80000002, "Assertion failed: Unsupported command `%xh`, only support `03h` read command\n", cmd);
+          //$fatal;
         end
       endcase
     end
@@ -94,8 +94,8 @@ module flash_cmd(
     if (valid)
       if (cmd == 8'h03) flash_read(addr, data);
       else begin
-        //$fwrite(32'h80000002, "Assertion failed: Unsupport command `%xh`, only support `03h` read command\n", cmd);
-        //$fatal;
+        $fwrite(32'h80000002, "Assertion failed: Unsupport command `%xh`, only support `03h` read command\n", cmd);
+        $fatal;
       end
   end
 endmodule
