@@ -4832,15 +4832,11 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__6(VysyxSoCFull___0
         vlSelf->__Vdly__ysyxSoCFull__DOT__bitrev__DOT__state = 1U;
         vlSelf->__Vdly__ysyxSoCFull__DOT__bitrev__DOT__counter = 0U;
         vlSelf->__Vdly__ysyxSoCFull__DOT__bitrev__DOT__data_in = 0U;
-    } else if (VL_UNLIKELY((0U == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__state)))) {
-        VL_WRITEF("IDLE\n");
-        Verilated::runFlushCallbacks();
+    } else if ((0U == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__state))) {
         vlSelf->ysyxSoCFull__DOT___bitrev_miso = 1U;
         vlSelf->__Vdly__ysyxSoCFull__DOT__bitrev__DOT__state = 0U;
         vlSelf->__Vdly__ysyxSoCFull__DOT__bitrev__DOT__counter = 0U;
     } else if (VL_UNLIKELY((1U == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__state)))) {
-        VL_WRITEF("RX\n");
-        Verilated::runFlushCallbacks();
         vlSelf->__Vdly__ysyxSoCFull__DOT__bitrev__DOT__data_in 
             = ((0xfeU & ((IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__data_in) 
                          << 1U)) | (IData)(vlSelf->ysyxSoCFull__DOT___asic_spi_mosi));
@@ -4848,6 +4844,8 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__6(VysyxSoCFull___0
             = ((7U > (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter))
                 ? (0xffU & ((IData)(1U) + (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter)))
                 : 0U);
+        VL_WRITEF("RX\n");
+        Verilated::runFlushCallbacks();
         vlSelf->__Vdly__ysyxSoCFull__DOT__bitrev__DOT__state 
             = ((7U == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter))
                 ? 2U : (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__state));
