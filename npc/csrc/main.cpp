@@ -31,6 +31,8 @@ extern "C" void flash_read(int32_t addr, int32_t *data) {
  }
 
 extern "C" void mrom_read(int32_t addr, int32_t *data) { 
+  std::cout << "Reading from address: 0x" << std::hex << addr  
+  << ", Data read: 0x" << std::hex << *data << std::endl; 
   *data = Memory::pmem_read(addr); 
 }
 
