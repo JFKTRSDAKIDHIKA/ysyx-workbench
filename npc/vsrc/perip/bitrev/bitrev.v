@@ -14,15 +14,9 @@ module bitrev (
   reg [1:0]  state;
   wire inactive = ss;
 
-  always @(*) begin
-    // $write("sck: %d\n", sck);
-    // $write("mosi: %d\n", mosi);
-    $write("ss: %d\n", ss);
-  end
-
   always @(posedge sck) begin
     if (inactive) begin 
-      $write("inactive\n");
+      // $write("inactive\n");
       state <= RX;
       counter <= 8'd0;
       data_in <= 8'd0;
