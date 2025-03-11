@@ -14,7 +14,7 @@ module bitrev (
   reg [1:0]  state;
   wire reset = ss;
   
-  always @(posedge sck or posedge ss) begin
+  always @(posedge sck or posedge reset) begin
     if (reset) begin 
       state <= RX;
       counter <= 8'd0;
