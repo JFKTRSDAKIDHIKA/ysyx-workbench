@@ -12,16 +12,15 @@ module bitrev (
   reg [7:0]  counter;
   reg [7:0]  data_in;
   reg [1:0]  state;
-  wire reset = ss;
-  
-  always @(posedge sck or posedge reset) begin
-    if (reset) begin 
-      $write("RESET");
+  wire inactive = ss;
+
+  always @(posedge sck or inactive) begin
+    if (inactive) begin 
+      $write("inactive");
       state <= RX;
       counter <= 8'd0;
       data_in <= 8'd0;
-    end
-    else begin
+    end else begin
       case (state)
         IDLE:  begin
           miso <= 1'b1;  // slave空闲时, 将MISO信号设置为高电平

@@ -75,7 +75,7 @@ void VysyxSoCFull___024root___eval_triggers__act(VysyxSoCFull___024root* vlSelf)
     vlSelf->__VactTriggered.set(3U, ((IData)(vlSelf->ysyxSoCFull__DOT___asic_spi_sck) 
                                      & (~ (IData)(vlSelf->__Vtrigprevexpr___TOP__ysyxSoCFull__DOT___asic_spi_sck__0))));
     vlSelf->__VactTriggered.set(4U, (((IData)(vlSelf->ysyxSoCFull__DOT____Vcellinp__bitrev__ss) 
-                                      & (~ (IData)(vlSelf->__Vtrigprevexpr___TOP__ysyxSoCFull__DOT____Vcellinp__bitrev__ss__0))) 
+                                      != (IData)(vlSelf->__Vtrigprevexpr___TOP__ysyxSoCFull__DOT____Vcellinp__bitrev__ss__0)) 
                                      | ((IData)(vlSelf->ysyxSoCFull__DOT___asic_spi_sck) 
                                         & (~ (IData)(vlSelf->__Vtrigprevexpr___TOP__ysyxSoCFull__DOT___asic_spi_sck__0)))));
     vlSelf->__Vtrigprevexpr___TOP__clock__0 = vlSelf->clock;
@@ -86,6 +86,10 @@ void VysyxSoCFull___024root___eval_triggers__act(VysyxSoCFull___024root* vlSelf)
         = vlSelf->ysyxSoCFull__DOT___asic_spi_sck;
     vlSelf->__Vtrigprevexpr___TOP__ysyxSoCFull__DOT____Vcellinp__bitrev__ss__0 
         = vlSelf->ysyxSoCFull__DOT____Vcellinp__bitrev__ss;
+    if (VL_UNLIKELY((1U & (~ (IData)(vlSelf->__VactDidInit))))) {
+        vlSelf->__VactDidInit = 1U;
+        vlSelf->__VactTriggered.set(4U, 1U);
+    }
 #ifdef VL_DEBUG
     if (VL_UNLIKELY(vlSymsp->_vm_contextp__->debug())) {
         VysyxSoCFull___024root___dump_triggers__act(vlSelf);
@@ -4825,7 +4829,7 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__6(VysyxSoCFull___0
     VL_DEBUG_IF(VL_DBG_MSGF("+    VysyxSoCFull___024root___nba_sequent__TOP__6\n"); );
     // Body
     if (VL_UNLIKELY(vlSelf->ysyxSoCFull__DOT____Vcellinp__bitrev__ss)) {
-        VL_WRITEF("RESET");
+        VL_WRITEF("inactive");
         Verilated::runFlushCallbacks();
         vlSelf->__Vdly__ysyxSoCFull__DOT__bitrev__DOT__state = 1U;
         vlSelf->__Vdly__ysyxSoCFull__DOT__bitrev__DOT__counter = 0U;
@@ -4869,10 +4873,10 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__6(VysyxSoCFull___0
     } else {
         vlSelf->__Vdly__ysyxSoCFull__DOT__bitrev__DOT__state 
             = vlSelf->ysyxSoCFull__DOT__bitrev__DOT__state;
-        VL_WRITEF("Invalid state[%0t] %%Fatal: bitrev.v:49: Assertion failed in %NysyxSoCFull.bitrev\n",
+        VL_WRITEF("Invalid state[%0t] %%Fatal: bitrev.v:48: Assertion failed in %NysyxSoCFull.bitrev\n",
                   64,VL_TIME_UNITED_Q(1000),-9,vlSymsp->name());
         Verilated::runFlushCallbacks();
-        VL_STOP_MT("vsrc/perip/bitrev/bitrev.v", 49, "");
+        VL_STOP_MT("vsrc/perip/bitrev/bitrev.v", 48, "");
     }
     vlSelf->ysyxSoCFull__DOT__bitrev__DOT__state = vlSelf->__Vdly__ysyxSoCFull__DOT__bitrev__DOT__state;
     vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter 
