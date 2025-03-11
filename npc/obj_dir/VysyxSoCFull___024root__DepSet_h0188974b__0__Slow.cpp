@@ -152,7 +152,8 @@ VL_ATTR_COLD void VysyxSoCFull___024root___stl_sequent__TOP__0(VysyxSoCFull___02
     VlWide<4>/*127:0*/ __Vtemp_6;
     // Body
     VysyxSoCFull___024root____Vdpiimwrap_ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__regfile__DOT__get_register_values_TOP(vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__regfile__DOT__rf);
-    VL_WRITEF("sck: %1#\n",1,vlSelf->ysyxSoCFull__DOT___asic_spi_sck);
+    VL_WRITEF("sck: %1#\nmosi: %1#\n",1,vlSelf->ysyxSoCFull__DOT___asic_spi_sck,
+              1,(IData)(vlSelf->ysyxSoCFull__DOT___asic_spi_mosi));
     Verilated::runFlushCallbacks();
     vlSelf->io_wbu_state_debug = vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__wbu__DOT__state;
     vlSelf->io_pc_debug = vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__ifu__DOT__pc;

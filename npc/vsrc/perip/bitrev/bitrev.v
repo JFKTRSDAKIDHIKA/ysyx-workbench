@@ -16,6 +16,7 @@ module bitrev (
 
   always @(*) begin
     $write("sck: %d\n", sck);
+    $write("mosi: %d\n", mosi);
   end
 
   always @(posedge sck) begin
