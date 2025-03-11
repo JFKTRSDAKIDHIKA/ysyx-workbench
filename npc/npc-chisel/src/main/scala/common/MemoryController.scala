@@ -58,7 +58,7 @@ class MemoryController extends Module with RISCVConstants {
     )),
     // SRAM does not support narrow transfer
     SRAM_ADDR -> 2.U(3.W),
-    // FLASH supports narrow transfer ??
+    // FLASH supports narrow transfer ?? i don't know
     FLASH_ADDR -> 2.U(3.W)
   ))
 }
