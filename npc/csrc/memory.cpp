@@ -11,7 +11,7 @@ uint32_t Memory::pmem_read(uint32_t address) {
     if (address >= MROM_BASE_ADDR && address <= MROM_BASE_ADDR + MROM_SIZE) {
         offset = address - MROM_BASE_ADDR; // Calculate the offset
     } else if (address >= FLASH_BASE_ADDR && address <= FLASH_BASE_ADDR + FLASH_SIZE){
-        offset = address;
+        offset = address + MROM_SIZE;
     } else {
         std::cerr << "Memory read address invalid at address: " << address << std::endl;
         return 0;
