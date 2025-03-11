@@ -18,7 +18,7 @@ module bitrev (
     $write("ss: %d\n", ss);
   end
 
-  always @(posedge sck or inactive) begin
+  always @(posedge sck) begin
     if (inactive) begin 
       $write("inactive\n");
       state <= RX;
