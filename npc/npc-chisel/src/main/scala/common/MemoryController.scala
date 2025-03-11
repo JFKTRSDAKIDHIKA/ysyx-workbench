@@ -40,7 +40,7 @@ class MemoryController extends Module with RISCVConstants {
     // SRAM does not support narrow transfer
     SRAM_ADDR -> (base_mask << (shift_amount * 1.U)),
     // SPI supports narrow transfer ???
-    SPI_ADDR -> 1.U(8.W)
+    SPI_ADDR -> (base_mask << (shift_amount * 1.U))
   ))
 
   io.dmem_wdata := MuxLookup(rw_address_type, io.dmem_wdata_raw << (shift_amount * 8.U))(Seq(
@@ -49,7 +49,7 @@ class MemoryController extends Module with RISCVConstants {
     // SRAM does not support narrow transfer
     SRAM_ADDR -> (io.dmem_wdata_raw << (shift_amount * 8.U)),
     // SPI supports narrow transfer ???
-    SPI_ADDR -> io.dmem_wdata_raw
+    SPI_ADDR -> (io.dmem_wdata_raw << (shift_amount * 8.U))
   ))
 
   io.dmem_rw_size := MuxLookup(rw_address_type, 2.U(3.W))(Seq(
@@ -66,12 +66,6 @@ class MemoryController extends Module with RISCVConstants {
     // FLASH supports narrow transfer ?? i don't know
     FLASH_ADDR -> 2.U(3.W),
     // SPI supports narrow transfer ???
-    SPI_ADDR -> MuxLookup(io.control, 2.U(3.W))(Seq(
-          MEM_ACCESS_WORD -> 2.U(3.W), 
-          MEM_ACCESS_BYTE -> 0.U(3.W), 
-          MEM_ACCESS_BYTE_U -> 0.U(3.W), 
-          MEM_ACCESS_HALF -> 1.U(3.W), 
-          MEM_ACCESS_HALF_U -> 1.U(3.W) 
-    ))
+    SPI_ADDR -> 2.U(3.W)
   ))
 }
