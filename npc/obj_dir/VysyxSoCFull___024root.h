@@ -283,7 +283,7 @@ class alignas(VL_CACHE_LINE_BYTES) VysyxSoCFull___024root final : public Verilat
         CData/*2:0*/ ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__lsu__DOT__memory_ctl__DOT__rw_address_type;
     };
     struct {
-        CData/*7:0*/ ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__lsu__DOT__memory_ctl__DOT____VdfgTmp_h4f042ded__0;
+        CData/*2:0*/ ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__lsu__DOT__memory_ctl__DOT____VdfgTmp_h54ffe3d1__0;
         CData/*1:0*/ ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__wbu__DOT__state;
         CData/*4:0*/ ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__wbu__DOT__wbu_reg_wb_addr;
         CData/*7:0*/ ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__wbu__DOT__unnamedblk1__DOT___GEN_0;
@@ -602,9 +602,9 @@ class alignas(VL_CACHE_LINE_BYTES) VysyxSoCFull___024root final : public Verilat
         CData/*7:0*/ ysyxSoCFull__DOT__bitrev__DOT__counter;
         CData/*7:0*/ ysyxSoCFull__DOT__bitrev__DOT__data_in;
         CData/*1:0*/ ysyxSoCFull__DOT__bitrev__DOT__state;
-        CData/*3:0*/ __VdfgTmp_hbc06b86d__0;
-        CData/*7:0*/ __VdfgTmp_h1599dce9__0;
-        CData/*7:0*/ __VdfgTmp_h451bd853__0;
+        CData/*3:0*/ __VdfgTmp_hd91252b7__0;
+        CData/*7:0*/ __VdfgTmp_h5dff1e0b__0;
+        CData/*7:0*/ __VdfgTmp_h70c4e0da__0;
         CData/*2:0*/ __VdfgTmp_ha17ae98a__0;
         CData/*1:0*/ __Vtableidx1;
         CData/*7:0*/ __Vtableidx2;
