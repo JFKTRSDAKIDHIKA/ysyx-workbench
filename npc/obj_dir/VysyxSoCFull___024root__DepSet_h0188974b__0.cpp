@@ -2162,7 +2162,6 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__7(VysyxSoCFull___0
     VysyxSoCFull__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     VL_DEBUG_IF(VL_DBG_MSGF("+    VysyxSoCFull___024root___nba_sequent__TOP__7\n"); );
     // Body
-    vlSelf->ysyxSoCFull__DOT___asic_spi_mosi = vlSelf->__Vdly__ysyxSoCFull__DOT___asic_spi_mosi;
     vlSelf->ysyxSoCFull__DOT___asic_spi_ss = (0xffU 
                                               & (~ 
                                                  ((IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__lspi__DOT__mspi__DOT__u0_spi_top__DOT__ss) 
@@ -2175,8 +2174,11 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__7(VysyxSoCFull___0
                                                                    & (~ 
                                                                       ((IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__lspi__DOT__mspi__DOT__u0_spi_top__DOT__ctrl) 
                                                                        >> 0xdU)))))))));
+    vlSelf->ysyxSoCFull__DOT___asic_spi_mosi = vlSelf->__Vdly__ysyxSoCFull__DOT___asic_spi_mosi;
     vlSelf->ysyxSoCFull__DOT____Vcellinp__flash__ss 
         = (1U & (IData)(vlSelf->ysyxSoCFull__DOT___asic_spi_ss));
+    VL_WRITEF("mosi: %1#\n",1,vlSelf->ysyxSoCFull__DOT___asic_spi_mosi);
+    Verilated::runFlushCallbacks();
 }
 
 void VysyxSoCFull___024root____Vdpiimwrap_ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__ifu__DOT__ebreakHandler__DOT__simulation_exit_TOP();
