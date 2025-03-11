@@ -59,12 +59,6 @@ class MemoryController extends Module with RISCVConstants {
     // SRAM does not support narrow transfer
     SRAM_ADDR -> 2.U(3.W),
     // FLASH supports narrow transfer ??
-    FLASH_ADDR -> MuxLookup(io.control, 2.U(3.W))(Seq(
-          MEM_ACCESS_WORD -> 2.U(3.W), 
-          MEM_ACCESS_BYTE -> 0.U(3.W), 
-          MEM_ACCESS_BYTE_U -> 0.U(3.W), 
-          MEM_ACCESS_HALF -> 1.U(3.W), 
-          MEM_ACCESS_HALF_U -> 1.U(3.W) 
-    ))
+    FLASH_ADDR -> 2.U(3.W)
   ))
 }
