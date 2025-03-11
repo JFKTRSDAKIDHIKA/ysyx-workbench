@@ -26,36 +26,45 @@ class MemoryController extends Module with RISCVConstants {
   val shift_amount = io.dmem_addr(1, 0)
 
   // Determine address type based on io.dmem_addr
-  val rw_address_type = MuxCase(OTHER_W_ADDR, Array(
-    ((io.dmem_addr >= UART_BASE_ADDR) && (io.dmem_addr <= UART_TOP_ADDR)) -> UART_W_ADDR,
-    ((io.dmem_addr >= SRAM_BASE) && (io.dmem_addr <= SRAM_TOP)) -> SRAM_W_ADDR
+  val rw_address_type = MuxCase(OTHER_ADDR, Array(
+    ((io.dmem_addr >= UART_BASE_ADDR) && (io.dmem_addr <= UART_TOP_ADDR)) -> UART_ADDR,
+    ((io.dmem_addr >= SRAM_BASE) && (io.dmem_addr <= SRAM_TOP)) -> SRAM_ADDR,
+    ((io.dmem_addr >= FLASH_BASE) && (io.dmem_addr <= FLASH_TOP)) -> FLASH_ADDR
   ))
 
   // Output assignments
   io.wmask := MuxLookup(rw_address_type, 1.U(8.W))(Seq(
     // UART supports narrow transfer
-    UART_W_ADDR -> 1.U(8.W),
+    UART_ADDR -> 1.U(8.W),
     // SRAM does not support narrow transfer
-    SRAM_W_ADDR -> (base_mask << (shift_amount * 1.U))
+    SRAM_ADDR -> (base_mask << (shift_amount * 1.U))
   ))
 
   io.dmem_wdata := MuxLookup(rw_address_type, io.dmem_wdata_raw << (shift_amount * 8.U))(Seq(
     // UART supports narrow transfer
-    UART_W_ADDR -> io.dmem_wdata_raw,
+    UART_ADDR -> io.dmem_wdata_raw,
     // SRAM does not support narrow transfer
-    SRAM_W_ADDR -> (io.dmem_wdata_raw << (shift_amount * 8.U))
+    SRAM_ADDR -> (io.dmem_wdata_raw << (shift_amount * 8.U))
   ))
 
   io.dmem_rw_size := MuxLookup(rw_address_type, 2.U(3.W))(Seq(
     // UART supports narrow transfer
-    UART_W_ADDR -> MuxLookup(io.control, 2.U(3.W))(Seq(
+    UART_ADDR -> MuxLookup(io.control, 2.U(3.W))(Seq(
           MEM_ACCESS_WORD -> 2.U(3.W), 
           MEM_ACCESS_BYTE -> 0.U(3.W), 
           MEM_ACCESS_BYTE_U -> 0.U(3.W), 
           MEM_ACCESS_HALF -> 1.U(3.W), 
           MEM_ACCESS_HALF_U -> 1.U(3.W) 
-        )),
+    )),
     // SRAM does not support narrow transfer
-    SRAM_W_ADDR -> 2.U(3.W)
+    SRAM_ADDR -> 2.U(3.W),
+    // FLASH supports narrow transfer ??
+    FLASH_ADDR -> MuxLookup(io.control, 2.U(3.W))(Seq(
+          MEM_ACCESS_WORD -> 2.U(3.W), 
+          MEM_ACCESS_BYTE -> 0.U(3.W), 
+          MEM_ACCESS_BYTE_U -> 0.U(3.W), 
+          MEM_ACCESS_HALF -> 1.U(3.W), 
+          MEM_ACCESS_HALF_U -> 1.U(3.W) 
+    ))
   ))
 }

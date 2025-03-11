@@ -128,9 +128,10 @@ trait RISCVConstants
    val WB_X    = 0.asUInt(2.W)
 
    // Define write address types
-   val UART_W_ADDR = 0.U(2.W)
-   val SRAM_W_ADDR = 1.U(2.W)
-   val OTHER_W_ADDR = 2.U(2.W)
+   val UART_ADDR =  0.U(2.W)
+   val SRAM_ADDR =  1.U(2.W)
+   val FLASH_ADDR = 2.U(2.W)
+   val OTHER_ADDR = 3.U(2.W)
 
    // PC reset vector
    val RESET_VECTOR = 0x20000000L.U(32.W) 
@@ -142,6 +143,10 @@ trait RISCVConstants
    // SRAM
    val SRAM_BASE   = 0x0f000000L.U(32.W) 
    val SRAM_TOP    = 0x0fffffffL.U(32.W)
+
+   // FLASH
+   val FLASH_BASE   = 0x30000000L.U(32.W) 
+   val FLASH_TOP    = 0x3fffffffL.U(32.W)
 
    // Memoey config
    val MEM_BASE   = 0x80000000L.U(32.W) 
