@@ -4,6 +4,21 @@
 std::vector<uint8_t> Memory::mrom(MROM_SIZE, 0);  // Initialize mrom with size MROM_SIZE and set all elements to 0
 std::vector<uint8_t> Memory::flash(FLASH_SIZE, 0);  // Initialize mrom with size MROM_SIZE and set all elements to 0
 
+void Memory::write_memory_region(std::vector<uint8_t>& memory, uint32_t offset, uint32_t data, char write_mask) {
+    if (write_mask & 0x1) {
+        memory[offset] = data & 0xFF; // Write the least significant byte
+    }
+    if (write_mask & 0x2) {
+        memory[offset + 1] = (data >> 8) & 0xFF; // Write the second byte
+    }
+    if (write_mask & 0x4) {
+        memory[offset + 2] = (data >> 16) & 0xFF; // Write the third byte
+    }
+    if (write_mask & 0x8) {
+        memory[offset + 3] = (data >> 24) & 0xFF; // Write the most significant byte
+    }
+}
+
 // Function to read data from memory
 uint32_t Memory::pmem_read(uint32_t address) {
     uint32_t offset;
@@ -30,53 +45,16 @@ uint32_t Memory::pmem_read(uint32_t address) {
 }
 
 // Function to write data to flash(mrom does not support write action)
-void Memory::pmem_write(uint32_t address, uint32_t data, char wmask) {
+void Memory::pmem_write(uint32_t address, uint32_t data, char write_mask) {
     if (address >= MROM_BASE_ADDR && address <= MROM_BASE_ADDR + MROM_SIZE) {
         uint32_t offset = address - MROM_BASE_ADDR; // Calculate the offset
-
-        // Check if the address is within the memory range
-        if (offset + 3 >= MROM_SIZE) {
-            // std::cerr << "Memory write out of bounds at address: " << address << std::endl;
-            return; // Return if the address is out of bounds
-        }
-
-        // Write 4 bytes of data in little-endian format, based on wmask
-        if (wmask & 0x1) {
-            mrom[offset] = data & 0xFF; // Write the least significant byte
-        }
-        if (wmask & 0x2) {
-            mrom[offset + 1] = (data >> 8) & 0xFF; // Write the second byte
-        }
-        if (wmask & 0x4) {
-            mrom[offset + 2] = (data >> 16) & 0xFF; // Write the third byte
-        }
-        if (wmask & 0x8) {
-            mrom[offset + 3] = (data >> 24) & 0xFF; // Write the most significant byte
-        }
-    } else if (address >= FLASH_BASE_ADDR && address <= FLASH_BASE_ADDR + FLASH_SIZE){
+        write_memory_region(mrom, offset, data, write_mask);
+    } else if (address >= FLASH_BASE_ADDR && address <= FLASH_BASE_ADDR + FLASH_SIZE) {
         uint32_t offset = address - FLASH_BASE_ADDR; // Calculate the offset
-
-        // Check if the address is within the memory range
-        if (offset + 3 >= FLASH_SIZE) {
-            // std::cerr << "Memory write out of bounds at address: " << address << std::endl;
-            return; // Return if the address is out of bounds
-        }
-
-        // Write 4 bytes of data in little-endian format, based on wmask
-        if (wmask & 0x1) {
-            flash[offset] = data & 0xFF; // Write the least significant byte
-        }
-        if (wmask & 0x2) {
-            flash[offset + 1] = (data >> 8) & 0xFF; // Write the second byte
-        }
-        if (wmask & 0x4) {
-            flash[offset + 2] = (data >> 16) & 0xFF; // Write the third byte
-        }
-        if (wmask & 0x8) {
-            flash[offset + 3] = (data >> 24) & 0xFF; // Write the most significant byte
-        }
+        write_memory_region(flash, offset, data, write_mask);
     } else {
-
+        std::cerr << "Memory write address invalid at address: " << address << std::endl;
+        return; // Return if the address is out of bounds
     }
 }
 
