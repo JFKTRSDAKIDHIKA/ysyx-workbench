@@ -14,10 +14,6 @@ module bitrev (
   reg [1:0]  state;
   wire inactive = ss;
 
-  always @(*) begin
-    $write("ss: %d\n", ss);
-  end
-
   always @(posedge sck) begin
     if (inactive) begin 
       $write("inactive\n");
