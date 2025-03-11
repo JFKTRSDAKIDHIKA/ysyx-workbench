@@ -14,19 +14,19 @@ module bitrev (
   reg [1:0]  state;
   wire inactive = ss;
 
+/*
   always @(*) begin
     $write("ss: %d\n", ss);
     $write("sck: %d\n", sck);
   end
+*/
 
   always @(posedge sck or ss) begin
     if (inactive) begin 
-      // $write("inactive\n");
       state <= RX;
       counter <= 8'd0;
       data_in <= 8'd0;
     end else begin
-      $write("active\n");
       case (state)
         IDLE:  begin
           miso <= 1'b1;  // slave空闲时, 将MISO信号设置为高电平
