@@ -386,7 +386,7 @@ int main(int argc, char **argv) {
     load_program(argv[1]);
 
     // Initialize flash
-    Memory::init_flash();
+    // Memory::init_flash();
 
 #ifdef DIFFTEST
     // Initialize difftest
