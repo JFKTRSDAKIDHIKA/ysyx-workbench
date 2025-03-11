@@ -14,6 +14,7 @@ uint32_t Memory::pmem_read(uint32_t address) {
         offset = address - FLASH_BASE_ADDR; // Calculate the offset
     } else {
         std::cerr << "Memory read address invalid at address: " << address << std::endl;
+        return 0;
     }
 
     // Read 4 bytes of data in little-endian format
