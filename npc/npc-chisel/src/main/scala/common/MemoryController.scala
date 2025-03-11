@@ -29,7 +29,8 @@ class MemoryController extends Module with RISCVConstants {
   val rw_address_type = MuxCase(OTHER_ADDR, Array(
     ((io.dmem_addr >= UART_BASE_ADDR) && (io.dmem_addr <= UART_TOP_ADDR)) -> UART_ADDR,
     ((io.dmem_addr >= SRAM_BASE) && (io.dmem_addr <= SRAM_TOP)) -> SRAM_ADDR,
-    ((io.dmem_addr >= FLASH_BASE) && (io.dmem_addr <= FLASH_TOP)) -> FLASH_ADDR
+    ((io.dmem_addr >= FLASH_BASE) && (io.dmem_addr <= FLASH_TOP)) -> FLASH_ADDR,
+    ((io.dmem_addr >= SPI_BASE) && (io.dmem_addr <= SPI_TOP)) -> SPI_ADDR
   ))
 
   // Output assignments
@@ -37,14 +38,18 @@ class MemoryController extends Module with RISCVConstants {
     // UART supports narrow transfer
     UART_ADDR -> 1.U(8.W),
     // SRAM does not support narrow transfer
-    SRAM_ADDR -> (base_mask << (shift_amount * 1.U))
+    SRAM_ADDR -> (base_mask << (shift_amount * 1.U)),
+    // SPI supports narrow transfer ???
+    SPI_ADDR -> (base_mask << (shift_amount * 1.U))
   ))
 
   io.dmem_wdata := MuxLookup(rw_address_type, io.dmem_wdata_raw << (shift_amount * 8.U))(Seq(
     // UART supports narrow transfer
     UART_ADDR -> io.dmem_wdata_raw,
     // SRAM does not support narrow transfer
-    SRAM_ADDR -> (io.dmem_wdata_raw << (shift_amount * 8.U))
+    SRAM_ADDR -> (io.dmem_wdata_raw << (shift_amount * 8.U)),
+    // SPI supports narrow transfer ???
+    SPI_ADDR -> (io.dmem_wdata_raw << (shift_amount * 8.U))
   ))
 
   io.dmem_rw_size := MuxLookup(rw_address_type, 2.U(3.W))(Seq(
@@ -59,6 +64,8 @@ class MemoryController extends Module with RISCVConstants {
     // SRAM does not support narrow transfer
     SRAM_ADDR -> 2.U(3.W),
     // FLASH supports narrow transfer ?? i don't know
-    FLASH_ADDR -> 2.U(3.W)
+    FLASH_ADDR -> 2.U(3.W),
+    // SPI supports narrow transfer ???
+    SPI_ADDR -> 2.U(3.W),
   ))
 }
