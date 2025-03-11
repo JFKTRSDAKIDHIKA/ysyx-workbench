@@ -4829,7 +4829,7 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__6(VysyxSoCFull___0
     VL_DEBUG_IF(VL_DBG_MSGF("+    VysyxSoCFull___024root___nba_sequent__TOP__6\n"); );
     // Body
     if (VL_UNLIKELY(vlSelf->ysyxSoCFull__DOT____Vcellinp__bitrev__ss)) {
-        VL_WRITEF("inactive");
+        VL_WRITEF("inactive\n");
         Verilated::runFlushCallbacks();
         vlSelf->__Vdly__ysyxSoCFull__DOT__bitrev__DOT__state = 1U;
         vlSelf->__Vdly__ysyxSoCFull__DOT__bitrev__DOT__counter = 0U;
