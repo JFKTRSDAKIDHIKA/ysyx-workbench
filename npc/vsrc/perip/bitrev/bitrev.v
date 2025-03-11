@@ -15,8 +15,9 @@ module bitrev (
   wire inactive = ss;
 
   always @(*) begin
-    $write("sck: %d\n", sck);
-    $write("mosi: %d\n", mosi);
+    // $write("sck: %d\n", sck);
+    // $write("mosi: %d\n", mosi);
+    $write("ss: %d\n", ss);
   end
 
   always @(posedge sck) begin
