@@ -58,7 +58,7 @@ void Memory::pmem_write(uint32_t address, uint32_t data, char wmask) {
 void Memory::init_flash(){
     for (int i = 0; i <= FLASH_SIZE - 1; i++){
         uint32_t addr = i + FLASH_BASE_ADDR;
-        //pmem_write(addr, i, (char)0x1);
+        pmem_write(addr, i, (char)0x1);
     }
 }
 
