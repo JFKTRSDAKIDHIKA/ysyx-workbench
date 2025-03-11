@@ -32,7 +32,7 @@ module bitrev (
           miso <= 1'b1;  // slave空闲时, 将MISO信号设置为高电平
           state <= IDLE;
           counter <= 8'd0;
-          //$write("IDLE");
+          $write("IDLE\n");
         end
         RX: begin
           $write("RX\n");
