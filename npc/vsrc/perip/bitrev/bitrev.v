@@ -16,6 +16,7 @@ module bitrev (
   
   always @(posedge sck or posedge reset) begin
     if (reset) begin 
+      $write("RESET");
       state <= RX;
       counter <= 8'd0;
       data_in <= 8'd0;
