@@ -4,8 +4,12 @@
 #include <cstdint>
 #include <vector>
 
-#define  BASE_ADDR  0x20000000                     // Base address of the memory
-#define  MEMORY_SIZE  4096                         // 64KB memory
+#define  MROM_BASE_ADDR   0x20000000          // Base address of MROM
+#define  MROM_SIZE  4096                      // 64KB MROM
+#define  FLASH_BASE_ADDR  0x30000000          // Base address of FLASH
+#define  FLASH_SIZE  0xfffffff                // 16MB FLASH
+#define  MEMORY_SIZE (FLASH_SIZE + MROM_SIZE) // Memory size need to simulate
+
 
 class Memory {
 public:

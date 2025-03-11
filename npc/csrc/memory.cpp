@@ -1,16 +1,18 @@
 #include "include/memory.h"
 #include <iostream>
 
-std::vector<uint8_t> Memory::memory(MEMORY_SIZE, 0);  // Initialize memory with size MEMORY_SIZE and set all elements to 0
+std::vector<uint8_t> Memory::memory(MEMORY_SIZE, 0);  // Initialize memory with size MROM_SIZE and set all elements to 0
 
 // Function to read data from memory
 uint32_t Memory::pmem_read(uint32_t address) {
-    uint32_t offset = address - BASE_ADDR; // Calculate the offset
+    uint32_t offset;
 
-    // Check if the address is within the memory range
-    if (offset + 3 >= MEMORY_SIZE) {
-        // std::cerr << "Memory read out of bounds at address: " << address << std::endl;
-        return 0; // Return 0 if the address is out of bounds
+    if (address >= MROM_BASE_ADDR && address <= MROM_BASE_ADDR + MROM_SIZE) {
+        offset = address - MROM_BASE_ADDR; // Calculate the offset
+    } else if (address >= FLASH_BASE_ADDR && address <= FLASH_BASE_ADDR + FLASH_SIZE){
+        offset = address - FLASH_BASE_ADDR; // Calculate the offset
+    } else {
+        std::cerr << "Memory read address invalid at address: " << address << std::endl;
     }
 
     // Read 4 bytes of data in little-endian format
@@ -20,10 +22,10 @@ uint32_t Memory::pmem_read(uint32_t address) {
 
 // Function to write data to memory
 void Memory::pmem_write(uint32_t address, uint32_t data, char wmask) {
-    uint32_t offset = address - BASE_ADDR; // Calculate the offset
+    uint32_t offset = address - MROM_BASE_ADDR; // Calculate the offset
 
     // Check if the address is within the memory range
-    if (offset + 3 >= MEMORY_SIZE) {
+    if (offset + 3 >= MROM_SIZE) {
         // std::cerr << "Memory write out of bounds at address: " << address << std::endl;
         return; // Return if the address is out of bounds
     }
