@@ -16,6 +16,7 @@ public:
     static std::vector<uint8_t> memory;  // Declare memory as a static member
     static void pmem_write(uint32_t address, uint32_t data, char wmask);
     static uint32_t pmem_read(uint32_t address);
+    static void init_flash();
 };
 
 #endif // MEMORY_H

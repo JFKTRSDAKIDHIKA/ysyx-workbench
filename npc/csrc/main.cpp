@@ -383,6 +383,9 @@ int main(int argc, char **argv) {
     // Load program
     load_program(argv[1]);
 
+    // Initialize flash
+    Memory::init_flash();
+
 #ifdef DIFFTEST
     // Initialize difftest
     init_difftest("/home/jiashuao/Desktop/ysyx-workbench/nemu/build/riscv32-nemu-interpreter-so", 0);

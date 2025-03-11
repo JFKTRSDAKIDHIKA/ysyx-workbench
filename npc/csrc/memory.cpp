@@ -7,6 +7,7 @@ std::vector<uint8_t> Memory::memory(MEMORY_SIZE, 0);  // Initialize memory with 
 uint32_t Memory::pmem_read(uint32_t address) {
     uint32_t offset;
 
+    // Support both read from mrom and flash.
     if (address >= MROM_BASE_ADDR && address <= MROM_BASE_ADDR + MROM_SIZE) {
         offset = address - MROM_BASE_ADDR; // Calculate the offset
     } else if (address >= FLASH_BASE_ADDR && address <= FLASH_BASE_ADDR + FLASH_SIZE){
@@ -45,4 +46,11 @@ void Memory::pmem_write(uint32_t address, uint32_t data, char wmask) {
     }
 }
 
+// This function simulates the process of programming data into a flash chip.
+void Memory::init_flash(){
+    for (int i = 0; i <= FLASH_SIZE - 1; i++){
+        uint32_t addr = i + FLASH_BASE_ADDR;
+        pmem_write(addr, i, (char)0x1);
+    }
+}
 
