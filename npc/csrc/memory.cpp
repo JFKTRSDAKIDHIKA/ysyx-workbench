@@ -27,32 +27,30 @@ uint32_t Memory::pmem_read(uint32_t address) {
         std::cerr << "Memory read address invalid at address: " << address << std::endl;
         return 0;
     }
-
-
 }
 
-// Function to write data to memory
+// Function to write data to flash(mrom does not support write action)
 void Memory::pmem_write(uint32_t address, uint32_t data, char wmask) {
-    uint32_t offset = address - MROM_BASE_ADDR; // Calculate the offset
+    uint32_t offset = address - FLASH_BASE_ADDR; // Calculate the offset
 
     // Check if the address is within the memory range
-    if (offset + 3 >= MROM_SIZE) {
+    if (offset + 3 >= FLASH_SIZE) {
         // std::cerr << "Memory write out of bounds at address: " << address << std::endl;
         return; // Return if the address is out of bounds
     }
 
     // Write 4 bytes of data in little-endian format, based on wmask
     if (wmask & 0x1) {
-        mrom[offset] = data & 0xFF; // Write the least significant byte
+        flash[offset] = data & 0xFF; // Write the least significant byte
     }
     if (wmask & 0x2) {
-        mrom[offset + 1] = (data >> 8) & 0xFF; // Write the second byte
+        flash[offset + 1] = (data >> 8) & 0xFF; // Write the second byte
     }
     if (wmask & 0x4) {
-        mrom[offset + 2] = (data >> 16) & 0xFF; // Write the third byte
+        flash[offset + 2] = (data >> 16) & 0xFF; // Write the third byte
     }
     if (wmask & 0x8) {
-        mrom[offset + 3] = (data >> 24) & 0xFF; // Write the most significant byte
+        flash[offset + 3] = (data >> 24) & 0xFF; // Write the most significant byte
     }
 }
 
