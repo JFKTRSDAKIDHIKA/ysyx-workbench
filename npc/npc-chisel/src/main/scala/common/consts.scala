@@ -149,7 +149,6 @@ trait RISCVConstants
    val FLASH_BASE   = 0x30000000L.U(32.W) 
    val FLASH_TOP    = 0x3fffffffL.U(32.W)
 
-   
    // SPI master
    val SPI_BASE   = 0x10001000L.U(32.W) 
    val SPI_TOP    = 0x10001fffL.U(32.W)
