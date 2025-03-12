@@ -16,7 +16,7 @@ extern "C" {
 
 
     // DPI IMPORTS
-    // DPI import at vsrc/perip/flash/flash.v:92:30
+    // DPI import at vsrc/perip/flash/flash.v:93:30
     extern void flash_read(int addr, int* data);
     // DPI import at vsrc/generated/Core.sv:1401:34
     extern void get_register_values(const svLogicVecVal* rf);
