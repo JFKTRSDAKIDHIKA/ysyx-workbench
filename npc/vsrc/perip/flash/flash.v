@@ -11,6 +11,11 @@ module flash (
 );
   wire reset = ss;
 
+  always @(*) begin
+    $write("ss: %b\n", ss);
+    $write("sck: %b\n", sck);
+  end
+
   typedef enum [2:0] { cmd_t, addr_t, data_t, err_t } state_t;
   reg [2:0]  state;
   reg [7:0]  counter;
