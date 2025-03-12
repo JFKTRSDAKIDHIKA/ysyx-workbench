@@ -10,13 +10,13 @@ module flash (
   output miso
 );
   wire reset = ss;
-
+/*
   always @(*) begin
     $write("ss: %b\n", ss);
     $write("sck: %b\n", sck);
     $write("cmd: %b\n", cmd);
   end
-
+*/
   typedef enum [2:0] { cmd_t, addr_t, data_t, err_t } state_t;
   reg [2:0]  state;
   reg [7:0]  counter;
@@ -67,7 +67,10 @@ module flash (
 
   always@(posedge sck or posedge reset) begin
     if (reset)               cmd <= 8'd0;
-    else if (state == cmd_t) cmd <= { cmd[6:0], mosi };
+    else if (state == cmd_t) begin
+      cmd <= { cmd[6:0], mosi };
+      $write("cmd: %b\n", cmd);
+    end
   end
 
   always@(posedge sck or posedge reset) begin

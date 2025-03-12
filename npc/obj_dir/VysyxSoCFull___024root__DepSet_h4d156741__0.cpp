@@ -100,12 +100,12 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__0(VysyxSoCFull___0
     // Body
     vlSelf->__Vdly__ysyxSoCFull__DOT__flash__DOT__counter 
         = vlSelf->ysyxSoCFull__DOT__flash__DOT__counter;
+    vlSelf->__Vdly__ysyxSoCFull__DOT__flash__DOT__cmd 
+        = vlSelf->ysyxSoCFull__DOT__flash__DOT__cmd;
     vlSelf->__Vdly__ysyxSoCFull__DOT__flash__DOT__state 
         = vlSelf->ysyxSoCFull__DOT__flash__DOT__state;
     vlSelf->__Vdly__ysyxSoCFull__DOT__flash__DOT__data 
         = vlSelf->ysyxSoCFull__DOT__flash__DOT__data;
-    vlSelf->__Vdly__ysyxSoCFull__DOT__flash__DOT__cmd 
-        = vlSelf->ysyxSoCFull__DOT__flash__DOT__cmd;
     vlSelf->__Vdly__ysyxSoCFull__DOT__flash__DOT__addr 
         = vlSelf->ysyxSoCFull__DOT__flash__DOT__addr;
     vlSelf->__Vdly__ysyxSoCFull__DOT__flash__DOT__counter 
@@ -121,6 +121,15 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__0(VysyxSoCFull___0
                                                 : 0U)
                                             : ((IData)(1U) 
                                                + (IData)(vlSelf->ysyxSoCFull__DOT__flash__DOT__counter))))));
+    if (vlSelf->ysyxSoCFull__DOT____Vcellinp__flash__ss) {
+        vlSelf->__Vdly__ysyxSoCFull__DOT__flash__DOT__cmd = 0U;
+    } else if (VL_UNLIKELY((0U == (IData)(vlSelf->ysyxSoCFull__DOT__flash__DOT__state)))) {
+        vlSelf->__Vdly__ysyxSoCFull__DOT__flash__DOT__cmd 
+            = ((0xfeU & ((IData)(vlSelf->ysyxSoCFull__DOT__flash__DOT__cmd) 
+                         << 1U)) | (IData)(vlSelf->ysyxSoCFull__DOT___asic_spi_mosi));
+        VL_WRITEF("cmd: %b\n",8,vlSelf->ysyxSoCFull__DOT__flash__DOT__cmd);
+        Verilated::runFlushCallbacks();
+    }
     if (vlSelf->ysyxSoCFull__DOT____Vcellinp__flash__ss) {
         vlSelf->__Vdly__ysyxSoCFull__DOT__flash__DOT__state = 0U;
     } else if ((0U == (IData)(vlSelf->ysyxSoCFull__DOT__flash__DOT__state))) {
@@ -148,7 +157,6 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__0(VysyxSoCFull___0
     }
     if (vlSelf->ysyxSoCFull__DOT____Vcellinp__flash__ss) {
         vlSelf->__Vdly__ysyxSoCFull__DOT__flash__DOT__data = 0U;
-        vlSelf->__Vdly__ysyxSoCFull__DOT__flash__DOT__cmd = 0U;
         vlSelf->__Vdly__ysyxSoCFull__DOT__flash__DOT__addr = 0U;
     } else {
         if ((2U == (IData)(vlSelf->ysyxSoCFull__DOT__flash__DOT__state))) {
@@ -157,11 +165,6 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__0(VysyxSoCFull___0
                      ? vlSelf->ysyxSoCFull__DOT__flash__DOT__data_bswap
                      : vlSelf->ysyxSoCFull__DOT__flash__DOT__data) 
                    << 1U);
-        }
-        if ((0U == (IData)(vlSelf->ysyxSoCFull__DOT__flash__DOT__state))) {
-            vlSelf->__Vdly__ysyxSoCFull__DOT__flash__DOT__cmd 
-                = ((0xfeU & ((IData)(vlSelf->ysyxSoCFull__DOT__flash__DOT__cmd) 
-                             << 1U)) | (IData)(vlSelf->ysyxSoCFull__DOT___asic_spi_mosi));
         }
         if (((1U == (IData)(vlSelf->ysyxSoCFull__DOT__flash__DOT__state)) 
              & (0x17U > (IData)(vlSelf->ysyxSoCFull__DOT__flash__DOT__counter)))) {
@@ -4959,11 +4962,11 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__4(VysyxSoCFull___0
             VL_FWRITEF(0x80000002U,"Assertion failed: Unsupport command `%xh`, only support `03h` read command\n",
                        8,vlSelf->ysyxSoCFull__DOT__flash__DOT__cmd);
             if (0x80000002U) { VL_FFLUSH_I(0x80000002U); }
-            VL_WRITEF("[%0t] %%Fatal: flash.v:105: Assertion failed in %NysyxSoCFull.flash.flash_cmd_i\n",
+            VL_WRITEF("[%0t] %%Fatal: flash.v:108: Assertion failed in %NysyxSoCFull.flash.flash_cmd_i\n",
                       64,VL_TIME_UNITED_Q(1000),-9,
                       vlSymsp->name());
             Verilated::runFlushCallbacks();
-            VL_STOP_MT("vsrc/perip/flash/flash.v", 105, "");
+            VL_STOP_MT("vsrc/perip/flash/flash.v", 108, "");
         }
     }
     vlSelf->ysyxSoCFull__DOT__flash__DOT__data_bswap 
