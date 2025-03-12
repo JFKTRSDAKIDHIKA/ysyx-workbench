@@ -20,7 +20,7 @@ module bitrev (
   end
 */
 
-  always @(posedge sck) begin
+  always @(negedge sck) begin
     if (inactive) begin 
       state <= RX;
       counter <= 8'd0;
@@ -37,7 +37,6 @@ module bitrev (
           data_in <= { data_in[6:0], mosi };
           counter <= (counter < 8'd7 ) ? counter + 8'd1 : 8'd0;
           state <= (counter == 8'd7 ) ? TX : state;
-          miso <= data_in[7];
         end
         TX: begin
           $write("data: %b\n", data_in);
