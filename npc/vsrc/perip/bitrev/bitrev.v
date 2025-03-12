@@ -6,9 +6,9 @@ module bitrev (
 );
 
   // Internal signal declaration
-  localparam DONE = 2'b00,
-             RX   = 2'b01,
-             TX   = 2'b10;
+  localparam RX = 2'b00,
+             TX   = 2'b01,
+             DONE   = 2'b10;
   reg [7:0]  counter;
   reg [7:0]  data_in;
   reg [1:0]  state;

@@ -4825,11 +4825,11 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__5(VysyxSoCFull___0
                                                   | (vlSelf->ysyxSoCFull__DOT__flash__DOT__rdata 
                                                      >> 0x18U))));
     if ((0x80U & (IData)(vlSelf->ysyxSoCFull__DOT___asic_spi_ss))) {
-        vlSelf->__Vdly__ysyxSoCFull__DOT__bitrev__DOT__state = 1U;
+        vlSelf->__Vdly__ysyxSoCFull__DOT__bitrev__DOT__state = 0U;
         vlSelf->__Vdly__ysyxSoCFull__DOT__bitrev__DOT__counter = 0U;
         vlSelf->__Vdly__ysyxSoCFull__DOT__bitrev__DOT__data_in = 0U;
         vlSelf->ysyxSoCFull__DOT___bitrev_miso = 1U;
-    } else if (VL_UNLIKELY((1U == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__state)))) {
+    } else if (VL_UNLIKELY((0U == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__state)))) {
         vlSelf->__Vdly__ysyxSoCFull__DOT__bitrev__DOT__data_in 
             = ((0xfeU & ((IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__data_in) 
                          << 1U)) | (IData)(vlSelf->ysyxSoCFull__DOT___asic_spi_mosi));
@@ -4841,9 +4841,9 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__5(VysyxSoCFull___0
         Verilated::runFlushCallbacks();
         vlSelf->__Vdly__ysyxSoCFull__DOT__bitrev__DOT__state 
             = ((7U == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter))
-                ? 2U : (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__state));
+                ? 1U : (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__state));
         vlSelf->ysyxSoCFull__DOT___bitrev_miso = 1U;
-    } else if (VL_UNLIKELY((2U == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__state)))) {
+    } else if (VL_UNLIKELY((1U == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__state)))) {
         VL_WRITEF("TX\n");
         Verilated::runFlushCallbacks();
         vlSelf->__Vdly__ysyxSoCFull__DOT__bitrev__DOT__counter 
@@ -4852,14 +4852,14 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__5(VysyxSoCFull___0
                 : 0U);
         vlSelf->__Vdly__ysyxSoCFull__DOT__bitrev__DOT__state 
             = ((7U == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter))
-                ? 0U : (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__state));
+                ? 2U : (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__state));
         vlSelf->ysyxSoCFull__DOT___bitrev_miso = (1U 
                                                   & ((IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__data_in) 
                                                      >> 7U));
         vlSelf->__Vdly__ysyxSoCFull__DOT__bitrev__DOT__data_in 
             = (0xfeU & ((IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__data_in) 
                         << 1U));
-    } else if (VL_LIKELY((0U == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__state)))) {
+    } else if (VL_LIKELY((2U == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__state)))) {
         vlSelf->__Vdly__ysyxSoCFull__DOT__bitrev__DOT__state 
             = vlSelf->ysyxSoCFull__DOT__bitrev__DOT__state;
         VL_WRITEF("done");
