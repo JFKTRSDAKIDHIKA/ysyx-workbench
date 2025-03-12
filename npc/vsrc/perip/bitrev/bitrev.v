@@ -15,12 +15,6 @@ module bitrev (
   wire inactive = ss;
 
 
-  always @(*) begin
-    $write("ss: %d\n", ss);
-    $write("sck: %d\n", sck);
-  end
-
-
   always @(posedge sck) begin
     if (inactive) begin 
       state <= RX;
@@ -28,6 +22,8 @@ module bitrev (
       data_in <= 8'd0;
       miso <= 1'b1;
     end else begin
+      $write("ss: %d\n", ss);
+      $write("sck: %d\n", sck);
       case (state)
         RX: begin
           $write("RX\n");
