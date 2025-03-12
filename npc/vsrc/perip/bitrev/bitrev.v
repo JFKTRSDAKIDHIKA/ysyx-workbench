@@ -45,7 +45,7 @@ module bitrev (
           miso <= data_in[7];
           data_in <= {data_in[6:0], data_in[7]};
           $write("mosi: %d\n", mosi);
-          //$write("miso: %d\n", miso);
+          $write("miso: %d\n", miso);
         end 
         DONE: begin
           state <= state;
