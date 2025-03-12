@@ -129,7 +129,9 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__1(VysyxSoCFull___0
         VL_WRITEF("mosi: %1#\nmiso: %b\n",1,vlSelf->ysyxSoCFull__DOT___asic_spi_mosi,
                   1,(IData)(vlSelf->ysyxSoCFull__DOT___bitrev_miso));
         Verilated::runFlushCallbacks();
-    } else if ((1U == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__state))) {
+    } else if (VL_UNLIKELY((1U == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__state)))) {
+        VL_WRITEF("data: %b\n",8,vlSelf->ysyxSoCFull__DOT__bitrev__DOT__data_in);
+        Verilated::runFlushCallbacks();
         __Vdly__ysyxSoCFull__DOT__bitrev__DOT__counter 
             = ((7U > (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter))
                 ? (0xffU & ((IData)(1U) + (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter)))
