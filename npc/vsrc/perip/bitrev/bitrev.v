@@ -20,7 +20,7 @@ module bitrev (
   end
 */
 
-  always @(posedge sck) begin
+  always @(posedge sck or posedge inactive) begin
     if (inactive) begin 
       state <= RX;
       counter <= 8'd0;
