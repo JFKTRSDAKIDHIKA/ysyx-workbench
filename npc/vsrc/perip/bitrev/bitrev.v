@@ -38,6 +38,7 @@ module bitrev (
           state <= (counter == 8'd7 ) ? DONE : state;
           miso <= data_in[7];
           data_in <= {data_in[6:0], data_in[7]};
+          $write("miso: %d\n", miso);
         end 
         DONE: begin
           state <= state;
