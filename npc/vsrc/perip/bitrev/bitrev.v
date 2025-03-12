@@ -44,7 +44,7 @@ module bitrev (
           miso <= data_in[7];
           data_in <= {data_in[6:0], 1'b0};
           counter <= (counter < 8'd7 ) ? counter + 8'd1 : 8'd0;
-          state <= (counter == 8'd7 ) ? DONE : state;
+          state <= (counter == 8'd7 ) ? TX : state;
         end 
         DONE: begin
           state <= state;

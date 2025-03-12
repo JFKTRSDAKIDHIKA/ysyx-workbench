@@ -160,7 +160,7 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__1(VysyxSoCFull___0
         Verilated::runFlushCallbacks();
         __Vdly__ysyxSoCFull__DOT__bitrev__DOT__state 
             = ((7U == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter))
-                ? 2U : (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__state));
+                ? 1U : (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__state));
         VL_WRITEF("miso: %b\n",1,vlSelf->ysyxSoCFull__DOT___bitrev_miso);
         Verilated::runFlushCallbacks();
         vlSelf->__Vdly__ysyxSoCFull__DOT___bitrev_miso 
