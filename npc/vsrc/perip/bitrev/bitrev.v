@@ -26,7 +26,7 @@ module bitrev (
       state <= RX;
       counter <= 8'd0;
       data_in <= 8'd0;
-      miso <= 1'b0;
+      miso <= 1'b1;
     end else begin
       case (state)
         RX: begin
