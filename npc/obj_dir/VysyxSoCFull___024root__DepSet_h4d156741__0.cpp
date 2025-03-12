@@ -129,18 +129,14 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__1(VysyxSoCFull___0
         VL_WRITEF("mosi: %1#\nmiso: %b\n",1,vlSelf->ysyxSoCFull__DOT___asic_spi_mosi,
                   1,(IData)(vlSelf->ysyxSoCFull__DOT___bitrev_miso));
         Verilated::runFlushCallbacks();
-    } else if (VL_UNLIKELY((1U == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__state)))) {
+    } else if ((1U == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__state))) {
         __Vdly__ysyxSoCFull__DOT__bitrev__DOT__counter 
             = ((7U > (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter))
                 ? (0xffU & ((IData)(1U) + (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter)))
                 : 0U);
-        VL_WRITEF("data: %b\n",8,vlSelf->ysyxSoCFull__DOT__bitrev__DOT__data_in);
-        Verilated::runFlushCallbacks();
         __Vdly__ysyxSoCFull__DOT__bitrev__DOT__state 
             = ((7U == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter))
                 ? 2U : (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__state));
-        VL_WRITEF("miso: %b\n",1,vlSelf->ysyxSoCFull__DOT___bitrev_miso);
-        Verilated::runFlushCallbacks();
         vlSelf->__Vdly__ysyxSoCFull__DOT___bitrev_miso 
             = (1U & ((IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__data_in) 
                      >> 7U));
