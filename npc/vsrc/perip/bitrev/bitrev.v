@@ -36,7 +36,7 @@ module bitrev (
           counter <= (counter < 8'd7 ) ? counter + 8'd1 : 8'd0;
           state <= (counter == 8'd7 ) ? TX : state;
           miso <= 1'b1;
-          //$write("mosi: %d\n", mosi);
+          $write("mosi: %d\n", mosi);
         end
         TX: begin
           $write("TX\n");
@@ -44,7 +44,7 @@ module bitrev (
           state <= (counter == 8'd7 ) ? DONE : state;
           miso <= data_in[7];
           data_in <= {data_in[6:0], data_in[7]};
-          //$write("mosi: %d\n", mosi);
+          $write("mosi: %d\n", mosi);
           //$write("miso: %d\n", miso);
         end 
         DONE: begin
