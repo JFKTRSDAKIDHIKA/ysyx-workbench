@@ -32,11 +32,11 @@ module bitrev (
       case (state)
         RX: begin
           $write("RX\n");
+          $write("mosi: %d\n", mosi);
           data_in <= { data_in[6:0], mosi };
           counter <= (counter < 8'd7 ) ? counter + 8'd1 : 8'd0;
           state <= (counter == 8'd7 ) ? TX : state;
           miso <= 1'b1;
-          $write("mosi: %d\n", mosi);
         end
         TX: begin
           $write("TX\n");
