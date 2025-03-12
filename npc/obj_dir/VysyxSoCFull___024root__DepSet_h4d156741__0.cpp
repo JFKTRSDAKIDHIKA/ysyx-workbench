@@ -4842,7 +4842,7 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__5(VysyxSoCFull___0
         vlSelf->__Vdly__ysyxSoCFull__DOT__bitrev__DOT__state 
             = ((7U == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter))
                 ? 1U : (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__state));
-        vlSelf->ysyxSoCFull__DOT___bitrev_miso = 0U;
+        vlSelf->ysyxSoCFull__DOT___bitrev_miso = 1U;
     } else if (VL_UNLIKELY((1U == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__state)))) {
         VL_WRITEF("TX\n");
         Verilated::runFlushCallbacks();
