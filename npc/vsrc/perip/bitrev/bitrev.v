@@ -46,7 +46,7 @@ module bitrev (
         DONE: begin
           state <= state;
           miso <= 1'b1;
-          $write("done");
+          //$write("done");
         end
         default: begin
           state <= state;
