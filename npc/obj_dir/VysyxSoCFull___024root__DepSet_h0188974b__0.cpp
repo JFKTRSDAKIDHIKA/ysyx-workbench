@@ -146,12 +146,12 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__1(VysyxSoCFull___0
     VysyxSoCFull__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     VL_DEBUG_IF(VL_DBG_MSGF("+    VysyxSoCFull___024root___nba_sequent__TOP__1\n"); );
     // Body
-    vlSelf->__Vdly__ysyxSoCFull__DOT__bitrev__DOT__state 
-        = vlSelf->ysyxSoCFull__DOT__bitrev__DOT__state;
     vlSelf->__Vdly__ysyxSoCFull__DOT__bitrev__DOT__data_in 
         = vlSelf->ysyxSoCFull__DOT__bitrev__DOT__data_in;
     vlSelf->__Vdly__ysyxSoCFull__DOT__bitrev__DOT__counter 
         = vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter;
+    vlSelf->__Vdly__ysyxSoCFull__DOT__bitrev__DOT__state 
+        = vlSelf->ysyxSoCFull__DOT__bitrev__DOT__state;
 }
 
 extern const VlUnpacked<CData/*3:0*/, 64> VysyxSoCFull__ConstPool__TABLE_h8baa9fa4_0;

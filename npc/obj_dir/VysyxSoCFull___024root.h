@@ -615,9 +615,9 @@ class alignas(VL_CACHE_LINE_BYTES) VysyxSoCFull___024root final : public Verilat
     struct {
         CData/*7:0*/ __Vdly__ysyxSoCFull__DOT__flash__DOT__counter;
         CData/*7:0*/ __Vdly__ysyxSoCFull__DOT__flash__DOT__cmd;
+        CData/*1:0*/ __Vdly__ysyxSoCFull__DOT__bitrev__DOT__state;
         CData/*7:0*/ __Vdly__ysyxSoCFull__DOT__bitrev__DOT__counter;
         CData/*7:0*/ __Vdly__ysyxSoCFull__DOT__bitrev__DOT__data_in;
-        CData/*1:0*/ __Vdly__ysyxSoCFull__DOT__bitrev__DOT__state;
         CData/*0:0*/ __VstlFirstIteration;
         CData/*0:0*/ __VicoFirstIteration;
         CData/*0:0*/ __Vtrigprevexpr___TOP__clock__0;
