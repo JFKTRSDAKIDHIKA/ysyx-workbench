@@ -39,7 +39,7 @@ module bitrev (
           miso <= 1'b1;
         end
         TX: begin
-          $write("data: %b", data_in);
+          $write("data: %b\n", data_in);
           $write("TX\n");
           miso <= data_in[7];
           $write("miso: %d\n", miso);
