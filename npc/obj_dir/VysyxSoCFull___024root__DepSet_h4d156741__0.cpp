@@ -156,35 +156,35 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__1(VysyxSoCFull___0
         VL_WRITEF("TX\ndata: %b\n",8,vlSelf->ysyxSoCFull__DOT__bitrev__DOT__data_in);
         Verilated::runFlushCallbacks();
         vlSelf->__Vdly__ysyxSoCFull__DOT___bitrev_miso 
-            = (((((((((0U == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter)) 
-                      | (1U == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter))) 
-                     | (2U == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter))) 
-                    | (3U == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter))) 
-                   | (4U == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter))) 
-                  | (5U == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter))) 
-                 | (6U == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter))) 
-                | (7U == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter))) 
-               && (1U & ((0U == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter))
+            = (((((((((1U == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter)) 
+                      | (2U == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter))) 
+                     | (3U == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter))) 
+                    | (4U == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter))) 
+                   | (5U == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter))) 
+                  | (6U == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter))) 
+                 | (7U == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter))) 
+                | (0U == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter))) 
+               && (1U & ((1U == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter))
                           ? ((IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__data_in) 
-                             >> 7U) : ((1U == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter))
+                             >> 7U) : ((2U == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter))
                                         ? ((IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__data_in) 
                                            >> 6U) : 
-                                       ((2U == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter))
+                                       ((3U == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter))
                                          ? ((IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__data_in) 
                                             >> 5U) : 
-                                        ((3U == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter))
+                                        ((4U == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter))
                                           ? ((IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__data_in) 
                                              >> 4U)
-                                          : ((4U == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter))
+                                          : ((5U == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter))
                                               ? ((IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__data_in) 
                                                  >> 3U)
-                                              : ((5U 
+                                              : ((6U 
                                                   == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter))
                                                   ? 
                                                  ((IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__data_in) 
                                                   >> 2U)
                                                   : 
-                                                 ((6U 
+                                                 ((7U 
                                                    == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter))
                                                    ? 
                                                   ((IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__data_in) 
@@ -209,10 +209,10 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__1(VysyxSoCFull___0
         VL_WRITEF("Invalid state");
         Verilated::runFlushCallbacks();
         vlSelf->__Vdly__ysyxSoCFull__DOT___bitrev_miso = 1U;
-        VL_WRITEF("[%0t] %%Fatal: bitrev.v:68: Assertion failed in %NysyxSoCFull.bitrev\n",
+        VL_WRITEF("[%0t] %%Fatal: bitrev.v:69: Assertion failed in %NysyxSoCFull.bitrev\n",
                   64,VL_TIME_UNITED_Q(1000),-9,vlSymsp->name());
         Verilated::runFlushCallbacks();
-        VL_STOP_MT("vsrc/perip/bitrev/bitrev.v", 68, "");
+        VL_STOP_MT("vsrc/perip/bitrev/bitrev.v", 69, "");
     }
     vlSelf->ysyxSoCFull__DOT__bitrev__DOT__state = __Vdly__ysyxSoCFull__DOT__bitrev__DOT__state;
     vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter 

@@ -41,15 +41,16 @@ module bitrev (
         TX: begin
           $write("TX\n");
           $write("data: %b\n", data_in);
+          // Concurrent
           case (counter)
-              3'd0: miso <= data_in[7];  
-              3'd1: miso <= data_in[6];
-              3'd2: miso <= data_in[5];
-              3'd3: miso <= data_in[4];
-              3'd4: miso <= data_in[3];
-              3'd5: miso <= data_in[2];
-              3'd6: miso <= data_in[1];
-              3'd7: miso <= data_in[0];  
+              3'd1: miso <= data_in[7];  
+              3'd2: miso <= data_in[6];
+              3'd3: miso <= data_in[5];
+              3'd4: miso <= data_in[4];
+              3'd5: miso <= data_in[3];
+              3'd6: miso <= data_in[2];
+              3'd7: miso <= data_in[1];
+              3'd0: miso <= data_in[0];  
               default: miso <= 1'b0;    
           endcase
           $write("miso: %d\n", miso);
