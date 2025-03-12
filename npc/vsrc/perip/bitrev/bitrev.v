@@ -40,10 +40,18 @@ module bitrev (
         end
         TX: begin
           $write("TX\n");
-          $write("data: %b\n", data_in);
-          miso <= data_in[6];
+          case (counter)
+              3'd0: miso <= data_in[7];  
+              3'd1: miso <= data_in[6];
+              3'd2: miso <= data_in[5];
+              3'd3: miso <= data_in[4];
+              3'd4: miso <= data_in[3];
+              3'd5: miso <= data_in[2];
+              3'd6: miso <= data_in[1];
+              3'd7: miso <= data_in[0];  
+              default: miso <= 1'b0;    
+          endcase
           $write("miso: %d\n", miso);
-          data_in <= {data_in[6:0], 1'b0};
           counter <= (counter < 8'd7 ) ? counter + 8'd1 : 8'd0;
           state <= (counter == 8'd7 ) ? DONE : state;
         end 
