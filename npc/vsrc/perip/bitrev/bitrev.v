@@ -6,7 +6,7 @@ module bitrev (
 );
 
   // Internal signal declaration
-  localparam IDLE = 2'b00,
+  localparam DONE = 2'b00,
              RX   = 2'b01,
              TX   = 2'b10;
   reg [7:0]  counter;
@@ -39,10 +39,13 @@ module bitrev (
         TX: begin
           $write("TX\n");
           counter <= (counter < 8'd7 ) ? counter + 8'd1 : 8'd0;
-          state <= (counter == 8'd7 ) ? IDLE : state;
+          state <= (counter == 8'd7 ) ? DONE : state;
           miso <= data_in[7];
           data_in <= {data_in[6:0], 1'b0};
         end 
+        DONE: begin
+          state <= state;
+        end
         default: begin
           state <= state;
           $write("Invalid state");
