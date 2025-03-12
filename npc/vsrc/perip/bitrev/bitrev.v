@@ -26,14 +26,9 @@ module bitrev (
       state <= RX;
       counter <= 8'd0;
       data_in <= 8'd0;
+      miso <= 1'b1;
     end else begin
       case (state)
-        IDLE:  begin
-          miso <= 1'b1;  // slave空闲时, 将MISO信号设置为高电平
-          state <= IDLE;
-          counter <= 8'd0;
-          $write("IDLE\n");
-        end
         RX: begin
           $write("RX\n");
           data_in <= { data_in[6:0], mosi };
