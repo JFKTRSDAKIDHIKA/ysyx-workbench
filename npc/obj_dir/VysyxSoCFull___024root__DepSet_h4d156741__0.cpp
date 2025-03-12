@@ -127,7 +127,7 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__0(VysyxSoCFull___0
         vlSelf->__Vdly__ysyxSoCFull__DOT__flash__DOT__cmd 
             = ((0xfeU & ((IData)(vlSelf->ysyxSoCFull__DOT__flash__DOT__cmd) 
                          << 1U)) | (IData)(vlSelf->ysyxSoCFull__DOT___asic_spi_mosi));
-        VL_WRITEF("cmd: %b\n",8,vlSelf->ysyxSoCFull__DOT__flash__DOT__cmd);
+        VL_WRITEF("mosi: %b\n",1,vlSelf->ysyxSoCFull__DOT___asic_spi_mosi);
         Verilated::runFlushCallbacks();
     }
     if (vlSelf->ysyxSoCFull__DOT____Vcellinp__flash__ss) {

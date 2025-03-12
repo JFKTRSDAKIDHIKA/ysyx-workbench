@@ -69,7 +69,7 @@ module flash (
     if (reset)               cmd <= 8'd0;
     else if (state == cmd_t) begin
       cmd <= { cmd[6:0], mosi };
-      $write("cmd: %b\n", cmd);
+      $write("mosi: %b\n", mosi);
     end
   end
 
