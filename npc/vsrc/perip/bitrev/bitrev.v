@@ -48,7 +48,6 @@ module bitrev (
         end 
         DONE: begin
           state <= state;
-          miso <= 1'b1;
           //$write("done");
         end
         default: begin
