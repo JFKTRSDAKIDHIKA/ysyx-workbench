@@ -650,7 +650,7 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__3(VysyxSoCFull___0
                                                             == (IData)(vlSelf->ysyxSoCFull__DOT__flash__DOT__state)) 
                                                            & (0U 
                                                               == (IData)(vlSelf->ysyxSoCFull__DOT__flash__DOT__counter)))
-                                                           ? vlSelf->ysyxSoCFull__DOT__flash__DOT__data_bswap
+                                                           ? vlSelf->ysyxSoCFull__DOT__flash__DOT__rdata
                                                            : vlSelf->ysyxSoCFull__DOT__flash__DOT__data) 
                                                          >> 0x1fU)))
                                                 : (
