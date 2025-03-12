@@ -4865,7 +4865,7 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__5(VysyxSoCFull___0
             = vlSelf->ysyxSoCFull__DOT__bitrev__DOT__state;
         VL_WRITEF("done");
         Verilated::runFlushCallbacks();
-        vlSelf->ysyxSoCFull__DOT___bitrev_miso = 1U;
+        vlSelf->ysyxSoCFull__DOT___bitrev_miso = 0U;
     } else {
         vlSelf->__Vdly__ysyxSoCFull__DOT__bitrev__DOT__state 
             = vlSelf->ysyxSoCFull__DOT__bitrev__DOT__state;
