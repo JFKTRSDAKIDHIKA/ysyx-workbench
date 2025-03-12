@@ -4868,7 +4868,7 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__5(VysyxSoCFull___0
             = vlSelf->ysyxSoCFull__DOT__bitrev__DOT__state;
         VL_WRITEF("Invalid state");
         Verilated::runFlushCallbacks();
-        vlSelf->ysyxSoCFull__DOT___bitrev_miso = 1U;
+        vlSelf->ysyxSoCFull__DOT___bitrev_miso = 0U;
         VL_WRITEF("[%0t] %%Fatal: bitrev.v:55: Assertion failed in %NysyxSoCFull.bitrev\n",
                   64,VL_TIME_UNITED_Q(1000),-9,vlSymsp->name());
         Verilated::runFlushCallbacks();

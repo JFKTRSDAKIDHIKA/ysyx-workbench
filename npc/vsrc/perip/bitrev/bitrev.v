@@ -50,7 +50,7 @@ module bitrev (
         end
         default: begin
           state <= state;
-          miso <= 1'b1;
+          miso <= 1'b0;
           $write("Invalid state");
           $fatal;
         end
