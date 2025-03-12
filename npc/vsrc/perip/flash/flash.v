@@ -67,10 +67,8 @@ module flash (
 
   always@(posedge sck or posedge reset) begin
     if (reset)               cmd <= 8'd0;
-    else if (state == cmd_t) begin
+    else if (state == cmd_t) 
       cmd <= { cmd[6:0], mosi };
-      $write("mosi: %b\n", mosi);
-    end
   end
 
   always@(posedge sck or posedge reset) begin
