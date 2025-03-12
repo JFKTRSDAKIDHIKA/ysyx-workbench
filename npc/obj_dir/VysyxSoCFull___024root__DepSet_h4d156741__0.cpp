@@ -157,12 +157,12 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__1(VysyxSoCFull___0
             = ((7U > (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter))
                 ? (0xffU & ((IData)(1U) + (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter)))
                 : 0U);
-        VL_WRITEF("data: %b\n",8,vlSelf->ysyxSoCFull__DOT__bitrev__DOT__data_in);
+        VL_WRITEF("TX\n");
         Verilated::runFlushCallbacks();
         __Vdly__ysyxSoCFull__DOT__bitrev__DOT__state 
             = ((7U == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter))
                 ? 2U : (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__state));
-        VL_WRITEF("TX\n");
+        VL_WRITEF("data: %b\n",8,vlSelf->ysyxSoCFull__DOT__bitrev__DOT__data_in);
         Verilated::runFlushCallbacks();
         vlSelf->__Vdly__ysyxSoCFull__DOT___bitrev_miso 
             = (1U & ((IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__data_in) 
