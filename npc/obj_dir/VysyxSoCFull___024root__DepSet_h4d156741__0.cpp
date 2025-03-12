@@ -4845,7 +4845,9 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__5(VysyxSoCFull___0
         VL_WRITEF("mosi: %1#\n",1,vlSelf->ysyxSoCFull__DOT___asic_spi_mosi);
         Verilated::runFlushCallbacks();
         vlSelf->ysyxSoCFull__DOT___bitrev_miso = 1U;
-    } else if ((1U == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__state))) {
+    } else if (VL_UNLIKELY((1U == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__state)))) {
+        VL_WRITEF("data: %b\n",8,vlSelf->ysyxSoCFull__DOT__bitrev__DOT__data_in);
+        Verilated::runFlushCallbacks();
         vlSelf->__Vdly__ysyxSoCFull__DOT__bitrev__DOT__counter 
             = ((7U > (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter))
                 ? (0xffU & ((IData)(1U) + (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter)))
@@ -4866,10 +4868,10 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__5(VysyxSoCFull___0
         VL_WRITEF("Invalid state");
         Verilated::runFlushCallbacks();
         vlSelf->ysyxSoCFull__DOT___bitrev_miso = 1U;
-        VL_WRITEF("[%0t] %%Fatal: bitrev.v:56: Assertion failed in %NysyxSoCFull.bitrev\n",
+        VL_WRITEF("[%0t] %%Fatal: bitrev.v:57: Assertion failed in %NysyxSoCFull.bitrev\n",
                   64,VL_TIME_UNITED_Q(1000),-9,vlSymsp->name());
         Verilated::runFlushCallbacks();
-        VL_STOP_MT("vsrc/perip/bitrev/bitrev.v", 56, "");
+        VL_STOP_MT("vsrc/perip/bitrev/bitrev.v", 57, "");
     }
     vlSelf->ysyxSoCFull__DOT__bitrev__DOT__state = vlSelf->__Vdly__ysyxSoCFull__DOT__bitrev__DOT__state;
     vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter 
