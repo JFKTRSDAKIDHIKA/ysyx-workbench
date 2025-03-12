@@ -22,8 +22,8 @@ module bitrev (
       data_in <= 8'd0;
       miso <= 1'b1;
     end else begin
-      $write("ss: %d\n", ss);
-      $write("sck: %d\n", sck);
+      //$write("ss: %d\n", ss);
+      //$write("sck: %d\n", sck);
       case (state)
         RX: begin
           $write("RX\n");
@@ -41,7 +41,7 @@ module bitrev (
         end 
         DONE: begin
           state <= state;
-          miso <= 1'b0;
+          // miso <= 1'b0;
           //$write("done");
         end
         default: begin
