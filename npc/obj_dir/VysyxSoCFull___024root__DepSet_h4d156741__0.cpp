@@ -96,20 +96,13 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__1(VysyxSoCFull___0
     // Init
     IData/*31:0*/ __Vtask_flash_read__4__data;
     __Vtask_flash_read__4__data = 0;
-    CData/*1:0*/ __Vdly__ysyxSoCFull__DOT__bitrev__DOT__state;
-    __Vdly__ysyxSoCFull__DOT__bitrev__DOT__state = 0;
-    CData/*7:0*/ __Vdly__ysyxSoCFull__DOT__bitrev__DOT__counter;
-    __Vdly__ysyxSoCFull__DOT__bitrev__DOT__counter = 0;
-    CData/*7:0*/ __Vdly__ysyxSoCFull__DOT__bitrev__DOT__data_in;
-    __Vdly__ysyxSoCFull__DOT__bitrev__DOT__data_in = 0;
     // Body
-    vlSelf->__Vdly__ysyxSoCFull__DOT___bitrev_miso 
-        = vlSelf->ysyxSoCFull__DOT___bitrev_miso;
-    __Vdly__ysyxSoCFull__DOT__bitrev__DOT__data_in 
+    vlSelf->__Vdly__ysyxSoCFull__DOT__bitrev__DOT__data_in 
         = vlSelf->ysyxSoCFull__DOT__bitrev__DOT__data_in;
-    __Vdly__ysyxSoCFull__DOT__bitrev__DOT__counter 
+    vlSelf->__Vdly__ysyxSoCFull__DOT__bitrev__DOT__counter 
         = vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter;
-    __Vdly__ysyxSoCFull__DOT__bitrev__DOT__state = vlSelf->ysyxSoCFull__DOT__bitrev__DOT__state;
+    vlSelf->__Vdly__ysyxSoCFull__DOT__bitrev__DOT__state 
+        = vlSelf->ysyxSoCFull__DOT__bitrev__DOT__state;
     if (((1U == (IData)(vlSelf->ysyxSoCFull__DOT__flash__DOT__state)) 
          & (0x17U == (IData)(vlSelf->ysyxSoCFull__DOT__flash__DOT__counter)))) {
         if (VL_LIKELY((3U == (IData)(vlSelf->ysyxSoCFull__DOT__flash__DOT__cmd)))) {
@@ -131,67 +124,6 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__1(VysyxSoCFull___0
             VL_STOP_MT("vsrc/perip/flash/flash.v", 98, "");
         }
     }
-    if ((0x80U & (IData)(vlSelf->ysyxSoCFull__DOT___asic_spi_ss))) {
-        __Vdly__ysyxSoCFull__DOT__bitrev__DOT__state = 0U;
-        __Vdly__ysyxSoCFull__DOT__bitrev__DOT__counter = 0U;
-        __Vdly__ysyxSoCFull__DOT__bitrev__DOT__data_in = 0U;
-        vlSelf->__Vdly__ysyxSoCFull__DOT___bitrev_miso = 1U;
-    } else if (VL_UNLIKELY((0U == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__state)))) {
-        VL_WRITEF("RX\n");
-        Verilated::runFlushCallbacks();
-        __Vdly__ysyxSoCFull__DOT__bitrev__DOT__data_in 
-            = ((0xfeU & ((IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__data_in) 
-                         << 1U)) | (IData)(vlSelf->ysyxSoCFull__DOT___asic_spi_mosi));
-        __Vdly__ysyxSoCFull__DOT__bitrev__DOT__counter 
-            = ((7U > (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter))
-                ? (0xffU & ((IData)(1U) + (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter)))
-                : 0U);
-        __Vdly__ysyxSoCFull__DOT__bitrev__DOT__state 
-            = ((7U == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter))
-                ? 1U : (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__state));
-        VL_WRITEF("mosi: %1#\n",1,vlSelf->ysyxSoCFull__DOT___asic_spi_mosi);
-        Verilated::runFlushCallbacks();
-        vlSelf->__Vdly__ysyxSoCFull__DOT___bitrev_miso = 1U;
-    } else if (VL_UNLIKELY((1U == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__state)))) {
-        __Vdly__ysyxSoCFull__DOT__bitrev__DOT__counter 
-            = ((7U > (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter))
-                ? (0xffU & ((IData)(1U) + (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter)))
-                : 0U);
-        VL_WRITEF("TX\n");
-        Verilated::runFlushCallbacks();
-        __Vdly__ysyxSoCFull__DOT__bitrev__DOT__state 
-            = ((7U == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter))
-                ? 2U : (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__state));
-        VL_WRITEF("data: %b\n",8,vlSelf->ysyxSoCFull__DOT__bitrev__DOT__data_in);
-        Verilated::runFlushCallbacks();
-        vlSelf->__Vdly__ysyxSoCFull__DOT___bitrev_miso 
-            = (1U & ((IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__data_in) 
-                     >> 7U));
-        VL_WRITEF("miso: %1#\n",1,vlSelf->ysyxSoCFull__DOT___bitrev_miso);
-        Verilated::runFlushCallbacks();
-        __Vdly__ysyxSoCFull__DOT__bitrev__DOT__data_in 
-            = (0xfeU & ((IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__data_in) 
-                        << 1U));
-    } else if (VL_LIKELY((2U == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__state)))) {
-        __Vdly__ysyxSoCFull__DOT__bitrev__DOT__state 
-            = vlSelf->ysyxSoCFull__DOT__bitrev__DOT__state;
-        vlSelf->__Vdly__ysyxSoCFull__DOT___bitrev_miso = 1U;
-    } else {
-        __Vdly__ysyxSoCFull__DOT__bitrev__DOT__state 
-            = vlSelf->ysyxSoCFull__DOT__bitrev__DOT__state;
-        VL_WRITEF("Invalid state");
-        Verilated::runFlushCallbacks();
-        vlSelf->__Vdly__ysyxSoCFull__DOT___bitrev_miso = 1U;
-        VL_WRITEF("[%0t] %%Fatal: bitrev.v:59: Assertion failed in %NysyxSoCFull.bitrev\n",
-                  64,VL_TIME_UNITED_Q(1000),-9,vlSymsp->name());
-        Verilated::runFlushCallbacks();
-        VL_STOP_MT("vsrc/perip/bitrev/bitrev.v", 59, "");
-    }
-    vlSelf->ysyxSoCFull__DOT__bitrev__DOT__state = __Vdly__ysyxSoCFull__DOT__bitrev__DOT__state;
-    vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter 
-        = __Vdly__ysyxSoCFull__DOT__bitrev__DOT__counter;
-    vlSelf->ysyxSoCFull__DOT__bitrev__DOT__data_in 
-        = __Vdly__ysyxSoCFull__DOT__bitrev__DOT__data_in;
 }
 
 extern const VlUnpacked<CData/*0:0*/, 128> VysyxSoCFull__ConstPool__TABLE_h87bb4701_0;
@@ -4877,4 +4809,74 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__2(VysyxSoCFull___0
               | (1U == (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__axi42apb__DOT__state))));
     vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu_reset_chain__DOT__output_chain__DOT__sync_9 
         = vlSelf->reset;
+}
+
+VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__5(VysyxSoCFull___024root* vlSelf) {
+    if (false && vlSelf) {}  // Prevent unused
+    VysyxSoCFull__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
+    VL_DEBUG_IF(VL_DBG_MSGF("+    VysyxSoCFull___024root___nba_sequent__TOP__5\n"); );
+    // Body
+    vlSelf->ysyxSoCFull__DOT__flash__DOT__data_bswap 
+        = ((vlSelf->ysyxSoCFull__DOT__flash__DOT__rdata 
+            << 0x18U) | ((0xff0000U & (vlSelf->ysyxSoCFull__DOT__flash__DOT__rdata 
+                                       << 8U)) | ((0xff00U 
+                                                   & (vlSelf->ysyxSoCFull__DOT__flash__DOT__rdata 
+                                                      >> 8U)) 
+                                                  | (vlSelf->ysyxSoCFull__DOT__flash__DOT__rdata 
+                                                     >> 0x18U))));
+    if ((0x80U & (IData)(vlSelf->ysyxSoCFull__DOT___asic_spi_ss))) {
+        vlSelf->__Vdly__ysyxSoCFull__DOT__bitrev__DOT__state = 0U;
+        vlSelf->__Vdly__ysyxSoCFull__DOT__bitrev__DOT__counter = 0U;
+        vlSelf->__Vdly__ysyxSoCFull__DOT__bitrev__DOT__data_in = 0U;
+        vlSelf->ysyxSoCFull__DOT___bitrev_miso = 1U;
+    } else if (VL_UNLIKELY((0U == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__state)))) {
+        VL_WRITEF("RX\n");
+        Verilated::runFlushCallbacks();
+        vlSelf->__Vdly__ysyxSoCFull__DOT__bitrev__DOT__data_in 
+            = ((0xfeU & ((IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__data_in) 
+                         << 1U)) | (IData)(vlSelf->ysyxSoCFull__DOT___asic_spi_mosi));
+        vlSelf->__Vdly__ysyxSoCFull__DOT__bitrev__DOT__counter 
+            = ((7U > (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter))
+                ? (0xffU & ((IData)(1U) + (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter)))
+                : 0U);
+        vlSelf->__Vdly__ysyxSoCFull__DOT__bitrev__DOT__state 
+            = ((7U == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter))
+                ? 1U : (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__state));
+        VL_WRITEF("mosi: %1#\n",1,vlSelf->ysyxSoCFull__DOT___asic_spi_mosi);
+        Verilated::runFlushCallbacks();
+        vlSelf->ysyxSoCFull__DOT___bitrev_miso = 1U;
+    } else if ((1U == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__state))) {
+        vlSelf->__Vdly__ysyxSoCFull__DOT__bitrev__DOT__counter 
+            = ((7U > (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter))
+                ? (0xffU & ((IData)(1U) + (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter)))
+                : 0U);
+        vlSelf->__Vdly__ysyxSoCFull__DOT__bitrev__DOT__state 
+            = ((7U == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter))
+                ? 2U : (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__state));
+        vlSelf->ysyxSoCFull__DOT___bitrev_miso = (1U 
+                                                  & ((IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__data_in) 
+                                                     >> 7U));
+        vlSelf->__Vdly__ysyxSoCFull__DOT__bitrev__DOT__data_in 
+            = (0xfeU & ((IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__data_in) 
+                        << 1U));
+    } else if (VL_LIKELY((2U == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__state)))) {
+        vlSelf->__Vdly__ysyxSoCFull__DOT__bitrev__DOT__state 
+            = vlSelf->ysyxSoCFull__DOT__bitrev__DOT__state;
+        vlSelf->ysyxSoCFull__DOT___bitrev_miso = 1U;
+    } else {
+        vlSelf->__Vdly__ysyxSoCFull__DOT__bitrev__DOT__state 
+            = vlSelf->ysyxSoCFull__DOT__bitrev__DOT__state;
+        VL_WRITEF("Invalid state");
+        Verilated::runFlushCallbacks();
+        vlSelf->ysyxSoCFull__DOT___bitrev_miso = 1U;
+        VL_WRITEF("[%0t] %%Fatal: bitrev.v:56: Assertion failed in %NysyxSoCFull.bitrev\n",
+                  64,VL_TIME_UNITED_Q(1000),-9,vlSymsp->name());
+        Verilated::runFlushCallbacks();
+        VL_STOP_MT("vsrc/perip/bitrev/bitrev.v", 56, "");
+    }
+    vlSelf->ysyxSoCFull__DOT__bitrev__DOT__state = vlSelf->__Vdly__ysyxSoCFull__DOT__bitrev__DOT__state;
+    vlSelf->ysyxSoCFull__DOT__bitrev__DOT__counter 
+        = vlSelf->__Vdly__ysyxSoCFull__DOT__bitrev__DOT__counter;
+    vlSelf->ysyxSoCFull__DOT__bitrev__DOT__data_in 
+        = vlSelf->__Vdly__ysyxSoCFull__DOT__bitrev__DOT__data_in;
 }
