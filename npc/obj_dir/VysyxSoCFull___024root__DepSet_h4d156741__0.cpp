@@ -4835,6 +4835,7 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__6(VysyxSoCFull___0
     } else if (VL_UNLIKELY((0U == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__state)))) {
         VL_WRITEF("IDLE\n");
         Verilated::runFlushCallbacks();
+        vlSelf->ysyxSoCFull__DOT___bitrev_miso = 1U;
         vlSelf->__Vdly__ysyxSoCFull__DOT__bitrev__DOT__state = 0U;
         vlSelf->__Vdly__ysyxSoCFull__DOT__bitrev__DOT__counter = 0U;
     } else if (VL_UNLIKELY((1U == (IData)(vlSelf->ysyxSoCFull__DOT__bitrev__DOT__state)))) {
