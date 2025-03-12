@@ -10,12 +10,13 @@ module flash (
   output miso
 );
   wire reset = ss;
-/*
+
   always @(*) begin
     $write("ss: %b\n", ss);
     $write("sck: %b\n", sck);
+    $write("cmd: %b\n", cmd);
   end
-*/
+
   typedef enum [2:0] { cmd_t, addr_t, data_t, err_t } state_t;
   reg [2:0]  state;
   reg [7:0]  counter;
@@ -26,6 +27,7 @@ module flash (
   wire ren = (state == addr_t) && (counter == 8'd23);
   wire [31:0] rdata;
   wire [31:0] raddr = {8'b0, addr[22:0], mosi};
+
   flash_cmd flash_cmd_i(
     .clock(sck),
     .valid(ren),
