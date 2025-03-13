@@ -7,10 +7,12 @@ SECTIONS {
   .text : {
     *(entry)
     *(.text*)
-    *(.rodata*) 
   } : text
   etext = .;
   _etext = .;
+  .rodata : {
+    *(.rodata*)
+  }
   .data : {
     *(.data)
   } : data

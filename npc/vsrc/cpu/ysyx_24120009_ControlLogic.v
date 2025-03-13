@@ -1,5 +1,3 @@
-// Warning: This file is no longer used in the final design.
-
 // Control logic for RV32 instructions 
 `include "vsrc/include/ysyx_24120009_defs.vh"
 
