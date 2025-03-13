@@ -48,7 +48,7 @@ static void init_screen() {
   SDL_Init(SDL_INIT_VIDEO);  
   SDL_CreateWindowAndRenderer(
       400,
-      300,
+      400,
       0, &window, &renderer);
   SDL_SetWindowTitle(window, title);
   texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888,
