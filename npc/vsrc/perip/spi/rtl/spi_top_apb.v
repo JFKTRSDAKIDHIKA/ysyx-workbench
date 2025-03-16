@@ -228,7 +228,7 @@ always @(posedge clock or posedge reset) begin
         flash_wb_stb_i <= 1'b1;
         flash_wb_cyc_i <= 1'b1;
         // Debug output
-        $write("CLEAR_SS\n");
+        //$write("CLEAR_SS\n");
         // Wait for acknowledge
         if (wb_ack_o) begin
           flash_wb_stb_i <= 1'b0;
