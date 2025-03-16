@@ -161,8 +161,14 @@ always @(posedge clock or posedge reset) begin
         // Continue transaction
         flash_wb_stb_i <= 1'b1;
         flash_wb_cyc_i <= 1'b1;
-        // Switch state
-        state <= GO_BUSY;
+        // Debug output
+        $write("SET_SS\n");
+        // Wait for acknowledge
+        if (wb_ack_o) begin
+          flash_wb_stb_i <= 1'b0;
+          flash_wb_cyc_i <= 1'b0;
+          state <= GO_BUSY;
+        end
       end
       GO_BUSY: begin
         // Set GO_BSY bit in CTRL register
