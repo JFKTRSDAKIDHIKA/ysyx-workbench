@@ -15,16 +15,19 @@
 
 #include <memory/host.h>
 #include <memory/paddr.h>
+#include <memory/sram_mrom.h>
 #include <device/mmio.h>
 #include <isa.h>
 #include <cpu/cpu.h>
 #include <utils.h> 
 
-
 #if   defined(CONFIG_PMEM_MALLOC)
 static uint8_t *pmem = NULL;
 #else // CONFIG_PMEM_GARRAY
 static uint8_t pmem[CONFIG_MSIZE] PG_ALIGN = {};
+// Add sram and mrom to NEMU
+static uint8_t sram[CONFIG_SRAM_SIZE_KB * 1024] PG_ALIGN = {};
+static uint8_t mrom[CONFIG_MROM_SIZE_KB * 1024] PG_ALIGN = {};
 #endif
 
 // Helper function: Check if access information needs to be recorded
@@ -42,8 +45,31 @@ static inline bool need_mtrace(paddr_t addr) {
   #endif
   }
   
-uint8_t* guest_to_host(paddr_t paddr) { return pmem + paddr - CONFIG_MBASE; }
-paddr_t host_to_guest(uint8_t *haddr) { return haddr - pmem + CONFIG_MBASE; }
+uint8_t* guest_to_host(paddr_t paddr) { 
+  if (paddr >= CONFIG_MBASE) {
+    return pmem + paddr - CONFIG_MBASE; 
+  } else if (IS_SRAM_ADDR(paddr)) {
+    return sram + paddr - CONFIG_SRAM_BASE;
+  } else if (IS_MROM_ADDR(paddr)) {
+    return mrom + paddr - CONFIG_MROM_BASE;
+  } else {
+    assert("Invalid memory");
+    return NULL; 
+  }
+}
+
+paddr_t host_to_guest(uint8_t *haddr) { 
+  if (haddr - pmem + CONFIG_MBASE >= CONFIG_MBASE) {
+    return haddr - pmem + CONFIG_MBASE; 
+  } else if (IS_SRAM_ADDR(haddr - sram + CONFIG_SRAM_BASE)) {
+    return haddr - sram + CONFIG_SRAM_BASE;
+  } else if (IS_MROM_ADDR(haddr - mrom + CONFIG_MROM_BASE)) {
+    return haddr - mrom + CONFIG_MROM_BASE;
+  } else {
+    assert("Invalid memory");
+    return -1; 
+  }
+}
 
 static word_t pmem_read(paddr_t addr, int len) {
   word_t ret = host_read(guest_to_host(addr), len);
@@ -55,8 +81,14 @@ static void pmem_write(paddr_t addr, int len, word_t data) {
 }
 
 static void out_of_bound(paddr_t addr) {
-  panic("address = " FMT_PADDR " is out of bound of pmem [" FMT_PADDR ", " FMT_PADDR "] at pc = " FMT_WORD,
-      addr, PMEM_LEFT, PMEM_RIGHT, cpu.pc);
+  panic("Address " FMT_PADDR " is out of bound: "
+        "Physical Memory [" FMT_PADDR ", " FMT_PADDR "], "
+        "SRAM [" FMT_PADDR ", " FMT_PADDR "], "
+        "MROM [" FMT_PADDR ", " FMT_PADDR "] at pc = " FMT_WORD,
+        addr, PMEM_LEFT, PMEM_RIGHT,
+        CONFIG_SRAM_BASE, CONFIG_SRAM_TOP,
+        CONFIG_MROM_BASE, CONFIG_MROM_TOP,
+        cpu.pc);
 }
 
 void init_mem() {
@@ -65,11 +97,19 @@ void init_mem() {
   assert(pmem);
 #endif
   IFDEF(CONFIG_MEM_RANDOM, memset(pmem, rand(), CONFIG_MSIZE));
-  Log("physical memory area [" FMT_PADDR ", " FMT_PADDR "]", PMEM_LEFT, PMEM_RIGHT);
+  memset(sram, 0, CONFIG_SRAM_SIZE_KB * 1024);
+  memset(mrom, 0, CONFIG_MROM_SIZE_KB * 1024);
+  Log("Memory layout: "
+    "Physical Memory [" FMT_PADDR ", " FMT_PADDR "], "
+    "SRAM [" FMT_PADDR ", " FMT_PADDR "], "
+    "MROM [" FMT_PADDR ", " FMT_PADDR "]",
+    PMEM_LEFT, PMEM_RIGHT,
+    CONFIG_SRAM_BASE, CONFIG_SRAM_TOP,
+    CONFIG_MROM_BASE, CONFIG_MROM_TOP);
 }
 
 word_t paddr_read(paddr_t addr, int len) {
-  if (likely(in_pmem(addr))) {
+  if (likely(in_pmem(addr)) || IS_SRAM_ADDR(addr) || IS_MROM_ADDR(addr)) {
     word_t data = pmem_read(addr, len);
 
 #ifdef CONFIG_MTRACE
@@ -87,7 +127,7 @@ word_t paddr_read(paddr_t addr, int len) {
 }
 
 void paddr_write(paddr_t addr, int len, word_t data) {
-  if (likely(in_pmem(addr))) {
+  if (likely(in_pmem(addr)) || IS_SRAM_ADDR(addr)) {
     pmem_write(addr, len, data);
 
 #ifdef CONFIG_MTRACE

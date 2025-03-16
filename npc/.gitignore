@@ -9,4 +9,6 @@
 !*.cpp
 !.gitignore
 !README.md
+!*.scala
+!*.sbt
 build/
