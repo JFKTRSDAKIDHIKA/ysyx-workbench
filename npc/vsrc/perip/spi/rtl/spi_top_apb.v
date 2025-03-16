@@ -78,11 +78,11 @@ assign wb_cyc_i = is_flash_access ? flash_wb_cyc_i : in_penable;
 assign in_pready = is_flash_access? flash_wb_ack_o : wb_ack_o;
 assign in_prdata = wb_dat_o;
 assign in_pslverr = wb_err_o;
-
+/*
 always @(*) begin
   $write("in_paddr: %b\n", in_paddr);
 end
-
+*/
 always @(posedge clock or posedge reset) begin
   if (reset) begin
     state <= IDLE;
