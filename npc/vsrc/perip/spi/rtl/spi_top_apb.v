@@ -136,7 +136,7 @@ always @(posedge clock or posedge reset) begin
         // Specify write register DIVIDER.
         flash_wb_adr_i <= 5'h14;
         // Write data to register DIVIDER.
-        flash_wb_dat_i <= 32'h1;
+        flash_wb_dat_i <= 32'h10;
         // Byte enable signal.
         flash_wb_sel_i <= 4'b1111;
         // Enable write.
