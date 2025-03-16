@@ -44,6 +44,7 @@ reg [3:0]  flash_wb_sel_i;
 reg flash_wb_we_i;
 reg flash_wb_stb_i;
 reg flash_wb_cyc_i;
+reg flash_wb_ack_o;
 
 // State machine state definition
 localparam IDLE = 3'b000,
@@ -73,7 +74,7 @@ assign wb_we_i = is_flash_access ? flash_wb_we_i : in_pwrite;
 assign wb_stb_i = is_flash_access ? flash_wb_stb_i : in_psel;
 assign wb_cyc_i = is_flash_access ? flash_wb_cyc_i : in_penable;
 
-assign in_pready = wb_ack_o;
+assign in_pready = is_flash_access? flash_wb_ack_o : wb_ack_o;
 assign in_prdata = wb_dat_o;
 assign in_pslverr = wb_err_o;
 /*
@@ -90,6 +91,7 @@ always @(posedge clock or posedge reset) begin
     flash_wb_we_i <= 1'b0;
     flash_wb_stb_i <= 1'b0;
     flash_wb_cyc_i <= 1'b0;
+    flash_wb_ack_o <= 1'b0;
   end else begin
     case (state)
       IDLE: begin 
@@ -100,6 +102,8 @@ always @(posedge clock or posedge reset) begin
         end
       end
       SEND_CMD: begin
+        // Transaction not done
+        flash_wb_ack_o <= 1'b0;
         // Specify write register TX1.
         flash_wb_adr_i <= 5'h04;
         // Write data to register TX1.
@@ -121,6 +125,8 @@ always @(posedge clock or posedge reset) begin
         end
       end
       SET_DIVIDER: begin
+        // Transaction not done
+        flash_wb_ack_o <= 1'b0;
         // Specify write register DIVIDER.
         flash_wb_adr_i <= 5'h14;
         // Write data to register DIVIDER.
@@ -142,6 +148,8 @@ always @(posedge clock or posedge reset) begin
         end
       end
       SET_SS: begin
+        // Transaction not done
+        flash_wb_ack_o <= 1'b0;
         // Specify write register SS.
         flash_wb_adr_i <= 5'h18;
         // Write data to register SS.
@@ -163,6 +171,8 @@ always @(posedge clock or posedge reset) begin
         end
       end
       GO_BUSY: begin
+        // Transaction not done
+        flash_wb_ack_o <= 1'b0;
         // Set GO_BSY bit in CTRL register
         flash_wb_adr_i <= 5'h10;
         flash_wb_dat_i <= {23'b0, 1'b1, 1'b0, 7'b1000000}; // Set GO_BSY and CHAR_LEN
@@ -181,6 +191,8 @@ always @(posedge clock or posedge reset) begin
         end
       end
       WAIT_COMPLETE: begin
+        // Transaction not done
+        flash_wb_ack_o <= 1'b0;
         // Check if transaction is complete
         flash_wb_adr_i <= 5'h10;
         flash_wb_sel_i <= 4'b0000;
@@ -198,6 +210,8 @@ always @(posedge clock or posedge reset) begin
         end
       end
       READ_DATA: begin
+        // Transaction not done
+        flash_wb_ack_o <= 1'b0;
         // Read data from RX0 register
         flash_wb_adr_i <= 5'h00;
         flash_wb_sel_i <= 4'b1111;
@@ -214,6 +228,8 @@ always @(posedge clock or posedge reset) begin
         end
       end
       DONE: begin
+        // Transaction done
+        flash_wb_ack_o <= 1'b1;
         // Specify write register SS.
         flash_wb_adr_i <= 5'h18;
         // Write data to register SS.
