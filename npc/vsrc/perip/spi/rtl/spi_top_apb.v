@@ -85,7 +85,7 @@ assign wb_stb_i = is_flash_access ? flash_wb_stb_i : in_psel;
 assign wb_cyc_i = is_flash_access ? flash_wb_cyc_i : in_penable;
 
 assign in_pready = wb_ack_o;
-assign in_prdata = is_flash_access ? flash_wb_dat_o : wb_dat_o;
+assign in_prdata = wb_dat_o;
 assign in_pslverr = wb_err_o;
 
 always @(posedge clock or posedge reset) begin
@@ -195,9 +195,11 @@ always @(posedge clock or posedge reset) begin
         flash_wb_we_i <= 1'b0;
         flash_wb_stb_i <= 1'b0;
         flash_wb_cyc_i <= 1'b0;
-        //$write("flash_wb_ack_o: %b\n", flash_wb_ack_o);
-        //$write("flash_wb_dat_o: %b\n", flash_wb_dat_o[8]);
-        if (flash_wb_ack_o && !(flash_wb_dat_o[8])) begin
+        // Debug output
+        $write("WAIT_COMPLETE\n");
+        if (wb_ack_o && !(wb_dat_o[8])) begin
+          flash_wb_stb_i <= 1'b0;
+          flash_wb_cyc_i <= 1'b0;
           state <= READ_DATA;
         end
       end
