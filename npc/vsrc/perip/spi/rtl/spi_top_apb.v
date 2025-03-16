@@ -102,7 +102,6 @@ always @(posedge clock or posedge reset) begin
         end
       end
       SEND_CMD: begin
-        $write("ok\n");
         // Specify write register TX1.
         flash_wb_adr_i <= 5'h04;
         // Write data to register TX1.
