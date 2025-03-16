@@ -215,7 +215,7 @@ always @(posedge clock or posedge reset) begin
       end
       CLEAR_SS: begin
         // Transaction not done
-        flash_wb_ack_o <= 1'b1;
+        flash_wb_ack_o <= 1'b0;
         // Specify write register SS.
         flash_wb_adr_i <= 5'h18;
         // Write data to register SS.
