@@ -135,7 +135,7 @@ trait RISCVConstants
    val OTHER_ADDR = 4.U(3.W)
 
    // PC reset vector
-   val RESET_VECTOR = 0x20000000L.U(32.W) 
+   val RESET_VECTOR = 0x30000000L.U(32.W) 
 
    // Device
    val UART_BASE_ADDR = 0x10000000L.U(32.W)
