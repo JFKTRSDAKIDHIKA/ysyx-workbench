@@ -217,7 +217,7 @@ always @(posedge clock or posedge reset) begin
         flash_wb_ack_o <= 1'b0;
         // Read data from RX0 register
         flash_wb_adr_i <= 5'h00;
-        flash_wb_sel_i <= 4'b1111;
+        flash_wb_sel_i <= 4'b0000;
         flash_wb_we_i <= 1'b0;
         flash_wb_stb_i <= 1'b1;
         flash_wb_cyc_i <= 1'b1;
