@@ -6,7 +6,7 @@
 
 extern char _heap_start;
 extern char _sram_start;
-extern char _data_lma;    /* LMA（加载地址）来自 mrom */
+extern char _data_lma;    /* LMA（加载地址）来自 flash */
 extern char _data;        /* VMA（运行时地址）在 sram */
 extern char _edata;    
 extern char _ebss;
