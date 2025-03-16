@@ -13,7 +13,7 @@
 #include <readline/history.h>
 #include <cassert>    
 
-#define ENABLE_MEMORY_CHECK 1
+// #define ENABLE_MEMORY_CHECK 1
 #define DIFFTEST 1
 #define is_silent_mode 1
 
