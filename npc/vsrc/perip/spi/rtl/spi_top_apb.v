@@ -25,6 +25,12 @@ module spi_top_apb #(
   output                  spi_irq_out
 );
 
+// Debug print
+always @(*) begin
+  $write("in_paddr: %b\n", in_paddr);
+
+end
+
 // Internal signals declaration
 wire [4:0] wb_adr_i;
 wire [31:0] wb_dat_i;
