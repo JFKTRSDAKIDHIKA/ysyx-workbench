@@ -262,8 +262,10 @@ always @(posedge clock or posedge reset) begin
         flash_wb_ack_o <= 1'b1;
         flash_wb_stb_i <= 1'b0;
         flash_wb_cyc_i <= 1'b0;
+        // Make sure thet the same transaction does not go through two request.
         if (!in_penable && !in_psel) begin
           state <= IDLE;
+          // Why?????
           flash_wb_adr_i <= 5'b0;
           flash_wb_dat_i <= 32'b0;
           flash_wb_sel_i <= 4'b0;
