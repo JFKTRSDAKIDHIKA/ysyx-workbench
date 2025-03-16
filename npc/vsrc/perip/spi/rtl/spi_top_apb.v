@@ -101,9 +101,10 @@ always @(posedge clock or posedge reset) begin
           //$write("addr: %b\n", in_paddr);
           flash_wb_ack_o <= 1'b0;
         end else if (is_spi_master_access && in_psel && in_penable) begin
-          state <= IDLE; // Directly pass through for SPI master access
+          state <= DONE; // Directly pass through for SPI master access
           flash_wb_ack_o <= 1'b0;
-        end
+        end else 
+          state <= state;
       end
       SEND_CMD: begin
         // Transaction not done
