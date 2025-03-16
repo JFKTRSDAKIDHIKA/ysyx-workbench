@@ -54,7 +54,7 @@ void Memory::pmem_write(uint32_t address, uint32_t data, char write_mask) {
         uint32_t offset = address - FLASH_BASE_ADDR; // Calculate the offset
         write_memory_region(flash, offset, data, write_mask);
     } else {
-        // std::cerr << "Memory write address invalid at address: " << address << std::endl;
+        std::cerr << "Memory write address invalid at address: " << address << std::endl;
         return; // Return if the address is out of bounds
     }
 }
