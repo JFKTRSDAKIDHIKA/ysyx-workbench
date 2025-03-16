@@ -44,9 +44,6 @@ reg [3:0]  flash_wb_sel_i;
 reg flash_wb_we_i;
 reg flash_wb_stb_i;
 reg flash_wb_cyc_i;
-wire flash_wb_ack_o;
-wire flash_wb_err_o;
-wire flash_wb_int_o;
 
 // State machine state definition
 localparam IDLE = 3'b000,
@@ -79,6 +76,10 @@ assign wb_cyc_i = is_flash_access ? flash_wb_cyc_i : in_penable;
 assign in_pready = wb_ack_o;
 assign in_prdata = wb_dat_o;
 assign in_pslverr = wb_err_o;
+
+always @(*) begin
+  $write("wb_dat_o: %b\n", wb_dat_o);
+end
 
 always @(posedge clock or posedge reset) begin
   if (reset) begin
