@@ -98,6 +98,7 @@ always @(posedge clock or posedge reset) begin
         if (is_flash_access && in_psel && in_penable) begin
           state <= SEND_CMD;
         end else if (is_spi_master_access && in_psel && in_penable) begin
+          $write("ok\n");
           state <= DONE; // Directly pass through for SPI master access
         end
       end
