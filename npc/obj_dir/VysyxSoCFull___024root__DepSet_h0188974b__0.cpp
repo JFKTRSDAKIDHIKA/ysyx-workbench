@@ -1995,6 +1995,9 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__6(VysyxSoCFull___0
     vlSelf->ysyxSoCFull__DOT__flash__DOT__cmd = vlSelf->__Vdly__ysyxSoCFull__DOT__flash__DOT__cmd;
     vlSelf->ysyxSoCFull__DOT__flash__DOT__counter = vlSelf->__Vdly__ysyxSoCFull__DOT__flash__DOT__counter;
     vlSelf->ysyxSoCFull__DOT__flash__DOT__state = vlSelf->__Vdly__ysyxSoCFull__DOT__flash__DOT__state;
+    VL_WRITEF("ren: %b\n",1,((1U == (IData)(vlSelf->ysyxSoCFull__DOT__flash__DOT__state)) 
+                             & (0x17U == (IData)(vlSelf->ysyxSoCFull__DOT__flash__DOT__counter))));
+    Verilated::runFlushCallbacks();
 }
 
 VL_INLINE_OPT void VysyxSoCFull___024root___nba_comb__TOP__0(VysyxSoCFull___024root* vlSelf) {
