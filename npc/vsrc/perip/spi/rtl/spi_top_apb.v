@@ -198,7 +198,7 @@ always @(posedge clock or posedge reset) begin
       READ_DATA: begin
         // Read data from RX0 register
         flash_wb_adr_i <= 5'h00;
-        flash_wb_sel_i <= 4'b0000;
+        flash_wb_sel_i <= 4'b1111;
         flash_wb_we_i <= 1'b0;
         flash_wb_stb_i <= 1'b1;
         flash_wb_cyc_i <= 1'b1;
@@ -212,8 +212,25 @@ always @(posedge clock or posedge reset) begin
         end
       end
       DONE: begin
-        // Return to IDLE state
-        state <= IDLE;
+        // Specify write register SS.
+        flash_wb_adr_i <= 5'h18;
+        // Write data to register SS.
+        flash_wb_dat_i <= {27'b0, 1'b0};
+        // Byte enable signal.
+        flash_wb_sel_i <= 4'b1111;
+        // Enable write.
+        flash_wb_we_i <= 1'b1;
+        // Continue transaction
+        flash_wb_stb_i <= 1'b1;
+        flash_wb_cyc_i <= 1'b1;
+        // Debug output
+        //$write("DONE\n");
+        // Wait for acknowledge
+        if (wb_ack_o) begin
+          flash_wb_stb_i <= 1'b0;
+          flash_wb_cyc_i <= 1'b0;
+          state <= IDLE;
+        end
       end
     endcase
   end
