@@ -59,7 +59,7 @@ localparam IDLE = 4'b0000,
 
 // Internal signals for state machine
 reg [3:0] state;
-reg [31:0] flash_cmd;
+wire [31:0] flash_cmd;
 
 // Signal in_paddr ranges from 0x3000_0000 to 0x3fff_ffff.
 assign flash_cmd = {8'h03, in_paddr[23:0]};
