@@ -98,7 +98,7 @@ always @(posedge clock or posedge reset) begin
       IDLE: begin 
         if (is_flash_access && in_psel && in_penable) begin
           state <= SEND_CMD;
-          //$write("addr: %b\n", in_paddr);
+          $write("addr: %b\n", in_paddr);
           flash_wb_ack_o <= 1'b0;
         end else if (is_spi_master_access && in_psel && in_penable) begin
           state <= DONE; // Directly pass through for SPI master access
