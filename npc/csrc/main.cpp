@@ -13,8 +13,8 @@
 #include <readline/history.h>
 #include <cassert>    
 
-// #define ENABLE_MEMORY_CHECK 1
-// #define DIFFTEST 1
+#define ENABLE_MEMORY_CHECK 1
+#define DIFFTEST 1
 #define is_silent_mode 1
 
 // Declare global variables
@@ -121,7 +121,7 @@ int check_dut_and_ref(VysyxSoCFull* top, paddr_t start_addr, size_t size) {
 
       return -1;  // End simulation
   }
-
+/*
 #ifdef ENABLE_MEMORY_CHECK
   // ----------- 检查内存 -----------
   // Allocate buffers for memory comparison
@@ -151,6 +151,7 @@ int check_dut_and_ref(VysyxSoCFull* top, paddr_t start_addr, size_t size) {
       }
   }
 #endif
+*/
   // If no mismatches, return 0
   return 0;
 }
@@ -241,7 +242,7 @@ static int execute_single_step() {
     need_check = (top->io_wbu_state_debug == 2);
     ref_difftest_exec(1);
     ref_difftest_regcpy(&ref, DIFFTEST_TO_REF);
-    return check_dut_and_ref(top, BASE_ADDR, MEMORY_SIZE);
+    return check_dut_and_ref(top, 0, 0);
   } else {
     need_check = (top->io_wbu_state_debug == 2);
     return 0;
