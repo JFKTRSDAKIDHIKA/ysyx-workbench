@@ -46,7 +46,6 @@ wire wb_int_o;
 // XIP signals
 reg [4:0] flash_wb_adr_i;
 reg [31:0] flash_wb_dat_i;
-reg [31:0] flash_wb_dat_o;
 reg [3:0]  flash_wb_sel_i;
 reg flash_wb_we_i;
 reg flash_wb_stb_i;
@@ -68,7 +67,6 @@ localparam IDLE = 3'b000,
 // Internal signals for state machine
 reg [2:0] state;
 reg [31:0] flash_cmd;
-reg [31:0] flash_data;
 
 // Signal in_paddr ranges from 0x3000_0000 to 0x3fff_ffff.
 assign flash_cmd = {8'h03, in_paddr[23:0]};
@@ -97,7 +95,6 @@ always @(posedge clock or posedge reset) begin
     flash_wb_we_i <= 1'b0;
     flash_wb_stb_i <= 1'b0;
     flash_wb_cyc_i <= 1'b0;
-    flash_data <= 32'b0;
   end else begin
     case (state)
       IDLE: begin 
@@ -197,6 +194,7 @@ always @(posedge clock or posedge reset) begin
         flash_wb_cyc_i <= 1'b1;
         // Debug output
         $write("WAIT_COMPLETE\n");
+        // Wait for acknowledge
         if (wb_ack_o && !(wb_dat_o[8])) begin
           flash_wb_stb_i <= 1'b0;
           flash_wb_cyc_i <= 1'b0;
@@ -208,10 +206,16 @@ always @(posedge clock or posedge reset) begin
         flash_wb_adr_i <= 5'h00;
         flash_wb_sel_i <= 4'b0000;
         flash_wb_we_i <= 1'b0;
-        flash_wb_stb_i <= 1'b0;
-        flash_wb_cyc_i <= 1'b0;
-        flash_data <= flash_wb_dat_o;
-        state <= DONE;
+        flash_wb_stb_i <= 1'b1;
+        flash_wb_cyc_i <= 1'b1;
+        // Debug output
+        $write("READ_DATA\n");
+        // Wait for acknowledge
+        if (wb_ack_o) begin
+          flash_wb_stb_i <= 1'b0;
+          flash_wb_cyc_i <= 1'b0;
+          state <= DONE;
+        end
       end
       DONE: begin
         // Return to IDLE state
