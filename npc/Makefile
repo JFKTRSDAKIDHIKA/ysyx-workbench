@@ -30,6 +30,7 @@ verilog:
 # 运行仿真
 sim: $(EXEC)
 	$(call git_commit, "sim RTL")  
+	$(call git_commit, "sim RTL")  
 	$(EXEC) $(IMG) $(STEP_MODE)
 
 # 清理生成文件

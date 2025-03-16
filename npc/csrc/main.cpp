@@ -37,6 +37,7 @@ extern "C" void simulation_exit() {
     Verilated::gotFinish(true); 
 }
 
+
 extern "C" void get_register_values(uint32_t rf[32]) {
     set_register_values(rf);  // set the register values
 }
@@ -130,7 +131,13 @@ int check_dut_and_ref(VysyxSoCFull* top, paddr_t start_addr, size_t size) {
 
   // Copy memory from REF to ref_mem buffer
   ref_difftest_memcpy(start_addr, ref_mem.data(), size, DIFFTEST_TO_DUT);
+  // Copy memory from REF to ref_mem buffer
+  ref_difftest_memcpy(start_addr, ref_mem.data(), size, DIFFTEST_TO_DUT);
 
+  // Copy memory from DUT to dut_mem buffer
+  for (size_t i = 0; i < size; ++i) {
+      dut_mem[i] = Memory::pmem_read(start_addr + i) & 0xFF; // Read one byte at a time
+  }
   // Copy memory from DUT to dut_mem buffer
   for (size_t i = 0; i < size; ++i) {
       dut_mem[i] = Memory::pmem_read(start_addr + i) & 0xFF; // Read one byte at a time
@@ -155,6 +162,7 @@ int check_dut_and_ref(VysyxSoCFull* top, paddr_t start_addr, size_t size) {
   // If no mismatches, return 0
   return 0;
 }
+#endif
 #endif
 
 void tick(VysyxSoCFull* top, bool silent_mode ) {
@@ -189,7 +197,12 @@ void tick(VysyxSoCFull* top, bool silent_mode ) {
 /*
     // print some debug info of memory write
     if (top->mem_wen_debug == 1 && !silent_mode ) {  
+    if (top->mem_wen_debug == 1 && !silent_mode ) {  
         std::cout << "Memory Write - Addr: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->dmem_addr_debug
+                << ", Data: 0x" << std::setw(8) << std::setfill('0') << top->dmem_wdata_debug
+                << ", Mask: 0x" << std::setw(2) << static_cast<unsigned>(top->wmask_debug) 
+                << std::dec << std::endl;
+        print_memory(top->dmem_addr_debug, 20);
                 << ", Data: 0x" << std::setw(8) << std::setfill('0') << top->dmem_wdata_debug
                 << ", Mask: 0x" << std::setw(2) << static_cast<unsigned>(top->wmask_debug) 
                 << std::dec << std::endl;
@@ -198,9 +211,11 @@ void tick(VysyxSoCFull* top, bool silent_mode ) {
 
     // print some debug info of memory read
     if (top->mem_en_debug == 1 && top->mem_wen_debug != 1 && !silent_mode ) {  
+    if (top->mem_en_debug == 1 && top->mem_wen_debug != 1 && !silent_mode ) {  
             std::cout << "Memory Read  - Addr: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->dmem_addr_debug
                       << std::dec << std::endl;
     }
+*/
 */
 
     top->clock = 1;
@@ -372,6 +387,7 @@ int main(int argc, char **argv) {
 
     // Default to single step mode (if no argument is provided)
     step_mode = true;
+    step_mode = true;
     if (argc > 2) {
         std::string mode = argv[2];
         if (mode == "step") {
@@ -407,5 +423,7 @@ int main(int argc, char **argv) {
     delete top;
     return 0;
 }
+
+
 
 
