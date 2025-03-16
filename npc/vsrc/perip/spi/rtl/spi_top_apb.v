@@ -107,6 +107,7 @@ always @(posedge clock or posedge reset) begin
           state <= state;
       end
       SEND_CMD: begin
+        $write("flash_cmd: %b\n", flash_cmd);
         // Transaction not done
         flash_wb_ack_o <= 1'b0;
         // Specify write register TX1.
