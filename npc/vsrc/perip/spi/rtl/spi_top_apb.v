@@ -47,14 +47,15 @@ reg flash_wb_cyc_i;
 reg flash_wb_ack_o;
 
 // State machine state definition
-localparam IDLE = 3'b000,
-           SEND_CMD = 3'b001,
-           SET_DIVIDER = 3'b010,
-           SET_SS = 3'b011,
-           GO_BUSY = 3'b100,
-           WAIT_COMPLETE = 3'b101,
-           READ_DATA = 3'b110,
-           DONE = 3'b111;
+localparam IDLE = 4'b0000,
+           SEND_CMD = 4'b0001,
+           SET_DIVIDER = 4'b0010,
+           SET_SS = 4'b0011,
+           GO_BUSY = 4'b0100,
+           WAIT_COMPLETE = 4'b0101,
+           CLEAR_SS = 4'b1101,
+           READ_DATA = 4'b1110,
+           DONE = 4'b1111;
 
 // Internal signals for state machine
 reg [2:0] state;
@@ -77,11 +78,11 @@ assign wb_cyc_i = is_flash_access ? flash_wb_cyc_i : in_penable;
 assign in_pready = is_flash_access? flash_wb_ack_o : wb_ack_o;
 assign in_prdata = wb_dat_o;
 assign in_pslverr = wb_err_o;
-
+/*
 always @(*) begin
   $write("wb_dat_o: %b\n", wb_dat_o);
 end
-
+*/
 always @(posedge clock or posedge reset) begin
   if (reset) begin
     state <= IDLE;
@@ -212,6 +213,29 @@ always @(posedge clock or posedge reset) begin
           state <= READ_DATA;
         end
       end
+      CLEAR_SS: begin
+        // Transaction not done
+        flash_wb_ack_o <= 1'b1;
+        // Specify write register SS.
+        flash_wb_adr_i <= 5'h18;
+        // Write data to register SS.
+        flash_wb_dat_i <= {27'b0, 1'b0};
+        // Byte enable signal.
+        flash_wb_sel_i <= 4'b1111;
+        // Enable write.
+        flash_wb_we_i <= 1'b1;
+        // Continue transaction
+        flash_wb_stb_i <= 1'b1;
+        flash_wb_cyc_i <= 1'b1;
+        // Debug output
+        $write("CLEAR_SS\n");
+        // Wait for acknowledge
+        if (wb_ack_o) begin
+          flash_wb_stb_i <= 1'b0;
+          flash_wb_cyc_i <= 1'b0;
+          state <= READ_DATA;
+        end
+      end
       READ_DATA: begin
         // Transaction not done
         flash_wb_ack_o <= 1'b0;
@@ -233,26 +257,8 @@ always @(posedge clock or posedge reset) begin
       DONE: begin
         // Transaction done
         flash_wb_ack_o <= 1'b1;
-        // Specify write register SS.
-        flash_wb_adr_i <= 5'h18;
-        // Write data to register SS.
-        flash_wb_dat_i <= {27'b0, 1'b0};
-        // Byte enable signal.
-        flash_wb_sel_i <= 4'b1111;
-        // Enable write.
-        flash_wb_we_i <= 1'b1;
-        // Continue transaction
-        flash_wb_stb_i <= 1'b1;
-        flash_wb_cyc_i <= 1'b1;
-        // Debug output
-        $write("DONE\n");
-        // Wait for acknowledge
-        if (wb_ack_o) begin
-          flash_wb_stb_i <= 1'b0;
-          flash_wb_cyc_i <= 1'b0;
-          state <= IDLE;
+        state <= IDLE;
         end
-      end
     endcase
   end
 end
