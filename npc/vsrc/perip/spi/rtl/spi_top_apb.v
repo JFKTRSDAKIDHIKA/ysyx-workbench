@@ -214,7 +214,7 @@ always @(posedge clock or posedge reset) begin
           state <= READ_DATA;
         end
       end
-      /*CLEAR_SS: begin
+      CLEAR_SS: begin
         // Transaction not done
         flash_wb_ack_o <= 1'b0;
         // Specify write register SS.
@@ -236,7 +236,7 @@ always @(posedge clock or posedge reset) begin
           flash_wb_cyc_i <= 1'b0;
           state <= READ_DATA;
         end
-      end*/
+      end
       READ_DATA: begin
         // Transaction not done
         flash_wb_ack_o <= 1'b0;
