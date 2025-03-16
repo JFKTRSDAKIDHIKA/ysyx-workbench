@@ -1,10 +1,14 @@
 ENTRY(_start)
 
-PHDRS { text PT_LOAD; data PT_LOAD; }
+PHDRS { 
+  text PT_LOAD; 
+  data PT_LOAD;
+  bbs PT_LOAD;
+}
 
 MEMORY {
   flash : ORIGIN = 0x30000000, LENGTH = 256M
-  sram : ORIGIN = 0x0f000000, LENGTH = 8K
+  sram : ORIGIN = 0x0f000000, LENGTH = 8k
 }
 
 SECTIONS {
@@ -32,7 +36,7 @@ SECTIONS {
     *(.sbss*)
     *(.scommon)
     _ebss = .;
-  } > sram AT> sram
+  } > sram AT> flash : bbs
 
   _stack_top = ALIGN(0x1000);
   . = _stack_top + 0x1000;
