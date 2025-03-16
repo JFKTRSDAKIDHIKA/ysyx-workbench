@@ -119,8 +119,12 @@ always @(posedge clock or posedge reset) begin
         // Start transaction
         flash_wb_stb_i <= 1'b1;
         flash_wb_cyc_i <= 1'b1;
-        // Switch state
-        state <= SET_DIVIDER;
+        // Wait for acknowledge
+        if (flash_wb_ack_o) begin
+          flash_wb_stb_i <= 1'b0;
+          flash_wb_cyc_i <= 1'b0;
+          state <= SET_DIVIDER;
+        end
       end
       SET_DIVIDER: begin
         // Specify write register DIVIDER.
