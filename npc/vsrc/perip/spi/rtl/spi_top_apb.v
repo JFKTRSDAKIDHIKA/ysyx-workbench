@@ -213,7 +213,7 @@ always @(posedge clock or posedge reset) begin
         if (!(wb_dat_o[8])) begin
           flash_wb_stb_i <= 1'b0;
           flash_wb_cyc_i <= 1'b0;
-          state <= READ_DATA;
+          state <= CLEAR_SS;
         end
       end
       CLEAR_SS: begin
