@@ -98,11 +98,11 @@ always @(posedge clock or posedge reset) begin
         if (is_flash_access && in_psel && in_penable) begin
           state <= SEND_CMD;
         end else if (is_spi_master_access && in_psel && in_penable) begin
-          $write("ok\n");
           state <= DONE; // Directly pass through for SPI master access
         end
       end
       SEND_CMD: begin
+        $write("ok\n");
         // Specify write register TX1.
         flash_wb_adr_i <= 5'h04;
         // Write data to register TX1.
