@@ -32,7 +32,7 @@ SECTIONS {
     *(.sbss*)
     *(.scommon)
     _ebss = .;
-  } > sram AT> flash
+  } 
 
   _stack_top = ALIGN(0x1000);
   . = _stack_top + 0x1000;
