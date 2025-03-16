@@ -97,8 +97,10 @@ always @(posedge clock or posedge reset) begin
       IDLE: begin 
         if (is_flash_access && in_psel && in_penable) begin
           state <= SEND_CMD;
+          flash_wb_ack_o <= 1'b0;
         end else if (is_spi_master_access && in_psel && in_penable) begin
           state <= IDLE; // Directly pass through for SPI master access
+          flash_wb_ack_o <= 1'b0;
         end
       end
       SEND_CMD: begin
