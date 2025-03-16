@@ -58,7 +58,7 @@ localparam IDLE = 4'b0000,
            DONE = 4'b1111;
 
 // Internal signals for state machine
-reg [2:0] state;
+reg [3:0] state;
 reg [31:0] flash_cmd;
 
 // Signal in_paddr ranges from 0x3000_0000 to 0x3fff_ffff.
@@ -205,7 +205,7 @@ always @(posedge clock or posedge reset) begin
         // Debug output
         // $write("WAIT_COMPLETE\n");
         //$write("wb_ack_o: %b\n", wb_ack_o);
-       // $write("wb_dat_o[8]: %b\n", wb_dat_o[8]);
+        // $write("wb_dat_o[8]: %b\n", wb_dat_o[8]);
         // Wait for acknowledge
         if (!(wb_dat_o[8])) begin
           flash_wb_stb_i <= 1'b0;
