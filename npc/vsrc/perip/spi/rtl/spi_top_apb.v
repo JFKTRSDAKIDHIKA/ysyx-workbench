@@ -116,7 +116,7 @@ always @(posedge clock or posedge reset) begin
         flash_wb_stb_i <= 1'b1;
         flash_wb_cyc_i <= 1'b1;
         // Debug output
-        $write("SEND_CMD\n");
+        //$write("SEND_CMD\n");
         // Wait for acknowledge
         if (wb_ack_o) begin
           flash_wb_stb_i <= 1'b0;
@@ -139,7 +139,7 @@ always @(posedge clock or posedge reset) begin
         flash_wb_stb_i <= 1'b1;
         flash_wb_cyc_i <= 1'b1;
         // Debug output
-        $write("SET_DIVIDER\n");
+        //$write("SET_DIVIDER\n");
         // Wait for acknowledge
         if (wb_ack_o) begin
           flash_wb_stb_i <= 1'b0;
@@ -162,7 +162,7 @@ always @(posedge clock or posedge reset) begin
         flash_wb_stb_i <= 1'b1;
         flash_wb_cyc_i <= 1'b1;
         // Debug output
-        $write("SET_SS\n");
+        //$write("SET_SS\n");
         // Wait for acknowledge
         if (wb_ack_o) begin
           flash_wb_stb_i <= 1'b0;
@@ -182,7 +182,7 @@ always @(posedge clock or posedge reset) begin
         flash_wb_stb_i <= 1'b1;
         flash_wb_cyc_i <= 1'b1;
         // Debug output
-        $write("GO_BUSY\n");
+        //$write("GO_BUSY\n");
         // Wait for acknowledge
         if (wb_ack_o) begin
           flash_wb_stb_i <= 1'b0;
@@ -200,8 +200,8 @@ always @(posedge clock or posedge reset) begin
         flash_wb_stb_i <= 1'b1;
         flash_wb_cyc_i <= 1'b1;
         // Debug output
-        $write("WAIT_COMPLETE\n");
-        $write("wb_ack_o: %b\n", wb_ack_o);
+        //$write("WAIT_COMPLETE\n");
+        //$write("wb_ack_o: %b\n", wb_ack_o);
         // Wait for acknowledge
         if (wb_ack_o && !(wb_dat_o[8])) begin
           flash_wb_stb_i <= 1'b0;
@@ -219,7 +219,7 @@ always @(posedge clock or posedge reset) begin
         flash_wb_stb_i <= 1'b1;
         flash_wb_cyc_i <= 1'b1;
         // Debug output
-        $write("READ_DATA\n");
+        //$write("READ_DATA\n");
         // Wait for acknowledge
         if (wb_ack_o) begin
           flash_wb_stb_i <= 1'b0;
@@ -242,7 +242,7 @@ always @(posedge clock or posedge reset) begin
         flash_wb_stb_i <= 1'b1;
         flash_wb_cyc_i <= 1'b1;
         // Debug output
-        $write("DONE\n");
+        //$write("DONE\n");
         // Wait for acknowledge
         if (wb_ack_o) begin
           flash_wb_stb_i <= 1'b0;
