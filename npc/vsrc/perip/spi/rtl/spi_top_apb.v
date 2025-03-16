@@ -144,7 +144,7 @@ always @(posedge clock or posedge reset) begin
         // Specify write register SS.
         flash_wb_adr_i <= 5'h18;
         // Write data to register SS.
-        flash_wb_dat_i <= {27'b0, 1'b0};
+        flash_wb_dat_i <= {27'b0, 1'b1};
         // Byte enable signal.
         flash_wb_sel_i <= 4'b1111;
         // Enable write.
