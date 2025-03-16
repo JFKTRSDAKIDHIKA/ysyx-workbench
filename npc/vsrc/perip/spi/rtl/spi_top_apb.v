@@ -119,6 +119,7 @@ always @(posedge clock or posedge reset) begin
         // Start transaction
         flash_wb_stb_i <= 1'b1;
         flash_wb_cyc_i <= 1'b1;
+        $write("SEND_CMD\n");
         // Wait for acknowledge
         if (flash_wb_ack_o) begin
           flash_wb_stb_i <= 1'b0;
