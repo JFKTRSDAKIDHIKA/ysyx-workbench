@@ -100,31 +100,36 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__0(VysyxSoCFull___0
     // Body
     vlSelf->__Vdly__ysyxSoCFull__DOT__flash__DOT__counter 
         = vlSelf->ysyxSoCFull__DOT__flash__DOT__counter;
-    vlSelf->__Vdly__ysyxSoCFull__DOT__flash__DOT__cmd 
-        = vlSelf->ysyxSoCFull__DOT__flash__DOT__cmd;
-    vlSelf->__Vdly__ysyxSoCFull__DOT__flash__DOT__state 
-        = vlSelf->ysyxSoCFull__DOT__flash__DOT__state;
     vlSelf->__Vdly__ysyxSoCFull__DOT__flash__DOT__data 
         = vlSelf->ysyxSoCFull__DOT__flash__DOT__data;
+    vlSelf->__Vdly__ysyxSoCFull__DOT__flash__DOT__state 
+        = vlSelf->ysyxSoCFull__DOT__flash__DOT__state;
+    vlSelf->__Vdly__ysyxSoCFull__DOT__flash__DOT__cmd 
+        = vlSelf->ysyxSoCFull__DOT__flash__DOT__cmd;
     vlSelf->__Vdly__ysyxSoCFull__DOT__flash__DOT__addr 
         = vlSelf->ysyxSoCFull__DOT__flash__DOT__addr;
     if (vlSelf->ysyxSoCFull__DOT____Vcellinp__flash__ss) {
         vlSelf->__Vdly__ysyxSoCFull__DOT__flash__DOT__counter = 0U;
-        vlSelf->__Vdly__ysyxSoCFull__DOT__flash__DOT__cmd = 0U;
-    } else if ((0U == (IData)(vlSelf->ysyxSoCFull__DOT__flash__DOT__state))) {
-        vlSelf->__Vdly__ysyxSoCFull__DOT__flash__DOT__counter 
-            = (0xffU & ((7U > (IData)(vlSelf->ysyxSoCFull__DOT__flash__DOT__counter))
-                         ? ((IData)(1U) + (IData)(vlSelf->ysyxSoCFull__DOT__flash__DOT__counter))
-                         : 0U));
-        vlSelf->__Vdly__ysyxSoCFull__DOT__flash__DOT__cmd 
-            = ((0xfeU & ((IData)(vlSelf->ysyxSoCFull__DOT__flash__DOT__cmd) 
-                         << 1U)) | (IData)(vlSelf->ysyxSoCFull__DOT___asic_spi_mosi));
+        vlSelf->__Vdly__ysyxSoCFull__DOT__flash__DOT__data = 0U;
     } else {
         vlSelf->__Vdly__ysyxSoCFull__DOT__flash__DOT__counter 
-            = (0xffU & ((1U == (IData)(vlSelf->ysyxSoCFull__DOT__flash__DOT__state))
-                         ? ((0x17U > (IData)(vlSelf->ysyxSoCFull__DOT__flash__DOT__counter))
+            = (0xffU & ((0U == (IData)(vlSelf->ysyxSoCFull__DOT__flash__DOT__state))
+                         ? ((7U > (IData)(vlSelf->ysyxSoCFull__DOT__flash__DOT__counter))
                              ? ((IData)(1U) + (IData)(vlSelf->ysyxSoCFull__DOT__flash__DOT__counter))
-                             : 0U) : ((IData)(1U) + (IData)(vlSelf->ysyxSoCFull__DOT__flash__DOT__counter))));
+                             : 0U) : ((1U == (IData)(vlSelf->ysyxSoCFull__DOT__flash__DOT__state))
+                                       ? ((0x17U > (IData)(vlSelf->ysyxSoCFull__DOT__flash__DOT__counter))
+                                           ? ((IData)(1U) 
+                                              + (IData)(vlSelf->ysyxSoCFull__DOT__flash__DOT__counter))
+                                           : 0U) : 
+                                      ((IData)(1U) 
+                                       + (IData)(vlSelf->ysyxSoCFull__DOT__flash__DOT__counter)))));
+        if ((2U == (IData)(vlSelf->ysyxSoCFull__DOT__flash__DOT__state))) {
+            vlSelf->__Vdly__ysyxSoCFull__DOT__flash__DOT__data 
+                = (((0U == (IData)(vlSelf->ysyxSoCFull__DOT__flash__DOT__counter))
+                     ? vlSelf->ysyxSoCFull__DOT__flash__DOT__rdata
+                     : vlSelf->ysyxSoCFull__DOT__flash__DOT__data) 
+                   << 1U);
+        }
     }
     if (vlSelf->ysyxSoCFull__DOT____Vcellinp__flash__ss) {
         vlSelf->__Vdly__ysyxSoCFull__DOT__flash__DOT__state = 0U;
@@ -152,15 +157,13 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__0(VysyxSoCFull___0
         VL_STOP_MT("vsrc/perip/flash/flash.v", 51, "");
     }
     if (vlSelf->ysyxSoCFull__DOT____Vcellinp__flash__ss) {
-        vlSelf->__Vdly__ysyxSoCFull__DOT__flash__DOT__data = 0U;
+        vlSelf->__Vdly__ysyxSoCFull__DOT__flash__DOT__cmd = 0U;
         vlSelf->__Vdly__ysyxSoCFull__DOT__flash__DOT__addr = 0U;
     } else {
-        if ((2U == (IData)(vlSelf->ysyxSoCFull__DOT__flash__DOT__state))) {
-            vlSelf->__Vdly__ysyxSoCFull__DOT__flash__DOT__data 
-                = (((0U == (IData)(vlSelf->ysyxSoCFull__DOT__flash__DOT__counter))
-                     ? vlSelf->ysyxSoCFull__DOT__flash__DOT__rdata
-                     : vlSelf->ysyxSoCFull__DOT__flash__DOT__data) 
-                   << 1U);
+        if ((0U == (IData)(vlSelf->ysyxSoCFull__DOT__flash__DOT__state))) {
+            vlSelf->__Vdly__ysyxSoCFull__DOT__flash__DOT__cmd 
+                = ((0xfeU & ((IData)(vlSelf->ysyxSoCFull__DOT__flash__DOT__cmd) 
+                             << 1U)) | (IData)(vlSelf->ysyxSoCFull__DOT___asic_spi_mosi));
         }
         if (((1U == (IData)(vlSelf->ysyxSoCFull__DOT__flash__DOT__state)) 
              & (0x17U > (IData)(vlSelf->ysyxSoCFull__DOT__flash__DOT__counter)))) {
