@@ -103,7 +103,6 @@ always @(posedge clock or posedge reset) begin
       IDLE: begin 
         if (is_flash_access && in_psel && in_penable) begin
           state <= SEND_CMD;
-          $write("hhhhh\n");
         end else if (is_spi_master_access && in_psel && in_penable) begin
           state <= DONE; // Directly pass through for SPI master access
         end
@@ -172,6 +171,7 @@ always @(posedge clock or posedge reset) begin
         flash_wb_we_i <= 1'b0;
         flash_wb_stb_i <= 1'b0;
         flash_wb_cyc_i <= 1'b0;
+          $write("hhhhh\n");
         if (flash_wb_ack_o && !(flash_wb_dat_o[8])) begin
           state <= READ_DATA;
         end
