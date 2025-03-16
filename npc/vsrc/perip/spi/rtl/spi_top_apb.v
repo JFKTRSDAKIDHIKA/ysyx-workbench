@@ -179,8 +179,14 @@ always @(posedge clock or posedge reset) begin
         // Continue transaction
         flash_wb_stb_i <= 1'b1;
         flash_wb_cyc_i <= 1'b1;
-        // Switch state
-        state <= WAIT_COMPLETE;
+        // Debug output
+        $write("GO_BUSY\n");
+        // Wait for acknowledge
+        if (wb_ack_o) begin
+          flash_wb_stb_i <= 1'b0;
+          flash_wb_cyc_i <= 1'b0;
+          state <= WAIT_COMPLETE;
+        end
       end
       WAIT_COMPLETE: begin
         // Check if transaction is complete
