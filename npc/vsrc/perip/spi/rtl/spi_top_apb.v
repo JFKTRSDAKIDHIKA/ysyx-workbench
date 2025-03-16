@@ -27,7 +27,7 @@ module spi_top_apb #(
 
 // Debug print
 always @(*) begin
-  $write("in_paddr: %b\n", in_paddr);
+  // $write("in_paddr: %b\n", in_paddr);
 
 end
 
