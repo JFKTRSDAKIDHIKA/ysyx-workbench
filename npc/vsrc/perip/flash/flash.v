@@ -14,8 +14,9 @@ module flash (
   always @(*) begin
     $write("ren: %b\n", ren);
     $write("state: %b\n", state);
-    /*
+    
     $write("ss: %b\n", ss);
+    /*
     $write("sck: %b\n", sck);
     $write("cmd: %b\n", cmd);
     */
