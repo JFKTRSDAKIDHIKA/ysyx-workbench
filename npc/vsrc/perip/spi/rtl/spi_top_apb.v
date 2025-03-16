@@ -63,7 +63,7 @@ reg [2:0] state;
 reg [31:0] flash_cmd;
 
 // Signal in_paddr ranges from 0x3000_0000 to 0x3fff_ffff.
-assign flash_cmd = {8'h03, in_paddr[23:0]};
+assign flash_cmd = {8'h01, in_paddr[23:0]};
 
 // MUX to select between normal APB access and XIP access
 wire is_flash_access = (in_paddr >= flash_addr_start) && (in_paddr <= flash_addr_end);
