@@ -164,7 +164,7 @@ always @(posedge clock or posedge reset) begin
       GO_BUSY: begin
         // Set GO_BSY bit in CTRL register
         flash_wb_adr_i <= 5'h10;
-        flash_wb_dat_i <= {23'b0, 1'b1, 1'b0, 6'b100000}; // Set GO_BSY and CHAR_LEN
+        flash_wb_dat_i <= {23'b0, 1'b1, 1'b0, 7'b1000000}; // Set GO_BSY and CHAR_LEN
         flash_wb_sel_i <= 4'b1111;
         flash_wb_we_i <= 1'b1;
         // Continue transaction
