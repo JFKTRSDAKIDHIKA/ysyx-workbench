@@ -171,8 +171,8 @@ always @(posedge clock or posedge reset) begin
         flash_wb_we_i <= 1'b0;
         flash_wb_stb_i <= 1'b1;
         flash_wb_cyc_i <= 1'b1;
-        $write("flash_wb_ack_o: %b\n", flash_wb_ack_o);
-        $write("flash_wb_ack_o: %b\n", flash_wb_ack_o);
+        //$write("flash_wb_ack_o: %b\n", flash_wb_ack_o);
+        //$write("flash_wb_ack_o: %b\n", flash_wb_ack_o);
         if (flash_wb_ack_o && !(flash_wb_dat_o[8])) begin
           state <= READ_DATA;
         end
