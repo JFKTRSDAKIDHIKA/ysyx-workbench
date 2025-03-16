@@ -1,5 +1,12 @@
 #include "VysyxSoCFull.h"
+#include "VysyxSoCFull.h"
 #include "verilated.h"
+#include "include/difftest.h"
+#include "include/registers.h"
+#include "include/program_loader.h"
+#include "include/memory.h"
+#include "include/disassemble.h"
+#include "include/device.h"
 #include "include/difftest.h"
 #include "include/registers.h"
 #include "include/program_loader.h"
@@ -12,12 +19,16 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <cassert>    
+#include <cassert>    
 
 // #define ENABLE_MEMORY_CHECK 1
 // #define DIFFTEST 1
 #define is_silent_mode 1
 
 // Declare global variables
+VysyxSoCFull* top;  // Top module (global)
+static bool step_mode;  // Step mode flag (global)
+static riscv32_CPU_state ref;
 VysyxSoCFull* top;  // Top module (global)
 static bool step_mode;  // Step mode flag (global)
 static riscv32_CPU_state ref;
@@ -78,10 +89,12 @@ void print_memory(paddr_t start_addr, size_t size) {
 
 #ifdef DIFFTEST
 int check_dut_and_ref(VysyxSoCFull* top, paddr_t start_addr, size_t size) {
+int check_dut_and_ref(VysyxSoCFull* top, paddr_t start_addr, size_t size) {
   // ----------- 检查寄存器 -----------
   // Compare DUT registers with REF registers
   for (int i = 0; i < 32; i++) {
       if (rf_values[i] != ref.gpr[i]) {
+          std::cerr << "Register mismatch at " << regs[i]
           std::cerr << "Register mismatch at " << regs[i]
                     << " - DUT: 0x" << std::hex << rf_values[i] 
                     << " REF: 0x" << ref.gpr[i] 
@@ -91,11 +104,16 @@ int check_dut_and_ref(VysyxSoCFull* top, paddr_t start_addr, size_t size) {
           std::cerr << "DUT Registers (rf_values):" << std::endl;
           for (int j = 0; j < 32; j++) {
               std::cerr << regs[j] << ": 0x" << std::hex << rf_values[j] << std::endl;
+              std::cerr << regs[j] << ": 0x" << std::hex << rf_values[j] << std::endl;
           }
           std::cerr << "REF Registers (ref.gpr):" << std::endl;
           for (int j = 0; j < 32; j++) {
               std::cerr << regs[j] << ": 0x" << std::hex << ref.gpr[j] << std::endl;
+              std::cerr << regs[j] << ": 0x" << std::hex << ref.gpr[j] << std::endl;
           }
+
+          // Dump memory
+          print_memory(top->io_lsu_reg_dmem_addr_debug, 20);
 
           // Dump memory
           print_memory(top->io_lsu_reg_dmem_addr_debug, 20);
@@ -108,15 +126,19 @@ int check_dut_and_ref(VysyxSoCFull* top, paddr_t start_addr, size_t size) {
   // Compare program counter (PC) between DUT and REF
   if (top->io_pc_debug != ref.pc) {
       std::cerr << "PC mismatch - DUT: 0x" << std::hex << top->io_pc_debug 
+  if (top->io_pc_debug != ref.pc) {
+      std::cerr << "PC mismatch - DUT: 0x" << std::hex << top->io_pc_debug 
                 << " REF: 0x" << std::hex << ref.pc << std::endl;
       
       // Print DUT and REF register values (optional)
       std::cerr << "DUT Registers (rf_values):" << std::endl;
       for (int j = 0; j < 32; j++) {
           std::cerr << regs[j] << ": 0x" << std::hex << rf_values[j] << std::endl;
+          std::cerr << regs[j] << ": 0x" << std::hex << rf_values[j] << std::endl;
       }
       std::cerr << "REF Registers (ref.gpr):" << std::endl;
       for (int j = 0; j < 32; j++) {
+          std::cerr << regs[j] << ": 0x" << std::hex << ref.gpr[j] << std::endl;
           std::cerr << regs[j] << ": 0x" << std::hex << ref.gpr[j] << std::endl;
       }
 
@@ -167,14 +189,31 @@ int check_dut_and_ref(VysyxSoCFull* top, paddr_t start_addr, size_t size) {
 
 void tick(VysyxSoCFull* top, bool silent_mode ) {
     top->clock = 0;
+void tick(VysyxSoCFull* top, bool silent_mode ) {
+    top->clock = 0;
     top->eval();
+
 
     if (!silent_mode) {
       printf("------------------------------------------------------------------------------\n");
       std::cout << "Instruction Info: "
                 << "Instruction: " << std::setw(8) << std::setfill('0') << disassemble_instruction(top->io_inst_debug)
                 << ", PC: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_pc_debug << "\n"
+      std::cout << "Instruction Info: "
+                << "Instruction: " << std::setw(8) << std::setfill('0') << disassemble_instruction(top->io_inst_debug)
+                << ", PC: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_pc_debug << "\n"
                 << "Write-Back Info: "
+                << "wb_data: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_wb_data_debug
+                << ", wbu_reg_dmem_rdata: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_wbu_reg_dmem_rdata_debug
+                << ", wb_wen: 0x" << std::hex << static_cast<int>(top->io_wb_wen_debug)
+                << ", wb_sel: 0x" << std::hex << static_cast<int>(top->io_wb_sel_debug) << "\n"
+                << "LSU Info: "
+                << "lsu_reg_inst: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_lsu_reg_inst_debug
+                << ", lsu_reg_dmem_addr: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_lsu_reg_dmem_addr_debug
+                << ", dmem_rdata: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_dmem_rdata_debug
+                << ", dmem_wdata: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_dmem_wdata_debug
+                << ", lsu_is_ld_or_st: 0x" << std::hex << static_cast<int>(top->io_lsu_is_ld_or_st_debug) 
+                << ", lsu_memory_ar_size 0x:" << std::hex << static_cast<int>(top->io_lsu_memory_ar_size) << "\n"
                 << "wb_data: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_wb_data_debug
                 << ", wbu_reg_dmem_rdata: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_wbu_reg_dmem_rdata_debug
                 << ", wb_wen: 0x" << std::hex << static_cast<int>(top->io_wb_wen_debug)
@@ -191,8 +230,13 @@ void tick(VysyxSoCFull* top, bool silent_mode ) {
                 << ", lsu_state: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->io_lsu_state_debug)
                 << ", wbu_state: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->io_wbu_state_debug)
                 << ", Arbiter_state: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->io_Arbiter_state_debug)
+                << "ifu_state: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->io_ifu_state_debug)
+                << ", lsu_state: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->io_lsu_state_debug)
+                << ", wbu_state: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->io_wbu_state_debug)
+                << ", Arbiter_state: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->io_Arbiter_state_debug)
                 << std::dec << std::endl;
   }
+
 
 /*
     // print some debug info of memory write
@@ -219,15 +263,19 @@ void tick(VysyxSoCFull* top, bool silent_mode ) {
 */
 
     top->clock = 1;
+    top->clock = 1;
     top->eval();
     Verilated::timeInc(1); // 增加仿真时间
 }
 
 void reset(VysyxSoCFull* top, int cycles) {
     top->reset = 1;
+void reset(VysyxSoCFull* top, int cycles) {
+    top->reset = 1;
     for (int i = 0; i < cycles; ++i) {
         tick(top, true);  // forbidden single-step mode
     }
+    top->reset = 0;
     top->reset = 0;
 }
 
@@ -250,15 +298,21 @@ static char* rl_gets() {
   }
 
 static int need_check = 0;
+
+static int need_check = 0;
 static int execute_single_step() {
   tick(top, is_silent_mode);  
 #ifdef DIFFTEST
   if (need_check) {
     need_check = (top->io_wbu_state_debug == 2);
     ref_difftest_exec(1);
+  if (need_check) {
+    need_check = (top->io_wbu_state_debug == 2);
+    ref_difftest_exec(1);
     ref_difftest_regcpy(&ref, DIFFTEST_TO_REF);
     return check_dut_and_ref(top, 0, 0);
   } else {
+    need_check = (top->io_wbu_state_debug == 2);
     need_check = (top->io_wbu_state_debug == 2);
     return 0;
   }
@@ -384,6 +438,7 @@ int sdb_mainloop() {
 int main(int argc, char **argv) {
     Verilated::commandArgs(argc, argv);
     top = new VysyxSoCFull;
+    top = new VysyxSoCFull;
 
     // Default to single step mode (if no argument is provided)
     step_mode = true;
@@ -409,6 +464,7 @@ int main(int argc, char **argv) {
 #ifdef DIFFTEST
     // Initialize difftest
     init_difftest("/home/jiashuao/Desktop/ysyx-workbench/nemu/build/riscv32-nemu-interpreter-so", 0);
+    init_difftest("/home/jiashuao/Desktop/ysyx-workbench/nemu/build/riscv32-nemu-interpreter-so", 0);
 #endif
 
     // Reset
@@ -418,6 +474,8 @@ int main(int argc, char **argv) {
       if (sdb_mainloop() < 0) return -1;
     } else {
       if (cmd_c(NULL) < 0) return -1;
+    }
+
     }
 
     delete top;

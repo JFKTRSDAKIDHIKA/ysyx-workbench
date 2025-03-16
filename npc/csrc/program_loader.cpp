@@ -1,6 +1,9 @@
 #include <iostream>
 #include <iomanip> 
+#include <iomanip> 
 #include <fstream>
+#include "include/memory.h"
+#include "include/program_loader.h"
 #include "include/memory.h"
 #include "include/program_loader.h"
 

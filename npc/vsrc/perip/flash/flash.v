@@ -31,7 +31,6 @@ module flash (
   wire ren = (state == addr_t) && (counter == 8'd23);
   wire [31:0] rdata;
   wire [31:0] raddr = {8'b0, addr[22:0], mosi};
-
   flash_cmd flash_cmd_i(
     .clock(sck),
     .valid(ren),

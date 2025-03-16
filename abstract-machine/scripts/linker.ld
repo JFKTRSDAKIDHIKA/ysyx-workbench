@@ -32,6 +32,7 @@ SECTIONS {
 
   .bss : {
 	  _bss_start = .;
+	  _bss_start = .;
     *(.bss*)
     *(.sbss*)
     *(.scommon)
@@ -39,6 +40,7 @@ SECTIONS {
   } > sram : bss
 
   _stack_top = ALIGN(0x1000);
+  . = _stack_top + 0x1000;
   . = _stack_top + 0x1000;
   _stack_pointer = .;
   end = .;
