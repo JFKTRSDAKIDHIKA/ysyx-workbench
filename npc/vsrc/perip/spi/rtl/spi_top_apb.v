@@ -121,7 +121,7 @@ always @(posedge clock or posedge reset) begin
         flash_wb_stb_i <= 1'b1;
         flash_wb_cyc_i <= 1'b1;
         // Debug output
-        // $write("SEND_CMD\n");
+        $write("SEND_CMD\n");
         // Wait for acknowledge
         if (wb_ack_o) begin
           flash_wb_stb_i <= 1'b0;
@@ -261,6 +261,13 @@ always @(posedge clock or posedge reset) begin
         flash_wb_ack_o <= 1'b1;
         if (!in_penable && !in_psel) begin
           state <= IDLE;
+          flash_wb_adr_i <= 5'b0;
+          flash_wb_dat_i <= 32'b0;
+          flash_wb_sel_i <= 4'b0;
+          flash_wb_we_i <= 1'b0;
+          flash_wb_stb_i <= 1'b0;
+          flash_wb_cyc_i <= 1'b0;
+          flash_wb_ack_o <= 1'b0;
         end
         else
           state <= state;
