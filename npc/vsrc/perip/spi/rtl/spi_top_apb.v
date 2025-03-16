@@ -213,6 +213,24 @@ always @(posedge clock or posedge reset) begin
         if (!(wb_dat_o[8])) begin
           flash_wb_stb_i <= 1'b0;
           flash_wb_cyc_i <= 1'b0;
+          state <= READ_DATA;
+        end
+      end
+      READ_DATA: begin
+        // Transaction not done
+        flash_wb_ack_o <= 1'b0;
+        // Read data from RX0 register
+        flash_wb_adr_i <= 5'h00;
+        flash_wb_sel_i <= 4'b0000;
+        flash_wb_we_i <= 1'b0;
+        flash_wb_stb_i <= 1'b1;
+        flash_wb_cyc_i <= 1'b1;
+        // Debug output
+        $write("READ_DATA\n");
+        // Wait for acknowledge
+        if (wb_ack_o) begin
+          flash_wb_stb_i <= 1'b0;
+          flash_wb_cyc_i <= 1'b0;
           state <= CLEAR_SS;
         end
       end
@@ -232,24 +250,6 @@ always @(posedge clock or posedge reset) begin
         flash_wb_cyc_i <= 1'b1;
         // Debug output
         // $write("CLEAR_SS\n");
-        // Wait for acknowledge
-        if (wb_ack_o) begin
-          flash_wb_stb_i <= 1'b0;
-          flash_wb_cyc_i <= 1'b0;
-          state <= READ_DATA;
-        end
-      end
-      READ_DATA: begin
-        // Transaction not done
-        flash_wb_ack_o <= 1'b0;
-        // Read data from RX0 register
-        flash_wb_adr_i <= 5'h00;
-        flash_wb_sel_i <= 4'b0000;
-        flash_wb_we_i <= 1'b0;
-        flash_wb_stb_i <= 1'b1;
-        flash_wb_cyc_i <= 1'b1;
-        // Debug output
-        $write("READ_DATA\n");
         // Wait for acknowledge
         if (wb_ack_o) begin
           flash_wb_stb_i <= 1'b0;
