@@ -3,7 +3,7 @@ ENTRY(_start)
 PHDRS { 
   text PT_LOAD; 
   data PT_LOAD;
-  bbs PT_LOAD;
+  bss  PT_NULL;
 }
 
 MEMORY {
@@ -36,7 +36,7 @@ SECTIONS {
     *(.sbss*)
     *(.scommon)
     _ebss = .;
-  } > sram AT> flash : bbs
+  } > sram : bss
 
   _stack_top = ALIGN(0x1000);
   . = _stack_top + 0x1000;
