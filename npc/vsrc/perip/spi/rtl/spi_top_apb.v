@@ -258,7 +258,7 @@ always @(posedge clock or posedge reset) begin
       DONE: begin
         // Transaction done
         flash_wb_ack_o <= 1'b1;
-        if (!in_penable)
+        if (!in_penable && !in_psel)
           state <= IDLE;
         else
           state <= state;
