@@ -80,12 +80,17 @@ class Core extends Module with RISCVConstants {
     // Memory interface
     // Module instantiation
     val arbiter = Module(new MemoryArbiter)
-    // Connect arbiter to ifu, lsu and xbar
+    // Connect arbiter to ifu, lsu.
     arbiter.io.ifu <> ifu.io.memory
     arbiter.io.lsu <> lsu.io.memory
     arbiter.io.ifu_handshake <> ifu.io.arbiter
     arbiter.io.lsu_handshake <> lsu.io.arbiter
-    arbiter.io.axi <> io.master
+    // Connect xbar to clint and arbiter.
+    val xbar = Module(new Xbar)
+    val clint = Module(new clint)
+    xbar.io.in <> arbiter.io.axi
+    xbar.io.clint <> clint.io.in
+    xbar.io.soc <> io.master
 
 
     // Debus signals

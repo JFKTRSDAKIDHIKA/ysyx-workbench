@@ -8,44 +8,24 @@ import common.constants.RISCVConstants
 class Xbar extends Module with RISCVConstants {
   val io = IO(new Bundle {
     val in = Flipped(new AXI4IO)
-    val uart = new AXI4IO
-    val sram = new AXI4IO
-
-    // Debug signals
-    val aw_addr_debug = Output(UInt(32.W))    
+    val soc = new AXI4IO
+    val clint = new AXI4IO
   })  
 
   // Set default output values
   AXI4FlippedDefaults(io.in)
-  AXI4Defaults(io.uart)
-  AXI4Defaults(io.sram)
+  AXI4Defaults(io.soc)
+  AXI4Defaults(io.clint)
 
   // Address range check functions
-  private def isUartAddress(addr: UInt): Bool = {
-    addr >= UART_BASE_ADDR && addr < UART_TOP_ADDR
-  }
-
-  private def isSramAddress(addr: UInt): Bool = {
-    addr >= MEM_BASE && addr < MEM_TOP
+  private def isCLINTAddress(addr: UInt): Bool = {
+    addr >= CLINT_BASE && addr < CLINT_TOP
   }
 
   // Bypass logic
-  when(isUartAddress(io.in.aw.addr) || isUartAddress(io.in.ar.addr)) {
-    io.uart <> io.in
-  }.elsewhen(isSramAddress(io.in.aw.addr) || isSramAddress(io.in.ar.addr)) {
-    io.sram <> io.in
+  when(isCLINTAddress(io.in.aw.addr) || isCLINTAddress(io.in.ar.addr)) {
+    io.clint <> io.in
   }.otherwise {
-    // Unmapped address: return error response
-    io.in.b.resp := AXI4Constants.RESP_SLVERR
-    io.in.b.valid     := true.B
-    io.in.r.resp := AXI4Constants.RESP_SLVERR
-    io.in.r.valid     := true.B
-    // Ready signals for unhandled addresses
-    io.in.aw.ready    := true.B
-    io.in.ar.ready    := true.B
-    io.in.w.ready     := true.B
+    io.soc <> io.in
   }
-
-  // Debug signal assignment
-  io.aw_addr_debug := io.in.aw.addr
 }

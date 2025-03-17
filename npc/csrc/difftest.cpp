@@ -16,7 +16,7 @@ void (*ref_difftest_raise_intr)(uint64_t NO) = NULL;
 void (*ref_difftest_init)(int port) = NULL;
 
 void diff_test_sync_mrom(){
-  ref_difftest_memcpy(MROM_BASE_ADDR, Memory::mrom.data(), MROM_SIZE, DIFFTEST_TO_REF);
+  ref_difftest_memcpy(FLASH_BASE_ADDR, Memory::flash.data(), FLASH_SIZE, DIFFTEST_TO_REF);
 }
 
 // Function to initialize difftest

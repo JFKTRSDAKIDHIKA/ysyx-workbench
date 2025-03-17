@@ -153,6 +153,10 @@ trait RISCVConstants
    val SPI_BASE   = 0x10001000L.U(32.W) 
    val SPI_TOP    = 0x10001fffL.U(32.W)
 
+   // CLINT
+   val CLINT_BASE = 0x02000000L.U(32.W)
+   val CLINT_TOP  = 0x0200ffffL.U(32.W)
+
    // Memoey config
    val MEM_BASE   = 0x80000000L.U(32.W) 
    val MEM_TOP    = 0x80ffffffL.U(32.W)

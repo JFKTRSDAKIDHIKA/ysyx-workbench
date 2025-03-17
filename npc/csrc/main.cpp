@@ -21,6 +21,7 @@
 VysyxSoCFull* top;  // Top module (global)
 static bool step_mode;  // Step mode flag (global)
 static riscv32_CPU_state ref;
+static int total_cycles;
 
 // define the DPI-C functions
 // note: extern "C" 是 C++ 中的一个声明方式，用来告诉编译器，函数使用 C 的链接方式，而不是 C++ 默认的链接方式。
@@ -159,6 +160,7 @@ int check_dut_and_ref(VysyxSoCFull* top, paddr_t start_addr, size_t size) {
 #endif
 
 void tick(VysyxSoCFull* top, bool silent_mode ) {
+    total_cycles++;
     top->clock = 0;
     top->eval();
 
@@ -389,7 +391,6 @@ int main(int argc, char **argv) {
 
     // Load program
     load_program(argv[1]);
-
     // Initialize flash
     // Memory::init_flash();
 
@@ -400,12 +401,22 @@ int main(int argc, char **argv) {
 
     // Reset
     reset(top, 10); // Reset for 10 cycles
+
+    auto start_time = std::chrono::high_resolution_clock::now();
     
     if (step_mode) {
       if (sdb_mainloop() < 0) return -1;
     } else {
       if (cmd_c(NULL) < 0) return -1;
     }
+
+    auto end_time = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> elapsed = end_time - start_time;
+    double seconds = elapsed.count();
+    double cycles_per_second = total_cycles / seconds;
+
+    std::cout << "Total time: " << seconds << " seconds" << std::endl;
+    std::cout << "Simulation speed: " << cycles_per_second << " cycles/second" << std::endl;
 
     delete top;
     return 0;
