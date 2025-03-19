@@ -39,8 +39,9 @@ module EF_PSRAM_CTRL_wb (
     output  wire [3:0]      douten
 );
 
-    localparam  ST_IDLE = 1'b0,
-                ST_WAIT = 1'b1;
+    localparam  ST_IDLE  = 2'b00,
+                ST_WAIT  = 2'b01,
+                ST_INIT  = 2'b10;  // Send a request to enter the QSI mode
 
     wire        mr_sck;
     wire        mr_ce_n;
@@ -69,28 +70,62 @@ module EF_PSRAM_CTRL_wb (
     //wire[3:0]   wb_byte_sel     =   sel_i & {4{wb_we}};
 
     // The FSM
-    reg         state, nstate;
-    always @ (posedge clk_i or posedge rst_i)
-        if(rst_i)
-            state <= ST_IDLE;
-        else
+    reg [1:0] state, nstate;
+    reg [3:0] init_counter;
+    reg init_done;
+
+    always @ (posedge clk_i or posedge rst_i) begin
+        if(rst_i) begin
+            //$write("rst\n");
+            state <= ST_INIT;
+            init_counter <= 4'd0;
+            init_done <= 1'b0;
+        end else begin
             state <= nstate;
+            if (state == ST_INIT) begin
+                //$write("init_counter: %d\n", init_counter);
+                if (init_counter < 4'd8)  
+                    init_counter <= init_counter + 1;
+                else
+                    init_done <= 1'b1;
+            end
+        end
+    end
+
+    always @(*) begin
+        //$write("ce_n: %d\n", ce_n);
+    end
 
     always @* begin
         case(state)
-            ST_IDLE :
+            ST_INIT: begin
+                if (init_done) begin
+                    nstate = ST_IDLE;
+                    ////$write("init_done\n");
+                end
+                else
+                    nstate = ST_INIT;
+            end
+            ST_IDLE : begin
                 if(wb_valid)
                     nstate = ST_WAIT;
                 else
                     nstate = ST_IDLE;
-
-            ST_WAIT :
+            end
+            ST_WAIT : begin
                 if((mw_done & wb_we) | (mr_done & wb_re))
                     nstate = ST_IDLE;
                 else
                     nstate = ST_WAIT;
+            end
         endcase
     end
+
+    wire [7:0] CMD_QPI = 8'h35;
+    wire init_sck = (state == ST_INIT) ? clk_i : 1'b0;
+    wire init_ce_n = (state != ST_INIT || rst_i);
+    wire [3:0] init_dout = (state == ST_INIT) ? {3'b0, CMD_QPI[7 - init_counter]} : 4'b0;
+    wire [3:0] init_douten = (state == ST_INIT) ? 4'b1111 : 4'b0000;
 
     wire [2:0]  size =  (sel_i == 4'b0001) ? 1 :
                         (sel_i == 4'b0010) ? 1 :
@@ -161,10 +196,10 @@ module EF_PSRAM_CTRL_wb (
         .douten(mw_doe)
     );
 
-    assign sck  = wb_we ? mw_sck  : mr_sck;
-    assign ce_n = wb_we ? mw_ce_n : mr_ce_n;
-    assign dout = wb_we ? mw_dout : mr_dout;
-    assign douten  = wb_we ? {4{mw_doe}}  : {4{mr_doe}};
+    assign sck = (state == ST_INIT) ? init_sck : (wb_we ? mw_sck : mr_sck);
+    assign ce_n = (state == ST_INIT) ? init_ce_n : (wb_we ? mw_ce_n : mr_ce_n);
+    assign dout = (state == ST_INIT) ? init_dout : (wb_we ? mw_dout : mr_dout);
+    assign douten = (state == ST_INIT) ? init_douten : (wb_we ? {4{mw_doe}} : {4{mr_doe}});
 
     assign mw_din = din;
     assign mr_din = din;

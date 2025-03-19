@@ -92,7 +92,6 @@ class Core extends Module with RISCVConstants {
     xbar.io.clint <> clint.io.in
     xbar.io.soc <> io.master
 
-
     // Debus signals
     // ifu
     io.pc_debug := ifu.io.pc_debug

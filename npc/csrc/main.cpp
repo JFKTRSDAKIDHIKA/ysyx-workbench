@@ -165,7 +165,7 @@ void tick(VysyxSoCFull* top, bool silent_mode ) {
     top->eval();
 
 
-    if (!silent_mode) {
+    if ((!silent_mode) && (top->io_wbu_state_debug == 2)) {
       printf("------------------------------------------------------------------------------\n");
       std::cout << "Instruction Info: "
                 << "Instruction: " << std::setw(8) << std::setfill('0') << disassemble_instruction(top->io_inst_debug)

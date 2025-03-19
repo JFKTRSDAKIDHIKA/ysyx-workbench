@@ -3,7 +3,9 @@ package common
 import chisel3._
 import chisel3.util._
 
-class AlignmentNetwork extends Module {
+import common.constants.RISCVConstants 
+
+class AlignmentNetwork extends Module with RISCVConstants {
   val io = IO(new Bundle {
     val data_in = Input(UInt(32.W))   
     val dmem_addr = Input(UInt(32.W)) 
@@ -19,6 +21,15 @@ class AlignmentNetwork extends Module {
   compiled instructions meet specific alignment requirements.
 */
 
+  // Determine address type based on io.dmem_addr
+  val rw_address_type = MuxCase(OTHER_ADDR, Array(
+    ((io.dmem_addr >= UART_BASE_ADDR) && (io.dmem_addr <= UART_TOP_ADDR)) -> UART_ADDR,
+    ((io.dmem_addr >= SRAM_BASE) && (io.dmem_addr <= SRAM_TOP)) -> SRAM_ADDR,
+    ((io.dmem_addr >= FLASH_BASE) && (io.dmem_addr <= FLASH_TOP)) -> FLASH_ADDR,
+    ((io.dmem_addr >= SPI_BASE) && (io.dmem_addr <= SPI_TOP)) -> SPI_ADDR,
+    ((io.dmem_addr >= PSRAM_BASE) && (io.dmem_addr <= PSRAM_TOP)) -> PSRAM_ADDR
+  ))
+
   // shift logic
   val shift_amount = io.dmem_addr(1, 0)
   val shifted_data = io.data_in >> (shift_amount * 8.U)
@@ -29,12 +40,23 @@ class AlignmentNetwork extends Module {
   val sign_ext_byte = Cat(Fill(24, shifted_data(7)), shifted_data(7, 0))
   val sign_ext_half = Cat(Fill(16, shifted_data(15)), shifted_data(15, 0))
 
-  // Output select
-  io.data_out := MuxLookup(io.control, 0.U)(Seq(
+  val aligned_data_out = MuxLookup(io.control, 0.U)(Seq(
     4.U -> zero_ext_byte, // LBU
     5.U -> zero_ext_half, // LHU
     2.U -> io.data_in,    // LW
     0.U -> sign_ext_byte, // LB
     1.U -> sign_ext_half  // LH
+  ))
+
+  // Output select
+  io.data_out := MuxLookup(rw_address_type, aligned_data_out)(Seq(
+    // UART supports narrow transfer
+    UART_ADDR -> io.data_in,
+    // SRAM does not support narrow transfer
+    SRAM_ADDR -> aligned_data_out,
+    // SPI does not support narrow transfer
+    SPI_ADDR -> aligned_data_out,
+    // PSRAM supports narrow transfer
+    PSRAM_ADDR -> aligned_data_out
   ))
 }

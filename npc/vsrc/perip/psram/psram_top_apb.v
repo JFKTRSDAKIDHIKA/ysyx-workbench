@@ -16,7 +16,12 @@ module psram_top_apb (
   output qspi_ce_n,
   inout  [3:0] qspi_dio
 );
-
+/*
+  always @(*) begin
+    $write("in_penable: %h\n", in_penable);
+    $write("in_paddr: %h\n", in_paddr);
+  end
+*/
   wire [3:0] din, dout, douten;
   wire ack;
   EF_PSRAM_CTRL_wb u0 (
