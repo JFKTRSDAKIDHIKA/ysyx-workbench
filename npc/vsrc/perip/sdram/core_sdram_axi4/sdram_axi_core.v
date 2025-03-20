@@ -464,15 +464,19 @@ reg [SDRAM_DATA_W-1:0] sample_data0_q;
 always @ (posedge clk_i or posedge rst_i)
 if (rst_i)
     sample_data0_q <= {SDRAM_DATA_W{1'b0}};
-else
+else begin
+    //$strobe("Input sampling: sample_data0_q: %h\n", sample_data0_q);
     sample_data0_q <= sdram_data_in_w;
+end
 
 reg [SDRAM_DATA_W-1:0] sample_data_q;
 always @ (posedge clk_i or posedge rst_i)
 if (rst_i)
     sample_data_q <= {SDRAM_DATA_W{1'b0}};
-else
+else begin
+    //$strobe("Input sampling: sample_data_q: %h\n", sample_data_q);
     sample_data_q <= sample_data0_q;
+end
 
 //-----------------------------------------------------------------
 // Command Output
@@ -552,6 +556,7 @@ begin
     //-----------------------------------------
     STATE_ACTIVATE :
     begin
+        //$strobe("Time: %0t, STATE_ACTIVATE CMD Issued | active_row_q: %h, bank_q: %h", $time, addr_row_w, addr_bank_w);
         // Select a row and activate it
         command_q     <= CMD_ACTIVE;
         addr_q        <= addr_row_w;
@@ -598,6 +603,7 @@ begin
     //-----------------------------------------
     STATE_READ :
     begin
+        //$display("Time: %0t, READ CMD Issued | addr_q: %h", $time, addr_col_w);
         command_q   <= CMD_READ;
         addr_q      <= addr_col_w;
         bank_q      <= addr_bank_w;
@@ -613,6 +619,9 @@ begin
     //-----------------------------------------
     STATE_WRITE0 :
     begin
+        //$display("Time: %0t, Write Command Issued | addr_q: %h, data_q: %h, dqm_q: %b", 
+        //     $time, addr_col_w, ram_write_data_w[15:0], ~ram_wr_w[1:0]);
+
         command_q       <= CMD_WRITE;
         addr_q          <= addr_col_w;
         bank_q          <= addr_bank_w;
@@ -632,6 +641,9 @@ begin
     //-----------------------------------------
     STATE_WRITE1 :
     begin
+        //$display("Time: %0t, STATE_WRITE1 | data_q: %h, dqm_q: %b", 
+        //     $time, data_buffer_q, dqm_buffer_q);
+
         // Burst continuation
         command_q   <= CMD_NOP;
 
@@ -668,8 +680,11 @@ if (rst_i)
     data_buffer_q <= 16'b0;
 else if (state_q == STATE_WRITE0)
     data_buffer_q <= ram_write_data_w[31:16];
-else if (rd_q[SDRAM_READ_LATENCY+1])
+else if (rd_q[SDRAM_READ_LATENCY+1]) begin
     data_buffer_q <= sample_data_q;
+    //$strobe("Time: %t, data_buffer_q: %h\n", $time, data_buffer_q);
+    //$strobe("Time: %t, sample_data_q: %h\n", $time, sample_data_q);
+end
 
 // Read data output
 assign ram_read_data_w = {sample_data_q, data_buffer_q};
@@ -686,8 +701,10 @@ else
 begin
     if (state_q == STATE_WRITE1)
         ack_q <= 1'b1;
-    else if (rd_q[SDRAM_READ_LATENCY+1])
+    else if (rd_q[SDRAM_READ_LATENCY+1]) begin
         ack_q <= 1'b1;
+        //$strobe("Time: %t, Read data valid! | ack_q: %b, ram_read_data_w: %h\n", $time, ack_q, ram_read_data_w);
+    end
     else
         ack_q <= 1'b0;
 end
