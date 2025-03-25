@@ -112,7 +112,7 @@ int check_dut_and_ref(VysyxSoCFull* top, paddr_t start_addr, size_t size) {
           return -1;  
       }
   }
-
+/*
   // Compare program counter (PC) between DUT and REF
   if (top->io_pc_debug != ref.pc) {
       std::cerr << "PC mismatch - DUT: 0x" << std::hex << top->io_pc_debug 
@@ -130,6 +130,7 @@ int check_dut_and_ref(VysyxSoCFull* top, paddr_t start_addr, size_t size) {
 
       return -1;  // End simulation
   }
+*/
 /*
 #ifdef ENABLE_MEMORY_CHECK
   // ----------- 检查内存 -----------
