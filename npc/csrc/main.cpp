@@ -20,7 +20,7 @@
 
 // Declare global variables
 VysyxSoCFull* top;  // Top module (global)
-VerilatedVcdC* tfp;
+//VerilatedVcdC* tfp;
 static bool step_mode;  // Step mode flag (global)
 static riscv32_CPU_state ref;
 static int total_cycles;
