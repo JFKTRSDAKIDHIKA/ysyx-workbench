@@ -112,18 +112,12 @@ always @(posedge clk) begin
             end
         end
         // The READ command
-        else if (is_read) begin
+        else if (is_read && active[ba]) begin
             state[ba]         <= WAIT_READ;
             // Reduce latency by 1 to synchronize with SDRAM controller timing
             delay_counter[ba] <= cas_latency - 1;
             current_col[ba]   <= a[8:0];
             burst_counter[ba] <= burst_length - 1;
-            // Clear the bank
-            for (integer i = 0; i < BANK_COUNT; i++) begin
-                if (i != ba) begin
-                    active[i] <= 0;
-                end
-            end
             // Select the bank
             active[ba]        <= 1;
         end
