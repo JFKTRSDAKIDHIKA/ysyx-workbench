@@ -15,7 +15,7 @@
 #include <cassert>    
 
 // #define ENABLE_MEMORY_CHECK 1
-#define DIFFTEST 1
+// #define DIFFTEST 1
 #define is_silent_mode 0
 #define TRACE
 
@@ -250,21 +250,15 @@ static char* rl_gets() {
   }
 
 static int need_check = 0;
-static int need_quit = 0;
 static int execute_single_step() {
   tick(top, is_silent_mode);  
 #ifdef DIFFTEST
   if (need_check) {
-    if (need_quit) {
-      return -1;
-    }
     need_check = (top->io_wbu_state_debug == 2);
     ref_difftest_exec(1);
     ref_difftest_regcpy(&ref, DIFFTEST_TO_REF);
-    need_quit = check_dut_and_ref(top, 0, 0);
-    return 0;
+    return check_dut_and_ref(top, 0, 0);
   } else {
-    need_quit = 0;
     need_check = (top->io_wbu_state_debug == 2);
     return 0;
   }
