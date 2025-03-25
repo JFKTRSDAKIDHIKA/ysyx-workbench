@@ -128,10 +128,11 @@ always @(posedge clk) begin
             active[ba]        <= 1;
         end
         // The WRITE command is used to initiate a burst write access to an active row.
-        else if (is_write) begin
+        else if (is_write && active[ba]) begin
             state[ba]         <= WRITING;
             burst_counter[ba] <= burst_length - 1;
             current_col[ba]   <= a[8:0];
+            /*
             // Clear the bank
             for (integer i = 0; i < BANK_COUNT; i++) begin
                 if (i != ba) begin
@@ -140,6 +141,7 @@ always @(posedge clk) begin
             end
             // Select the bank
             active[ba]        <= 1;
+            */
         end
     end
 end
