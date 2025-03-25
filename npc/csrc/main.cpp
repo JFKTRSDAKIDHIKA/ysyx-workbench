@@ -1,5 +1,6 @@
 #include "VysyxSoCFull.h"
 #include "verilated.h"
+#include "verilated_vcd_c.h"
 #include "include/difftest.h"
 #include "include/registers.h"
 #include "include/program_loader.h"
@@ -19,9 +20,11 @@
 
 // Declare global variables
 VysyxSoCFull* top;  // Top module (global)
+VerilatedVcdC* tfp;
 static bool step_mode;  // Step mode flag (global)
 static riscv32_CPU_state ref;
 static int total_cycles;
+static int time_i = 0;
 
 // define the DPI-C functions
 // note: extern "C" 是 C++ 中的一个声明方式，用来告诉编译器，函数使用 C 的链接方式，而不是 C++ 默认的链接方式。
@@ -163,7 +166,8 @@ void tick(VysyxSoCFull* top, bool silent_mode ) {
     total_cycles++;
     top->clock = 0;
     top->eval();
-
+    tfp->dump(time_i);
+    time_i++;
 
     if ((!silent_mode) && (top->io_wbu_state_debug == 2)) {
       printf("------------------------------------------------------------------------------\n");
@@ -375,6 +379,11 @@ int main(int argc, char **argv) {
     Verilated::commandArgs(argc, argv);
     top = new VysyxSoCFull;
 
+    Verilated::traceEverOn(true);
+    tfp = new VerilatedVcdC;
+    top->trace(tfp, 99);
+    tfp->open("waveform.vcd");
+
     // Default to single step mode (if no argument is provided)
     step_mode = true;
     if (argc > 2) {
@@ -418,6 +427,8 @@ int main(int argc, char **argv) {
     std::cout << "Total time: " << seconds << " seconds" << std::endl;
     std::cout << "Simulation speed: " << cycles_per_second << " cycles/second" << std::endl;
 
+    tfp->close();
+    delete tfp;
     delete top;
     return 0;
 }

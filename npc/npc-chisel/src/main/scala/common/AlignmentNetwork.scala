@@ -27,8 +27,9 @@ class AlignmentNetwork extends Module with RISCVConstants {
     ((io.dmem_addr >= SRAM_BASE) && (io.dmem_addr <= SRAM_TOP)) -> SRAM_ADDR,
     ((io.dmem_addr >= FLASH_BASE) && (io.dmem_addr <= FLASH_TOP)) -> FLASH_ADDR,
     ((io.dmem_addr >= SPI_BASE) && (io.dmem_addr <= SPI_TOP)) -> SPI_ADDR,
-    ((io.dmem_addr >= PSRAM_BASE) && (io.dmem_addr <= PSRAM_TOP)) -> PSRAM_ADDR
-  ))
+    ((io.dmem_addr >= PSRAM_BASE) && (io.dmem_addr <= PSRAM_TOP)) -> PSRAM_ADDR,
+    ((io.dmem_addr >= SDRAM_BASE) && (io.dmem_addr <= SDRAM_TOP)) -> SDRAM_ADDR
+))
 
   // shift logic
   val shift_amount = io.dmem_addr(1, 0)
@@ -57,6 +58,8 @@ class AlignmentNetwork extends Module with RISCVConstants {
     // SPI does not support narrow transfer
     SPI_ADDR -> aligned_data_out,
     // PSRAM supports narrow transfer
-    PSRAM_ADDR -> aligned_data_out
+    PSRAM_ADDR -> aligned_data_out,
+    // SDRAM ???
+    SDRAM_ADDR -> aligned_data_out
   ))
 }

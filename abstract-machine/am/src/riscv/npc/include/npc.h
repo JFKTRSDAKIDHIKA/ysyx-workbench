@@ -24,6 +24,7 @@
 
 //SDRAM
 #define SDRAM_BASR 0xa0000000
-#define SDRAM_TEST_SIZE 0x10000
+#define SDRAM_TEST_SIZE 0x400000
+//#define SDRAM_TEST_SIZE 0x1000
 
 #endif

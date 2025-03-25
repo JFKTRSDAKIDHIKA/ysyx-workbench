@@ -34,34 +34,41 @@
 
 module sdram_axi_core
 (
-    // Inputs
-     input           clk_i
-    ,input           rst_i
-    ,input  [  3:0]  inport_wr_i
-    ,input           inport_rd_i
-    ,input  [  7:0]  inport_len_i
-    ,input  [ 31:0]  inport_addr_i
-    ,input  [ 31:0]  inport_write_data_i
-    ,input  [ 15:0]  sdram_data_input_i
+    // 时钟和复位信号
+    input           clk_i,                  // 时钟输入
+    input           rst_i,                  // 复位输入，高电平有效
 
-    // Outputs
-    ,output          inport_accept_o
-    ,output          inport_ack_o
-    ,output          inport_error_o
-    ,output [ 31:0]  inport_read_data_o
-    ,output          sdram_clk_o
-    ,output          sdram_cke_o
-    ,output          sdram_cs_o
-    ,output          sdram_ras_o
-    ,output          sdram_cas_o
-    ,output          sdram_we_o
-    ,output [  1:0]  sdram_dqm_o
-    ,output [ 12:0]  sdram_addr_o
-    ,output [  1:0]  sdram_ba_o
-    ,output [ 15:0]  sdram_data_output_o
-    ,output          sdram_data_out_en_o
+    // AXI-like 主机接口（输入）
+    input  [  3:0]  inport_wr_i,             // 写使能信号，每个比特表示一个字节是否被写入（Byte Enable）
+    input           inport_rd_i,             // 读使能信号，高电平表示进行 SDRAM 读操作
+    input  [  7:0]  inport_len_i,            // 读/写事务的突发长度（burst length）
+    input  [ 31:0]  inport_addr_i,           // 访问 SDRAM 的地址
+    input  [ 31:0]  inport_write_data_i,     // 需要写入 SDRAM 的数据
+    input  [ 15:0]  sdram_data_input_i,      // SDRAM 读出的数据（SDRAM -> 控制器）
+
+    // AXI-like 主机接口（输出）
+    output          inport_accept_o,         // 指示控制器是否可以接受新的读/写请求
+    output          inport_ack_o,            // 事务完成确认信号
+    output          inport_error_o,          // 访问错误指示信号（如非法地址访问）
+    output [ 31:0]  inport_read_data_o,      // 从 SDRAM 读取的数据（控制器 -> 处理器）
+
+    // SDRAM 控制信号（输出）
+    output          sdram_clk_o,             // SDRAM 时钟输出
+    output          sdram_cke_o,             // SDRAM 时钟使能（Clock Enable）
+    output          sdram_cs_o,              // SDRAM 片选（Chip Select）
+    output          sdram_ras_o,             // SDRAM 行地址选通信号（Row Address Strobe）
+    output          sdram_cas_o,             // SDRAM 列地址选通信号（Column Address Strobe）
+    output          sdram_we_o,              // SDRAM 写使能信号（Write Enable）
+
+    // SDRAM 数据控制信号
+    output [  1:0]  sdram_dqm_o,             // SDRAM 数据屏蔽（Data Mask），控制哪些字节有效
+    output [ 12:0]  sdram_addr_o,            // SDRAM 地址总线（支持 8192 行）
+    output [  1:0]  sdram_ba_o,              // SDRAM Bank 地址（选择不同的 Bank）
+
+    // SDRAM 数据总线（输出）
+    output [ 15:0]  sdram_data_output_o,     // SDRAM 写入的数据（控制器 -> SDRAM）
+    output          sdram_data_out_en_o      // SDRAM 数据总线方向控制，高电平时表示写操作
 );
-
 
 
 //-----------------------------------------------------------------
@@ -177,7 +184,9 @@ reg  [STATE_W-1:0]     target_state_q;
 reg  [STATE_W-1:0]     delay_state_q;
 
 // Address bits
+// 从 ram_addr_w 提取列地址，并扩展到 SDRAM_ROW_W 位
 wire [SDRAM_ROW_W-1:0]  addr_col_w  = {{(SDRAM_ROW_W-SDRAM_COL_W){1'b0}}, ram_addr_w[SDRAM_COL_W:2], 1'b0};
+// 从 ram_addr_w 提取行地址
 wire [SDRAM_ROW_W-1:0]  addr_row_w  = ram_addr_w[SDRAM_ADDR_W:SDRAM_COL_W+2+1];
 wire [SDRAM_BANK_W-1:0] addr_bank_w = ram_addr_w[SDRAM_COL_W+2:SDRAM_COL_W+2-1];
 
@@ -186,151 +195,163 @@ wire [SDRAM_BANK_W-1:0] addr_bank_w = ram_addr_w[SDRAM_COL_W+2:SDRAM_COL_W+2-1];
 //-----------------------------------------------------------------
 always @ *
 begin
+    // 默认情况下，保持当前状态
     next_state_r   = state_q;
+    // 目标状态（用于预充电后决定下一步去向）
     target_state_r = target_state_q;
 
     case (state_q)
     //-----------------------------------------
-    // STATE_INIT
+    // STATE_INIT: 初始化状态
     //-----------------------------------------
     STATE_INIT :
     begin
+        // 如果检测到刷新请求，进入空闲状态
         if (refresh_q)
             next_state_r = STATE_IDLE;
     end
+
     //-----------------------------------------
-    // STATE_IDLE
+    // STATE_IDLE: 空闲状态
     //-----------------------------------------
     STATE_IDLE :
     begin
-        // Pending refresh
-        // Note: tRAS (open row time) cannot be exceeded due to periodic
-        //        auto refreshes.
+        // 处理刷新请求
+        // SDRAM需要定期刷新以保持数据有效
         if (refresh_q)
         begin
-            // Close open rows, then refresh
+            // 如果当前有打开的行，先关闭行（进入预充电状态）
             if (|row_open_q)
                 next_state_r = STATE_PRECHARGE;
             else
-                next_state_r = STATE_REFRESH;
+                next_state_r = STATE_REFRESH; // 直接进入刷新
 
+            // 目标状态设为刷新
             target_state_r = STATE_REFRESH;
         end
-        // Access request
+        // 处理读写请求
         else if (ram_req_w)
         begin
-            // Open row hit
+            // 如果当前访问的行已打开（命中），直接读/写
             if (row_open_q[addr_bank_w] && addr_row_w == active_row_q[addr_bank_w])
             begin
                 if (!ram_rd_w)
-                    next_state_r = STATE_WRITE0;
+                    next_state_r = STATE_WRITE0; // 进入写入阶段
                 else
-                    next_state_r = STATE_READ;
+                    next_state_r = STATE_READ; // 进入读取阶段
             end
-            // Row miss, close row, open new row
+            // 访问的行未打开但当前bank中有其它行已打开，先关闭已打开的行
             else if (row_open_q[addr_bank_w])
             begin
-                next_state_r   = STATE_PRECHARGE;
-
+                next_state_r   = STATE_PRECHARGE; // 关闭当前行
                 if (!ram_rd_w)
-                    target_state_r = STATE_WRITE0;
+                    target_state_r = STATE_WRITE0; // 目标状态为写
                 else
-                    target_state_r = STATE_READ;
+                    target_state_r = STATE_READ; // 目标状态为读
             end
-            // No open row, open row
+            // 如果当前bank中没有任何行打开，直接激活目标行
             else
             begin
                 next_state_r   = STATE_ACTIVATE;
-
                 if (!ram_rd_w)
-                    target_state_r = STATE_WRITE0;
+                    target_state_r = STATE_WRITE0; // 目标状态为写
                 else
-                    target_state_r = STATE_READ;
+                    target_state_r = STATE_READ; // 目标状态为读
             end
         end
     end
+
     //-----------------------------------------
-    // STATE_ACTIVATE
+    // STATE_ACTIVATE: 激活状态（打开行）
     //-----------------------------------------
     STATE_ACTIVATE :
     begin
-        // Proceed to read or write state
+        // 激活完成后，直接进入目标状态（读或写）
         next_state_r = target_state_r;
     end
+
     //-----------------------------------------
-    // STATE_READ
+    // STATE_READ: 读取数据
     //-----------------------------------------
     STATE_READ :
     begin
-        next_state_r = STATE_READ_WAIT;
+        next_state_r = STATE_READ_WAIT; // 进入等待状态，确保数据稳定
     end
+
     //-----------------------------------------
-    // STATE_READ_WAIT
+    // STATE_READ_WAIT: 读取数据等待
     //-----------------------------------------
     STATE_READ_WAIT :
     begin
-        next_state_r = STATE_IDLE;
+        next_state_r = STATE_IDLE; // 读取完成，回到空闲状态
 
-        // Another pending read request (with no refresh pending)
+        // 如果还有未完成的读取请求，并且不需要刷新
         if (!refresh_q && ram_req_w && ram_rd_w)
         begin
-            // Open row hit
+            // 如果新的请求命中已打开的行，直接读取
             if (row_open_q[addr_bank_w] && addr_row_w == active_row_q[addr_bank_w])
                 next_state_r = STATE_READ;
         end
     end
+
     //-----------------------------------------
-    // STATE_WRITE0
+    // STATE_WRITE0: 写入数据（阶段1）
     //-----------------------------------------
     STATE_WRITE0 :
     begin
-        next_state_r = STATE_WRITE1;
+        next_state_r = STATE_WRITE1; // 进入下一阶段写入
     end
+
     //-----------------------------------------
-    // STATE_WRITE1
+    // STATE_WRITE1: 写入数据（阶段2）
     //-----------------------------------------
     STATE_WRITE1 :
     begin
-        next_state_r = STATE_IDLE;
+        next_state_r = STATE_IDLE; // 写入完成，回到空闲状态
 
-        // Another pending write request (with no refresh pending)
+        // 如果还有未完成的写入请求，并且不需要刷新
         if (!refresh_q && ram_req_w && (ram_wr_w != 4'b0))
         begin
-            // Open row hit
+            // 如果新的请求命中已打开的行，直接写入
             if (row_open_q[addr_bank_w] && addr_row_w == active_row_q[addr_bank_w])
                 next_state_r = STATE_WRITE0;
         end
     end
+
     //-----------------------------------------
-    // STATE_PRECHARGE
+    // STATE_PRECHARGE: 预充电（关闭行）
     //-----------------------------------------
     STATE_PRECHARGE :
     begin
-        // Closing row to perform refresh
+        // 如果是为了刷新而关闭行，下一步进入刷新
         if (target_state_r == STATE_REFRESH)
             next_state_r = STATE_REFRESH;
-        // Must be closing row to open another
+        // 否则，关闭行后进入激活状态
         else
             next_state_r = STATE_ACTIVATE;
     end
+
     //-----------------------------------------
-    // STATE_REFRESH
+    // STATE_REFRESH: 刷新状态
     //-----------------------------------------
     STATE_REFRESH :
     begin
-        next_state_r = STATE_IDLE;
+        next_state_r = STATE_IDLE; // 刷新完成，回到空闲状态
     end
+
     //-----------------------------------------
-    // STATE_DELAY
+    // STATE_DELAY: 延迟状态
     //-----------------------------------------
     STATE_DELAY :
     begin
-        next_state_r = delay_state_q;
+        next_state_r = delay_state_q; // 延迟完成后，进入目标状态
     end
+
     default:
         ;
    endcase
 end
+
 
 //-----------------------------------------------------------------
 // Delays
@@ -603,7 +624,7 @@ begin
     //-----------------------------------------
     STATE_READ :
     begin
-        //$display("Time: %0t, READ CMD Issued | addr_q: %h", $time, addr_col_w);
+        //$display("Time: %0t, READ CMD Issued | addr_q: %h | dram addr: %h", $time, addr_col_w, inport_addr_i);
         command_q   <= CMD_READ;
         addr_q      <= addr_col_w;
         bank_q      <= addr_bank_w;
@@ -660,14 +681,21 @@ end
 
 //-----------------------------------------------------------------
 // Record read events
+// 记录 SDRAM 读取事件
 //-----------------------------------------------------------------
 reg [SDRAM_READ_LATENCY+1:0]  rd_q;
 
 always @ (posedge clk_i or posedge rst_i)
 if (rst_i)
+    // 异步复位：当 `rst_i` 置高时，将 `rd_q` 置为全 0。
     rd_q    <= {(SDRAM_READ_LATENCY+2){1'b0}};
 else
+    // `rd_q` 作为一个移位寄存器，每个时钟周期向左移动一位，
+    // 并在最低位插入当前 `state_q` 是否为 `STATE_READ` 的结果。
+    // 这样可以记录 `STATE_READ` 发生的时间，并在后续的若干个
+    // 时钟周期内保持这个信息，用于对齐 SDRAM 读数据的返回时序。
     rd_q    <= {rd_q[SDRAM_READ_LATENCY:0], (state_q == STATE_READ)};
+
 
 //-----------------------------------------------------------------
 // Data Buffer
@@ -681,6 +709,7 @@ if (rst_i)
 else if (state_q == STATE_WRITE0)
     data_buffer_q <= ram_write_data_w[31:16];
 else if (rd_q[SDRAM_READ_LATENCY+1]) begin
+    // 读取数据的时候，先读取的是低位，后读取的是高位。
     data_buffer_q <= sample_data_q;
     //$strobe("Time: %t, data_buffer_q: %h\n", $time, data_buffer_q);
     //$strobe("Time: %t, sample_data_q: %h\n", $time, sample_data_q);
@@ -703,7 +732,7 @@ begin
         ack_q <= 1'b1;
     else if (rd_q[SDRAM_READ_LATENCY+1]) begin
         ack_q <= 1'b1;
-        //$strobe("Time: %t, Read data valid! | ack_q: %b, ram_read_data_w: %h\n", $time, ack_q, ram_read_data_w);
+        //$strobe("Time: %t, Read data valid! | ack_q: %b, ram_read_data_w: %h, inport_accept_o: %h\n", $time, ack_q, ram_read_data_w, inport_accept_o);
     end
     else
         ack_q <= 1'b0;

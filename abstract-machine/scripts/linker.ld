@@ -12,14 +12,15 @@ MEMORY {
   flash : ORIGIN = 0x30000000, LENGTH = 256M
   psram : ORIGIN = 0x80000000, LENGTH = 4M
   sram : ORIGIN = 0x0f000000, LENGTH = 8k 
+  sdram : ORIGIN = 0xa0000000, LENGTH = 4M
 }
 
 SECTIONS {
   . = ORIGIN(flash);
   _flash_start = .;
 
-  _psram_start = ORIGIN(psram);
-  _psram_end = ORIGIN(psram) + LENGTH(psram);
+  _sdram_start = ORIGIN(sdram);
+  _sdram_end = ORIGIN(sdram) + LENGTH(sdram);
 
   /* First stage Bootloader 段：VMA 和 LMA 都在 Flash 中 */
   .FSBL : {
@@ -38,7 +39,7 @@ SECTIONS {
 
   .text : {
     _text_lma = LOADADDR(.text);
-    . = ORIGIN(psram);
+    /*. = ORIGIN(psram);*/
     _text = .;    /* .text段在psram的起始地址 */
     *(.text*)
     *(.rodata*)
@@ -47,20 +48,19 @@ SECTIONS {
 
   .data : {
     _data_lma = LOADADDR(.data);  /* LMA（加载地址）来自 flash */
-    _data = .;                    /* VMA（运行时地址）在 psram */
+    _data = .;                    /* VMA（运行时地址）在 sdram */
     *(.data .data.* .sdata.*)     /* 匹配所有 .data 和 .data.* 子段 和.sdata.* 子段*/
     _edata = .;
-  } > psram AT> flash : data
+  } > sdram AT> flash : data
   _data_len = _edata - _data;
 
   .bss : {
-	  _bss_start = .;
 	  _bss_start = .;
     *(.bss*)
     *(.sbss*)
     *(.scommon)
     _ebss = .;
-  } > psram : bss
+  } > sdram : bss
 
   /* 将栈分配到 SRAM 中 */
   .stack : {
@@ -71,7 +71,7 @@ SECTIONS {
     _stack_pointer = .;       
   } > sram
   
-  /* 堆起始地址仍放在 PSRAM 中，紧跟 .bss 之后 */
+  /* 堆起始地址仍放在 SDRAM 中，紧跟 .bss 之后 */
   . = _ebss;
   _heap_start = ALIGN(0x1000);
 
