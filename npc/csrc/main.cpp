@@ -175,7 +175,7 @@ void tick(VysyxSoCFull* top, bool silent_mode ) {
     time_i++;
 #endif
 
-    if ((!silent_mode) && (top->io_wbu_state_debug == 2)) {
+    if ((!silent_mode)) {
       printf("------------------------------------------------------------------------------\n");
       std::cout << "Instruction Info: "
                 << "Instruction: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_inst_debug
