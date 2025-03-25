@@ -175,10 +175,10 @@ void tick(VysyxSoCFull* top, bool silent_mode ) {
     time_i++;
 #endif
 
-    if ((!silent_mode)) {
+    if ((!silent_mode) && (top->io_wbu_state_debug == 2)) {
       printf("------------------------------------------------------------------------------\n");
       std::cout << "Instruction Info: "
-                << "Instruction: " << std::setw(8) << std::setfill('0') << top->io_inst_debug
+                << "Instruction: " << std::setw(8) << std::setfill('0') << std::hex << top->io_inst_debug
                 << ", PC: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_pc_debug << "\n"
                 << "Write-Back Info: "
                 << "wb_data: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_wb_data_debug
