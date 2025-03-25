@@ -40,10 +40,10 @@ SECTIONS {
   .text : {
     _text_lma = LOADADDR(.text);
     /*. = ORIGIN(sdram);*/
-    _text = .;    /* .text段在sdram的起始地址 */
+    _text = .;    /* .text段在psram的起始地址 */
     *(.text*)
     *(.rodata*)
-    _etext = .;   /* .text段在sdram的结束地址 */
+    _etext = .;   /* .text段在psram的结束地址 */
   } > sdram AT> flash : text
 
   .data : {
