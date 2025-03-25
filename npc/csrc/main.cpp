@@ -264,6 +264,7 @@ static int execute_single_step() {
     need_quit = check_dut_and_ref(top, 0, 0);
     return 0;
   } else {
+    need_quit = 0;
     need_check = (top->io_wbu_state_debug == 2);
     return 0;
   }
