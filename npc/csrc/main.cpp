@@ -166,7 +166,7 @@ void tick(VysyxSoCFull* top, bool silent_mode ) {
     total_cycles++;
     top->clock = 0;
     top->eval();
-    tfp->dump(time_i);
+    //tfp->dump(time_i);
     time_i++;
 
     if ((!silent_mode) && (top->io_wbu_state_debug == 2)) {
