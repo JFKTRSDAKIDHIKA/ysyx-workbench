@@ -381,7 +381,7 @@ int main(int argc, char **argv) {
 
     Verilated::traceEverOn(true);
     tfp = new VerilatedVcdC;
-    top->trace(tfp, 99);
+    top ->trace(tfp, 3);
     tfp->open("waveform.vcd");
 
     // Default to single step mode (if no argument is provided)
