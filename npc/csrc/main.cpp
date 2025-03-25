@@ -427,8 +427,8 @@ int main(int argc, char **argv) {
     std::cout << "Total time: " << seconds << " seconds" << std::endl;
     std::cout << "Simulation speed: " << cycles_per_second << " cycles/second" << std::endl;
 
-    tfp->close();
-    delete tfp;
+    //tfp->close();
+    //delete tfp;
     delete top;
     return 0;
 }
