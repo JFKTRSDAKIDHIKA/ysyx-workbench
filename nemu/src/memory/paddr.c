@@ -28,6 +28,7 @@ static uint8_t pmem[CONFIG_MSIZE] PG_ALIGN = {};
 // Add sram and flash to NEMU
 static uint8_t sram[CONFIG_SRAM_SIZE_KB * 1024] PG_ALIGN = {};
 static uint8_t flash[CONFIG_FLASH_SIZE_KB * 1024] PG_ALIGN = {};
+static uint8_t sdram[CONFIG_SDRAM_SIZE_KB * 1024] PG_ALIGN = {};
 #endif
 
 // Helper function: Check if access information needs to be recorded
@@ -46,8 +47,8 @@ static inline bool need_mtrace(paddr_t addr) {
   }
   
 uint8_t* guest_to_host(paddr_t paddr) { 
-  if (paddr >= CONFIG_MBASE) {
-    return pmem + paddr - CONFIG_MBASE; 
+  if (IS_SDRAM_ADDR(paddr)) {
+    return sdram + paddr - CONFIG_SDRAM_BASE; 
   } else if (IS_SRAM_ADDR(paddr)) {
     return sram + paddr - CONFIG_SRAM_BASE;
   } else if (IS_FLASH_ADDR(paddr)) {
@@ -59,8 +60,8 @@ uint8_t* guest_to_host(paddr_t paddr) {
 }
 
 paddr_t host_to_guest(uint8_t *haddr) { 
-  if (haddr - pmem + CONFIG_MBASE >= CONFIG_MBASE) {
-    return haddr - pmem + CONFIG_MBASE; 
+  if (IS_SDRAM_ADDR(haddr - sdram + CONFIG_SDRAM_BASE)) {
+    return haddr - sdram + CONFIG_SDRAM_BASE; 
   } else if (IS_SRAM_ADDR(haddr - sram + CONFIG_SRAM_BASE)) {
     return haddr - sram + CONFIG_SRAM_BASE;
   } else if (IS_FLASH_ADDR(haddr - flash + CONFIG_FLASH_BASE)) {
@@ -83,9 +84,11 @@ static void pmem_write(paddr_t addr, int len, word_t data) {
 static void out_of_bound(paddr_t addr) {
   panic("Address " FMT_PADDR " is out of bound: "
         "Physical Memory [" FMT_PADDR ", " FMT_PADDR "], "
+        "SDRAM [" FMT_PADDR ", " FMT_PADDR "], "
         "SRAM [" FMT_PADDR ", " FMT_PADDR "], "
         "FLASH [" FMT_PADDR ", " FMT_PADDR "] at pc = " FMT_WORD,
         addr, PMEM_LEFT, PMEM_RIGHT,
+        CONFIG_SDRAM_BASE, CONFIG_SDRAM_TOP,
         CONFIG_SRAM_BASE, CONFIG_SRAM_TOP,
         CONFIG_FLASH_BASE, CONFIG_FLASH_TOP,
         cpu.pc);
@@ -99,17 +102,20 @@ void init_mem() {
   IFDEF(CONFIG_MEM_RANDOM, memset(pmem, rand(), CONFIG_MSIZE));
   memset(sram, 0, CONFIG_SRAM_SIZE_KB * 1024);
   memset(flash, 0, CONFIG_FLASH_SIZE_KB * 1024);
+  memset(sdram, 0, CONFIG_SDRAM_SIZE_KB * 1024);
   Log("Memory layout: "
     "Physical Memory [" FMT_PADDR ", " FMT_PADDR "], "
+    "SDRAM [" FMT_PADDR ", " FMT_PADDR "], "
     "SRAM [" FMT_PADDR ", " FMT_PADDR "], "
     "FLASH [" FMT_PADDR ", " FMT_PADDR "]",
     PMEM_LEFT, PMEM_RIGHT,
+    CONFIG_SDRAM_BASE, CONFIG_SDRAM_TOP,
     CONFIG_SRAM_BASE, CONFIG_SRAM_TOP,
     CONFIG_FLASH_BASE, CONFIG_FLASH_TOP);
 }
 
 word_t paddr_read(paddr_t addr, int len) {
-  if (likely(in_pmem(addr)) || IS_SRAM_ADDR(addr) || IS_FLASH_ADDR(addr)) {
+  if (IS_SDRAM_ADDR(addr) || IS_SRAM_ADDR(addr) || IS_FLASH_ADDR(addr)) {
     word_t data = pmem_read(addr, len);
 
 #ifdef CONFIG_MTRACE
@@ -127,7 +133,7 @@ word_t paddr_read(paddr_t addr, int len) {
 }
 
 void paddr_write(paddr_t addr, int len, word_t data) {
-  if (likely(in_pmem(addr)) || IS_SRAM_ADDR(addr)) {
+  if (IS_SDRAM_ADDR(addr) || IS_SRAM_ADDR(addr)) {
     pmem_write(addr, len, data);
 
 #ifdef CONFIG_MTRACE
