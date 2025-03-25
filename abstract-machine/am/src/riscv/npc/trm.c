@@ -3,19 +3,13 @@
 #include <klib.h>
 #include "../riscv.h"
 #include "include/npc.h"
+#include <stdio.h>
 
 extern char _heap_start;
-extern char _sram_start;
-extern char _data_lma;    /* LMA（加载地址）来自 mrom */
-extern char _data;        /* VMA（运行时地址）在 sram */
-extern char _edata;    
-extern char _ebss;
-extern char _bss_start;
+extern char _sdram_start;
+extern char _sdram_end;
 
-int main(const char *args);
-#define SRAM_END  ((uintptr_t)&_sram_start + SRAM_SIZE)
-
-Area heap = RANGE(&_heap_start, SRAM_END);
+Area heap = RANGE(&_heap_start, &_sdram_end);
 static const char mainargs[MAINARGS_MAX_LEN] = MAINARGS_PLACEHOLDER; // defined in CFLAGS
 
 void putch(char ch) {
@@ -28,20 +22,52 @@ void halt(int code) {
   while (1);
 }
 
-void crt0_init() {
+__attribute__((section(".SSBL")))
+void second_stage_boot_loader() {
+  // External symbols
+  extern char _etext, _text, _text_lma;
+  extern char _edata, _data, _data_lma;
+  extern int main(const char *args);
+
+  // Copy .text section
+  if (&_etext > &_text) {
+    char *src = &_text_lma;  // Source addr in Flash
+    char *dst = &_text;      // Target addr in PSRAM 
+    unsigned long text_size = (uintptr_t)&_etext - (uintptr_t)&_text;
+
+    // Copy bytes
+    while (text_size--) {
+      *dst++ = *src++;
+    }
+  }
+
   // Copy .data section
   if (&_edata > &_data) {
-    size_t data_size = (uintptr_t)&_edata - (uintptr_t)&_data;
-    memcpy(&_data, &_data_lma, data_size);
+    char *src = &_data_lma;
+    char *dst = &_data;
+    unsigned long data_size = (uintptr_t)&_edata - (uintptr_t)&_data;
+
+    // Copy bytes
+    while (data_size--) {
+      *dst++ = *src++;
+    }
   }
 
-  // Zero out .bss section
-  if (&_ebss > &_bss_start) {
-    size_t bss_size = (uintptr_t)&_ebss - (uintptr_t)&_bss_start;
-    memset(&_bss_start, 0, bss_size);
-  }
+  // Jump to main with mainargs as parameter
+  __asm__ volatile (
+    "mv t0, %0\n\t"      
+    "mv a0, %1\n\t"      
+    "jalr t0"            
+    :                    
+    : "r"(&main), "r"(mainargs)  
+    : "t0", "a0"        
+  );
+
+  __asm__ volatile ("ebreak");
+  while (1); 
 }
 
+__attribute__((section(".SSBL")))
 void init_uart() {  
   // Set the 7th (DLAB) bit of the Line Control Register to ‘1’.
   // The divisor latches can be accessed.
@@ -61,12 +87,39 @@ void init_uart() {
   outb(UART_IER, (char)0x00);
 }
 
+__attribute__((section(".SSBL")))
 void _trm_init() {
-  crt0_init();
   init_uart();
-  int ret = main(mainargs);
-  halt(ret);
+  second_stage_boot_loader();
 }
+
+__attribute__((section(".FSBL")))
+void first_stage_boot_loader() {
+  // External symbols
+  extern char _eSSBL, _SSBL, _SSBL_lma;
+
+  // Copy .SSBL section
+  if (&_eSSBL > &_SSBL) {
+    char *src = &_SSBL_lma;  // Source addr in Flash
+    char *dst = &_SSBL;      // Target addr in SRAM 
+    unsigned long SSBL_size = (uintptr_t)&_eSSBL - (uintptr_t)&_SSBL;
+
+    // Copy bytes
+    while (SSBL_size--) {
+      *dst++ = *src++;
+    }
+  }
+
+  // Jump to main with mainargs as parameter
+  __asm__ volatile (
+    "mv t0, %0\n\t"      
+    "jalr t0"            
+    :                    
+    : "r"(&_trm_init)
+    : "t0"      
+  );
+}
+
     
 
 

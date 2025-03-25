@@ -17,4 +17,14 @@
 // SRAM
 #define SRAM_SIZE 8192
 
+// PSRAM
+#define PSRAM_BASR 0x80000000
+#define PSRAM_TOP 0x9fffffff
+#define PSRAM_TEST_SIZE 0x400000
+
+//SDRAM
+#define SDRAM_BASR 0xa0000000
+#define SDRAM_TEST_SIZE 0x400000
+//#define SDRAM_TEST_SIZE 0x1000
+
 #endif

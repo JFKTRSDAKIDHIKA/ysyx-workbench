@@ -1,9 +1,11 @@
 #include "VysyxSoCFull.h"
 #include "verilated.h"
+#include "verilated_vcd_c.h"
 #include "include/difftest.h"
 #include "include/registers.h"
 #include "include/program_loader.h"
 #include "include/memory.h"
+// #include "include/disassemble.h"
 #include "include/device.h"
 #include <iostream>
 #include <svdpi.h>
@@ -14,12 +16,15 @@
 
 // #define ENABLE_MEMORY_CHECK 1
 // #define DIFFTEST 1
-#define is_silent_mode 0
+#define is_silent_mode 1
 
 // Declare global variables
 VysyxSoCFull* top;  // Top module (global)
+VerilatedVcdC* tfp;
 static bool step_mode;  // Step mode flag (global)
 static riscv32_CPU_state ref;
+static int total_cycles;
+static int time_i = 0;
 
 // define the DPI-C functions
 // note: extern "C" 是 C++ 中的一个声明方式，用来告诉编译器，函数使用 C 的链接方式，而不是 C++ 默认的链接方式。
@@ -158,14 +163,17 @@ int check_dut_and_ref(VysyxSoCFull* top, paddr_t start_addr, size_t size) {
 #endif
 
 void tick(VysyxSoCFull* top, bool silent_mode ) {
+    total_cycles++;
     top->clock = 0;
     top->eval();
+    tfp->dump(time_i);
+    time_i++;
 
-
-    if (!silent_mode) {
+    if ((!silent_mode) && (top->io_wbu_state_debug == 2)) {
       printf("------------------------------------------------------------------------------\n");
       std::cout << "Instruction Info: "
-                << "PC: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_pc_debug << "\n"
+                << "Instruction: " << std::setw(8) << std::setfill('0') << top->io_inst_debug
+                << ", PC: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_pc_debug << "\n"
                 << "Write-Back Info: "
                 << "wb_data: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_wb_data_debug
                 << ", wbu_reg_dmem_rdata: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_wbu_reg_dmem_rdata_debug
@@ -371,6 +379,11 @@ int main(int argc, char **argv) {
     Verilated::commandArgs(argc, argv);
     top = new VysyxSoCFull;
 
+    Verilated::traceEverOn(true);
+    tfp = new VerilatedVcdC;
+    top->trace(tfp, 99);
+    tfp->open("waveform.vcd");
+
     // Default to single step mode (if no argument is provided)
     step_mode = true;
     if (argc > 2) {
@@ -387,7 +400,6 @@ int main(int argc, char **argv) {
 
     // Load program
     load_program(argv[1]);
-
     // Initialize flash
     // Memory::init_flash();
 
@@ -398,6 +410,8 @@ int main(int argc, char **argv) {
 
     // Reset
     reset(top, 10); // Reset for 10 cycles
+
+    auto start_time = std::chrono::high_resolution_clock::now();
     
     if (step_mode) {
       if (sdb_mainloop() < 0) return -1;
@@ -405,6 +419,16 @@ int main(int argc, char **argv) {
       if (cmd_c(NULL) < 0) return -1;
     }
 
+    auto end_time = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> elapsed = end_time - start_time;
+    double seconds = elapsed.count();
+    double cycles_per_second = total_cycles / seconds;
+
+    std::cout << "Total time: " << seconds << " seconds" << std::endl;
+    std::cout << "Simulation speed: " << cycles_per_second << " cycles/second" << std::endl;
+
+    tfp->close();
+    delete tfp;
     delete top;
     return 0;
 }

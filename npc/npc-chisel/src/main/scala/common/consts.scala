@@ -132,7 +132,9 @@ trait RISCVConstants
    val SRAM_ADDR =  1.U(3.W)
    val FLASH_ADDR = 2.U(3.W)
    val SPI_ADDR = 3.U(3.W)
-   val OTHER_ADDR = 4.U(3.W)
+   val PSRAM_ADDR = 4.U(3.W)
+   val SDRAM_ADDR = 5.U(3.W)
+   val OTHER_ADDR = 6.U(3.W)
 
    // PC reset vector
    val RESET_VECTOR = 0x30000000L.U(32.W) 
@@ -145,6 +147,14 @@ trait RISCVConstants
    val SRAM_BASE   = 0x0f000000L.U(32.W) 
    val SRAM_TOP    = 0x0fffffffL.U(32.W)
 
+   // PSRAM
+   val PSRAM_BASE = 0x80000000L.U(32.W)
+   val PSRAM_TOP  = 0x9fffffffL.U(32.W)
+
+   // SDRAM
+   val SDRAM_BASE = 0xa0000000L.U(32.W)
+   val SDRAM_TOP  = 0xbfffffffL.U(32.W)
+
    // FLASH
    val FLASH_BASE   = 0x30000000L.U(32.W) 
    val FLASH_TOP    = 0x3fffffffL.U(32.W)
@@ -152,6 +162,10 @@ trait RISCVConstants
    // SPI master
    val SPI_BASE   = 0x10001000L.U(32.W) 
    val SPI_TOP    = 0x10001fffL.U(32.W)
+
+   // CLINT
+   val CLINT_BASE = 0x02000000L.U(32.W)
+   val CLINT_TOP  = 0x0200ffffL.U(32.W)
 
    // Memoey config
    val MEM_BASE   = 0x80000000L.U(32.W) 

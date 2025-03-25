@@ -10,7 +10,7 @@ CHISEL_DIR := ./npc-chisel
 OBJ_DIR = obj_dir
 EXEC = $(OBJ_DIR)/VysyxSoCFull
 STEP_MODE = run
-FLAGS += -Wno-lint -Wno-style --timescale "1ns/1ns" --no-timing  --autoflush 
+FLAGS += -Wno-lint -Wno-style --timescale "1ns/1ns" --no-timing  --autoflush --stats 
 
 
 # 默认目标
@@ -18,10 +18,10 @@ all: $(EXEC)
 
 # 编译 Verilator 模型并生成可执行文件
 $(EXEC): $(TOP_MODULE) $(CSRC) $(VSRC)
-	$(VERILATOR) $(FLAGS) --cc $(TOP_MODULE) --exe $(CSRC) $(VSRC) $(INCLUDE_DIRS) \
+	$(VERILATOR) $(FLAGS) --cc $(TOP_MODULE) --trace --exe $(CSRC) $(VSRC) $(INCLUDE_DIRS) \
                     --build -j 0 --top-module ysyxSoCFull \
                     --Mdir $(OBJ_DIR)  \
-                    -LDFLAGS "-lreadline -L/usr/local/lib "
+                    -LDFLAGS "-lreadline -L/usr/local/lib"
 	+make -C $(OBJ_DIR) -f VysyxSoCFull.mk 
 
 verilog: 
@@ -29,7 +29,6 @@ verilog:
 
 # 运行仿真
 sim: $(EXEC)
-	$(call git_commit, "sim RTL")  
 	$(call git_commit, "sim RTL")  
 	$(EXEC) $(IMG) $(STEP_MODE)
 

@@ -1,3 +1,6 @@
 [submodule "ysyxSoC"]
 	path = ysyxSoC
 	url = git@github.com:OSCPU/ysyxSoC.git
+[submodule "am-kernels"]
+	path = am-kernels
+	url = git@github.com:NJU-ProjectN/am-kernels.git
