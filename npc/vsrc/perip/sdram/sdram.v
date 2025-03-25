@@ -118,6 +118,12 @@ always @(posedge clk) begin
             delay_counter[ba] <= cas_latency - 1;
             current_col[ba]   <= a[8:0];
             burst_counter[ba] <= burst_length - 1;
+            // Clear the bank
+            for (integer i = 0; i < BANK_COUNT; i++) begin
+                if (i != ba) begin
+                    active[i] <= 0;
+                end
+            end
             // Select the bank
             active[ba]        <= 1;
         end
