@@ -379,8 +379,8 @@ int main(int argc, char **argv) {
     Verilated::commandArgs(argc, argv);
     top = new VysyxSoCFull;
 
-    Verilated::traceEverOn(true);
-    tfp = new VerilatedVcdC;
+    //Verilated::traceEverOn(true);
+    //tfp = new VerilatedVcdC;
     //top ->trace(tfp, 3);
     //tfp->open("waveform.vcd");
 
