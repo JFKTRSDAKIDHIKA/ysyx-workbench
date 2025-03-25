@@ -112,12 +112,14 @@ always @(posedge clk) begin
             end
         end
         // The READ command
-        else if (is_read && active[ba]) begin
+        else if (is_read) begin
             state[ba]         <= WAIT_READ;
             // Reduce latency by 1 to synchronize with SDRAM controller timing
             delay_counter[ba] <= cas_latency - 1;
             current_col[ba]   <= a[8:0];
             burst_counter[ba] <= burst_length - 1;
+            // Select the bank
+            active[ba]        <= 1;
         end
         // The WRITE command is used to initiate a burst write access to an active row.
         else if (is_write && active[ba]) begin
@@ -208,7 +210,7 @@ always @(posedge clk) begin
                 end
             end
 
-            // Write operation
+            // Read operation
             if (state[i] == WAIT_READ && delay_counter[i] == 1 && active[i]) begin
                 dq_out    <= mem[i][active_row[i]][current_col[i]];
                 dq_en     <= 1'b1;
