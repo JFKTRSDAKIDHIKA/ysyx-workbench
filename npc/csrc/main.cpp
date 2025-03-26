@@ -65,7 +65,7 @@ extern "C" void write_mem(int bank, int row, int col, int data) {
 extern "C" int read_mem(int bank, int row, int col) {
     if (bank < BANK_COUNT && row < ROW_COUNT && col < COL_COUNT) {
         int value = sdram_memory[bank][row][col];
-        printf("[DEBUG] Read SDRAM: bank=%d, row=%d, col=%d, data=0x%04X\n", 
+        printf("[DEBUG] Read SDRAM: Bank: %d, Row: %d, Column: %d, data=0x%04X\n", 
           bank, row, col, value);
         return value;
     } else {
