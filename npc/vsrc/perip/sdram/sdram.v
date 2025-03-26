@@ -43,6 +43,11 @@ wire is_precharge    = ~cs & ~ras &  cas & ~we;
 wire is_auto_refresh = ~cs & ~ras & ~cas &  we;
 wire is_load_mode    = ~cs & ~ras & ~cas & ~we;
 
+// Write mask control
+wire [15:0] masked_dq;
+assign masked_dq[7:0]  = dqm[0] ? 8'b0  : dq[7:0];
+assign masked_dq[15:8] = dqm[1] ? 8'b0 : dq[15:8];
+
 // DQ output control
 reg [15:0] dq_out;       
 reg dq_en;        
@@ -93,11 +98,7 @@ always @(posedge clk) begin
             burst_counter <= burst_length - 1;
             current_col <= a[8:0];
             // Write SDRAM through DPI-C
-            if (~dqm[0]) begin
-                write_mem(ba, active_row[ba], current_col, dq[7:0]);
-            end else if (~dqm[1]) begin
-                write_mem(ba, active_row[ba], current_col, dq[15:8]);
-            end
+            write_mem(ba, active_row[ba], current_col, masked_dq);
         end
     end
 end
@@ -147,11 +148,7 @@ always @(posedge clk) begin
                     burst_counter <= burst_counter - 1;
                     current_col   <= current_col + 1;
                     // Write SDRAM through DPI-C
-                    if (~dqm[0]) begin
-                        write_mem(ba, active_row[ba], current_col, dq[7:0]);
-                    end else if (~dqm[1]) begin
-                        write_mem(ba, active_row[ba], current_col, dq[15:8]);
-                    end
+                    write_mem(ba, active_row[ba], current_col, masked_dq);
                 end else begin
                     state <= IDLE;
                 end
