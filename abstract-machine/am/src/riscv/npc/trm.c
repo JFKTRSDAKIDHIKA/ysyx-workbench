@@ -6,10 +6,10 @@
 #include <stdio.h>
 
 extern char _heap_start;
-extern char _sdram_start;
-extern char _sdram_end;
+extern char _psram_start;
+extern char _psram_end;
 
-Area heap = RANGE(&_heap_start, &_sdram_end);
+Area heap = RANGE(&_heap_start, &_psram_end);
 static const char mainargs[MAINARGS_MAX_LEN] = MAINARGS_PLACEHOLDER; // defined in CFLAGS
 
 void putch(char ch) {
