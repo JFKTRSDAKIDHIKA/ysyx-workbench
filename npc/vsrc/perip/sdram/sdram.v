@@ -98,7 +98,7 @@ always @(posedge clk) begin
             burst_counter <= burst_length - 1;
             current_col <= a[8:0];
             // Write SDRAM through DPI-C
-            write_mem(ba, active_row[ba], current_col, masked_dq);
+            write_mem(ba, active_row[ba], a[8:0], masked_dq);
         end
     end
 end

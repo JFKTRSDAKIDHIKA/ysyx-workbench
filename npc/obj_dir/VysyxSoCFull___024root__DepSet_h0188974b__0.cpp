@@ -2431,7 +2431,9 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__5(VysyxSoCFull___0
                     & (IData)(vlSelf->ysyxSoCFull__DOT__sdram__DOT____VdfgTmp_hb327f5d5__0))) {
             VysyxSoCFull___024root____Vdpiimwrap_ysyxSoCFull__DOT__sdram__DOT__write_mem_TOP(vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__bank_q, 
                                                                                 vlSelf->ysyxSoCFull__DOT__sdram__DOT__active_row
-                                                                                [vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__bank_q], vlSelf->ysyxSoCFull__DOT__sdram__DOT__current_col, (IData)(vlSelf->ysyxSoCFull__DOT__sdram__DOT__masked_dq));
+                                                                                [vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__bank_q], 
+                                                                                (0x1ffU 
+                                                                                & (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__addr_q)), (IData)(vlSelf->ysyxSoCFull__DOT__sdram__DOT__masked_dq));
             __Vdly__ysyxSoCFull__DOT__sdram__DOT__state = 3U;
             __Vdly__ysyxSoCFull__DOT__sdram__DOT__burst_counter 
                 = (0xfU & ((IData)(vlSelf->ysyxSoCFull__DOT__sdram__DOT__burst_length) 
