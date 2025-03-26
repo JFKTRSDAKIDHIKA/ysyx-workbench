@@ -118,6 +118,7 @@ always @(posedge clk) begin
             delay_counter[ba] <= cas_latency - 1;
             current_col[ba]   <= a[8:0];
             burst_counter[ba] <= burst_length - 1;
+            /*
             // Clear the bank
             for (integer i = 0; i < BANK_COUNT; i++) begin
                 if (i != ba) begin
@@ -128,6 +129,7 @@ always @(posedge clk) begin
             // Select the bank and the row
             active[ba]        <= 1;
             //active_row[ba]    <= a[12:0];
+            */
         end
         // The WRITE command is used to initiate a burst write access to an active row.
         else if (is_write) begin
@@ -136,6 +138,7 @@ always @(posedge clk) begin
             current_col[ba]   <= a[8:0];
             
             // Clear the bank
+            /*
             for (integer i = 0; i < BANK_COUNT; i++) begin
                 if (i != ba) begin
                     active[i] <= 0;
@@ -144,7 +147,8 @@ always @(posedge clk) begin
             end
             // Select the bank and the row
             active[ba]        <= 1;
-            active_row[ba]    <= a[12:0];
+            //active_row[ba]    <= a[12:0];
+            */
         end
     end
 end
@@ -213,29 +217,29 @@ always @(posedge clk) begin
                 if (~dqm[0]) begin
                     // a[8:0] is used as the column address and cannot be changed because the current state is idle. 
                     // The 'current_col' has not been assigned the value of 'a' yet, so 'a' is used directly.
-                    mem[i][active_row[i]][a[8:0]][7:0]  <= dq[7:0];
+                    mem[ba][active_row[i]][a[8:0]][7:0]  <= dq[7:0];
                 end
                 if (~dqm[1]) begin
-                    mem[i][active_row[i]][a[8:0]][15:8] <= dq[15:8];
+                    mem[ba][active_row[i]][a[8:0]][15:8] <= dq[15:8];
                 end
             end
             else if (state[i] == WRITING && burst_counter[i] > 0 && active[i]) begin
                 if (~dqm[0]) begin
                     // The reason for using 'current_col[i] + 1' here is the same as the reason for using 'a' above.
-                    mem[i][active_row[i]][current_col[i] + 1][7:0]  <= dq[7:0];
+                    mem[ba][active_row[i]][current_col[i] + 1][7:0]  <= dq[7:0];
                 end
                 if (~dqm[1]) begin
-                    mem[i][active_row[i]][current_col[i] + 1][15:8] <= dq[15:8];
+                    mem[ba][active_row[i]][current_col[i] + 1][15:8] <= dq[15:8];
                 end
             end
 
             // Read operation
             if (state[i] == WAIT_READ && delay_counter[i] == 1 && active[i]) begin
-                dq_out    <= mem[i][active_row[i]][current_col[i]];
+                dq_out    <= mem[ba][active_row[i]][current_col[i]];
                 dq_en     <= 1'b1;
             end
             else if (state[i] == READING && burst_counter[i] > 0 && active[i]) begin
-                dq_out    <= mem[i][active_row[i]][current_col[i]];
+                dq_out    <= mem[ba][active_row[i]][current_col[i]];
                 dq_en     <= 1'b1;
             end
         end
