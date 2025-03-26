@@ -26,7 +26,7 @@ std::vector<std::vector<std::vector<uint16_t>>> sdram_memory(BANK_COUNT,
 // #define ENABLE_MEMORY_CHECK 1
 #define DIFFTEST 1
 #define is_silent_mode 1
-#define TRACE
+//#define TRACE
 
 // Declare global variables
 VysyxSoCFull* top;  // Top module (global)
