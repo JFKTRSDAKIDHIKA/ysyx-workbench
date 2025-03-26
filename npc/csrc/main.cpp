@@ -274,6 +274,12 @@ static int cmd_c(char *args) {
 #ifdef TRACE
     tfp->dump(time_i);
     time_i++;
+    top->clock = 0;
+    top->eval();
+    tfp->dump(time_i);
+    time_i++;
+    top->clock = 1;
+    top->eval();
 #endif
       return -1;
     }
