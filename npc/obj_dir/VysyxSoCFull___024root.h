@@ -838,9 +838,10 @@ class VysyxSoCFull___024root final : public VerilatedModule {
         IData/*31:0*/ ysyxSoCFull__DOT__sdram__DOT__unnamedblk2__DOT__i;
         IData/*31:0*/ ysyxSoCFull__DOT__sdram__DOT__unnamedblk3__DOT__i;
         IData/*31:0*/ ysyxSoCFull__DOT__sdram__DOT__unnamedblk4__DOT__i;
-        IData/*31:0*/ ysyxSoCFull__DOT__sdram__DOT__unnamedblk6__DOT__i;
         IData/*31:0*/ ysyxSoCFull__DOT__sdram__DOT__unnamedblk5__DOT__i;
         IData/*31:0*/ ysyxSoCFull__DOT__sdram__DOT__unnamedblk7__DOT__i;
+        IData/*31:0*/ ysyxSoCFull__DOT__sdram__DOT__unnamedblk6__DOT__i;
+        IData/*31:0*/ ysyxSoCFull__DOT__sdram__DOT__unnamedblk8__DOT__i;
         IData/*31:0*/ __VdfgTmp_hf132a334__0;
         IData/*31:0*/ __Vtask_ysyxSoCFull__DOT__asic__DOT__lmrom__DOT__mrom__DOT__mrom_read__3__rdata;
         IData/*16:0*/ __Vdly__ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__refresh_timer_q;
