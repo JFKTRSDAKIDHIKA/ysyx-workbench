@@ -233,7 +233,7 @@ always @(posedge clk) begin
                 dq_en     <= 1'b1;
             end
             else if (state[i] == READING && burst_counter[i] > 0 && active[i]) begin
-                dq_out    <= mem[i][active_row[i]][current_col[i] - 1];
+                dq_out    <= mem[i][active_row[i]][current_col[i]];
                 dq_en     <= 1'b1;
             end
         end
