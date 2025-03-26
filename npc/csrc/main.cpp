@@ -52,8 +52,10 @@ extern "C" void mrom_read(int32_t addr, int32_t *data) {
 
 // Write SDRAM
 extern "C" void write_mem(int bank, int row, int col, int data) {
+    /*
     printf("[DEBUG] Write attempt - Bank: %d, Row: %d, Column: %d, Data: 0x%04X\n", 
       bank, row, col, static_cast<uint16_t>(data));
+    */
     if (bank < BANK_COUNT && row < ROW_COUNT && col < COL_COUNT) {
         sdram_memory[bank][row][col] = static_cast<uint16_t>(data);
     } else {
@@ -65,8 +67,10 @@ extern "C" void write_mem(int bank, int row, int col, int data) {
 extern "C" int read_mem(int bank, int row, int col) {
     if (bank < BANK_COUNT && row < ROW_COUNT && col < COL_COUNT) {
         int value = sdram_memory[bank][row][col];
+        /*
         printf("[DEBUG] Read SDRAM: bank=%d, row=%d, col=%d, data=0x%04X\n", 
           bank, row, col, value);
+        */
         return value;
     } else {
         printf("Error: Invalid memory access (bank=%d, row=%d, col=%d)\n", bank, row, col);
