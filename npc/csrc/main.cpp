@@ -15,7 +15,7 @@
 #include <cassert>    
 
 // #define ENABLE_MEMORY_CHECK 1
-#define DIFFTEST 1
+// #define DIFFTEST 1
 #define is_silent_mode 0
 #define TRACE
 
@@ -270,27 +270,7 @@ static int execute_single_step() {
 static int cmd_c(char *args) {
   while(!Verilated::gotFinish()) {
     int ret = execute_single_step();
-    if (ret < 0) {
-#ifdef TRACE
-    tfp->dump(time_i);
-    time_i++;
-    top->clock = 0;
-    top->eval();
-    tfp->dump(time_i);
-    time_i++;
-    top->clock = 1;
-    top->eval();
-    tfp->dump(time_i);
-    time_i++;
-    top->clock = 0;
-    top->eval();
-    tfp->dump(time_i);
-    time_i++;
-    top->clock = 1;
-    top->eval();
-#endif
-      return -1;
-    }
+    if (ret < 0) return -1;
   }
   return 0;
 }
