@@ -236,12 +236,12 @@ always @(posedge clk) begin
             end
 
             // Read operation
-            if (state[i] == WAIT_READ && delay_counter[i] == 1 && active[i]) begin
+            if (state[i] == WAIT_READ && delay_counter[i] == 1) begin
                 dq_out    <= mem[ba][active_row[i]][current_col[i] - 1];
                 dq_en     <= 1'b1;
                 $strobe("Read data at mem[%0d][%0d][%0d] = %0h", i, active_row[i], current_col[i]-1, dq_out);  
             end
-            else if (state[i] == READING && burst_counter[i] > 0 && active[i]) begin
+            else if (state[i] == READING && burst_counter[i] > 0) begin
                 dq_out    <= mem[ba][active_row[i]][current_col[i] - 1];
                 $strobe("Read data at mem[%0d][%0d][%0d] = %0h", i, active_row[i], current_col[i]-1, dq_out);  
                 dq_en     <= 1'b1;
