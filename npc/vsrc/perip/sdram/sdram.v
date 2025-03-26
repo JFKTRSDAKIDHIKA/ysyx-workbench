@@ -144,7 +144,7 @@ always @(posedge clk) begin
             end
             // Select the bank and the row
             active[ba]        <= 1;
-            active_row[ba]    <= a[12:0];
+            //active_row[ba]    <= a[12:0];
         end
     end
 end
