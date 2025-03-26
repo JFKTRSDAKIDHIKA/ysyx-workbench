@@ -2401,8 +2401,6 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__5(VysyxSoCFull___0
             if ((0U != (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__bank_q))) {
                 __Vdlyvset__ysyxSoCFull__DOT__sdram__DOT__active_row__v0 = 1U;
             }
-            vlSelf->ysyxSoCFull__DOT__sdram__DOT__active_bank 
-                = vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__bank_q;
             __Vdly__ysyxSoCFull__DOT__sdram__DOT__state = 0U;
             if ((1U != (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__bank_q))) {
                 __Vdlyvset__ysyxSoCFull__DOT__sdram__DOT__active_row__v1 = 1U;

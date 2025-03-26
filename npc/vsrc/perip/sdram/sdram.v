@@ -83,8 +83,6 @@ always @(posedge clk) begin
             end
             // Select the row in the particular bank
             active_row[ba]    <= a[12:0];
-            // Select the active bank
-            active_bank <= ba;
             // State remain IDLE
             state <= IDLE;
         end
