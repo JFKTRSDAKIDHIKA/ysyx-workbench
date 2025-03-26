@@ -211,12 +211,12 @@ always @(posedge clk) begin
                 if (~dqm[0]) begin
                     // a[8:0] is used as the column address and cannot be changed because the current state is idle. 
                     // The 'current_col' has not been assigned the value of 'a' yet, so 'a' is used directly.
-                    mem[ba][active_row[i]][current_col[i]][7:0]  <= dq[7:0];
+                    mem[ba][active_row[i]][a[8:0]][7:0]  <= dq[7:0];
                     $write("Bank: %d\n", i);
                     $strobe("Write data to mem[%0d][%0d][%0d] = %0h", i, active_row[i], current_col[i], dq[7:0]);
                 end
                 if (~dqm[1]) begin
-                    mem[ba][active_row[i]][current_col[i]][15:8] <= dq[15:8];
+                    mem[ba][active_row[i]][a[8:0]][15:8] <= dq[15:8];
                     $write("Bank: %d\n", i);
                     $strobe("Write data to mem[%0d][%0d][%0d] = %0h", i, active_row[i], current_col[i], dq[15:8]);
                 end
@@ -224,25 +224,25 @@ always @(posedge clk) begin
             else if (state[i] == WRITING && burst_counter[i] > 0 && active[i]) begin
                 if (~dqm[0]) begin
                     // The reason for using 'current_col[i] + 1' here is the same as the reason for using 'a' above.
-                    mem[ba][active_row[i]][current_col[i]][7:0]  <= dq[7:0];
+                    mem[ba][active_row[i]][a[8:0] + 1][7:0]  <= dq[7:0];
                     $write("Bank: %d\n", i);
                     $strobe("Write data to mem[%0d][%0d][%0d] = %0h", i, active_row[i], current_col[i], dq[7:0]);
                 end
                 if (~dqm[1]) begin
-                    mem[ba][active_row[i]][current_col[i]][15:8] <= dq[15:8];
+                    mem[ba][active_row[i]][a[8:0] + 1][15:8] <= dq[15:8];
                     $write("Bank: %d\n", i);
                     $strobe("Write data to mem[%0d][%0d][%0d] = %0h", i, active_row[i], current_col[i], dq[15:8]);  
                 end
             end
 
             // Read operation
-            if (state[i] == WAIT_READ && delay_counter[i] == 1) begin
-                dq_out    <= mem[ba][active_row[i]][current_col[i] - 1];
+            if (state[i] == WAIT_READ && delay_counter[i] == 1 && active[i]) begin
+                dq_out    <= mem[ba][active_row[i]][a[8:0]];
                 dq_en     <= 1'b1;
                 $strobe("Read data at mem[%0d][%0d][%0d] = %0h", i, active_row[i], current_col[i]-1, dq_out);  
             end
-            else if (state[i] == READING && burst_counter[i] > 0) begin
-                dq_out    <= mem[ba][active_row[i]][current_col[i] - 1];
+            else if (state[i] == READING && burst_counter[i] > 0 && active[i]) begin
+                dq_out    <= mem[ba][active_row[i]][a[8:0] + 1];
                 $strobe("Read data at mem[%0d][%0d][%0d] = %0h", i, active_row[i], current_col[i]-1, dq_out);  
                 dq_en     <= 1'b1;
             end
