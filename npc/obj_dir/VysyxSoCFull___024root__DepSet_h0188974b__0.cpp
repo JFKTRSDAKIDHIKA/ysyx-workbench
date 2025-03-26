@@ -3109,7 +3109,8 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__5(VysyxSoCFull___0
                 vlSelf->ysyxSoCFull__DOT__sdram__DOT____Vstrobe4 = 1U;
                 vlSelf->ysyxSoCFull__DOT__sdram__DOT__dq_out 
                     = vlSelf->ysyxSoCFull__DOT__sdram__DOT__mem
-                    [0U][vlSelf->ysyxSoCFull__DOT__sdram__DOT__active_row
+                    [vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__bank_q]
+                    [vlSelf->ysyxSoCFull__DOT__sdram__DOT__active_row
                     [0U]][(0x1ffU & (vlSelf->ysyxSoCFull__DOT__sdram__DOT__current_col
                                      [0U] - (IData)(1U)))];
                 vlSelf->ysyxSoCFull__DOT__sdram__DOT__dq_en = 1U;
@@ -3120,7 +3121,8 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__5(VysyxSoCFull___0
                 vlSelf->ysyxSoCFull__DOT__sdram__DOT____Vstrobe5 = 1U;
                 vlSelf->ysyxSoCFull__DOT__sdram__DOT__dq_out 
                     = vlSelf->ysyxSoCFull__DOT__sdram__DOT__mem
-                    [0U][vlSelf->ysyxSoCFull__DOT__sdram__DOT__active_row
+                    [vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__bank_q]
+                    [vlSelf->ysyxSoCFull__DOT__sdram__DOT__active_row
                     [0U]][(0x1ffU & (vlSelf->ysyxSoCFull__DOT__sdram__DOT__current_col
                                      [0U] - (IData)(1U)))];
                 vlSelf->ysyxSoCFull__DOT__sdram__DOT__dq_en = 1U;
@@ -3132,7 +3134,8 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__5(VysyxSoCFull___0
                 vlSelf->ysyxSoCFull__DOT__sdram__DOT____Vstrobe4 = 1U;
                 vlSelf->ysyxSoCFull__DOT__sdram__DOT__dq_out 
                     = vlSelf->ysyxSoCFull__DOT__sdram__DOT__mem
-                    [1U][vlSelf->ysyxSoCFull__DOT__sdram__DOT__active_row
+                    [vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__bank_q]
+                    [vlSelf->ysyxSoCFull__DOT__sdram__DOT__active_row
                     [1U]][(0x1ffU & (vlSelf->ysyxSoCFull__DOT__sdram__DOT__current_col
                                      [1U] - (IData)(1U)))];
                 vlSelf->ysyxSoCFull__DOT__sdram__DOT__dq_en = 1U;
@@ -3143,7 +3146,8 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__5(VysyxSoCFull___0
                 vlSelf->ysyxSoCFull__DOT__sdram__DOT____Vstrobe5 = 1U;
                 vlSelf->ysyxSoCFull__DOT__sdram__DOT__dq_out 
                     = vlSelf->ysyxSoCFull__DOT__sdram__DOT__mem
-                    [1U][vlSelf->ysyxSoCFull__DOT__sdram__DOT__active_row
+                    [vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__bank_q]
+                    [vlSelf->ysyxSoCFull__DOT__sdram__DOT__active_row
                     [1U]][(0x1ffU & (vlSelf->ysyxSoCFull__DOT__sdram__DOT__current_col
                                      [1U] - (IData)(1U)))];
                 vlSelf->ysyxSoCFull__DOT__sdram__DOT__dq_en = 1U;
@@ -3155,7 +3159,8 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__5(VysyxSoCFull___0
                 vlSelf->ysyxSoCFull__DOT__sdram__DOT____Vstrobe4 = 1U;
                 vlSelf->ysyxSoCFull__DOT__sdram__DOT__dq_out 
                     = vlSelf->ysyxSoCFull__DOT__sdram__DOT__mem
-                    [2U][vlSelf->ysyxSoCFull__DOT__sdram__DOT__active_row
+                    [vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__bank_q]
+                    [vlSelf->ysyxSoCFull__DOT__sdram__DOT__active_row
                     [2U]][(0x1ffU & (vlSelf->ysyxSoCFull__DOT__sdram__DOT__current_col
                                      [2U] - (IData)(1U)))];
                 vlSelf->ysyxSoCFull__DOT__sdram__DOT__dq_en = 1U;
@@ -3166,7 +3171,8 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__5(VysyxSoCFull___0
                 vlSelf->ysyxSoCFull__DOT__sdram__DOT____Vstrobe5 = 1U;
                 vlSelf->ysyxSoCFull__DOT__sdram__DOT__dq_out 
                     = vlSelf->ysyxSoCFull__DOT__sdram__DOT__mem
-                    [2U][vlSelf->ysyxSoCFull__DOT__sdram__DOT__active_row
+                    [vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__bank_q]
+                    [vlSelf->ysyxSoCFull__DOT__sdram__DOT__active_row
                     [2U]][(0x1ffU & (vlSelf->ysyxSoCFull__DOT__sdram__DOT__current_col
                                      [2U] - (IData)(1U)))];
                 vlSelf->ysyxSoCFull__DOT__sdram__DOT__dq_en = 1U;
@@ -3178,7 +3184,8 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__5(VysyxSoCFull___0
                 vlSelf->ysyxSoCFull__DOT__sdram__DOT____Vstrobe4 = 1U;
                 vlSelf->ysyxSoCFull__DOT__sdram__DOT__dq_out 
                     = vlSelf->ysyxSoCFull__DOT__sdram__DOT__mem
-                    [3U][vlSelf->ysyxSoCFull__DOT__sdram__DOT__active_row
+                    [vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__bank_q]
+                    [vlSelf->ysyxSoCFull__DOT__sdram__DOT__active_row
                     [3U]][(0x1ffU & (vlSelf->ysyxSoCFull__DOT__sdram__DOT__current_col
                                      [3U] - (IData)(1U)))];
                 vlSelf->ysyxSoCFull__DOT__sdram__DOT__dq_en = 1U;
@@ -3189,7 +3196,8 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__5(VysyxSoCFull___0
                 vlSelf->ysyxSoCFull__DOT__sdram__DOT____Vstrobe5 = 1U;
                 vlSelf->ysyxSoCFull__DOT__sdram__DOT__dq_out 
                     = vlSelf->ysyxSoCFull__DOT__sdram__DOT__mem
-                    [3U][vlSelf->ysyxSoCFull__DOT__sdram__DOT__active_row
+                    [vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__bank_q]
+                    [vlSelf->ysyxSoCFull__DOT__sdram__DOT__active_row
                     [3U]][(0x1ffU & (vlSelf->ysyxSoCFull__DOT__sdram__DOT__current_col
                                      [3U] - (IData)(1U)))];
                 vlSelf->ysyxSoCFull__DOT__sdram__DOT__dq_en = 1U;
