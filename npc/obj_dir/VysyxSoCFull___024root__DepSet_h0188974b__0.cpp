@@ -3155,7 +3155,7 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__5(VysyxSoCFull___0
                   [0U]) & (0U == vlSelf->ysyxSoCFull__DOT__sdram__DOT__state
                            [0U]))) {
                 if (VL_UNLIKELY((1U & (~ (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__dqm_q))))) {
-                    VL_WRITEF("          0\n");
+                    VL_WRITEF("Bank:           0\n");
                     Verilated::runFlushCallbacks();
                     vlSelf->ysyxSoCFull__DOT__sdram__DOT____Vstrobe0 = 1U;
                     __Vdlyvval__ysyxSoCFull__DOT__sdram__DOT__mem__v0 
@@ -3169,8 +3169,10 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__5(VysyxSoCFull___0
                         = vlSelf->ysyxSoCFull__DOT__sdram__DOT__active_row
                         [0U];
                 }
-                if ((1U & (~ ((IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__dqm_q) 
-                              >> 1U)))) {
+                if (VL_UNLIKELY((1U & (~ ((IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__dqm_q) 
+                                          >> 1U))))) {
+                    VL_WRITEF("Bank:           0\n");
+                    Verilated::runFlushCallbacks();
                     vlSelf->ysyxSoCFull__DOT__sdram__DOT____Vstrobe1 = 1U;
                     __Vdlyvval__ysyxSoCFull__DOT__sdram__DOT__mem__v1 
                         = (0xffU & ((IData)(vlSelf->ysyxSoCFull__DOT___dq_wire) 
@@ -3188,7 +3190,9 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__5(VysyxSoCFull___0
                           [0U]) & (0U < vlSelf->ysyxSoCFull__DOT__sdram__DOT__burst_counter
                                    [0U])) & vlSelf->ysyxSoCFull__DOT__sdram__DOT__active
                         [0U])) {
-                if ((1U & (~ (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__dqm_q)))) {
+                if (VL_UNLIKELY((1U & (~ (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__dqm_q))))) {
+                    VL_WRITEF("Bank:           0\n");
+                    Verilated::runFlushCallbacks();
                     vlSelf->ysyxSoCFull__DOT__sdram__DOT____Vstrobe2 = 1U;
                     __Vdlyvval__ysyxSoCFull__DOT__sdram__DOT__mem__v2 
                         = (0xffU & (IData)(vlSelf->ysyxSoCFull__DOT___dq_wire));
@@ -3201,8 +3205,10 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__5(VysyxSoCFull___0
                         = vlSelf->ysyxSoCFull__DOT__sdram__DOT__active_row
                         [0U];
                 }
-                if ((1U & (~ ((IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__dqm_q) 
-                              >> 1U)))) {
+                if (VL_UNLIKELY((1U & (~ ((IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__dqm_q) 
+                                          >> 1U))))) {
+                    VL_WRITEF("Bank:           0\n");
+                    Verilated::runFlushCallbacks();
                     vlSelf->ysyxSoCFull__DOT__sdram__DOT____Vstrobe3 = 1U;
                     __Vdlyvval__ysyxSoCFull__DOT__sdram__DOT__mem__v3 
                         = (0xffU & ((IData)(vlSelf->ysyxSoCFull__DOT___dq_wire) 
@@ -3222,7 +3228,7 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__5(VysyxSoCFull___0
                   [1U]) & (0U == vlSelf->ysyxSoCFull__DOT__sdram__DOT__state
                            [1U]))) {
                 if (VL_UNLIKELY((1U & (~ (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__dqm_q))))) {
-                    VL_WRITEF("          1\n");
+                    VL_WRITEF("Bank:           1\n");
                     Verilated::runFlushCallbacks();
                     vlSelf->ysyxSoCFull__DOT__sdram__DOT____Vstrobe0 = 1U;
                     __Vdlyvval__ysyxSoCFull__DOT__sdram__DOT__mem__v4 
@@ -3236,8 +3242,10 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__5(VysyxSoCFull___0
                         = vlSelf->ysyxSoCFull__DOT__sdram__DOT__active_row
                         [1U];
                 }
-                if ((1U & (~ ((IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__dqm_q) 
-                              >> 1U)))) {
+                if (VL_UNLIKELY((1U & (~ ((IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__dqm_q) 
+                                          >> 1U))))) {
+                    VL_WRITEF("Bank:           1\n");
+                    Verilated::runFlushCallbacks();
                     vlSelf->ysyxSoCFull__DOT__sdram__DOT____Vstrobe1 = 1U;
                     __Vdlyvval__ysyxSoCFull__DOT__sdram__DOT__mem__v5 
                         = (0xffU & ((IData)(vlSelf->ysyxSoCFull__DOT___dq_wire) 
@@ -3255,7 +3263,9 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__5(VysyxSoCFull___0
                           [1U]) & (0U < vlSelf->ysyxSoCFull__DOT__sdram__DOT__burst_counter
                                    [1U])) & vlSelf->ysyxSoCFull__DOT__sdram__DOT__active
                         [1U])) {
-                if ((1U & (~ (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__dqm_q)))) {
+                if (VL_UNLIKELY((1U & (~ (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__dqm_q))))) {
+                    VL_WRITEF("Bank:           1\n");
+                    Verilated::runFlushCallbacks();
                     vlSelf->ysyxSoCFull__DOT__sdram__DOT____Vstrobe2 = 1U;
                     __Vdlyvval__ysyxSoCFull__DOT__sdram__DOT__mem__v6 
                         = (0xffU & (IData)(vlSelf->ysyxSoCFull__DOT___dq_wire));
@@ -3268,8 +3278,10 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__5(VysyxSoCFull___0
                         = vlSelf->ysyxSoCFull__DOT__sdram__DOT__active_row
                         [1U];
                 }
-                if ((1U & (~ ((IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__dqm_q) 
-                              >> 1U)))) {
+                if (VL_UNLIKELY((1U & (~ ((IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__dqm_q) 
+                                          >> 1U))))) {
+                    VL_WRITEF("Bank:           1\n");
+                    Verilated::runFlushCallbacks();
                     vlSelf->ysyxSoCFull__DOT__sdram__DOT____Vstrobe3 = 1U;
                     __Vdlyvval__ysyxSoCFull__DOT__sdram__DOT__mem__v7 
                         = (0xffU & ((IData)(vlSelf->ysyxSoCFull__DOT___dq_wire) 
@@ -3289,7 +3301,7 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__5(VysyxSoCFull___0
                   [2U]) & (0U == vlSelf->ysyxSoCFull__DOT__sdram__DOT__state
                            [2U]))) {
                 if (VL_UNLIKELY((1U & (~ (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__dqm_q))))) {
-                    VL_WRITEF("          2\n");
+                    VL_WRITEF("Bank:           2\n");
                     Verilated::runFlushCallbacks();
                     vlSelf->ysyxSoCFull__DOT__sdram__DOT____Vstrobe0 = 1U;
                     __Vdlyvval__ysyxSoCFull__DOT__sdram__DOT__mem__v8 
@@ -3303,8 +3315,10 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__5(VysyxSoCFull___0
                         = vlSelf->ysyxSoCFull__DOT__sdram__DOT__active_row
                         [2U];
                 }
-                if ((1U & (~ ((IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__dqm_q) 
-                              >> 1U)))) {
+                if (VL_UNLIKELY((1U & (~ ((IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__dqm_q) 
+                                          >> 1U))))) {
+                    VL_WRITEF("Bank:           2\n");
+                    Verilated::runFlushCallbacks();
                     vlSelf->ysyxSoCFull__DOT__sdram__DOT____Vstrobe1 = 1U;
                     __Vdlyvval__ysyxSoCFull__DOT__sdram__DOT__mem__v9 
                         = (0xffU & ((IData)(vlSelf->ysyxSoCFull__DOT___dq_wire) 
@@ -3322,7 +3336,9 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__5(VysyxSoCFull___0
                           [2U]) & (0U < vlSelf->ysyxSoCFull__DOT__sdram__DOT__burst_counter
                                    [2U])) & vlSelf->ysyxSoCFull__DOT__sdram__DOT__active
                         [2U])) {
-                if ((1U & (~ (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__dqm_q)))) {
+                if (VL_UNLIKELY((1U & (~ (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__dqm_q))))) {
+                    VL_WRITEF("Bank:           2\n");
+                    Verilated::runFlushCallbacks();
                     vlSelf->ysyxSoCFull__DOT__sdram__DOT____Vstrobe2 = 1U;
                     __Vdlyvval__ysyxSoCFull__DOT__sdram__DOT__mem__v10 
                         = (0xffU & (IData)(vlSelf->ysyxSoCFull__DOT___dq_wire));
@@ -3335,8 +3351,10 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__5(VysyxSoCFull___0
                         = vlSelf->ysyxSoCFull__DOT__sdram__DOT__active_row
                         [2U];
                 }
-                if ((1U & (~ ((IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__dqm_q) 
-                              >> 1U)))) {
+                if (VL_UNLIKELY((1U & (~ ((IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__dqm_q) 
+                                          >> 1U))))) {
+                    VL_WRITEF("Bank:           2\n");
+                    Verilated::runFlushCallbacks();
                     vlSelf->ysyxSoCFull__DOT__sdram__DOT____Vstrobe3 = 1U;
                     __Vdlyvval__ysyxSoCFull__DOT__sdram__DOT__mem__v11 
                         = (0xffU & ((IData)(vlSelf->ysyxSoCFull__DOT___dq_wire) 
@@ -3356,7 +3374,7 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__5(VysyxSoCFull___0
                   [3U]) & (0U == vlSelf->ysyxSoCFull__DOT__sdram__DOT__state
                            [3U]))) {
                 if (VL_UNLIKELY((1U & (~ (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__dqm_q))))) {
-                    VL_WRITEF("          3\n");
+                    VL_WRITEF("Bank:           3\n");
                     Verilated::runFlushCallbacks();
                     vlSelf->ysyxSoCFull__DOT__sdram__DOT____Vstrobe0 = 1U;
                     __Vdlyvval__ysyxSoCFull__DOT__sdram__DOT__mem__v12 
@@ -3370,8 +3388,10 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__5(VysyxSoCFull___0
                         = vlSelf->ysyxSoCFull__DOT__sdram__DOT__active_row
                         [3U];
                 }
-                if ((1U & (~ ((IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__dqm_q) 
-                              >> 1U)))) {
+                if (VL_UNLIKELY((1U & (~ ((IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__dqm_q) 
+                                          >> 1U))))) {
+                    VL_WRITEF("Bank:           3\n");
+                    Verilated::runFlushCallbacks();
                     vlSelf->ysyxSoCFull__DOT__sdram__DOT____Vstrobe1 = 1U;
                     __Vdlyvval__ysyxSoCFull__DOT__sdram__DOT__mem__v13 
                         = (0xffU & ((IData)(vlSelf->ysyxSoCFull__DOT___dq_wire) 
@@ -3389,7 +3409,9 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__5(VysyxSoCFull___0
                           [3U]) & (0U < vlSelf->ysyxSoCFull__DOT__sdram__DOT__burst_counter
                                    [3U])) & vlSelf->ysyxSoCFull__DOT__sdram__DOT__active
                         [3U])) {
-                if ((1U & (~ (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__dqm_q)))) {
+                if (VL_UNLIKELY((1U & (~ (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__dqm_q))))) {
+                    VL_WRITEF("Bank:           3\n");
+                    Verilated::runFlushCallbacks();
                     vlSelf->ysyxSoCFull__DOT__sdram__DOT____Vstrobe2 = 1U;
                     __Vdlyvval__ysyxSoCFull__DOT__sdram__DOT__mem__v14 
                         = (0xffU & (IData)(vlSelf->ysyxSoCFull__DOT___dq_wire));
@@ -3402,8 +3424,10 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__5(VysyxSoCFull___0
                         = vlSelf->ysyxSoCFull__DOT__sdram__DOT__active_row
                         [3U];
                 }
-                if ((1U & (~ ((IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__dqm_q) 
-                              >> 1U)))) {
+                if (VL_UNLIKELY((1U & (~ ((IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__dqm_q) 
+                                          >> 1U))))) {
+                    VL_WRITEF("Bank:           3\n");
+                    Verilated::runFlushCallbacks();
                     vlSelf->ysyxSoCFull__DOT__sdram__DOT____Vstrobe3 = 1U;
                     __Vdlyvval__ysyxSoCFull__DOT__sdram__DOT__mem__v15 
                         = (0xffU & ((IData)(vlSelf->ysyxSoCFull__DOT___dq_wire) 
