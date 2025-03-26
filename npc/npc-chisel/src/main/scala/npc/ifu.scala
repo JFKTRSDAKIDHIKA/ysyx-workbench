@@ -200,13 +200,15 @@ class EBreakHandler extends BlackBox with HasBlackBoxInline {
       |        end
       |    end
       |
+      |endmodule
+    """.stripMargin)
+}
+
+/* 
       |    always @(*) begin
       |        if (lsu_axi_resp_err == 1'b1) begin
       |            $display("LSU memory access error...");
       |            simulation_exit(); // 通知仿真环境结束
       |        end
       |    end
-      |
-      |endmodule
-    """.stripMargin)
-}
+ */
