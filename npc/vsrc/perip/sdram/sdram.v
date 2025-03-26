@@ -127,7 +127,7 @@ always @(posedge clk) begin
             end
             // Select the bank and the row
             active[ba]        <= 1;
-            //active_row[ba]    <= a[12:0];
+            active_row[ba]    <= a[12:0];
         end
         // The WRITE command is used to initiate a burst write access to an active row.
         else if (is_write) begin
