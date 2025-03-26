@@ -76,11 +76,6 @@ always @(posedge clk) begin
         // The ACTIVE command is used to activate a row in a particular bank for a subsequent access.
         // This row remains active for accesses until a PRECHARGE command is issued to that bank.
         else if (is_active) begin
-            for (integer i = 0; i < BANK_COUNT; i++) begin
-                if (i != ba) begin
-                    active_row[i] <= 13'b0;
-                end
-            end
             // Select the row in the particular bank
             active_row[ba]    <= a[12:0];
             // State remain IDLE

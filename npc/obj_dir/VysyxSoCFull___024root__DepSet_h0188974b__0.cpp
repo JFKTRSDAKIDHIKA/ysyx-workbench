@@ -2288,22 +2288,14 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__5(VysyxSoCFull___0
     __Vfunc_ysyxSoCFull__DOT__sdram__DOT__read_mem__6__Vfuncout = 0;
     IData/*31:0*/ __Vfunc_ysyxSoCFull__DOT__sdram__DOT__read_mem__7__Vfuncout;
     __Vfunc_ysyxSoCFull__DOT__sdram__DOT__read_mem__7__Vfuncout = 0;
+    CData/*1:0*/ __Vdlyvdim0__ysyxSoCFull__DOT__sdram__DOT__active_row__v0;
+    __Vdlyvdim0__ysyxSoCFull__DOT__sdram__DOT__active_row__v0 = 0;
+    SData/*12:0*/ __Vdlyvval__ysyxSoCFull__DOT__sdram__DOT__active_row__v0;
+    __Vdlyvval__ysyxSoCFull__DOT__sdram__DOT__active_row__v0 = 0;
     CData/*0:0*/ __Vdlyvset__ysyxSoCFull__DOT__sdram__DOT__active_row__v0;
     __Vdlyvset__ysyxSoCFull__DOT__sdram__DOT__active_row__v0 = 0;
     CData/*2:0*/ __Vdly__ysyxSoCFull__DOT__sdram__DOT__state;
     __Vdly__ysyxSoCFull__DOT__sdram__DOT__state = 0;
-    CData/*0:0*/ __Vdlyvset__ysyxSoCFull__DOT__sdram__DOT__active_row__v1;
-    __Vdlyvset__ysyxSoCFull__DOT__sdram__DOT__active_row__v1 = 0;
-    CData/*0:0*/ __Vdlyvset__ysyxSoCFull__DOT__sdram__DOT__active_row__v2;
-    __Vdlyvset__ysyxSoCFull__DOT__sdram__DOT__active_row__v2 = 0;
-    CData/*0:0*/ __Vdlyvset__ysyxSoCFull__DOT__sdram__DOT__active_row__v3;
-    __Vdlyvset__ysyxSoCFull__DOT__sdram__DOT__active_row__v3 = 0;
-    CData/*1:0*/ __Vdlyvdim0__ysyxSoCFull__DOT__sdram__DOT__active_row__v4;
-    __Vdlyvdim0__ysyxSoCFull__DOT__sdram__DOT__active_row__v4 = 0;
-    SData/*12:0*/ __Vdlyvval__ysyxSoCFull__DOT__sdram__DOT__active_row__v4;
-    __Vdlyvval__ysyxSoCFull__DOT__sdram__DOT__active_row__v4 = 0;
-    CData/*0:0*/ __Vdlyvset__ysyxSoCFull__DOT__sdram__DOT__active_row__v4;
-    __Vdlyvset__ysyxSoCFull__DOT__sdram__DOT__active_row__v4 = 0;
     CData/*3:0*/ __Vdly__ysyxSoCFull__DOT__sdram__DOT__delay_counter;
     __Vdly__ysyxSoCFull__DOT__sdram__DOT__delay_counter = 0;
     CData/*3:0*/ __Vdly__ysyxSoCFull__DOT__sdram__DOT__burst_counter;
@@ -2312,10 +2304,6 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__5(VysyxSoCFull___0
     __Vdly__ysyxSoCFull__DOT__sdram__DOT__current_col = 0;
     // Body
     __Vdlyvset__ysyxSoCFull__DOT__sdram__DOT__active_row__v0 = 0U;
-    __Vdlyvset__ysyxSoCFull__DOT__sdram__DOT__active_row__v1 = 0U;
-    __Vdlyvset__ysyxSoCFull__DOT__sdram__DOT__active_row__v2 = 0U;
-    __Vdlyvset__ysyxSoCFull__DOT__sdram__DOT__active_row__v3 = 0U;
-    __Vdlyvset__ysyxSoCFull__DOT__sdram__DOT__active_row__v4 = 0U;
     __Vdly__ysyxSoCFull__DOT__sdram__DOT__current_col 
         = vlSelf->ysyxSoCFull__DOT__sdram__DOT__current_col;
     __Vdly__ysyxSoCFull__DOT__sdram__DOT__burst_counter 
@@ -2397,25 +2385,12 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__5(VysyxSoCFull___0
                          >> 4U));
         } else if (((IData)(vlSelf->ysyxSoCFull__DOT__sdram__DOT____VdfgTmp_h47486cab__0) 
                     & (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__command_q))) {
-            vlSelf->ysyxSoCFull__DOT__sdram__DOT__unnamedblk1__DOT__i = 4U;
-            if ((0U != (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__bank_q))) {
-                __Vdlyvset__ysyxSoCFull__DOT__sdram__DOT__active_row__v0 = 1U;
-            }
-            __Vdly__ysyxSoCFull__DOT__sdram__DOT__state = 0U;
-            if ((1U != (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__bank_q))) {
-                __Vdlyvset__ysyxSoCFull__DOT__sdram__DOT__active_row__v1 = 1U;
-            }
-            if ((2U != (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__bank_q))) {
-                __Vdlyvset__ysyxSoCFull__DOT__sdram__DOT__active_row__v2 = 1U;
-            }
-            if ((3U != (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__bank_q))) {
-                __Vdlyvset__ysyxSoCFull__DOT__sdram__DOT__active_row__v3 = 1U;
-            }
-            __Vdlyvval__ysyxSoCFull__DOT__sdram__DOT__active_row__v4 
+            __Vdlyvval__ysyxSoCFull__DOT__sdram__DOT__active_row__v0 
                 = vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__addr_q;
-            __Vdlyvset__ysyxSoCFull__DOT__sdram__DOT__active_row__v4 = 1U;
-            __Vdlyvdim0__ysyxSoCFull__DOT__sdram__DOT__active_row__v4 
+            __Vdlyvset__ysyxSoCFull__DOT__sdram__DOT__active_row__v0 = 1U;
+            __Vdlyvdim0__ysyxSoCFull__DOT__sdram__DOT__active_row__v0 
                 = vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__bank_q;
+            __Vdly__ysyxSoCFull__DOT__sdram__DOT__state = 0U;
         } else if (((IData)(vlSelf->ysyxSoCFull__DOT__sdram__DOT____VdfgTmp_hb327f5d5__0) 
                     & (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__command_q))) {
             __Vdly__ysyxSoCFull__DOT__sdram__DOT__state = 1U;
@@ -2452,20 +2427,8 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__5(VysyxSoCFull___0
     vlSelf->ysyxSoCFull__DOT__sdram__DOT__current_col 
         = __Vdly__ysyxSoCFull__DOT__sdram__DOT__current_col;
     if (__Vdlyvset__ysyxSoCFull__DOT__sdram__DOT__active_row__v0) {
-        vlSelf->ysyxSoCFull__DOT__sdram__DOT__active_row[0U] = 0U;
-    }
-    if (__Vdlyvset__ysyxSoCFull__DOT__sdram__DOT__active_row__v1) {
-        vlSelf->ysyxSoCFull__DOT__sdram__DOT__active_row[1U] = 0U;
-    }
-    if (__Vdlyvset__ysyxSoCFull__DOT__sdram__DOT__active_row__v2) {
-        vlSelf->ysyxSoCFull__DOT__sdram__DOT__active_row[2U] = 0U;
-    }
-    if (__Vdlyvset__ysyxSoCFull__DOT__sdram__DOT__active_row__v3) {
-        vlSelf->ysyxSoCFull__DOT__sdram__DOT__active_row[3U] = 0U;
-    }
-    if (__Vdlyvset__ysyxSoCFull__DOT__sdram__DOT__active_row__v4) {
-        vlSelf->ysyxSoCFull__DOT__sdram__DOT__active_row[__Vdlyvdim0__ysyxSoCFull__DOT__sdram__DOT__active_row__v4] 
-            = __Vdlyvval__ysyxSoCFull__DOT__sdram__DOT__active_row__v4;
+        vlSelf->ysyxSoCFull__DOT__sdram__DOT__active_row[__Vdlyvdim0__ysyxSoCFull__DOT__sdram__DOT__active_row__v0] 
+            = __Vdlyvval__ysyxSoCFull__DOT__sdram__DOT__active_row__v0;
     }
     vlSelf->ysyxSoCFull__DOT__sdram__DOT__burst_length 
         = ((0U == (IData)(vlSelf->ysyxSoCFull__DOT__sdram__DOT__burst_length_code))
