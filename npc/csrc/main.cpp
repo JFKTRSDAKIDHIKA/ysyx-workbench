@@ -5,7 +5,7 @@
 #include "include/registers.h"
 #include "include/program_loader.h"
 #include "include/memory.h"
-#include "include/disassemble.h"
+// #include "include/disassemble.h"
 #include "include/device.h"
 #include <iostream>
 #include <svdpi.h>
@@ -13,18 +13,31 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <cassert>    
+// sdram_model
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
+
+// SDRAM 存储器，使用 vector 代替三维数组
+std::vector<std::vector<std::vector<uint16_t>>> sdram_memory(BANK_COUNT,
+  std::vector<std::vector<uint16_t>>(ROW_COUNT,
+      std::vector<uint16_t>(COL_COUNT, 0)));
 
 // #define ENABLE_MEMORY_CHECK 1
-// #define DIFFTEST 1
+//#define DIFFTEST 1
 #define is_silent_mode 1
+//#define TRACE
 
 // Declare global variables
 VysyxSoCFull* top;  // Top module (global)
-VerilatedVcdC* tfp;
 static bool step_mode;  // Step mode flag (global)
 static riscv32_CPU_state ref;
 static int total_cycles;
+
+#ifdef TRACE
 static int time_i = 0;
+VerilatedVcdC* tfp;
+#endif
 
 // define the DPI-C functions
 // note: extern "C" 是 C++ 中的一个声明方式，用来告诉编译器，函数使用 C 的链接方式，而不是 C++ 默认的链接方式。
@@ -35,6 +48,39 @@ extern "C" void flash_read(int32_t addr, int32_t *data) {
 
 extern "C" void mrom_read(int32_t addr, int32_t *data) { 
   *data = Memory::pmem_read(addr); 
+}
+
+// Write SDRAM with mask
+extern "C" void write_mem(int bank, int row, int col, int data, int mask) {
+  //printf("[DEBUG] Write attempt - Bank: %d, Row: %d, Column: %d, Data: 0x%04X, Mask: 0x%02X\n", 
+  //  bank, row, col, static_cast<uint16_t>(data), mask);
+
+  if (bank < BANK_COUNT && row < ROW_COUNT && col < COL_COUNT) {
+      // 读取当前 SDRAM 中的数据
+      uint16_t old_data = sdram_memory[bank][row][col];
+
+      // 计算新数据，只有 `mask` 允许的部分会被修改
+      uint16_t new_data = (old_data & ~mask) | (data & mask);
+
+      // 写入 SDRAM
+      sdram_memory[bank][row][col] = new_data;
+  } else {
+      printf("Error: Invalid memory access (bank=%d, row=%d, col=%d)\n", bank, row, col);
+  }
+}
+
+
+// Read SDRAM
+extern "C" int read_mem(int bank, int row, int col) {
+    if (bank < BANK_COUNT && row < ROW_COUNT && col < COL_COUNT) {
+        int value = sdram_memory[bank][row][col];
+    //    printf("[DEBUG] Read SDRAM: Bank: %d, Row: %d, Column: %d, data=0x%04X\n", 
+    //      bank, row, col, value);
+        return value;
+    } else {
+        printf("Error: Invalid memory access (bank=%d, row=%d, col=%d)\n", bank, row, col);
+        return -1;
+    }
 }
 
 extern "C" void simulation_exit() {
@@ -166,13 +212,15 @@ void tick(VysyxSoCFull* top, bool silent_mode ) {
     total_cycles++;
     top->clock = 0;
     top->eval();
+#ifdef TRACE
     tfp->dump(time_i);
     time_i++;
+#endif
 
     if ((!silent_mode) && (top->io_wbu_state_debug == 2)) {
       printf("------------------------------------------------------------------------------\n");
       std::cout << "Instruction Info: "
-                << "Instruction: " << std::setw(8) << std::setfill('0') << disassemble_instruction(top->io_inst_debug)
+                << "Instruction: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_inst_debug
                 << ", PC: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_pc_debug << "\n"
                 << "Write-Back Info: "
                 << "wb_data: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_wb_data_debug
@@ -379,10 +427,12 @@ int main(int argc, char **argv) {
     Verilated::commandArgs(argc, argv);
     top = new VysyxSoCFull;
 
+#ifdef TRACE
     Verilated::traceEverOn(true);
     tfp = new VerilatedVcdC;
-    top->trace(tfp, 99);
+    top ->trace(tfp, 3);
     tfp->open("waveform.vcd");
+#endif
 
     // Default to single step mode (if no argument is provided)
     step_mode = true;
@@ -405,7 +455,7 @@ int main(int argc, char **argv) {
 
 #ifdef DIFFTEST
     // Initialize difftest
-    init_difftest("/home/jiashuao/Desktop/ysyx-workbench/nemu/build/riscv32-nemu-interpreter-so", 0);
+    init_difftest("/root/ysyx-workbench/nemu/build/riscv32-nemu-interpreter-so", 0);
 #endif
 
     // Reset
@@ -427,8 +477,11 @@ int main(int argc, char **argv) {
     std::cout << "Total time: " << seconds << " seconds" << std::endl;
     std::cout << "Simulation speed: " << cycles_per_second << " cycles/second" << std::endl;
 
+#ifdef TRACE
     tfp->close();
     delete tfp;
+#endif
+
     delete top;
     return 0;
 }

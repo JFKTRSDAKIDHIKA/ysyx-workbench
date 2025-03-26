@@ -31,25 +31,47 @@ void second_stage_boot_loader() {
 
   // Copy .text section
   if (&_etext > &_text) {
-    char *src = &_text_lma;  // Source addr in Flash
-    char *dst = &_text;      // Target addr in PSRAM 
+    uint32_t *src = (uint32_t *)&_text_lma;  // Source addr in Flash
+    uint32_t *dst = (uint32_t *)&_text;      // Target addr in PSRAM 
     unsigned long text_size = (uintptr_t)&_etext - (uintptr_t)&_text;
-
-    // Copy bytes
-    while (text_size--) {
-      *dst++ = *src++;
+    
+    // Copy in 4-byte chunks
+    unsigned long word_count = text_size / 4;
+    while (word_count--) {
+        *dst++ = *src++;
+    }
+    
+    // Handle remaining bytes (if size not multiple of 4)
+    unsigned long remainder = text_size % 4;
+    if (remainder) {
+        char *byte_src = (char *)src;
+        char *byte_dst = (char *)dst;
+        while (remainder--) {
+            *byte_dst++ = *byte_src++;
+        }
     }
   }
 
   // Copy .data section
   if (&_edata > &_data) {
-    char *src = &_data_lma;
-    char *dst = &_data;
+    uint32_t *src = (uint32_t *)&_data_lma;
+    uint32_t *dst = (uint32_t *)&_data;
     unsigned long data_size = (uintptr_t)&_edata - (uintptr_t)&_data;
-
-    // Copy bytes
-    while (data_size--) {
-      *dst++ = *src++;
+    
+    // Copy in 4-byte chunks
+    unsigned long word_count = data_size / 4;
+    while (word_count--) {
+        *dst++ = *src++;
+    }
+    
+    // Handle remaining bytes (if size not multiple of 4)
+    unsigned long remainder = data_size % 4;
+    if (remainder) {
+        char *byte_src = (char *)src;
+        char *byte_dst = (char *)dst;
+        while (remainder--) {
+            *byte_dst++ = *byte_src++;
+        }
     }
   }
 
@@ -89,7 +111,7 @@ void init_uart() {
 
 __attribute__((section(".SSBL")))
 void _trm_init() {
-  init_uart();
+  //init_uart();
   second_stage_boot_loader();
 }
 
@@ -121,5 +143,4 @@ void first_stage_boot_loader() {
 }
 
     
-
 

@@ -21,7 +21,7 @@ $(EXEC): $(TOP_MODULE) $(CSRC) $(VSRC)
 	$(VERILATOR) $(FLAGS) --cc $(TOP_MODULE) --trace --exe $(CSRC) $(VSRC) $(INCLUDE_DIRS) \
                     --build -j 0 --top-module ysyxSoCFull \
                     --Mdir $(OBJ_DIR)  \
-                    -LDFLAGS "-lreadline -L/usr/local/lib -lcapstone"
+                    -LDFLAGS "-lreadline -L/usr/local/lib"
 	+make -C $(OBJ_DIR) -f VysyxSoCFull.mk 
 
 verilog: 
@@ -29,7 +29,6 @@ verilog:
 
 # 运行仿真
 sim: $(EXEC)
-	$(call git_commit, "sim RTL")  
 	$(call git_commit, "sim RTL")  
 	$(EXEC) $(IMG) $(STEP_MODE)
 

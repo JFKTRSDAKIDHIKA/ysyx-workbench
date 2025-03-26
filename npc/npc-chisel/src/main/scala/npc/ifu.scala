@@ -210,3 +210,4 @@ class EBreakHandler extends BlackBox with HasBlackBoxInline {
       |endmodule
     """.stripMargin)
 }
+

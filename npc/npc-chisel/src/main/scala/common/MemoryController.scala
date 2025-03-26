@@ -43,7 +43,7 @@ class MemoryController extends Module with RISCVConstants {
     SRAM_ADDR -> (base_mask << (shift_amount * 1.U)),
     // SPI does not support narrow transfer
     SPI_ADDR -> (base_mask << (shift_amount * 1.U)),
-    // PSRAM supports narrow transfer
+    // PSRAM does not supports narrow transfer
     PSRAM_ADDR -> (base_mask << (shift_amount * 1.U)),
     // SDRAM supports narrow transfer ?????
     SDRAM_ADDR -> (base_mask << (shift_amount * 1.U))
