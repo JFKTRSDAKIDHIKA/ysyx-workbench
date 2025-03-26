@@ -212,6 +212,7 @@ always @(posedge clk) begin
                     // a[8:0] is used as the column address and cannot be changed because the current state is idle. 
                     // The 'current_col' has not been assigned the value of 'a' yet, so 'a' is used directly.
                     mem[i][active_row[i]][current_col[i]][7:0]  <= dq[7:0];
+                    $write("%d\n", i);
                     $strobe("Write data to mem[%0d][%0d][%0d] = %0h", i, active_row[i], current_col[i], dq[7:0]);
                 end
                 if (~dqm[1]) begin
