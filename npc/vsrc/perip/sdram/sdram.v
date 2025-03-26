@@ -232,11 +232,11 @@ always @(posedge clk) begin
             end
 
             // Read operation
-            if (state[i] == WAIT_READ && delay_counter[i] == 1 && active[i]) begin
+            if (state[i] == WAIT_READ && delay_counter[i] == 1 && active[ba]) begin
                 dq_out    <= mem[ba][active_row[i]][current_col[i] - 1];
                 dq_en     <= 1'b1;
             end
-            else if (state[i] == READING && burst_counter[i] > 0 && active[i]) begin
+            else if (state[i] == READING && burst_counter[i] > 0 && active[ba]) begin
                 dq_out    <= mem[ba][active_row[i]][current_col[i] - 1];
                 dq_en     <= 1'b1;
             end
