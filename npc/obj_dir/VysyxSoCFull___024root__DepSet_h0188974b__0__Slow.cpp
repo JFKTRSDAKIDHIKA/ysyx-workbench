@@ -2917,6 +2917,16 @@ VL_ATTR_COLD void VysyxSoCFull___024root___dump_triggers__nba(VysyxSoCFull___024
 }
 #endif  // VL_DEBUG
 
+VL_ATTR_COLD void VysyxSoCFull___024root___eval_postponed__TOP(VysyxSoCFull___024root* vlSelf);
+
+VL_ATTR_COLD void VysyxSoCFull___024root___eval_postponed(VysyxSoCFull___024root* vlSelf) {
+    if (false && vlSelf) {}  // Prevent unused
+    VysyxSoCFull__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
+    VL_DEBUG_IF(VL_DBG_MSGF("+    VysyxSoCFull___024root___eval_postponed\n"); );
+    // Body
+    VysyxSoCFull___024root___eval_postponed__TOP(vlSelf);
+}
+
 VL_ATTR_COLD void VysyxSoCFull___024root___ctor_var_reset(VysyxSoCFull___024root* vlSelf) {
     if (false && vlSelf) {}  // Prevent unused
     VysyxSoCFull__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
@@ -3753,6 +3763,10 @@ VL_ATTR_COLD void VysyxSoCFull___024root___ctor_var_reset(VysyxSoCFull___024root
     for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
         vlSelf->ysyxSoCFull__DOT__sdram__DOT__current_col[__Vi0] = VL_RAND_RESET_I(9);
     }
+    vlSelf->ysyxSoCFull__DOT__sdram__DOT____Vstrobe0 = VL_RAND_RESET_I(1);
+    vlSelf->ysyxSoCFull__DOT__sdram__DOT____Vstrobe1 = VL_RAND_RESET_I(1);
+    vlSelf->ysyxSoCFull__DOT__sdram__DOT____Vstrobe2 = VL_RAND_RESET_I(1);
+    vlSelf->ysyxSoCFull__DOT__sdram__DOT____Vstrobe3 = VL_RAND_RESET_I(1);
     vlSelf->ysyxSoCFull__DOT__sdram__DOT__unnamedblk1__DOT__i = VL_RAND_RESET_I(32);
     vlSelf->ysyxSoCFull__DOT__sdram__DOT__unnamedblk2__DOT__i = VL_RAND_RESET_I(32);
     vlSelf->ysyxSoCFull__DOT__sdram__DOT__unnamedblk3__DOT__i = VL_RAND_RESET_I(32);

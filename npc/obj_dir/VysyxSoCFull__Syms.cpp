@@ -37,6 +37,7 @@ VysyxSoCFull__Syms::VysyxSoCFull__Syms(VerilatedContext* contextp, const char* n
     __Vscope_ysyxSoCFull__bitrev.configure(this, name(), "ysyxSoCFull.bitrev", "bitrev", -9, VerilatedScope::SCOPE_OTHER);
     __Vscope_ysyxSoCFull__flash.configure(this, name(), "ysyxSoCFull.flash", "flash", -9, VerilatedScope::SCOPE_OTHER);
     __Vscope_ysyxSoCFull__flash__flash_cmd_i.configure(this, name(), "ysyxSoCFull.flash.flash_cmd_i", "flash_cmd_i", -9, VerilatedScope::SCOPE_OTHER);
+    __Vscope_ysyxSoCFull__sdram.configure(this, name(), "ysyxSoCFull.sdram", "sdram", -9, VerilatedScope::SCOPE_OTHER);
     // Setup export functions
     for (int __Vfinal = 0; __Vfinal < 2; ++__Vfinal) {
     }
