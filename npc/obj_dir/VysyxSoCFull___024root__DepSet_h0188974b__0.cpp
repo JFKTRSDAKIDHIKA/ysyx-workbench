@@ -3106,6 +3106,7 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__5(VysyxSoCFull___0
                    [0U]) & (1U == vlSelf->ysyxSoCFull__DOT__sdram__DOT__delay_counter
                             [0U])) & vlSelf->ysyxSoCFull__DOT__sdram__DOT__active
                  [0U])) {
+                vlSelf->ysyxSoCFull__DOT__sdram__DOT____Vstrobe4 = 1U;
                 vlSelf->ysyxSoCFull__DOT__sdram__DOT__dq_out 
                     = vlSelf->ysyxSoCFull__DOT__sdram__DOT__mem
                     [0U][vlSelf->ysyxSoCFull__DOT__sdram__DOT__active_row
@@ -3116,6 +3117,7 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__5(VysyxSoCFull___0
                           [0U]) & (0U < vlSelf->ysyxSoCFull__DOT__sdram__DOT__burst_counter
                                    [0U])) & vlSelf->ysyxSoCFull__DOT__sdram__DOT__active
                         [0U])) {
+                vlSelf->ysyxSoCFull__DOT__sdram__DOT____Vstrobe5 = 1U;
                 vlSelf->ysyxSoCFull__DOT__sdram__DOT__dq_out 
                     = vlSelf->ysyxSoCFull__DOT__sdram__DOT__mem
                     [0U][vlSelf->ysyxSoCFull__DOT__sdram__DOT__active_row
@@ -3127,6 +3129,7 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__5(VysyxSoCFull___0
                    [1U]) & (1U == vlSelf->ysyxSoCFull__DOT__sdram__DOT__delay_counter
                             [1U])) & vlSelf->ysyxSoCFull__DOT__sdram__DOT__active
                  [1U])) {
+                vlSelf->ysyxSoCFull__DOT__sdram__DOT____Vstrobe4 = 1U;
                 vlSelf->ysyxSoCFull__DOT__sdram__DOT__dq_out 
                     = vlSelf->ysyxSoCFull__DOT__sdram__DOT__mem
                     [1U][vlSelf->ysyxSoCFull__DOT__sdram__DOT__active_row
@@ -3137,6 +3140,7 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__5(VysyxSoCFull___0
                           [1U]) & (0U < vlSelf->ysyxSoCFull__DOT__sdram__DOT__burst_counter
                                    [1U])) & vlSelf->ysyxSoCFull__DOT__sdram__DOT__active
                         [1U])) {
+                vlSelf->ysyxSoCFull__DOT__sdram__DOT____Vstrobe5 = 1U;
                 vlSelf->ysyxSoCFull__DOT__sdram__DOT__dq_out 
                     = vlSelf->ysyxSoCFull__DOT__sdram__DOT__mem
                     [1U][vlSelf->ysyxSoCFull__DOT__sdram__DOT__active_row
@@ -3148,6 +3152,7 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__5(VysyxSoCFull___0
                    [2U]) & (1U == vlSelf->ysyxSoCFull__DOT__sdram__DOT__delay_counter
                             [2U])) & vlSelf->ysyxSoCFull__DOT__sdram__DOT__active
                  [2U])) {
+                vlSelf->ysyxSoCFull__DOT__sdram__DOT____Vstrobe4 = 1U;
                 vlSelf->ysyxSoCFull__DOT__sdram__DOT__dq_out 
                     = vlSelf->ysyxSoCFull__DOT__sdram__DOT__mem
                     [2U][vlSelf->ysyxSoCFull__DOT__sdram__DOT__active_row
@@ -3158,6 +3163,7 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__5(VysyxSoCFull___0
                           [2U]) & (0U < vlSelf->ysyxSoCFull__DOT__sdram__DOT__burst_counter
                                    [2U])) & vlSelf->ysyxSoCFull__DOT__sdram__DOT__active
                         [2U])) {
+                vlSelf->ysyxSoCFull__DOT__sdram__DOT____Vstrobe5 = 1U;
                 vlSelf->ysyxSoCFull__DOT__sdram__DOT__dq_out 
                     = vlSelf->ysyxSoCFull__DOT__sdram__DOT__mem
                     [2U][vlSelf->ysyxSoCFull__DOT__sdram__DOT__active_row
@@ -3169,6 +3175,7 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__5(VysyxSoCFull___0
                    [3U]) & (1U == vlSelf->ysyxSoCFull__DOT__sdram__DOT__delay_counter
                             [3U])) & vlSelf->ysyxSoCFull__DOT__sdram__DOT__active
                  [3U])) {
+                vlSelf->ysyxSoCFull__DOT__sdram__DOT____Vstrobe4 = 1U;
                 vlSelf->ysyxSoCFull__DOT__sdram__DOT__dq_out 
                     = vlSelf->ysyxSoCFull__DOT__sdram__DOT__mem
                     [3U][vlSelf->ysyxSoCFull__DOT__sdram__DOT__active_row
@@ -3179,6 +3186,7 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__5(VysyxSoCFull___0
                           [3U]) & (0U < vlSelf->ysyxSoCFull__DOT__sdram__DOT__burst_counter
                                    [3U])) & vlSelf->ysyxSoCFull__DOT__sdram__DOT__active
                         [3U])) {
+                vlSelf->ysyxSoCFull__DOT__sdram__DOT____Vstrobe5 = 1U;
                 vlSelf->ysyxSoCFull__DOT__sdram__DOT__dq_out 
                     = vlSelf->ysyxSoCFull__DOT__sdram__DOT__mem
                     [3U][vlSelf->ysyxSoCFull__DOT__sdram__DOT__active_row

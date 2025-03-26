@@ -213,7 +213,7 @@ always @(posedge clk) begin
                     // The 'current_col' has not been assigned the value of 'a' yet, so 'a' is used directly.
                     mem[ba][active_row[i]][current_col[i]][7:0]  <= dq[7:0];
                     $write("Bank: %d\n", i);
-                    $strobe("Write data to mem[%0d][%0d] = %0h", i, active_row[i], current_col[i], dq[7:0]);
+                    $strobe("Write data to mem[%0d][%0d][%0d] = %0h", i, active_row[i], current_col[i], dq[7:0]);
                 end
                 if (~dqm[1]) begin
                     mem[ba][active_row[i]][current_col[i]][15:8] <= dq[15:8];
@@ -239,9 +239,11 @@ always @(posedge clk) begin
             if (state[i] == WAIT_READ && delay_counter[i] == 1 && active[i]) begin
                 dq_out    <= mem[i][active_row[i]][current_col[i] - 1];
                 dq_en     <= 1'b1;
+                $strobe("Read data at mem[%0d][%0d][%0d] = %0h", i, active_row[i], current_col[i]-1, dq_out);  
             end
             else if (state[i] == READING && burst_counter[i] > 0 && active[i]) begin
                 dq_out    <= mem[i][active_row[i]][current_col[i] - 1];
+                $strobe("Read data at mem[%0d][%0d][%0d] = %0h", i, active_row[i], current_col[i]-1, dq_out);  
                 dq_en     <= 1'b1;
             end
         end
