@@ -64,7 +64,10 @@ extern "C" void write_mem(int bank, int row, int col, int data) {
 // Read SDRAM
 extern "C" int read_mem(int bank, int row, int col) {
     if (bank < BANK_COUNT && row < ROW_COUNT && col < COL_COUNT) {
-        return sdram_memory[bank][row][col];
+        int value = sdram_memory[bank][row][col];
+        printf("[DEBUG] Read SDRAM: bank=%d, row=%d, col=%d, data=0x%04X\n", 
+          bank, row, col, value);
+        return value;
     } else {
         printf("Error: Invalid memory access (bank=%d, row=%d, col=%d)\n", bank, row, col);
         return -1;
