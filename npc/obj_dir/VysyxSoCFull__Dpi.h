@@ -27,7 +27,7 @@ extern "C" {
     // DPI import at vsrc/generated/Core.sv:1572:30
     extern void simulation_exit();
     // DPI import at vsrc/perip/sdram/sdram.v:21:30
-    extern void write_mem(int bank, int row, int col, int data);
+    extern void write_mem(int bank, int row, int col, int data, int mask);
 
 #ifdef __cplusplus
 }

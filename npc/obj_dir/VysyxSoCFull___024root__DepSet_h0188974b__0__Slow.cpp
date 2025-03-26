@@ -234,6 +234,10 @@ VL_ATTR_COLD void VysyxSoCFull___024root___stl_sequent__TOP__0(VysyxSoCFull___02
         = (4U == (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__lsu__DOT__state));
     vlSelf->ysyxSoCFull__DOT__asic__DOT__lpsram__DOT__mpsram__DOT__u0__DOT__mr_done 
         = (0x16U == (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__lpsram__DOT__mpsram__DOT__u0__DOT__MR__DOT__counter));
+    vlSelf->ysyxSoCFull__DOT__sdram__DOT__write_mask 
+        = ((((2U & (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__dqm_q))
+              ? 0U : 0xffU) << 8U) | ((1U & (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__dqm_q))
+                                       ? 0U : 0xffU));
     vlSelf->ysyxSoCFull__DOT__asic__DOT__luart__DOT__muart__DOT__Uregs__DOT__transmitter__DOT__fifo_tx__DOT__top_plus_1 
         = (0xfU & ((IData)(1U) + (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__luart__DOT__muart__DOT__Uregs__DOT__transmitter__DOT__fifo_tx__DOT__top)));
     vlSelf->ysyxSoCFull__DOT__asic__DOT__luart__DOT__muart__DOT__Uregs__DOT__receiver__DOT__rcounter16_eq_7 
@@ -3664,6 +3668,7 @@ VL_ATTR_COLD void VysyxSoCFull___024root___ctor_var_reset(VysyxSoCFull___024root
     vlSelf->ysyxSoCFull__DOT__sdram__DOT__burst_length = VL_RAND_RESET_I(4);
     vlSelf->ysyxSoCFull__DOT__sdram__DOT__cas_latency = VL_RAND_RESET_I(3);
     vlSelf->ysyxSoCFull__DOT__sdram__DOT__masked_dq = VL_RAND_RESET_I(16);
+    vlSelf->ysyxSoCFull__DOT__sdram__DOT__write_mask = VL_RAND_RESET_I(16);
     vlSelf->ysyxSoCFull__DOT__sdram__DOT__dq_out = VL_RAND_RESET_I(16);
     vlSelf->ysyxSoCFull__DOT__sdram__DOT__dq_en = VL_RAND_RESET_I(1);
     vlSelf->ysyxSoCFull__DOT__sdram__DOT__state = VL_RAND_RESET_I(3);

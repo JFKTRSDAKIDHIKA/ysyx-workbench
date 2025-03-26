@@ -50,16 +50,25 @@ extern "C" void mrom_read(int32_t addr, int32_t *data) {
   *data = Memory::pmem_read(addr); 
 }
 
-// Write SDRAM
-extern "C" void write_mem(int bank, int row, int col, int data) {
-    printf("[DEBUG] Write attempt - Bank: %d, Row: %d, Column: %d, Data: 0x%04X\n", 
-      bank, row, col, static_cast<uint16_t>(data));
-    if (bank < BANK_COUNT && row < ROW_COUNT && col < COL_COUNT) {
-        sdram_memory[bank][row][col] = static_cast<uint16_t>(data);
-    } else {
-        printf("Error: Invalid memory access (bank=%d, row=%d, col=%d)\n", bank, row, col);
-    }
+// Write SDRAM with mask
+extern "C" void write_mem(int bank, int row, int col, int data, int mask) {
+  printf("[DEBUG] Write attempt - Bank: %d, Row: %d, Column: %d, Data: 0x%04X, Mask: 0x%02X\n", 
+    bank, row, col, static_cast<uint16_t>(data), mask);
+
+  if (bank < BANK_COUNT && row < ROW_COUNT && col < COL_COUNT) {
+      // 读取当前 SDRAM 中的数据
+      uint16_t old_data = sdram_memory[bank][row][col];
+
+      // 计算新数据，只有 `mask` 允许的部分会被修改
+      uint16_t new_data = (old_data & ~mask) | (data & mask);
+
+      // 写入 SDRAM
+      sdram_memory[bank][row][col] = new_data;
+  } else {
+      printf("Error: Invalid memory access (bank=%d, row=%d, col=%d)\n", bank, row, col);
+  }
 }
+
 
 // Read SDRAM
 extern "C" int read_mem(int bank, int row, int col) {

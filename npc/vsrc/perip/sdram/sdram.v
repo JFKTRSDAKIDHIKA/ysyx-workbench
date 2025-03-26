@@ -18,7 +18,7 @@ localparam BANK_COUNT = 4;
 
 // Use DPI-C to simulate SDRAM behavior with an external C++ model
 // This approach replaces SystemVerilog's multi-dimensional array with a more flexible and scalable C++ implementation
-import "DPI-C" function void write_mem(int bank, int row, int col, int data);
+import "DPI-C" function void write_mem(int bank, int row, int col, int data, int mask);
 import "DPI-C" function int read_mem(int bank, int row, int col);
 
 // Active bank states
@@ -47,8 +47,11 @@ wire is_load_mode    = ~cs & ~ras & ~cas & ~we;
 
 // Write mask control
 wire [15:0] masked_dq;
+wire [15:0] write_mask;
 assign masked_dq[7:0]  = dqm[0] ? 8'b0  : dq[7:0];
 assign masked_dq[15:8] = dqm[1] ? 8'b0 : dq[15:8];
+assign write_mask[7:0]  = dqm[0] ? 8'b0 : 8'hFF;
+assign write_mask[15:8] = dqm[1] ? 8'b0 : 8'hFF;
 
 // DQ output control
 reg [15:0] dq_out;       
@@ -99,7 +102,7 @@ always @(posedge clk) begin
             // Write SDRAM through DPI-C
             // DPI-C write_mem executes immediately - uses combinational input 'a' 
             // instead of registered current_col for correct write timing
-            write_mem(ba, active_row[ba], a[8:0], masked_dq);
+            write_mem(ba, active_row[ba], a[8:0], masked_dq, write_mask);
         end
     end
 end
@@ -151,7 +154,7 @@ always @(posedge clk) begin
                     // Write SDRAM through DPI-C
                     // DPI-C write_mem executes immediately - uses combinational input 'a' 
                     // instead of registered current_col for correct write timing
-                    write_mem(ba, active_row[ba], current_col + 1, masked_dq);
+                    write_mem(ba, active_row[ba], current_col + 1, masked_dq, write_mask);
                 end else begin
                     state <= IDLE;
                 end
