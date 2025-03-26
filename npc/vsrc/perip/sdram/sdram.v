@@ -139,12 +139,12 @@ always @(posedge clk) begin
             for (integer i = 0; i < BANK_COUNT; i++) begin
                 if (i != ba) begin
                     active[i] <= 0;
-                    //active_row[i] <= 13'b0;
+                    active_row[i] <= 13'b0;
                 end
             end
             // Select the bank and the row
             active[ba]        <= 1;
-            //active_row[ba]    <= a[12:0];
+            active_row[ba]    <= a[12:0];
         end
     end
 end
