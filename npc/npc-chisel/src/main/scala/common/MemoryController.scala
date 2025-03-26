@@ -43,10 +43,10 @@ class MemoryController extends Module with RISCVConstants {
     SRAM_ADDR -> (base_mask << (shift_amount * 1.U)),
     // SPI does not support narrow transfer
     SPI_ADDR -> (base_mask << (shift_amount * 1.U)),
-    // PSRAM supports narrow transfer
+    // PSRAM does not supports narrow transfer
     PSRAM_ADDR -> (base_mask << (shift_amount * 1.U)),
     // SDRAM supports narrow transfer ?????
-    SDRAM_ADDR -> (base_mask << (shift_amount * 1.U))
+    SDRAM_ADDR -> 15.U(8.W)
   ))
 
   io.dmem_wdata := MuxLookup(rw_address_type, io.dmem_wdata_raw << (shift_amount * 8.U))(Seq(
