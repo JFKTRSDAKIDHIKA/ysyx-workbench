@@ -270,7 +270,13 @@ static int execute_single_step() {
 static int cmd_c(char *args) {
   while(!Verilated::gotFinish()) {
     int ret = execute_single_step();
-    if (ret < 0) return -1;
+    if (ret < 0) {
+#ifdef TRACE
+    tfp->dump(time_i);
+    time_i++;
+#endif
+      return -1;
+    }
   }
   return 0;
 }
