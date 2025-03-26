@@ -21,6 +21,8 @@ localparam BANK_COUNT = 4;
 import "DPI-C" function void write_mem(int bank, int row, int col, int data);
 import "DPI-C" function int read_mem(int bank, int row, int col);
 
+// Active bank states
+reg [BANK_COUNT-1:0] active_bank;
 // Active row states
 reg [ROW_WIDTH-1:0] active_row [0:BANK_COUNT-1]; 
 
@@ -81,6 +83,8 @@ always @(posedge clk) begin
             end
             // Select the row in the particular bank
             active_row[ba]    <= a[12:0];
+            // Select the active bank
+            active_bank <= ba;
             // State remain IDLE
             state <= IDLE;
         end
@@ -124,7 +128,7 @@ always @(posedge clk) begin
                     // During WAIT_READ, the first 16-bit data is read; in the next cycle (READING), 
                     // the second 16-bit data is fetched to support burst transfer.
                     // Read the first 16 bits.
-                    dq_out <= read_mem(ba, active_row[ba], current_col);    
+                    dq_out <= read_mem(active_bank, active_row[ba], current_col);    
                     dq_en <= 1'b1;                  
                     current_col <= current_col + 1;
                     if (burst_length == 1)
@@ -136,7 +140,7 @@ always @(posedge clk) begin
                     burst_counter <= burst_counter - 1;
                     current_col   <= current_col + 1;
                     // Read the second 16 bits.
-                    dq_out <= read_mem(ba, active_row[ba], current_col);     
+                    dq_out <= read_mem(active_bank, active_row[ba], current_col);     
                     dq_en <= 1'b1;      
                 end else begin
                     state <= IDLE;
