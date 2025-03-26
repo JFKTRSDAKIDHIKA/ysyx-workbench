@@ -60,6 +60,6 @@ class AlignmentNetwork extends Module with RISCVConstants {
     // PSRAM supports narrow transfer
     PSRAM_ADDR -> aligned_data_out,
     // SDRAM ???
-    SDRAM_ADDR -> io.data_in
+    SDRAM_ADDR -> aligned_data_out
   ))
 }
