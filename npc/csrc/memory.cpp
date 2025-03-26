@@ -1,5 +1,4 @@
 #include "include/memory.h"
-#include "include/memory.h"
 #include <iostream>
 
 std::vector<uint8_t> Memory::mrom(MROM_SIZE, 0);  // Initialize mrom with size MROM_SIZE and set all elements to 0
@@ -66,4 +65,3 @@ void Memory::init_flash(){
         pmem_write(addr, i, (char)0xf);
     }
 }
-

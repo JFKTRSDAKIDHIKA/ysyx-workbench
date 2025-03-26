@@ -9,6 +9,10 @@
 #define  FLASH_BASE_ADDR  0x30000000          // Base address of FLASH
 #define  FLASH_SIZE  0xfffffff                // 16MB FLASH
 
+// SDRAM 
+const int BANK_COUNT = 4;
+const int ROW_COUNT = 1 << 13;  // 8192
+const int COL_COUNT = 1 << 9;   // 512
 
 class Memory {
 public:

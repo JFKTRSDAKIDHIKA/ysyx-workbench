@@ -13,6 +13,15 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <cassert>    
+// sdram_model
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
+
+// SDRAM 存储器，使用 vector 代替三维数组
+std::vector<std::vector<std::vector<uint16_t>>> sdram_memory(BANK_COUNT,
+  std::vector<std::vector<uint16_t>>(ROW_COUNT,
+      std::vector<uint16_t>(COL_COUNT, 0)));
 
 // #define ENABLE_MEMORY_CHECK 1
 #define DIFFTEST 1
@@ -39,6 +48,25 @@ extern "C" void flash_read(int32_t addr, int32_t *data) {
 
 extern "C" void mrom_read(int32_t addr, int32_t *data) { 
   *data = Memory::pmem_read(addr); 
+}
+
+// Write SDRAM
+extern "C" void write_mem(int bank, int row, int col, int data) {
+    if (bank < BANK_COUNT && row < ROW_COUNT && col < COL_COUNT) {
+        sdram_memory[bank][row][col] = static_cast<uint16_t>(data);
+    } else {
+        printf("Error: Invalid memory access (bank=%d, row=%d, col=%d)\n", bank, row, col);
+    }
+}
+
+// Read SDRAM
+extern "C" int read_mem(int bank, int row, int col) {
+    if (bank < BANK_COUNT && row < ROW_COUNT && col < COL_COUNT) {
+        return sdram_memory[bank][row][col];
+    } else {
+        printf("Error: Invalid memory access (bank=%d, row=%d, col=%d)\n", bank, row, col);
+        return -1;
+    }
 }
 
 extern "C" void simulation_exit() {
