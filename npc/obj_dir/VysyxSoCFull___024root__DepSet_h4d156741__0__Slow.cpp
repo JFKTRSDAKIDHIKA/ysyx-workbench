@@ -31,7 +31,7 @@ VL_ATTR_COLD void VysyxSoCFull___024root___eval_postponed__TOP(VysyxSoCFull___02
     VL_DEBUG_IF(VL_DBG_MSGF("+    VysyxSoCFull___024root___eval_postponed__TOP\n"); );
     // Body
     if (VL_UNLIKELY(vlSelf->ysyxSoCFull__DOT__sdram__DOT____Vstrobe0)) {
-        VL_WRITEF("Write data to mem[%0d][%0#][%0#] = %0x\n",
+        VL_WRITEF("Write data to bank: %11d | mem[%0#][%0#] = %0x\n",
                   32,vlSelf->ysyxSoCFull__DOT__sdram__DOT__unnamedblk7__DOT__i,
                   13,vlSelf->ysyxSoCFull__DOT__sdram__DOT__active_row
                   [(3U & vlSelf->ysyxSoCFull__DOT__sdram__DOT__unnamedblk7__DOT__i)],
@@ -42,7 +42,7 @@ VL_ATTR_COLD void VysyxSoCFull___024root___eval_postponed__TOP(VysyxSoCFull___02
         vlSelf->ysyxSoCFull__DOT__sdram__DOT____Vstrobe0 = 0U;
     }
     if (VL_UNLIKELY(vlSelf->ysyxSoCFull__DOT__sdram__DOT____Vstrobe1)) {
-        VL_WRITEF("Write data to mem[%0d][%0#][%0#] = %0x\n",
+        VL_WRITEF("Write data to bank: %11d | mem[%0#][%0#] = %0x\n",
                   32,vlSelf->ysyxSoCFull__DOT__sdram__DOT__unnamedblk7__DOT__i,
                   13,vlSelf->ysyxSoCFull__DOT__sdram__DOT__active_row
                   [(3U & vlSelf->ysyxSoCFull__DOT__sdram__DOT__unnamedblk7__DOT__i)],
@@ -54,7 +54,7 @@ VL_ATTR_COLD void VysyxSoCFull___024root___eval_postponed__TOP(VysyxSoCFull___02
         vlSelf->ysyxSoCFull__DOT__sdram__DOT____Vstrobe1 = 0U;
     }
     if (VL_UNLIKELY(vlSelf->ysyxSoCFull__DOT__sdram__DOT____Vstrobe2)) {
-        VL_WRITEF("Write data to mem[%0d][%0#][%0#] = %0x\n",
+        VL_WRITEF("Write data to bank: %11d | mem[%0#][%0#] = %0x\n",
                   32,vlSelf->ysyxSoCFull__DOT__sdram__DOT__unnamedblk7__DOT__i,
                   13,vlSelf->ysyxSoCFull__DOT__sdram__DOT__active_row
                   [(3U & vlSelf->ysyxSoCFull__DOT__sdram__DOT__unnamedblk7__DOT__i)],
@@ -65,7 +65,7 @@ VL_ATTR_COLD void VysyxSoCFull___024root___eval_postponed__TOP(VysyxSoCFull___02
         vlSelf->ysyxSoCFull__DOT__sdram__DOT____Vstrobe2 = 0U;
     }
     if (VL_UNLIKELY(vlSelf->ysyxSoCFull__DOT__sdram__DOT____Vstrobe3)) {
-        VL_WRITEF("Write data to mem[%0d][%0#][%0#] = %0x\n",
+        VL_WRITEF("Write data to bank: %11d | mem[%0#][%0#] = %0x\n",
                   32,vlSelf->ysyxSoCFull__DOT__sdram__DOT__unnamedblk7__DOT__i,
                   13,vlSelf->ysyxSoCFull__DOT__sdram__DOT__active_row
                   [(3U & vlSelf->ysyxSoCFull__DOT__sdram__DOT__unnamedblk7__DOT__i)],
