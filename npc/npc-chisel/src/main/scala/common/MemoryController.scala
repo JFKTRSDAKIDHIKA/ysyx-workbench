@@ -46,7 +46,7 @@ class MemoryController extends Module with RISCVConstants {
     // PSRAM does not supports narrow transfer
     PSRAM_ADDR -> (base_mask << (shift_amount * 1.U)),
     // SDRAM supports narrow transfer ?????
-    SDRAM_ADDR -> 15.U(8.W)
+    SDRAM_ADDR -> (base_mask << (shift_amount * 1.U))
   ))
 
   io.dmem_wdata := MuxLookup(rw_address_type, io.dmem_wdata_raw << (shift_amount * 8.U))(Seq(
@@ -59,7 +59,7 @@ class MemoryController extends Module with RISCVConstants {
     // PSRAM supports narrow transfer
     PSRAM_ADDR -> (io.dmem_wdata_raw << (shift_amount * 8.U)),
     // SDRAM supports narrow transfer ?????
-    SDRAM_ADDR -> io.dmem_wdata_raw
+    SDRAM_ADDR -> (io.dmem_wdata_raw << (shift_amount * 8.U))
   ))
 
   io.dmem_rw_size := MuxLookup(rw_address_type, 2.U(3.W))(Seq(
@@ -86,12 +86,6 @@ class MemoryController extends Module with RISCVConstants {
           MEM_ACCESS_HALF_U -> 1.U(3.W) 
     )),
     // SDRAM supports narrow transfer ?????
-    SDRAM_ADDR -> MuxLookup(io.control, 2.U(3.W))(Seq(
-          MEM_ACCESS_WORD -> 2.U(3.W), 
-          MEM_ACCESS_BYTE -> 0.U(3.W), 
-          MEM_ACCESS_BYTE_U -> 0.U(3.W), 
-          MEM_ACCESS_HALF -> 1.U(3.W), 
-          MEM_ACCESS_HALF_U -> 1.U(3.W) 
-    ))
+    SDRAM_ADDR -> 2.U(3.W)
   ))
 }
