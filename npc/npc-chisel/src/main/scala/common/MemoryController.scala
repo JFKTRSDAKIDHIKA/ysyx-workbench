@@ -59,7 +59,7 @@ class MemoryController extends Module with RISCVConstants {
     // PSRAM supports narrow transfer
     PSRAM_ADDR -> (io.dmem_wdata_raw << (shift_amount * 8.U)),
     // SDRAM supports narrow transfer ?????
-    SDRAM_ADDR -> (io.dmem_wdata_raw << (shift_amount * 8.U))
+    SDRAM_ADDR -> io.dmem_wdata_raw
   ))
 
   io.dmem_rw_size := MuxLookup(rw_address_type, 2.U(3.W))(Seq(
