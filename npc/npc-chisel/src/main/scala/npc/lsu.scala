@@ -205,15 +205,12 @@ class LSU extends Module with RISCVConstants{
         io.memory.ar.id := 0.U
         // Wait memory return data valid
         when(io.memory.r.valid) {
-          /*
           io.lsu_axi_resp_err := MuxLookup(io.memory.r.resp, false.B)(Seq(
             AXI4Constants.RESP_OKAY -> false.B,
             AXI4Constants.RESP_EXOKAY -> false.B,
             AXI4Constants.RESP_SLVERR -> true.B,
             AXI4Constants.RESP_DECERR -> true.B
           ))
-          */
-          io.lsu_axi_resp_err := false.B
           state := sDone
         }
       // Write channel
