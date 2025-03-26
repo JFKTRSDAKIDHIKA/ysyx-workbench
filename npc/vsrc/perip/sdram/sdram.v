@@ -95,6 +95,8 @@ always @(posedge clk) begin
             delay_counter <= cas_latency - 1;
             burst_counter <= burst_length - 1;
             current_col   <= a[8:0];
+            // Select the active bank
+            active_bank <= ba;
         end
         // The WRITE command is used to initiate a burst write access to an active row.
         else if (is_write) begin
@@ -128,7 +130,7 @@ always @(posedge clk) begin
                     // During WAIT_READ, the first 16-bit data is read; in the next cycle (READING), 
                     // the second 16-bit data is fetched to support burst transfer.
                     // Read the first 16 bits.
-                    dq_out <= read_mem(ba, active_row[ba], current_col);    
+                    dq_out <= read_mem(active_bank, active_row[ba], current_col);    
                     dq_en <= 1'b1;                  
                     current_col <= current_col + 1;
                     if (burst_length == 1)
@@ -140,7 +142,7 @@ always @(posedge clk) begin
                     burst_counter <= burst_counter - 1;
                     current_col   <= current_col + 1;
                     // Read the second 16 bits.
-                    dq_out <= read_mem(ba, active_row[ba], current_col);     
+                    dq_out <= read_mem(active_bank, active_row[ba], current_col);     
                     dq_en <= 1'b1;      
                 end else begin
                     state <= IDLE;
