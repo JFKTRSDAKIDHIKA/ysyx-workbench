@@ -20,7 +20,7 @@
 
 // #define ENABLE_MEMORY_CHECK 1
 #define DIFFTEST 1
-#define is_silent_mode 0
+#define is_silent_mode 1
 #define TRACE
 
 // Declare global variables
@@ -70,6 +70,10 @@ extern "C" void write_mem(int instance_id, int bank, int row, int col, int data,
   if (bank < BANK_COUNT && row < ROW_COUNT && col < COL_COUNT) {
       uint16_t old_data = sdram_memory[bank][row][col];
       uint16_t new_data = (old_data & ~mask) | (data & mask);
+
+      printf("[DEBUG] Writing to SDRAM: instance=%d, bank=%d, row=%d, col=%d, old_data=0x%04x, new_data=0x%04x, mask=0x%04x\n",
+        instance_id, bank, row, col, old_data, new_data, mask);
+
       sdram_memory[bank][row][col] = new_data;
   } else {
       printf("Error: Invalid memory access (instance=%d, bank=%d, row=%d, col=%d)\n", 
