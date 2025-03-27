@@ -184,7 +184,8 @@ wire [SDRAM_ROW_W-1:0]  addr_col_w  = {{(SDRAM_ROW_W-SDRAM_COL_W){1'b0}}, ram_ad
 wire [SDRAM_BANK_W-1:0] addr_bank_w = ram_addr_w[SDRAM_COL_W+3:SDRAM_COL_W+1+1];
 wire [SDRAM_ROW_W-1:0]  addr_row_w  = ram_addr_w[SDRAM_ADDR_W+1:SDRAM_COL_W+4];
 // Word extension
-assign sdram_select = ram_addr_w[SDRAM_ADDR_W+2];
+reg sdram_select_reg;
+assign sdram_select = sdram_select_reg;
 
 //-----------------------------------------------------------------
 // SDRAM State Machine
@@ -605,6 +606,9 @@ begin
 
         // Read mask (all bytes in burst)
         dqm_q       <= {SDRAM_DQM_W{1'b0}};
+
+        // ???
+        sdram_select_reg <= ram_addr_w[SDRAM_ADDR_W+2];
     end
     //-----------------------------------------
     // STATE_WRITE
@@ -625,6 +629,9 @@ begin
         dqm_q[3:2]      <= ~ram_wr_w[3:2];
 
         data_rd_en_q    <= 1'b0;
+
+        // ??
+        sdram_select_reg <= ram_addr_w[SDRAM_ADDR_W+2];
     end
     endcase
 end
