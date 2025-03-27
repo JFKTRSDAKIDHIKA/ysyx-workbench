@@ -3,8 +3,11 @@
 !*/
 !Makefile
 !*.mk
+!*.sh
 !*.[cSh]
 !*.v
+!*.sv
+!*.vh
 !*.cc
 !*.cpp
 !.gitignore
