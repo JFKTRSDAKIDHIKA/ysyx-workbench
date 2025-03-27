@@ -111,8 +111,11 @@ module sdram_top_apb (
   assign sdram_ras_1 = sdram_ras;
   assign sdram_cas_0 = sdram_cas;
   assign sdram_cas_1 = sdram_cas;
-  assign sdram_we_0 = (sdram_select == 0) ? sdram_we : 1'b0;
-  assign sdram_we_1 = (sdram_select == 1) ? sdram_we : 1'b0;
+
+  // we signal active low!
+  assign sdram_we_0 = (sdram_select == 0) ? sdram_we : 1'b1;
+  assign sdram_we_1 = (sdram_select == 1) ? sdram_we : 1'b1;
+
   assign sdram_dqm_0 = sdram_dqm;
   assign sdram_dqm_1 = sdram_dqm;
   assign sdram_a_0 = sdram_a;
