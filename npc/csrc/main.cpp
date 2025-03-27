@@ -19,9 +19,9 @@
 #include <vector>
 
 // #define ENABLE_MEMORY_CHECK 1
-// #define DIFFTEST 0
+#define DIFFTEST 1
 #define is_silent_mode 1
-// #define TRACE
+#define TRACE
 
 // Declare global variables
 VysyxSoCFull* top;  // Top module (global)
