@@ -10,8 +10,7 @@ module sdram #(
     input [12:0] a,           // Address bus
     input [ 1:0] ba,          // Bank address
     input [ 1:0] dqm,         // Data mask
-    inout [15:0] dq,          // Data bus
-    input        sdram_select
+    inout [15:0] dq           // Data bus
 );
 
 // Memory parameter declaration
@@ -71,7 +70,6 @@ reg [2:0] state;
 reg [3:0] delay_counter;
 reg [3:0] burst_counter; 
 reg [COL_WIDTH-1:0] current_col;
-reg sdram_active;
 
 // Command processing
 always @(posedge clk) begin
@@ -104,22 +102,16 @@ always @(posedge clk) begin
             burst_counter <= burst_length - 1;
             current_col <= a[8:0];
             // Write SDRAM through DPI-C
-            // Sdram select
-            if (sdram_select) begin
-                sdram_active <= 1'b1;
-                // DPI-C write_mem executes immediately - uses combinational input 'a' 
-                // instead of registered current_col for correct write timing
-                write_mem(INSTANCE_ID, ba, active_row[ba], a[8:0], masked_dq, write_mask);
-            end else begin
-                sdram_active <= 1'b0;
-            end
+            // DPI-C write_mem executes immediately - uses combinational input 'a' 
+            // instead of registered current_col for correct write timing
+            write_mem(INSTANCE_ID, ba, active_row[ba], a[8:0], masked_dq, write_mask);
         end
     end
 end
 
 // State machine
 always @(posedge clk) begin
-    if (!cke || !sdram_active) begin
+    if (!cke) begin
         state <= IDLE;
     end
     else if (cke) begin
@@ -128,7 +120,6 @@ always @(posedge clk) begin
                 // This state (IDLE) is responsible for instruction dispatch.
                 // When burst length = 1, the state cannot reach the READING state, so dq_en needs to be set to 0 here
                 dq_en <= 1'b0;
-                sdram_active <= 1'b0;
             end
             WAIT_READ: begin
                 if (delay_counter > 0) begin
