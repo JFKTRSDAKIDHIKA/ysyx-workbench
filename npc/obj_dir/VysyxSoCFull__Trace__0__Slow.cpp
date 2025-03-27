@@ -2819,6 +2819,7 @@ VL_ATTR_COLD void VysyxSoCFull___024root__trace_init_sub__TOP__0(VysyxSoCFull___
     tracep->declBit(c+577,"qpi_mode", false,-1);
     tracep->popNamePrefix(1);
     tracep->pushNamePrefix("sdram ");
+    tracep->declBus(c+1152,"INSTANCE_ID", false,-1, 31,0);
     tracep->declBit(c+1060,"clk", false,-1);
     tracep->declBit(c+841,"cke", false,-1);
     tracep->declBit(c+842,"cs", false,-1);
@@ -4837,4 +4838,5 @@ VL_ATTR_COLD void VysyxSoCFull___024root__trace_full_sub_0(VysyxSoCFull___024roo
     bufp->fullCData(oldp+1149,(2U),3);
     bufp->fullCData(oldp+1150,(3U),3);
     bufp->fullCData(oldp+1151,(5U),3);
+    bufp->fullIData(oldp+1152,(0U),32);
 }

@@ -1,4 +1,6 @@
-module sdram (
+module sdram #(
+    parameter int INSTANCE_ID = 0
+)(
     input        clk,         // Clock signal
     input        cke,         // Clock enable (assumed to be always 1)
     input        cs,          // Chip select signal, active low
@@ -102,7 +104,7 @@ always @(posedge clk) begin
             // Write SDRAM through DPI-C
             // DPI-C write_mem executes immediately - uses combinational input 'a' 
             // instead of registered current_col for correct write timing
-            write_mem(0, ba, active_row[ba], a[8:0], masked_dq, write_mask);
+            write_mem(INSTANCE_ID, ba, active_row[ba], a[8:0], masked_dq, write_mask);
         end
     end
 end
@@ -127,7 +129,7 @@ always @(posedge clk) begin
                     // the second 16-bit data is fetched to support burst transfer.
                     // Read the first 16 bits.
                     // Due to the two-cycle CAS latency, the bank address (BA) cannot remain constant and must be derived from the registered 'active_bank' value.
-                    dq_out <= read_mem(0, active_bank, active_row[active_bank], current_col);    
+                    dq_out <= read_mem(INSTANCE_ID, active_bank, active_row[active_bank], current_col);    
                     dq_en <= 1'b1;                  
                     current_col <= current_col + 1;
                     if (burst_length == 1)
@@ -140,7 +142,7 @@ always @(posedge clk) begin
                     current_col   <= current_col + 1;
                     // Read the second 16 bits.
                     // Due to the two-cycle CAS latency, the bank address (BA) cannot remain constant and must be derived from the registered 'active_bank' value.
-                    dq_out <= read_mem(0, active_bank, active_row[active_bank], current_col);     
+                    dq_out <= read_mem(INSTANCE_ID, active_bank, active_row[active_bank], current_col);     
                     dq_en <= 1'b1;      
                 end else begin
                     state <= IDLE;
@@ -156,7 +158,7 @@ always @(posedge clk) begin
                     // Write SDRAM through DPI-C
                     // DPI-C write_mem executes immediately - uses combinational input 'a' 
                     // instead of registered current_col for correct write timing
-                    write_mem(0, ba, active_row[ba], current_col + 1, masked_dq, write_mask);
+                    write_mem(INSTANCE_ID, ba, active_row[ba], current_col + 1, masked_dq, write_mask);
                 end else begin
                     state <= IDLE;
                 end
