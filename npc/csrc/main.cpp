@@ -19,7 +19,7 @@
 #include <vector>
 
 // #define ENABLE_MEMORY_CHECK 1
-//#define DIFFTEST 1
+#define DIFFTEST 1
 #define is_silent_mode 1
 //#define TRACE
 
@@ -478,6 +478,8 @@ int main(int argc, char **argv) {
     // Initialize SDRAM chips
     init_sdram(0);
     init_sdram(1);
+    init_sdram(2);
+    init_sdram(3);
 
 #ifdef DIFFTEST
     // Initialize difftest
