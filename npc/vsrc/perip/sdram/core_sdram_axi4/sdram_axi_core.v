@@ -187,7 +187,7 @@ wire [SDRAM_ROW_W-1:0]  addr_row_w  = ram_addr_w[SDRAM_ADDR_W+1:SDRAM_COL_W+4];
 reg sdram_select_reg; 
 
 always @(*) begin
-    if (command_q == STATE_WRITE) begin
+    if (command_q == CMD_WRITE) begin
         sdram_select_reg = ram_addr_w[SDRAM_ADDR_W+2];
     end
 end
