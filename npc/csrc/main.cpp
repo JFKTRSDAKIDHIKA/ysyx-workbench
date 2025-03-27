@@ -19,9 +19,9 @@
 #include <vector>
 
 // #define ENABLE_MEMORY_CHECK 1
-#define DIFFTEST 1
+// #define DIFFTEST 1
 #define is_silent_mode 1
-#define TRACE
+// #define TRACE
 
 // Declare global variables
 VysyxSoCFull* top;  // Top module (global)
@@ -73,9 +73,9 @@ extern "C" void write_mem(int instance_id, int bank, int row, int col, int data,
 
       sdram_memory[bank][row][col] = new_data;  
 
-      uint16_t written_data = sdram_memory[bank][row][col];
-      printf("[DEBUG] Writing to SDRAM: instance=%d, bank=%d, row=%d, col=%d, old_data=0x%04x, written_data=0x%04x, mask=0x%04x\n",
-            instance_id, bank, row, col, old_data, written_data, mask);
+      //uint16_t written_data = sdram_memory[bank][row][col];
+      //printf("[DEBUG] Writing to SDRAM: instance=%d, bank=%d, row=%d, col=%d, old_data=0x%04x, written_data=0x%04x, mask=0x%04x\n",
+      //     instance_id, bank, row, col, old_data, written_data, mask);
   } else {
       printf("Error: Invalid memory access (instance=%d, bank=%d, row=%d, col=%d)\n", 
              instance_id, bank, row, col);
@@ -94,8 +94,8 @@ extern "C" int read_mem(int instance_id, int bank, int row, int col) {
   if (bank < BANK_COUNT && row < ROW_COUNT && col < COL_COUNT) {
       int value = sdram_memory[bank][row][col];
 
-      printf("[DEBUG] Read SDRAM (Instance: %d, Bank: %d, Row: %d, Column: %d) -> Data: 0x%04X\n", 
-             instance_id, bank, row, col, value);
+      //printf("[DEBUG] Read SDRAM (Instance: %d, Bank: %d, Row: %d, Column: %d) -> Data: 0x%04X\n", 
+      //       instance_id, bank, row, col, value);
 
       return value;
   } else {
