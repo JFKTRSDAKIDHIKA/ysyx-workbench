@@ -1,7 +1,7 @@
 # Generate Verilog code
 doit:
 	sbt run
-	./process.sh ../vsrc/generated/Core.sv
+	./process.sh 
 
 # Run the test
 test:
