@@ -2231,8 +2231,8 @@ VL_ATTR_COLD void VysyxSoCFull___024root__trace_init_sub__TOP__0(VysyxSoCFull___
     tracep->declBus(c+619,"target_state_q", false,-1, 3,0);
     tracep->declBus(c+620,"delay_state_q", false,-1, 3,0);
     tracep->declBus(c+914,"addr_col_w", false,-1, 12,0);
-    tracep->declBus(c+915,"addr_row_w", false,-1, 12,0);
-    tracep->declBus(c+916,"addr_bank_w", false,-1, 1,0);
+    tracep->declBus(c+915,"addr_bank_w", false,-1, 1,0);
+    tracep->declBus(c+916,"addr_row_w", false,-1, 12,0);
     tracep->declBus(c+1136,"DELAY_W", false,-1, 31,0);
     tracep->declBus(c+621,"delay_q", false,-1, 3,0);
     tracep->declBus(c+1029,"delay_r", false,-1, 3,0);
@@ -4457,12 +4457,12 @@ VL_ATTR_COLD void VysyxSoCFull___024root__trace_full_sub_0(VysyxSoCFull___024roo
     bufp->fullBit(oldp+911,(vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__is_write));
     bufp->fullCData(oldp+912,(vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT____Vcellinp__u_sdram_ctrl__inport_wr_i),4);
     bufp->fullBit(oldp+913,(vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__ram_req_w));
-    bufp->fullSData(oldp+914,((0xffU & (vlSelf->ysyxSoCFull__DOT__asic__DOT___axi42apb_auto_out_paddr 
-                                        >> 2U))),13);
-    bufp->fullSData(oldp+915,((0x1fffU & (vlSelf->ysyxSoCFull__DOT__asic__DOT___axi42apb_auto_out_paddr 
-                                          >> 0xcU))),13);
-    bufp->fullCData(oldp+916,((3U & (vlSelf->ysyxSoCFull__DOT__asic__DOT___axi42apb_auto_out_paddr 
-                                     >> 0xaU))),2);
+    bufp->fullSData(oldp+914,((0x1ffU & (vlSelf->ysyxSoCFull__DOT__asic__DOT___axi42apb_auto_out_paddr 
+                                         >> 2U))),13);
+    bufp->fullCData(oldp+915,((3U & (vlSelf->ysyxSoCFull__DOT__asic__DOT___axi42apb_auto_out_paddr 
+                                     >> 0xbU))),2);
+    bufp->fullSData(oldp+916,((0x1fffU & (vlSelf->ysyxSoCFull__DOT__asic__DOT___axi42apb_auto_out_paddr 
+                                          >> 0xdU))),13);
     bufp->fullIData(oldp+917,((0x3fffffffU & vlSelf->ysyxSoCFull__DOT__asic__DOT___axi42apb_auto_out_paddr)),32);
     bufp->fullIData(oldp+918,((0x3000000U | (0xffffffU 
                                              & vlSelf->ysyxSoCFull__DOT__asic__DOT___axi42apb_auto_out_paddr))),32);
