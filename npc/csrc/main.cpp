@@ -216,7 +216,11 @@ void tick(VysyxSoCFull* top, bool silent_mode ) {
     tfp->dump(time_i);
     time_i++;
 #endif
-    
+
+  // Print some debug information
+  if ((top->io_wbu_state_debug == 2))
+    std::cout << "lsu_reg_dmem_addr: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_lsu_reg_dmem_addr_debug << std :: endl;
+
   if ((!silent_mode) && (top->io_wbu_state_debug == 2)) {
       printf("------------------------------------------------------------------------------\n");
       std::cout << "Instruction Info: "
