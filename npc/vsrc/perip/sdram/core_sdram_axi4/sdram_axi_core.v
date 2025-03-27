@@ -184,8 +184,7 @@ wire [SDRAM_ROW_W-1:0]  addr_col_w  = {{(SDRAM_ROW_W-SDRAM_COL_W){1'b0}}, ram_ad
 wire [SDRAM_BANK_W-1:0] addr_bank_w = ram_addr_w[SDRAM_COL_W+3:SDRAM_COL_W+1+1];
 wire [SDRAM_ROW_W-1:0]  addr_row_w  = ram_addr_w[SDRAM_ADDR_W+1:SDRAM_COL_W+4];
 // Word extension
-reg sdram_select_reg;
-assign sdram_select = sdram_select_reg;
+assign sdram_select = ram_addr_w[SDRAM_ADDR_W+2];
 
 //-----------------------------------------------------------------
 // SDRAM State Machine
@@ -230,10 +229,8 @@ begin
             begin
                 if (!ram_rd_w)
                     next_state_r = STATE_WRITE;
-                else begin
+                else
                     next_state_r = STATE_READ;
-                    sdram_select_reg = ram_addr_w[SDRAM_ADDR_W+2];
-                end
             end
             // Row miss, close row, open new row
             else if (row_open_q[addr_bank_w])
@@ -242,10 +239,8 @@ begin
 
                 if (!ram_rd_w)
                     target_state_r = STATE_WRITE;
-                else begin
+                else
                     target_state_r = STATE_READ;
-                    sdram_select_reg = ram_addr_w[SDRAM_ADDR_W+2];
-                end
             end
             // No open row, open row
             else
@@ -254,10 +249,8 @@ begin
 
                 if (!ram_rd_w)
                     target_state_r = STATE_WRITE;
-                else begin
+                else
                     target_state_r = STATE_READ;
-                    sdram_select_reg = ram_addr_w[SDRAM_ADDR_W+2];
-                end
             end
         end
     end
