@@ -42,7 +42,8 @@ module sdram_axi_core
     ,input  [  7:0]  inport_len_i
     ,input  [ 31:0]  inport_addr_i
     ,input  [ 31:0]  inport_write_data_i
-    ,input  [ 15:0]  sdram_data_input_i
+    // Read data from SDRAM
+    ,input  [ 31:0]  sdram_data_input_i
 
     // Outputs
     ,output          inport_accept_o
@@ -55,10 +56,10 @@ module sdram_axi_core
     ,output          sdram_ras_o
     ,output          sdram_cas_o
     ,output          sdram_we_o
-    ,output [  1:0]  sdram_dqm_o
+    ,output [  3:0]  sdram_dqm_o    // Bit width doubled
     ,output [ 12:0]  sdram_addr_o
     ,output [  1:0]  sdram_ba_o
-    ,output [ 15:0]  sdram_data_output_o
+    ,output [ 31:0]  sdram_data_output_o    // Bit width doubled
     ,output          sdram_data_out_en_o
 );
 
@@ -76,7 +77,7 @@ parameter SDRAM_READ_LATENCY     = 2;
 // Defines / Local params
 //-----------------------------------------------------------------
 localparam SDRAM_BANK_W          = 2;
-localparam SDRAM_DQM_W           = 2;
+localparam SDRAM_DQM_W           = 4; // Bit width doubled
 localparam SDRAM_BANKS           = 2 ** SDRAM_BANK_W;
 localparam SDRAM_ROW_W           = SDRAM_ADDR_W - SDRAM_COL_W - SDRAM_BANK_W;
 localparam SDRAM_REFRESH_CNT     = 2 ** SDRAM_ROW_W;
@@ -93,8 +94,9 @@ localparam CMD_PRECHARGE     = 4'b0010;
 localparam CMD_REFRESH       = 4'b0001;
 localparam CMD_LOAD_MODE     = 4'b0000;
 
-// Mode: Burst Length = 4 bytes, CAS=2
-localparam MODE_REG          = {3'b000,1'b0,2'b00,3'b010,1'b0,3'b001};
+// Mode: Burst Length = 2 bytes, CAS=2
+// Since bit extension was performed, the burst length is changed to 1
+localparam MODE_REG          = {3'b000,1'b0,2'b00,3'b010,1'b0,3'b000};
 
 // SM states
 localparam STATE_W           = 4;
@@ -104,15 +106,14 @@ localparam STATE_IDLE        = 4'd2;
 localparam STATE_ACTIVATE    = 4'd3;
 localparam STATE_READ        = 4'd4;
 localparam STATE_READ_WAIT   = 4'd5;
-localparam STATE_WRITE0      = 4'd6;
-localparam STATE_WRITE1      = 4'd7;
-localparam STATE_PRECHARGE   = 4'd8;
-localparam STATE_REFRESH     = 4'd9;
+localparam STATE_WRITE      = 4'd6;
+localparam STATE_PRECHARGE   = 4'd7;
+localparam STATE_REFRESH     = 4'd8;
 
 localparam AUTO_PRECHARGE    = 10;
 localparam ALL_BANKS         = 10;
 
-localparam SDRAM_DATA_W      = 16;
+localparam SDRAM_DATA_W      = 32;
 
 localparam CYCLE_TIME_NS     = 1000 / SDRAM_MHZ;
 
@@ -177,7 +178,7 @@ reg  [STATE_W-1:0]     target_state_q;
 reg  [STATE_W-1:0]     delay_state_q;
 
 // Address bits
-wire [SDRAM_ROW_W-1:0]  addr_col_w  = {{(SDRAM_ROW_W-SDRAM_COL_W){1'b0}}, ram_addr_w[SDRAM_COL_W:2], 1'b0};
+wire [SDRAM_ROW_W-1:0]  addr_col_w  = {{(SDRAM_ROW_W-SDRAM_COL_W+1){1'b0}}, ram_addr_w[SDRAM_COL_W:2]};
 wire [SDRAM_ROW_W-1:0]  addr_row_w  = ram_addr_w[SDRAM_ADDR_W:SDRAM_COL_W+2+1];
 wire [SDRAM_BANK_W-1:0] addr_bank_w = ram_addr_w[SDRAM_COL_W+2:SDRAM_COL_W+2-1];
 
@@ -223,7 +224,7 @@ begin
             if (row_open_q[addr_bank_w] && addr_row_w == active_row_q[addr_bank_w])
             begin
                 if (!ram_rd_w)
-                    next_state_r = STATE_WRITE0;
+                    next_state_r = STATE_WRITE;
                 else
                     next_state_r = STATE_READ;
             end
@@ -233,7 +234,7 @@ begin
                 next_state_r   = STATE_PRECHARGE;
 
                 if (!ram_rd_w)
-                    target_state_r = STATE_WRITE0;
+                    target_state_r = STATE_WRITE;
                 else
                     target_state_r = STATE_READ;
             end
@@ -243,7 +244,7 @@ begin
                 next_state_r   = STATE_ACTIVATE;
 
                 if (!ram_rd_w)
-                    target_state_r = STATE_WRITE0;
+                    target_state_r = STATE_WRITE;
                 else
                     target_state_r = STATE_READ;
             end
@@ -280,25 +281,18 @@ begin
         end
     end
     //-----------------------------------------
-    // STATE_WRITE0
+    // STATE_WRITE
     //-----------------------------------------
-    STATE_WRITE0 :
-    begin
-        next_state_r = STATE_WRITE1;
-    end
-    //-----------------------------------------
-    // STATE_WRITE1
-    //-----------------------------------------
-    STATE_WRITE1 :
+    STATE_WRITE :
     begin
         next_state_r = STATE_IDLE;
 
         // Another pending write request (with no refresh pending)
-        if (!refresh_q && ram_req_w && (ram_wr_w != 4'b0))
+        if (!refresh_q && ram_req_w && (ram_wr_w != 8'b0))
         begin
             // Open row hit
             if (row_open_q[addr_bank_w] && addr_row_w == active_row_q[addr_bank_w])
-                next_state_r = STATE_WRITE0;
+                next_state_r = STATE_WRITE;
         end
     end
     //-----------------------------------------
@@ -483,7 +477,7 @@ always @ (posedge clk_i or posedge rst_i)
 if (rst_i)
 begin
     command_q       <= CMD_NOP;
-    data_q          <= 16'b0;
+    data_q          <= 32'b0;
     addr_q          <= {SDRAM_ROW_W{1'b0}};
     bank_q          <= {SDRAM_BANK_W{1'b0}};
     cke_q           <= 1'b0;
@@ -609,39 +603,24 @@ begin
         dqm_q       <= {SDRAM_DQM_W{1'b0}};
     end
     //-----------------------------------------
-    // STATE_WRITE0
+    // STATE_WRITE
     //-----------------------------------------
-    STATE_WRITE0 :
+    STATE_WRITE :
     begin
         command_q       <= CMD_WRITE;
         addr_q          <= addr_col_w;
         bank_q          <= addr_bank_w;
-        data_q          <= ram_write_data_w[15:0];
+        data_q[15:0]    <= ram_write_data_w[15:0];
+        data_q[31:16]   <= ram_write_data_w[31:16];
 
         // Disable auto precharge (auto close of row)
         addr_q[AUTO_PRECHARGE]  <= 1'b0;
 
         // Write mask
-        dqm_q           <= ~ram_wr_w[1:0];
-        dqm_buffer_q    <= ~ram_wr_w[3:2];
+        dqm_q[1:0]      <= ~ram_wr_w[1:0];
+        dqm_q[3:2]      <= ~ram_wr_w[3:2];
 
         data_rd_en_q    <= 1'b0;
-    end
-    //-----------------------------------------
-    // STATE_WRITE1
-    //-----------------------------------------
-    STATE_WRITE1 :
-    begin
-        // Burst continuation
-        command_q   <= CMD_NOP;
-
-        data_q      <= data_buffer_q;
-
-        // Disable auto precharge (auto close of row)
-        addr_q[AUTO_PRECHARGE]  <= 1'b0;
-
-        // Write mask
-        dqm_q       <= dqm_buffer_q;
     end
     endcase
 end
@@ -649,30 +628,16 @@ end
 //-----------------------------------------------------------------
 // Record read events
 //-----------------------------------------------------------------
-reg [SDRAM_READ_LATENCY+1:0]  rd_q;
+reg [SDRAM_READ_LATENCY:0]  rd_q;
 
 always @ (posedge clk_i or posedge rst_i)
 if (rst_i)
-    rd_q    <= {(SDRAM_READ_LATENCY+2){1'b0}};
+    rd_q    <= {(SDRAM_READ_LATENCY+1){1'b0}};
 else
-    rd_q    <= {rd_q[SDRAM_READ_LATENCY:0], (state_q == STATE_READ)};
-
-//-----------------------------------------------------------------
-// Data Buffer
-//-----------------------------------------------------------------
-
-// Buffer upper 16-bits of write data so write command can be accepted
-// in WRITE0. Also buffer lower 16-bits of read data.
-always @ (posedge clk_i or posedge rst_i)
-if (rst_i)
-    data_buffer_q <= 16'b0;
-else if (state_q == STATE_WRITE0)
-    data_buffer_q <= ram_write_data_w[31:16];
-else if (rd_q[SDRAM_READ_LATENCY+1])
-    data_buffer_q <= sample_data_q;
+    rd_q    <= {rd_q[SDRAM_READ_LATENCY-1:0], (state_q == STATE_READ)};
 
 // Read data output
-assign ram_read_data_w = {sample_data_q, data_buffer_q};
+assign ram_read_data_w = sample_data_q;
 
 //-----------------------------------------------------------------
 // ACK
@@ -684,9 +649,9 @@ if (rst_i)
     ack_q   <= 1'b0;
 else
 begin
-    if (state_q == STATE_WRITE1)
+    if (state_q == STATE_WRITE)
         ack_q <= 1'b1;
-    else if (rd_q[SDRAM_READ_LATENCY+1])
+    else if (rd_q[SDRAM_READ_LATENCY])
         ack_q <= 1'b1;
     else
         ack_q <= 1'b0;
@@ -694,8 +659,8 @@ end
 
 assign ram_ack_w = ack_q;
 
-// Accept command in READ or WRITE0 states
-assign ram_accept_w = (state_q == STATE_READ || state_q == STATE_WRITE0);
+// Accept command in READ or WRITE states
+assign ram_accept_w = (state_q == STATE_READ || state_q == STATE_WRITE);
 
 //-----------------------------------------------------------------
 // SDRAM I/O
@@ -729,8 +694,7 @@ begin
     STATE_ACTIVATE    : dbg_state = "ACTIVATE";
     STATE_READ        : dbg_state = "READ";
     STATE_READ_WAIT   : dbg_state = "READ_WAIT";
-    STATE_WRITE0      : dbg_state = "WRITE0";
-    STATE_WRITE1      : dbg_state = "WRITE1";
+    STATE_WRITE      : dbg_state = "WRITE";
     STATE_PRECHARGE   : dbg_state = "PRECHARGE";
     STATE_REFRESH     : dbg_state = "REFRESH";
     default           : dbg_state = "UNKNOWN";

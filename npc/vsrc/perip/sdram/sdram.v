@@ -1,4 +1,6 @@
-module sdram (
+module sdram #(
+    parameter int INSTANCE_ID = 0
+)(
     input        clk,         // Clock signal
     input        cke,         // Clock enable (assumed to be always 1)
     input        cs,          // Chip select signal, active low
@@ -18,8 +20,8 @@ localparam BANK_COUNT = 4;
 
 // Use DPI-C to simulate SDRAM behavior with an external C++ model
 // This approach replaces SystemVerilog's multi-dimensional array with a more flexible and scalable C++ implementation
-import "DPI-C" function void write_mem(int bank, int row, int col, int data, int mask);
-import "DPI-C" function int read_mem(int bank, int row, int col);
+import "DPI-C" function void write_mem(int instance_id, int bank, int row, int col, int data, int mask);
+import "DPI-C" function int read_mem(int instance_id, int bank, int row, int col);
 
 // Active bank states
 reg [BANK_COUNT-1:0] active_bank;
@@ -102,7 +104,7 @@ always @(posedge clk) begin
             // Write SDRAM through DPI-C
             // DPI-C write_mem executes immediately - uses combinational input 'a' 
             // instead of registered current_col for correct write timing
-            write_mem(ba, active_row[ba], a[8:0], masked_dq, write_mask);
+            write_mem(INSTANCE_ID, ba, active_row[ba], a[8:0], masked_dq, write_mask);
         end
     end
 end
@@ -116,6 +118,8 @@ always @(posedge clk) begin
         case (state)
             IDLE: begin
                 // This state (IDLE) is responsible for instruction dispatch.
+                // When burst length = 1, the state cannot reach the READING state, so dq_en needs to be set to 0 here
+                dq_en <= 1'b0;
             end
             WAIT_READ: begin
                 if (delay_counter > 0) begin
@@ -127,11 +131,12 @@ always @(posedge clk) begin
                     // the second 16-bit data is fetched to support burst transfer.
                     // Read the first 16 bits.
                     // Due to the two-cycle CAS latency, the bank address (BA) cannot remain constant and must be derived from the registered 'active_bank' value.
-                    dq_out <= read_mem(active_bank, active_row[active_bank], current_col);    
+                    dq_out <= read_mem(INSTANCE_ID, active_bank, active_row[active_bank], current_col);    
                     dq_en <= 1'b1;                  
                     current_col <= current_col + 1;
-                    if (burst_length == 1)
+                    if (burst_length == 1) begin
                         state <= IDLE;
+                    end
                 end
             end
             READING: begin
@@ -140,7 +145,7 @@ always @(posedge clk) begin
                     current_col   <= current_col + 1;
                     // Read the second 16 bits.
                     // Due to the two-cycle CAS latency, the bank address (BA) cannot remain constant and must be derived from the registered 'active_bank' value.
-                    dq_out <= read_mem(active_bank, active_row[active_bank], current_col);     
+                    dq_out <= read_mem(INSTANCE_ID, active_bank, active_row[active_bank], current_col);     
                     dq_en <= 1'b1;      
                 end else begin
                     state <= IDLE;
@@ -156,7 +161,7 @@ always @(posedge clk) begin
                     // Write SDRAM through DPI-C
                     // DPI-C write_mem executes immediately - uses combinational input 'a' 
                     // instead of registered current_col for correct write timing
-                    write_mem(ba, active_row[ba], current_col + 1, masked_dq, write_mask);
+                    write_mem(INSTANCE_ID, ba, active_row[ba], current_col + 1, masked_dq, write_mask);
                 end else begin
                     state <= IDLE;
                 end
