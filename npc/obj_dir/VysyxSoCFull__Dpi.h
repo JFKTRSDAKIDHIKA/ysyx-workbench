@@ -23,11 +23,11 @@ extern "C" {
     // DPI import at ../ysyxSoC/build/ysyxSoCFull.v:4714:30
     extern void mrom_read(int raddr, int* rdata);
     // DPI import at vsrc/perip/sdram/sdram.v:22:29
-    extern int read_mem(int bank, int row, int col);
+    extern int read_mem(int instance_id, int bank, int row, int col);
     // DPI import at vsrc/generated/Core.sv:1588:30
     extern void simulation_exit();
     // DPI import at vsrc/perip/sdram/sdram.v:21:30
-    extern void write_mem(int bank, int row, int col, int data, int mask);
+    extern void write_mem(int instance_id, int bank, int row, int col, int data, int mask);
 
 #ifdef __cplusplus
 }

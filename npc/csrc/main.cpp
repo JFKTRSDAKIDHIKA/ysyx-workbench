@@ -19,9 +19,17 @@
 #include <vector>
 
 // SDRAM 存储器，使用 vector 代替三维数组
-std::vector<std::vector<std::vector<uint16_t>>> sdram_memory(BANK_COUNT,
-  std::vector<std::vector<uint16_t>>(ROW_COUNT,
-      std::vector<uint16_t>(COL_COUNT, 0)));
+std::unordered_map<int, std::vector<std::vector<std::vector<uint16_t>>>> sdram_instances;
+
+// 初始化 SDRAM
+void init_sdram(int instance_id) {
+  if (sdram_instances.find(instance_id) == sdram_instances.end()) {
+      sdram_instances[instance_id] = std::vector<std::vector<std::vector<uint16_t>>>(BANK_COUNT,
+          std::vector<std::vector<uint16_t>>(ROW_COUNT,
+              std::vector<uint16_t>(COL_COUNT, 0)));
+      printf("[INFO] Initialized SDRAM instance %d\n", instance_id);
+  }
+}
 
 // #define ENABLE_MEMORY_CHECK 1
 // #define DIFFTEST 0
@@ -50,37 +58,41 @@ extern "C" void mrom_read(int32_t addr, int32_t *data) {
   *data = Memory::pmem_read(addr); 
 }
 
-// Write SDRAM with mask
-extern "C" void write_mem(int bank, int row, int col, int data, int mask) {
-  //printf("[DEBUG] Write attempt - Bank: %d, Row: %d, Column: %d, Data: 0x%04X, Mask: 0x%02X\n", 
-  //  bank, row, col, static_cast<uint16_t>(data), mask);
+// 写 SDRAM（支持多个实例）
+extern "C" void write_mem(int instance_id, int bank, int row, int col, int data, int mask) {
+  if (sdram_instances.find(instance_id) == sdram_instances.end()) {
+      printf("Error: SDRAM instance %d not initialized!\n", instance_id);
+      return;
+  }
+
+  auto& sdram_memory = sdram_instances[instance_id];
 
   if (bank < BANK_COUNT && row < ROW_COUNT && col < COL_COUNT) {
-      // 读取当前 SDRAM 中的数据
       uint16_t old_data = sdram_memory[bank][row][col];
-
-      // 计算新数据，只有 `mask` 允许的部分会被修改
       uint16_t new_data = (old_data & ~mask) | (data & mask);
-
-      // 写入 SDRAM
       sdram_memory[bank][row][col] = new_data;
   } else {
-      printf("Error: Invalid memory access (bank=%d, row=%d, col=%d)\n", bank, row, col);
+      printf("Error: Invalid memory access (instance=%d, bank=%d, row=%d, col=%d)\n", 
+             instance_id, bank, row, col);
   }
 }
 
+// 读 SDRAM（支持多个实例）
+extern "C" int read_mem(int instance_id, int bank, int row, int col) {
+  if (sdram_instances.find(instance_id) == sdram_instances.end()) {
+      printf("Error: SDRAM instance %d not initialized!\n", instance_id);
+      return -1;
+  }
 
-// Read SDRAM
-extern "C" int read_mem(int bank, int row, int col) {
-    if (bank < BANK_COUNT && row < ROW_COUNT && col < COL_COUNT) {
-        int value = sdram_memory[bank][row][col];
-    //    printf("[DEBUG] Read SDRAM: Bank: %d, Row: %d, Column: %d, data=0x%04X\n", 
-    //      bank, row, col, value);
-        return value;
-    } else {
-        printf("Error: Invalid memory access (bank=%d, row=%d, col=%d)\n", bank, row, col);
-        return -1;
-    }
+  auto& sdram_memory = sdram_instances[instance_id];
+
+  if (bank < BANK_COUNT && row < ROW_COUNT && col < COL_COUNT) {
+      return sdram_memory[bank][row][col];
+  } else {
+      printf("Error: Invalid memory access (instance=%d, bank=%d, row=%d, col=%d)\n", 
+             instance_id, bank, row, col);
+      return -1;
+  }
 }
 
 extern "C" void simulation_exit() {
@@ -452,6 +464,8 @@ int main(int argc, char **argv) {
     load_program(argv[1]);
     // Initialize flash
     // Memory::init_flash();
+    // Initialize SDRAM
+    init_sdram(0);
 
 #ifdef DIFFTEST
     // Initialize difftest

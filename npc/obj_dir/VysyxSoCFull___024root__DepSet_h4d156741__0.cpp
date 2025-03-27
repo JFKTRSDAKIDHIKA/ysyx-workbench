@@ -38,11 +38,13 @@ VL_INLINE_OPT void VysyxSoCFull___024root____Vdpiimwrap_ysyxSoCFull__DOT__asic__
     rdata = rdata__Vcvt;
 }
 
-extern "C" void write_mem(int bank, int row, int col, int data, int mask);
+extern "C" void write_mem(int instance_id, int bank, int row, int col, int data, int mask);
 
-VL_INLINE_OPT void VysyxSoCFull___024root____Vdpiimwrap_ysyxSoCFull__DOT__sdram__DOT__write_mem_TOP(IData/*31:0*/ bank, IData/*31:0*/ row, IData/*31:0*/ col, IData/*31:0*/ data, IData/*31:0*/ mask) {
+VL_INLINE_OPT void VysyxSoCFull___024root____Vdpiimwrap_ysyxSoCFull__DOT__sdram__DOT__write_mem_TOP(IData/*31:0*/ instance_id, IData/*31:0*/ bank, IData/*31:0*/ row, IData/*31:0*/ col, IData/*31:0*/ data, IData/*31:0*/ mask) {
     VL_DEBUG_IF(VL_DBG_MSGF("+    VysyxSoCFull___024root____Vdpiimwrap_ysyxSoCFull__DOT__sdram__DOT__write_mem_TOP\n"); );
     // Body
+    int instance_id__Vcvt;
+    for (size_t instance_id__Vidx = 0; instance_id__Vidx < 1; ++instance_id__Vidx) instance_id__Vcvt = instance_id;
     int bank__Vcvt;
     for (size_t bank__Vidx = 0; bank__Vidx < 1; ++bank__Vidx) bank__Vcvt = bank;
     int row__Vcvt;
@@ -53,14 +55,16 @@ VL_INLINE_OPT void VysyxSoCFull___024root____Vdpiimwrap_ysyxSoCFull__DOT__sdram_
     for (size_t data__Vidx = 0; data__Vidx < 1; ++data__Vidx) data__Vcvt = data;
     int mask__Vcvt;
     for (size_t mask__Vidx = 0; mask__Vidx < 1; ++mask__Vidx) mask__Vcvt = mask;
-    write_mem(bank__Vcvt, row__Vcvt, col__Vcvt, data__Vcvt, mask__Vcvt);
+    write_mem(instance_id__Vcvt, bank__Vcvt, row__Vcvt, col__Vcvt, data__Vcvt, mask__Vcvt);
 }
 
-extern "C" int read_mem(int bank, int row, int col);
+extern "C" int read_mem(int instance_id, int bank, int row, int col);
 
-VL_INLINE_OPT void VysyxSoCFull___024root____Vdpiimwrap_ysyxSoCFull__DOT__sdram__DOT__read_mem_TOP(IData/*31:0*/ bank, IData/*31:0*/ row, IData/*31:0*/ col, IData/*31:0*/ &read_mem__Vfuncrtn) {
+VL_INLINE_OPT void VysyxSoCFull___024root____Vdpiimwrap_ysyxSoCFull__DOT__sdram__DOT__read_mem_TOP(IData/*31:0*/ instance_id, IData/*31:0*/ bank, IData/*31:0*/ row, IData/*31:0*/ col, IData/*31:0*/ &read_mem__Vfuncrtn) {
     VL_DEBUG_IF(VL_DBG_MSGF("+    VysyxSoCFull___024root____Vdpiimwrap_ysyxSoCFull__DOT__sdram__DOT__read_mem_TOP\n"); );
     // Body
+    int instance_id__Vcvt;
+    for (size_t instance_id__Vidx = 0; instance_id__Vidx < 1; ++instance_id__Vidx) instance_id__Vcvt = instance_id;
     int bank__Vcvt;
     for (size_t bank__Vidx = 0; bank__Vidx < 1; ++bank__Vidx) bank__Vcvt = bank;
     int row__Vcvt;
@@ -68,7 +72,7 @@ VL_INLINE_OPT void VysyxSoCFull___024root____Vdpiimwrap_ysyxSoCFull__DOT__sdram_
     int col__Vcvt;
     for (size_t col__Vidx = 0; col__Vidx < 1; ++col__Vidx) col__Vcvt = col;
     int read_mem__Vfuncrtn__Vcvt;
-    read_mem__Vfuncrtn__Vcvt = read_mem(bank__Vcvt, row__Vcvt, col__Vcvt);
+    read_mem__Vfuncrtn__Vcvt = read_mem(instance_id__Vcvt, bank__Vcvt, row__Vcvt, col__Vcvt);
     read_mem__Vfuncrtn = read_mem__Vfuncrtn__Vcvt;
 }
 
