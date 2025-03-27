@@ -25,7 +25,7 @@ std::vector<std::vector<std::vector<uint16_t>>> sdram_memory(BANK_COUNT,
 
 // #define ENABLE_MEMORY_CHECK 1
 #define DIFFTEST 1
-#define is_silent_mode 0
+#define is_silent_mode 1
 #define TRACE
 
 // Declare global variables
@@ -52,8 +52,8 @@ extern "C" void mrom_read(int32_t addr, int32_t *data) {
 
 // Write SDRAM with mask
 extern "C" void write_mem(int bank, int row, int col, int data, int mask) {
-  //printf("[DEBUG] Write attempt - Bank: %d, Row: %d, Column: %d, Data: 0x%04X, Mask: 0x%02X\n", 
-  //  bank, row, col, static_cast<uint16_t>(data), mask);
+  printf("[DEBUG] Write attempt - Bank: %d, Row: %d, Column: %d, Data: 0x%04X, Mask: 0x%02X\n", 
+    bank, row, col, static_cast<uint16_t>(data), mask);
 
   if (bank < BANK_COUNT && row < ROW_COUNT && col < COL_COUNT) {
       // 读取当前 SDRAM 中的数据
@@ -74,8 +74,8 @@ extern "C" void write_mem(int bank, int row, int col, int data, int mask) {
 extern "C" int read_mem(int bank, int row, int col) {
     if (bank < BANK_COUNT && row < ROW_COUNT && col < COL_COUNT) {
         int value = sdram_memory[bank][row][col];
-    //    printf("[DEBUG] Read SDRAM: Bank: %d, Row: %d, Column: %d, data=0x%04X\n", 
-    //      bank, row, col, value);
+        printf("[DEBUG] Read SDRAM: Bank: %d, Row: %d, Column: %d, data=0x%04X\n", 
+          bank, row, col, value);
         return value;
     } else {
         printf("Error: Invalid memory access (bank=%d, row=%d, col=%d)\n", bank, row, col);
