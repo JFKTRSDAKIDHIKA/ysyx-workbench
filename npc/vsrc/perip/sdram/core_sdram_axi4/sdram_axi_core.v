@@ -187,6 +187,21 @@ wire [SDRAM_ROW_W-1:0]  addr_row_w  = ram_addr_w[SDRAM_ADDR_W+1:SDRAM_COL_W+4];
 reg sdram_select_reg;
 assign sdram_select = sdram_select_reg;
 
+always @ (posedge clk_i or posedge rst_i) begin
+    if (rst_i)
+        sdram_select_reg <= 1'b0;
+    else begin
+        case (state_q)
+            STATE_READ, STATE_READ_WAIT, STATE_DELAY: 
+                sdram_select_reg <= ram_addr_w[SDRAM_ADDR_W+2];
+            STATE_WRITE:
+                sdram_select_reg <= ram_addr_w[SDRAM_ADDR_W+2];
+            default: 
+                sdram_select_reg <= 1'b0;
+        endcase
+    end
+end
+
 //-----------------------------------------------------------------
 // SDRAM State Machine
 //-----------------------------------------------------------------
@@ -508,7 +523,6 @@ begin
         addr_q       <= {SDRAM_ROW_W{1'b0}};
         bank_q       <= {SDRAM_BANK_W{1'b0}};
         data_rd_en_q <= 1'b1;
-        sdram_select_reg <= 1'b0;
     end
     //-----------------------------------------
     // STATE_INIT
@@ -607,9 +621,6 @@ begin
 
         // Read mask (all bytes in burst)
         dqm_q       <= {SDRAM_DQM_W{1'b0}};
-
-        // ???
-        sdram_select_reg <= ram_addr_w[SDRAM_ADDR_W+2];
     end
     //-----------------------------------------
     // STATE_WRITE
@@ -630,9 +641,6 @@ begin
         dqm_q[3:2]      <= ~ram_wr_w[3:2];
 
         data_rd_en_q    <= 1'b0;
-
-        // ??
-        sdram_select_reg <= ram_addr_w[SDRAM_ADDR_W+2];
     end
     endcase
 end
