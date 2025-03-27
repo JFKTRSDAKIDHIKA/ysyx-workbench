@@ -118,6 +118,7 @@ always @(posedge clk) begin
         case (state)
             IDLE: begin
                 // This state (IDLE) is responsible for instruction dispatch.
+                dq_en <= 1'b0;
             end
             WAIT_READ: begin
                 if (delay_counter > 0) begin
@@ -134,7 +135,6 @@ always @(posedge clk) begin
                     current_col <= current_col + 1;
                     if (burst_length == 1) begin
                         state <= IDLE;
-                        dq_en <= 1'b0;
                     end
                 end
             end
