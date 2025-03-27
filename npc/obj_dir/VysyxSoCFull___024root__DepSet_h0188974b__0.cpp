@@ -2323,7 +2323,9 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__5(VysyxSoCFull___0
                     if ((1U == (IData)(vlSelf->ysyxSoCFull__DOT__sdram__DOT__delay_counter))) {
                         VysyxSoCFull___024root____Vdpiimwrap_ysyxSoCFull__DOT__sdram__DOT__read_mem_TOP(vlSelf->ysyxSoCFull__DOT__sdram__DOT__active_bank, 
                                                                                 vlSelf->ysyxSoCFull__DOT__sdram__DOT__active_row
-                                                                                [vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__bank_q], vlSelf->ysyxSoCFull__DOT__sdram__DOT__current_col, __Vfunc_ysyxSoCFull__DOT__sdram__DOT__read_mem__6__Vfuncout);
+                                                                                [
+                                                                                (3U 
+                                                                                & (IData)(vlSelf->ysyxSoCFull__DOT__sdram__DOT__active_bank))], vlSelf->ysyxSoCFull__DOT__sdram__DOT__current_col, __Vfunc_ysyxSoCFull__DOT__sdram__DOT__read_mem__6__Vfuncout);
                         __Vdly__ysyxSoCFull__DOT__sdram__DOT__state = 2U;
                         vlSelf->ysyxSoCFull__DOT__sdram__DOT__dq_out 
                             = (0xffffU & __Vfunc_ysyxSoCFull__DOT__sdram__DOT__read_mem__6__Vfuncout);
@@ -2345,7 +2347,9 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__5(VysyxSoCFull___0
                                        - (IData)(1U)));
                         VysyxSoCFull___024root____Vdpiimwrap_ysyxSoCFull__DOT__sdram__DOT__read_mem_TOP(vlSelf->ysyxSoCFull__DOT__sdram__DOT__active_bank, 
                                                                                 vlSelf->ysyxSoCFull__DOT__sdram__DOT__active_row
-                                                                                [vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__bank_q], vlSelf->ysyxSoCFull__DOT__sdram__DOT__current_col, __Vfunc_ysyxSoCFull__DOT__sdram__DOT__read_mem__7__Vfuncout);
+                                                                                [
+                                                                                (3U 
+                                                                                & (IData)(vlSelf->ysyxSoCFull__DOT__sdram__DOT__active_bank))], vlSelf->ysyxSoCFull__DOT__sdram__DOT__current_col, __Vfunc_ysyxSoCFull__DOT__sdram__DOT__read_mem__7__Vfuncout);
                         vlSelf->ysyxSoCFull__DOT__sdram__DOT__dq_out 
                             = (0xffffU & __Vfunc_ysyxSoCFull__DOT__sdram__DOT__read_mem__7__Vfuncout);
                         vlSelf->ysyxSoCFull__DOT__sdram__DOT__dq_en = 1U;
