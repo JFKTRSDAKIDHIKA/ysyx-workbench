@@ -10,7 +10,8 @@ module sdram #(
     input [12:0] a,           // Address bus
     input [ 1:0] ba,          // Bank address
     input [ 1:0] dqm,         // Data mask
-    inout [15:0] dq           // Data bus
+    inout [15:0] dq,          // Data bus
+    input        sdram_select // SDRAM slave select signal
 );
 
 // Memory parameter declaration
@@ -87,7 +88,7 @@ always @(posedge clk) begin
             state <= IDLE;
         end
         // The READ command
-        else if (is_read) begin
+        else if (is_read && sdram_select) begin
             state <= WAIT_READ;
             // Reduce latency by 1 to synchronize with SDRAM controller timing
             delay_counter <= cas_latency - 1;
@@ -97,7 +98,7 @@ always @(posedge clk) begin
             active_bank <= ba;
         end
         // The WRITE command is used to initiate a burst write access to an active row.
-        else if (is_write) begin
+        else if (is_write && sdram_select) begin
             state <= WRITING;
             burst_counter <= burst_length - 1;
             current_col <= a[8:0];
