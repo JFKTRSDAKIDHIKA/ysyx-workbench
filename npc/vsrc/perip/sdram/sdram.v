@@ -118,6 +118,7 @@ always @(posedge clk) begin
         case (state)
             IDLE: begin
                 // This state (IDLE) is responsible for instruction dispatch.
+                // 当burst length=1的时候，sttate到不了READING状态，所以需要在这里把dq_en置为0
                 dq_en <= 1'b0;
             end
             WAIT_READ: begin
