@@ -51,7 +51,7 @@ void init_sdram(int instance_id) {
 // note: extern "C" 是 C++ 中的一个声明方式，用来告诉编译器，函数使用 C 的链接方式，而不是 C++ 默认的链接方式。
 extern "C" void flash_read(int32_t addr, int32_t *data) {
   *data = Memory::pmem_read(addr + FLASH_BASE_ADDR); 
-  // std::cout << "[DEBUG] Flash read "<< "addr: " << std::hex << addr << ", data: " << std::hex << *data << std::endl;
+  std::cout << "[DEBUG] Flash read "<< "addr: " << std::hex << addr << ", data: " << std::hex << *data << std::endl;
 }
 
 extern "C" void mrom_read(int32_t addr, int32_t *data) { 
