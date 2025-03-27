@@ -24,9 +24,9 @@ std::vector<std::vector<std::vector<uint16_t>>> sdram_memory(BANK_COUNT,
       std::vector<uint16_t>(COL_COUNT, 0)));
 
 // #define ENABLE_MEMORY_CHECK 1
-//#define DIFFTEST 1
+// #define DIFFTEST 0
 #define is_silent_mode 1
-//#define TRACE
+// #define TRACE
 
 // Declare global variables
 VysyxSoCFull* top;  // Top module (global)
@@ -43,7 +43,7 @@ VerilatedVcdC* tfp;
 // note: extern "C" 是 C++ 中的一个声明方式，用来告诉编译器，函数使用 C 的链接方式，而不是 C++ 默认的链接方式。
 extern "C" void flash_read(int32_t addr, int32_t *data) {
   *data = Memory::pmem_read(addr + FLASH_BASE_ADDR); 
-  // std::cout << "addr: " << std::hex << addr << ", data: " << std::hex << *data << std::endl;
+  // std::cout << "[DEBUG] Flash read "<< "addr: " << std::hex << addr << ", data: " << std::hex << *data << std::endl;
 }
 
 extern "C" void mrom_read(int32_t addr, int32_t *data) { 
@@ -217,7 +217,7 @@ void tick(VysyxSoCFull* top, bool silent_mode ) {
     time_i++;
 #endif
 
-    if ((!silent_mode) && (top->io_wbu_state_debug == 2)) {
+  if ((!silent_mode) && (top->io_wbu_state_debug == 2)) {
       printf("------------------------------------------------------------------------------\n");
       std::cout << "Instruction Info: "
                 << "Instruction: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_inst_debug

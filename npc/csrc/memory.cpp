@@ -65,3 +65,4 @@ void Memory::init_flash(){
         pmem_write(addr, i, (char)0xf);
     }
 }
+
