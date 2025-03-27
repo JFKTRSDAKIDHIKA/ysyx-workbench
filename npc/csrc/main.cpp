@@ -71,10 +71,11 @@ extern "C" void write_mem(int instance_id, int bank, int row, int col, int data,
       uint16_t old_data = sdram_memory[bank][row][col];
       uint16_t new_data = (old_data & ~mask) | (data & mask);
 
-      printf("[DEBUG] Writing to SDRAM: instance=%d, bank=%d, row=%d, col=%d, old_data=0x%04x, new_data=0x%04x, mask=0x%04x\n",
-        instance_id, bank, row, col, old_data, new_data, mask);
+      sdram_memory[bank][row][col] = new_data;  
 
-      sdram_memory[bank][row][col] = new_data;
+      uint16_t written_data = sdram_memory[bank][row][col];
+      printf("[DEBUG] Writing to SDRAM: instance=%d, bank=%d, row=%d, col=%d, old_data=0x%04x, written_data=0x%04x, mask=0x%04x\n",
+             instance_id, bank, row, col, old_data, written_data, mask);
   } else {
       printf("Error: Invalid memory access (instance=%d, bank=%d, row=%d, col=%d)\n", 
              instance_id, bank, row, col);
