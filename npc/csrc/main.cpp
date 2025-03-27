@@ -43,7 +43,7 @@ VerilatedVcdC* tfp;
 // note: extern "C" 是 C++ 中的一个声明方式，用来告诉编译器，函数使用 C 的链接方式，而不是 C++ 默认的链接方式。
 extern "C" void flash_read(int32_t addr, int32_t *data) {
   *data = Memory::pmem_read(addr + FLASH_BASE_ADDR); 
-  std::cout << "[DEBUG] Flash read "<< "addr: " << std::hex << addr << ", data: " << std::hex << *data << std::endl;
+  //std::cout << "[DEBUG] Flash read "<< "addr: " << std::hex << addr << ", data: " << std::hex << *data << std::endl;
 }
 
 extern "C" void mrom_read(int32_t addr, int32_t *data) { 
@@ -52,8 +52,8 @@ extern "C" void mrom_read(int32_t addr, int32_t *data) {
 
 // Write SDRAM with mask
 extern "C" void write_mem(int bank, int row, int col, int data, int mask) {
-  printf("[DEBUG] Write attempt - Bank: %d, Row: %d, Column: %d, Data: 0x%04X, Mask: 0x%02X\n", 
-    bank, row, col, static_cast<uint16_t>(data), mask);
+  //printf("[DEBUG] Write attempt - Bank: %d, Row: %d, Column: %d, Data: 0x%04X, Mask: 0x%02X\n", 
+  //  bank, row, col, static_cast<uint16_t>(data), mask);
 
   if (bank < BANK_COUNT && row < ROW_COUNT && col < COL_COUNT) {
       // 读取当前 SDRAM 中的数据
@@ -74,8 +74,8 @@ extern "C" void write_mem(int bank, int row, int col, int data, int mask) {
 extern "C" int read_mem(int bank, int row, int col) {
     if (bank < BANK_COUNT && row < ROW_COUNT && col < COL_COUNT) {
         int value = sdram_memory[bank][row][col];
-        printf("[DEBUG] Read SDRAM: Bank: %d, Row: %d, Column: %d, data=0x%04X\n", 
-          bank, row, col, value);
+    //    printf("[DEBUG] Read SDRAM: Bank: %d, Row: %d, Column: %d, data=0x%04X\n", 
+    //      bank, row, col, value);
         return value;
     } else {
         printf("Error: Invalid memory access (bank=%d, row=%d, col=%d)\n", bank, row, col);
