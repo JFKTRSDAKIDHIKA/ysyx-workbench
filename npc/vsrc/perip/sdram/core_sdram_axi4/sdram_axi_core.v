@@ -504,6 +504,14 @@ begin
         bank_q       <= {SDRAM_BANK_W{1'b0}};
         data_rd_en_q <= 1'b1;
     end
+    STATE_IDLE:
+    begin
+        // Default
+        command_q    <= CMD_NOP;
+        addr_q       <= {SDRAM_ROW_W{1'b0}};
+        bank_q       <= {SDRAM_BANK_W{1'b0}};
+        data_rd_en_q <= 1'b1;
+    end
     //-----------------------------------------
     // STATE_INIT
     //-----------------------------------------
