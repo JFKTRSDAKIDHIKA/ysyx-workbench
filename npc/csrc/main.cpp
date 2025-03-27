@@ -465,8 +465,9 @@ int main(int argc, char **argv) {
     // Initialize flash
     // Memory::init_flash();
 
-    // Initialize 1'st SDRAM chip
+    // Initialize SDRAM chips
     init_sdram(0);
+    init_sdram(1);
 
 #ifdef DIFFTEST
     // Initialize difftest
