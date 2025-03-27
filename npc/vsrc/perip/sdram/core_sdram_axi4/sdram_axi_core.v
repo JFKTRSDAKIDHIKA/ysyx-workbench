@@ -107,8 +107,8 @@ localparam STATE_ACTIVATE    = 4'd3;
 localparam STATE_READ        = 4'd4;
 localparam STATE_READ_WAIT   = 4'd5;
 localparam STATE_WRITE      = 4'd6;
-localparam STATE_PRECHARGE   = 4'd8;
-localparam STATE_REFRESH     = 4'd9;
+localparam STATE_PRECHARGE   = 4'd7;
+localparam STATE_REFRESH     = 4'd8;
 
 localparam AUTO_PRECHARGE    = 10;
 localparam ALL_BANKS         = 10;
@@ -288,7 +288,7 @@ begin
         next_state_r = STATE_IDLE;
 
         // Another pending write request (with no refresh pending)
-        if (!refresh_q && ram_req_w && (ram_wr_w != 4'b0))
+        if (!refresh_q && ram_req_w && (ram_wr_w != 8'b0))
         begin
             // Open row hit
             if (row_open_q[addr_bank_w] && addr_row_w == active_row_q[addr_bank_w])
