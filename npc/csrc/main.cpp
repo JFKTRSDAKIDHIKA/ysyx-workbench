@@ -92,7 +92,12 @@ extern "C" int read_mem(int instance_id, int bank, int row, int col) {
   auto& sdram_memory = sdram_instances[instance_id];
 
   if (bank < BANK_COUNT && row < ROW_COUNT && col < COL_COUNT) {
-      return sdram_memory[bank][row][col];
+      int value = sdram_memory[bank][row][col];
+
+      printf("[DEBUG] Read SDRAM (Instance: %d, Bank: %d, Row: %d, Column: %d) -> Data: 0x%04X\n", 
+             instance_id, bank, row, col, value);
+
+      return value;
   } else {
       printf("Error: Invalid memory access (instance=%d, bank=%d, row=%d, col=%d)\n", 
              instance_id, bank, row, col);
