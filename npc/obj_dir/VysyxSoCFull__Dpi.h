@@ -20,7 +20,7 @@ extern "C" {
     extern void flash_read(int addr, int* data);
     // DPI import at vsrc/generated/Core.sv:1625:34
     extern void get_register_values(const svLogicVecVal* rf);
-    // DPI import at ../ysyxSoC/build/ysyxSoCFull.v:4778:30
+    // DPI import at ../ysyxSoC/build/ysyxSoCFull.v:4752:30
     extern void mrom_read(int raddr, int* rdata);
     // DPI import at vsrc/perip/sdram/sdram.v:24:29
     extern int read_mem(int instance_id, int bank, int row, int col);

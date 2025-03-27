@@ -40,8 +40,8 @@ VL_INLINE_OPT void VysyxSoCFull___024root____Vdpiimwrap_ysyxSoCFull__DOT__asic__
 
 extern "C" void write_mem(int instance_id, int bank, int row, int col, int data, int mask);
 
-VL_INLINE_OPT void VysyxSoCFull___024root____Vdpiimwrap_ysyxSoCFull__DOT__sdram_chip_0__DOT__write_mem_TOP(IData/*31:0*/ instance_id, IData/*31:0*/ bank, IData/*31:0*/ row, IData/*31:0*/ col, IData/*31:0*/ data, IData/*31:0*/ mask) {
-    VL_DEBUG_IF(VL_DBG_MSGF("+    VysyxSoCFull___024root____Vdpiimwrap_ysyxSoCFull__DOT__sdram_chip_0__DOT__write_mem_TOP\n"); );
+VL_INLINE_OPT void VysyxSoCFull___024root____Vdpiimwrap_ysyxSoCFull__DOT__sdram_chip_2__DOT__write_mem_TOP(IData/*31:0*/ instance_id, IData/*31:0*/ bank, IData/*31:0*/ row, IData/*31:0*/ col, IData/*31:0*/ data, IData/*31:0*/ mask) {
+    VL_DEBUG_IF(VL_DBG_MSGF("+    VysyxSoCFull___024root____Vdpiimwrap_ysyxSoCFull__DOT__sdram_chip_2__DOT__write_mem_TOP\n"); );
     // Body
     int instance_id__Vcvt;
     for (size_t instance_id__Vidx = 0; instance_id__Vidx < 1; ++instance_id__Vidx) instance_id__Vcvt = instance_id;
@@ -60,8 +60,8 @@ VL_INLINE_OPT void VysyxSoCFull___024root____Vdpiimwrap_ysyxSoCFull__DOT__sdram_
 
 extern "C" int read_mem(int instance_id, int bank, int row, int col);
 
-VL_INLINE_OPT void VysyxSoCFull___024root____Vdpiimwrap_ysyxSoCFull__DOT__sdram_chip_0__DOT__read_mem_TOP(IData/*31:0*/ instance_id, IData/*31:0*/ bank, IData/*31:0*/ row, IData/*31:0*/ col, IData/*31:0*/ &read_mem__Vfuncrtn) {
-    VL_DEBUG_IF(VL_DBG_MSGF("+    VysyxSoCFull___024root____Vdpiimwrap_ysyxSoCFull__DOT__sdram_chip_0__DOT__read_mem_TOP\n"); );
+VL_INLINE_OPT void VysyxSoCFull___024root____Vdpiimwrap_ysyxSoCFull__DOT__sdram_chip_2__DOT__read_mem_TOP(IData/*31:0*/ instance_id, IData/*31:0*/ bank, IData/*31:0*/ row, IData/*31:0*/ col, IData/*31:0*/ &read_mem__Vfuncrtn) {
+    VL_DEBUG_IF(VL_DBG_MSGF("+    VysyxSoCFull___024root____Vdpiimwrap_ysyxSoCFull__DOT__sdram_chip_2__DOT__read_mem_TOP\n"); );
     // Body
     int instance_id__Vcvt;
     for (size_t instance_id__Vidx = 0; instance_id__Vidx < 1; ++instance_id__Vidx) instance_id__Vcvt = instance_id;
