@@ -11,7 +11,7 @@
 #define CONFIG_FLASH_BASE  0x30000000
 #define CONFIG_FLASH_TOP  0x3fffffff
 // SDRAM
-#define CONFIG_SDRAM_SIZE_KB 4096*32
+#define CONFIG_SDRAM_SIZE_KB 4096
 #define CONFIG_SDRAM_BASE  0xa0000000
 #define CONFIG_SDRAM_TOP  0xbfffffff
 // Range check
