@@ -61,6 +61,7 @@ module sdram_axi_core
     ,output [  1:0]  sdram_ba_o
     ,output [ 31:0]  sdram_data_output_o    // Bit width doubled
     ,output          sdram_data_out_en_o
+    ,output          sdram_select
 );
 
 
@@ -178,11 +179,13 @@ reg  [STATE_W-1:0]     target_state_q;
 reg  [STATE_W-1:0]     delay_state_q;
 
 // Address bits
+// Total address space 64MB (bit extension)
 wire [SDRAM_ROW_W-1:0]  addr_col_w  = {{(SDRAM_ROW_W-SDRAM_COL_W+1){1'b0}}, ram_addr_w[SDRAM_COL_W+1:2]};
 wire [SDRAM_BANK_W-1:0] addr_bank_w = ram_addr_w[SDRAM_COL_W+3:SDRAM_COL_W+2];
 wire [SDRAM_ROW_W-1:0]  addr_row_w  = ram_addr_w[SDRAM_ADDR_W+1:SDRAM_COL_W+4];
 // Word extension
-wire sdram_select = ram_addr_w[SDRAM_ADDR_W+1]; 
+// Total address space 64MB*2=128MB (word extension)
+assign sdram_select = ram_addr_w[SDRAM_ADDR_W+1+1]; 
 
 //-----------------------------------------------------------------
 // SDRAM State Machine
