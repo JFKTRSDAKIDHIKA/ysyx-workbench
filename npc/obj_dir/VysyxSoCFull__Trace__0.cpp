@@ -1823,7 +1823,7 @@ void VysyxSoCFull___024root__trace_chg_sub_0(VysyxSoCFull___024root* vlSelf, Ver
                                               & (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__lspi__DOT__mspi__DOT__wb_adr_i))))));
         bufp->chgCData(oldp+1034,(vlSelf->ysyxSoCFull__DOT__asic__DOT__lspi__DOT__mspi__DOT__u0_spi_top__DOT____Vcellinp__shift__latch),4);
         bufp->chgCData(oldp+1035,(vlSelf->ysyxSoCFull__DOT__asic__DOT__luart__DOT__muart__DOT__reg_dat8_r),8);
-        bufp->chgBit(oldp+1036,(vlSelf->ysyxSoCFull__DOT____Vcellinp__sdram_chip_2__cas));
+        bufp->chgBit(oldp+1036,((1U & (~ (IData)(vlSelf->ysyxSoCFull__DOT__sdram_chip_2__DOT____VdfgTmp_hd37bcd0c__0)))));
         bufp->chgBit(oldp+1037,(vlSelf->ysyxSoCFull__DOT__sdram_chip_2__DOT__is_active));
         bufp->chgBit(oldp+1038,(vlSelf->ysyxSoCFull__DOT__sdram_chip_2__DOT__is_read));
         bufp->chgBit(oldp+1039,(vlSelf->ysyxSoCFull__DOT__sdram_chip_2__DOT__is_write));
@@ -1963,7 +1963,7 @@ void VysyxSoCFull___024root__trace_chg_sub_0(VysyxSoCFull___024root* vlSelf, Ver
                                              << 1U)) 
                                | (IData)(vlSelf->ysyxSoCFull__DOT___asic_spi_mosi))),32);
     bufp->chgBit(oldp+1102,(((IData)(vlSelf->ysyxSoCFull__DOT__sdram_chip_3__DOT____VdfgTmp_hada35e22__0) 
-                             & ((IData)(vlSelf->ysyxSoCFull__DOT____Vcellinp__sdram_chip_2__cas) 
+                             & ((~ (IData)(vlSelf->ysyxSoCFull__DOT__sdram_chip_2__DOT____VdfgTmp_hd37bcd0c__0)) 
                                 & (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__command_q)))));
     bufp->chgBit(oldp+1103,(((~ (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__command_q)) 
                              & (IData)(vlSelf->ysyxSoCFull__DOT__sdram_chip_3__DOT____VdfgTmp_h47486cab__0))));
