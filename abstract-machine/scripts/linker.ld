@@ -39,12 +39,11 @@ SECTIONS {
 
   .text : {
     _text_lma = LOADADDR(.text);
-    /*. = ORIGIN(sdram);*/
     _text = .;    /* .text段在sdram的起始地址 */
     *(.text*)
     *(.rodata*)
-    _etext = .;   /* .text段在sdram的结束地址 */
     . = ALIGN(4);
+    _etext = .;   /* .text段在sdram的结束地址 */
   } > sdram AT> flash : text
 
   .data : {
