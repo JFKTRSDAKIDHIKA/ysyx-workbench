@@ -132,8 +132,11 @@ always @(posedge clk) begin
                     dq_out <= read_mem(INSTANCE_ID, active_bank, active_row[active_bank], current_col);    
                     dq_en <= 1'b1;                  
                     current_col <= current_col + 1;
-                    if (burst_length == 1)
+                    if (burst_length == 1) begin
                         state <= IDLE;
+                        // After reading is completed, `dq_en` must be disabled to set the output to a high-impedance state.
+                        dq_en <= 1'b0;
+                    end
                 end
             end
             READING: begin
