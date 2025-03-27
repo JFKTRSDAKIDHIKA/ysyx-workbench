@@ -186,7 +186,7 @@ wire [SDRAM_ROW_W-1:0]  addr_row_w  = ram_addr_w[SDRAM_ADDR_W+1:SDRAM_COL_W+4];
 // Word extension
 reg sdram_select_reg; 
 
-always @(*) begin
+always @(posedge clk_i) begin
     if (command_q == CMD_WRITE) begin
         sdram_select_reg = ram_addr_w[SDRAM_ADDR_W+2];
     end
