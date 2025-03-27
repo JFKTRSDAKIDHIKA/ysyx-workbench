@@ -18,19 +18,6 @@
 #include <cstdlib>
 #include <vector>
 
-// SDRAM 存储器，使用 vector 代替三维数组
-std::unordered_map<int, std::vector<std::vector<std::vector<uint16_t>>>> sdram_instances;
-
-// 初始化 SDRAM
-void init_sdram(int instance_id) {
-  if (sdram_instances.find(instance_id) == sdram_instances.end()) {
-      sdram_instances[instance_id] = std::vector<std::vector<std::vector<uint16_t>>>(BANK_COUNT,
-          std::vector<std::vector<uint16_t>>(ROW_COUNT,
-              std::vector<uint16_t>(COL_COUNT, 0)));
-      printf("[INFO] Initialized SDRAM instance %d\n", instance_id);
-  }
-}
-
 // #define ENABLE_MEMORY_CHECK 1
 // #define DIFFTEST 0
 #define is_silent_mode 1
@@ -47,6 +34,19 @@ static int time_i = 0;
 VerilatedVcdC* tfp;
 #endif
 
+// SDRAM memory, using vector instead of a three-dimensional array
+std::unordered_map<int, std::vector<std::vector<std::vector<uint16_t>>>> sdram_instances;
+
+// Initialize SDRAM
+void init_sdram(int instance_id) {
+  if (sdram_instances.find(instance_id) == sdram_instances.end()) {
+      sdram_instances[instance_id] = std::vector<std::vector<std::vector<uint16_t>>>(BANK_COUNT,
+          std::vector<std::vector<uint16_t>>(ROW_COUNT,
+              std::vector<uint16_t>(COL_COUNT, 0)));
+      printf("[INFO] Initialized SDRAM instance %d\n", instance_id);
+  }
+}
+
 // define the DPI-C functions
 // note: extern "C" 是 C++ 中的一个声明方式，用来告诉编译器，函数使用 C 的链接方式，而不是 C++ 默认的链接方式。
 extern "C" void flash_read(int32_t addr, int32_t *data) {
@@ -58,7 +58,7 @@ extern "C" void mrom_read(int32_t addr, int32_t *data) {
   *data = Memory::pmem_read(addr); 
 }
 
-// 写 SDRAM（支持多个实例）
+// Write SDRAM
 extern "C" void write_mem(int instance_id, int bank, int row, int col, int data, int mask) {
   if (sdram_instances.find(instance_id) == sdram_instances.end()) {
       printf("Error: SDRAM instance %d not initialized!\n", instance_id);
@@ -77,7 +77,7 @@ extern "C" void write_mem(int instance_id, int bank, int row, int col, int data,
   }
 }
 
-// 读 SDRAM（支持多个实例）
+// Read SDRAM
 extern "C" int read_mem(int instance_id, int bank, int row, int col) {
   if (sdram_instances.find(instance_id) == sdram_instances.end()) {
       printf("Error: SDRAM instance %d not initialized!\n", instance_id);
@@ -464,7 +464,8 @@ int main(int argc, char **argv) {
     load_program(argv[1]);
     // Initialize flash
     // Memory::init_flash();
-    // Initialize SDRAM
+
+    // Initialize 1'st SDRAM chip
     init_sdram(0);
 
 #ifdef DIFFTEST
