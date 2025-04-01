@@ -11,7 +11,7 @@ CHISEL_DIR := ./npc-chisel
 OBJ_DIR = obj_dir
 EXEC = $(OBJ_DIR)/VysyxSoCFull
 FLAGS += -Wno-lint -Wno-style --timescale "1ns/1ns" --no-timing  --autoflush --stats 
-STEP_MODE = step
+STEP_MODE = run
 
 
 # 默认目标
