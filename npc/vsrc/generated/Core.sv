@@ -812,7 +812,8 @@ module WBU(	// src/main/scala/npc/wbu.scala:29:7
   reg  [31:0]      wbu_reg_result;	// src/main/scala/npc/wbu.scala:67:33
   reg  [31:0]      wbu_reg_dmem_rdata;	// src/main/scala/npc/wbu.scala:68:37
   reg  [4:0]       wbu_reg_wb_addr;	// src/main/scala/npc/wbu.scala:69:34
-  wire             _wb_wen_T_3 = wbu_reg_inst[6:0] == 7'h17;	// src/main/scala/npc/wbu.scala:65:31, :72:28, :81:36
+  wire             _wb_wen_T_1 = wbu_reg_inst[6:0] == 7'h37;	// src/main/scala/npc/wbu.scala:65:31, :72:28, :81:36
+  wire             _wb_wen_T_2 = wbu_reg_inst[6:0] == 7'h17;	// src/main/scala/npc/wbu.scala:65:31, :72:28, :81:36
   wire             _wb_wen_T_4 = wbu_reg_inst[6:0] == 7'h33;	// src/main/scala/npc/wbu.scala:65:31, :72:28, :81:36
   wire             _wb_wen_T_6 = wbu_reg_inst[6:0] == 7'h13;	// src/main/scala/npc/wbu.scala:65:31, :72:28, :81:36
   wire             _wb_wen_T_8 = wbu_reg_inst[6:0] == 7'h3;	// src/main/scala/npc/wbu.scala:65:31, :72:28, :81:36
@@ -825,13 +826,12 @@ module WBU(	// src/main/scala/npc/wbu.scala:29:7
           ? 2'h0
           : _wb_wen_T_8
               ? 2'h3
-              : {_wb_wen_T_6 | _wb_wen_T_4 | _wb_wen_T_3 | wbu_reg_inst[6:0] == 7'h37,
-                 1'h0};	// src/main/scala/npc/wbu.scala:33:15, :41:22, :49:15, :65:31, :72:28, :81:36
+              : {_wb_wen_T_6 | _wb_wen_T_4 | _wb_wen_T_2 | _wb_wen_T_1, 1'h0};	// src/main/scala/npc/wbu.scala:41:22, :49:15, :65:31, :72:28, :81:36
   wire [3:0][31:0] _GEN =
     {{wbu_reg_dmem_rdata}, {wbu_reg_result}, {wbu_reg_pc + 32'h4}, {32'h0}};	// src/main/scala/npc/wbu.scala:66:29, :67:33, :68:37, :77:29, :95:37
   wire             io_wb_wen_0 =
-    (_wb_wen_T_12 | _wb_wen_T_10 | _wb_wen_T_8 | ~(_wb_wen_T_6 | _wb_wen_T_4)
-     & _wb_wen_T_3) & state == 2'h1;	// src/main/scala/npc/wbu.scala:41:22, :49:15, :81:36, :104:39, :117:{23,33}
+    (_wb_wen_T_12 | _wb_wen_T_10 | _wb_wen_T_8 | _wb_wen_T_6 | _wb_wen_T_4 | _wb_wen_T_2
+     | _wb_wen_T_1) & state == 2'h1;	// src/main/scala/npc/wbu.scala:41:22, :49:15, :81:36, :104:39, :117:{23,33}
   always @(posedge clock) begin	// src/main/scala/npc/wbu.scala:29:7
     if (reset)	// src/main/scala/npc/wbu.scala:29:7
       state <= 2'h0;	// src/main/scala/npc/wbu.scala:41:22
