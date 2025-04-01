@@ -30,39 +30,6 @@ static int time_i = 0;
 VerilatedVcdC* tfp;
 #endif
 
-void print_memory(paddr_t start_addr, size_t size) {
-    // Allocate buffers for memory data
-    std::vector<uint8_t> ref_mem(size, 0); // Buffer for REF memory
-    std::vector<uint8_t> dut_mem(size, 0); // Buffer for DUT memory
-
-    // Fetch memory data from REF
-    ref_difftest_memcpy(start_addr, ref_mem.data(), size, DIFFTEST_TO_DUT);
-
-    // Fetch memory data from DUT
-    for (size_t i = 0; i < size; ++i) {
-        dut_mem[i] = Memory::pmem_read(start_addr + i) & 0xFF; // Read byte by byte
-    }
-
-    // Print the memory in a more readable format
-    std::cout << "\nMemory Dump (Start Address: 0x" << std::hex << start_addr << ", Size: " << std::dec << size << " bytes)" << std::endl;
-    std::cout << "-------------------------------------------------------------------------------" << std::endl;
-    std::cout << "| Address      | REF Value  | DUT Value  | Match |" << std::endl;
-    std::cout << "-------------------------------------------------------------------------------" << std::endl;
-
-    for (size_t i = 0; i < size; ++i) {
-        paddr_t addr = start_addr + i;
-        bool match = (ref_mem[i] == dut_mem[i]);
-
-        // Print memory content with formatting
-        std::cout << "| 0x" << std::setw(10) << std::setfill('0') << std::hex << addr
-                  << " | 0x" << std::setw(8) << std::setfill('0') << static_cast<int>(ref_mem[i])
-                  << " | 0x" << std::setw(8) << std::setfill('0') << static_cast<int>(dut_mem[i])
-                  << " |  " << (match ? "Yes" : "No ") << "  |" << std::endl;
-    }
-
-    std::cout << "-------------------------------------------------------------------------------" << std::endl;
-}
-
 #ifdef DIFFTEST
 int check_dut_and_ref(VysyxSoCFull* top, paddr_t start_addr, size_t size) {
   // ----------- 检查寄存器 -----------
@@ -83,9 +50,6 @@ int check_dut_and_ref(VysyxSoCFull* top, paddr_t start_addr, size_t size) {
           for (int j = 0; j < 32; j++) {
               std::cerr << regs[j] << ": 0x" << std::hex << ref.gpr[j] << std::endl;
           }
-
-          // Dump memory
-          print_memory(top->io_lsu_reg_dmem_addr_debug, 20);
 
           // Stop the simulation on a mismatch
           return -1;  
@@ -133,7 +97,6 @@ int check_dut_and_ref(VysyxSoCFull* top, paddr_t start_addr, size_t size) {
               std::cerr << "Address: 0x" << std::hex << (start_addr + i) << std::endl;
               std::cerr << "REF: 0x" << std::hex << static_cast<int>(ref_mem[i]) << std::endl;
               std::cerr << "DUT: 0x" << std::hex << static_cast<int>(dut_mem[i]) << std::endl;
-              print_memory((start_addr + i), 40); // Optional memory dump
               return -1;
           }
       }
@@ -312,8 +275,7 @@ static int cmd_x(char* args){
   
   int len = 4 * arg0;
 
-  print_memory((paddr_t)((uintptr_t)arg1 & 0xFFFFFFFF), len);
-
+  printf("Memory dump skipped (SDRAM access is non-trivial)");
   return 0;
 }
 
