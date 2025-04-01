@@ -7,6 +7,7 @@
 #include "include/memory.h"
 #include "include/disassemble.h"
 #include "include/device.h"
+#include "include/config.h"
 #include <iostream>
 #include <svdpi.h>
 #include <iomanip> 
@@ -18,10 +19,7 @@
 #include <cstdlib>
 #include <vector>
 
-// #define ENABLE_MEMORY_CHECK 1
-#define DIFFTEST 
-#define SILENT_MODE 
-//#define TRACE
+
 #define NEED_CHECK(top) ((top)->io_wbu_state_debug == 2)
 
 
@@ -460,8 +458,6 @@ int main(int argc, char **argv) {
 
     // Load program
     load_program(argv[1]);
-    // Initialize flash
-    // Memory::init_flash();
 
     // Initialize SDRAM chips
     init_sdram(0);
