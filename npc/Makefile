@@ -18,7 +18,7 @@ FLAGS += -Wno-lint -Wno-style --timescale "1ns/1ns" --no-timing  --autoflush --s
 all: $(EXEC)
 
 # 编译 Verilator 模型并生成可执行文件
-$(EXEC): $(TOP_MODULE) $(CSRC) $(VSRC)
+$(EXEC): $(TOP_MODULE) $(CSRC) $(VSRC) $(HEADERS)
 	$(VERILATOR) $(FLAGS) --cc $(TOP_MODULE) --trace --exe $(CSRC) $(VSRC) $(INCLUDE_DIRS) \
                     --build -j 0 --top-module ysyxSoCFull \
                     --Mdir $(OBJ_DIR)  \
