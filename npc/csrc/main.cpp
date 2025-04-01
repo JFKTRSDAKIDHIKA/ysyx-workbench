@@ -101,6 +101,8 @@ void tick(void) {
     // Memory trace
     if (top->io_lsu_is_ld_or_st_debug) {  
       std::string inst_str = disassemble_instruction(top->io_lsu_reg_inst_debug);
+
+      printf("Instruction: %s\n", inst_str.c_str());
       
       bool is_load = (inst_str[0] == 'l');  
       bool is_store = (inst_str[0] == 's'); 
@@ -136,8 +138,7 @@ void tick(void) {
               << ", Arbiter_state: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->io_Arbiter_state_debug)
               << std::dec << std::endl;
 #endif
-
-  }
+}
 
     top->clock = 1;
     top->eval();
