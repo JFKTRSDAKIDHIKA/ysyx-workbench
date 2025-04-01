@@ -19,9 +19,11 @@
 #include <vector>
 
 // #define ENABLE_MEMORY_CHECK 1
-//#define DIFFTEST 1
-// #define SILENT_MODE 
+#define DIFFTEST 
+#define SILENT_MODE 
 //#define TRACE
+#define NEED_CHECK(top) ((top)->io_wbu_state_debug == 2)
+
 
 // Declare global variables
 VysyxSoCFull* top;      // Top module (global)
@@ -230,6 +232,7 @@ int check_dut_and_ref(VysyxSoCFull* top, paddr_t start_addr, size_t size) {
 }
 #endif
 
+
 void tick(void) {
     total_cycles++;
     top->clock = 0;
@@ -280,7 +283,7 @@ void reset(VysyxSoCFull* top, int cycles) {
     top->reset = 0;
 }
 
-/* We use the `readline' library to provide more flexibility to read from stdin. */
+/* We use the 'readline' library to provide more flexibility to read from stdin. */
 static char* rl_gets() {
     static char *line_read = NULL;
   
@@ -303,12 +306,12 @@ static int execute_single_step() {
   tick();
 #ifdef DIFFTEST
   if (need_check) {
-    need_check = (top->io_wbu_state_debug == 2);
+    need_check = NEED_CHECK(top);
     ref_difftest_exec(1);
     ref_difftest_regcpy(&ref, DIFFTEST_TO_REF);
     return check_dut_and_ref(top, 0, 0);
   } else {
-    need_check = (top->io_wbu_state_debug == 2);
+    need_check = NEED_CHECK(top);
     return 0;
   }
 #else 
