@@ -282,7 +282,6 @@ int sdb_mainloop() {
   
 int main(int argc, char **argv) {
     print_config();
-    
 
     Verilated::commandArgs(argc, argv);
     top = new VysyxSoCFull;

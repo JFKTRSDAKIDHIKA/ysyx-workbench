@@ -2,6 +2,7 @@
 VERILATOR = verilator
 TOP_MODULE = ../ysyxSoC/build/ysyxSoCFull.v
 CSRC = $(wildcard csrc/*.cpp)
+HEADERS = $(wildcard csrc/include/*.h) $(wildcard include/*.hpp) $(wildcard csrc/*.h) $(wildcard csrc/*.hpp)
 V_FILES = $(shell find vsrc -name "*.v")
 SV_FILES = $(shell find vsrc -name "*.sv")
 VSRC = $(V_FILES) $(SV_FILES)
