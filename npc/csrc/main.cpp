@@ -20,7 +20,7 @@
 
 // #define ENABLE_MEMORY_CHECK 1
 //#define DIFFTEST 1
-#define SILENT_MODE 
+// #define SILENT_MODE 
 //#define TRACE
 
 // Declare global variables
