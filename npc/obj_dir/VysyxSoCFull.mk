@@ -48,6 +48,7 @@ VM_USER_CLASSES = \
 	itrace \
 	main \
 	memory \
+	mtrace \
 	program_loader \
 	registers \
 	simulation \
@@ -77,6 +78,8 @@ itrace.o: csrc/itrace.cpp
 main.o: csrc/main.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 memory.o: csrc/memory.cpp
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+mtrace.o: csrc/mtrace.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 program_loader.o: csrc/program_loader.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<

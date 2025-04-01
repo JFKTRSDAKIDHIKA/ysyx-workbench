@@ -11,6 +11,7 @@
 #include "include/dpi_interface.h"
 #include "include/simulation.h"
 #include "include/itrace.h"
+#include "include/mtrace.h"
 #include <iostream>
 #include <svdpi.h>
 #include <iomanip> 
@@ -28,6 +29,7 @@ static bool step_mode;  // Step mode flag (global)
 static riscv32_CPU_state ref;
 static int total_cycles;
 InstructionTrace itrace;
+MemoryTrace mtrace;
 
 #ifdef TRACE
 static int time_i = 0;
@@ -96,6 +98,19 @@ void tick(void) {
     // instruction trace
     itrace.addEntry(top->io_pc_debug, top->io_inst_debug);
 
+    // Memory trace
+    if (top->io_lsu_is_ld_or_st_debug) {  
+      std::string inst_str = disassemble_instruction(top->io_lsu_reg_inst_debug);
+      
+      bool is_load = (inst_str[0] == 'L');  
+      bool is_store = (inst_str[0] == 'S'); 
+  
+      uint32_t addr = top->io_lsu_reg_dmem_addr_debug;
+      uint32_t data = is_load ? top->io_dmem_rdata_debug : top->io_dmem_wdata_debug;
+  
+      mtrace.addEntry(addr, data, is_load, is_store);
+    }
+  
     // print cpu execution information
 #ifndef SILENT_MODE
     printf("------------------------------------------------------------------------------\n");

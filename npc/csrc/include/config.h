@@ -3,7 +3,7 @@
 
 // Feature toggles
 #define DIFFTEST
-#define SILENT_MODE
+// #define SILENT_MODE
 //#define TRACE
 
 #endif // CONFIG_H
