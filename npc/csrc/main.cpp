@@ -222,7 +222,7 @@ static int cmd_info(char* args){
   char *arg = strtok(NULL, "");
 
   if (arg == NULL){
-    printf("info r : 打印寄存器状态\n");
+    printf("Note: Currently only the 'info r' command is available, which prints register contents\n");
   } else if (strcmp(arg, "r") == 0) {
     print_register_values();
   } else {
@@ -281,8 +281,6 @@ int sdb_mainloop() {
 }
   
 int main(int argc, char **argv) {
-    print_config();
-
     Verilated::commandArgs(argc, argv);
     top = new VysyxSoCFull;
 
@@ -349,27 +347,4 @@ int main(int argc, char **argv) {
     return 0;
 }
 
-void print_config() {
-  std::cout << "[INFO] Program Configuration:" << std::endl;
-
-#ifdef DIFFTEST
-  std::cout << "  - DIFFTEST: ENABLED" << std::endl;
-#else
-  std::cout << "  - DIFFTEST: DISABLED" << std::endl;
-#endif
-
-#ifdef SILENT_MODE
-  std::cout << "  - SILENT_MODE: ENABLED" << std::endl;
-#else
-  std::cout << "  - SILENT_MODE: DISABLED" << std::endl;
-#endif
-
-#ifdef TRACE
-  std::cout << "  - TRACE: ENABLED" << std::endl;
-#else
-  std::cout << "  - TRACE: DISABLED" << std::endl;
-#endif
-
-  std::cout << std::endl;
-}
 
