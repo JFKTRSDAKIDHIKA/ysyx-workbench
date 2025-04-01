@@ -21,26 +21,17 @@ void set_register_values(uint32_t rf[32]) {
 }
 
 void print_register_values() {
-    std::cout << "--------------------------------------" << std::endl;
-    std::cout << "| Register Information              |" << std::endl;
-    std::cout << "--------------------------------------" << std::endl;
+    std::cout << "Register information:" << std::endl;
+    std::cout << std::setw(5) << "Reg"   // Column title width for "Reg"
+              << std::setw(10) << "Value" << std::endl; // Column title width for "Value"
 
-    std::cout << std::left 
-              << std::setw(6) << "Reg"   
-              << std::setw(6) << "Name"  
-              << std::setw(12) << "Value (HEX)" 
-              << std::endl;
-
-    std::cout << "--------------------------------------" << std::endl;
-
+    // Output the value of each register
     for (int i = 0; i < 32; ++i) {
-        std::cout << std::left << std::setw(6) << ("x" + std::to_string(i)) 
-                  << std::setw(6) << regs[i]   
-                  << "0x" << std::uppercase 
-                  << std::setw(8) << std::setfill('0') << std::hex << rf_values[i]
-                  << std::setfill(' ')  
-                  << std::endl;
+        std::cout << std::setw(5)  // Width for "x" and register number
+                  << "x" << i << ": " 
+                  << std::setw(10)  // Width for the register value
+                  << "0x" << std::setfill('0') << std::setw(8) << std::hex << rf_values[i] << std::endl;
     }
-    
-    std::cout << "--------------------------------------" << std::endl;
 }
+
+
