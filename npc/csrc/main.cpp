@@ -73,36 +73,6 @@ int check_dut_and_ref(VysyxSoCFull* top, paddr_t start_addr, size_t size) {
 
       return -1;  // End simulation
   }
-/*
-#ifdef ENABLE_MEMORY_CHECK
-  // ----------- 检查内存 -----------
-  // Allocate buffers for memory comparison
-  std::vector<uint8_t> ref_mem(size, 0); // Buffer to store memory from REF
-  std::vector<uint8_t> dut_mem(size, 0); // Buffer to store memory from DUT
-
-  // Copy memory from REF to ref_mem buffer
-  ref_difftest_memcpy(start_addr, ref_mem.data(), size, DIFFTEST_TO_DUT);
-
-  // Copy memory from DUT to dut_mem buffer
-  for (size_t i = 0; i < size; ++i) {
-      dut_mem[i] = Memory::pmem_read(start_addr + i) & 0xFF; // Read one byte at a time
-  }
-
-  // Compare REF memory and DUT memory
-  if (memcmp(ref_mem.data(), dut_mem.data(), size) != 0) {
-      // If there's a mismatch, find the first mismatched byte
-      for (size_t i = 0; i < size; ++i) {
-          if (ref_mem[i] != dut_mem[i]) {
-              std::cerr << "Memory mismatch detected!" << std::endl;
-              std::cerr << "Address: 0x" << std::hex << (start_addr + i) << std::endl;
-              std::cerr << "REF: 0x" << std::hex << static_cast<int>(ref_mem[i]) << std::endl;
-              std::cerr << "DUT: 0x" << std::hex << static_cast<int>(dut_mem[i]) << std::endl;
-              return -1;
-          }
-      }
-  }
-#endif
-*/
   // If no mismatches, return 0
   return 0;
 }
@@ -275,7 +245,7 @@ static int cmd_x(char* args){
   
   int len = 4 * arg0;
 
-  printf("Memory dump skipped (SDRAM access is non-trivial)");
+  printf("Memory dump skipped (SDRAM access is non-trivial)\n");
   return 0;
 }
 
@@ -307,8 +277,40 @@ int sdb_mainloop() {
   }
   return 0;
 }
+
+void print_config() {
+  std::cout << "[INFO] Program Configuration:" << std::endl;
+
+#ifdef ENABLE_MEMORY_CHECK
+  std::cout << "  - ENABLE_MEMORY_CHECK: ENABLED" << std::endl;
+#else
+  std::cout << "  - ENABLE_MEMORY_CHECK: DISABLED" << std::endl;
+#endif
+
+#ifdef DIFFTEST
+  std::cout << "  - DIFFTEST: ENABLED" << std::endl;
+#else
+  std::cout << "  - DIFFTEST: DISABLED" << std::endl;
+#endif
+
+#ifdef SILENT_MODE
+  std::cout << "  - SILENT_MODE: ENABLED" << std::endl;
+#else
+  std::cout << "  - SILENT_MODE: DISABLED" << std::endl;
+#endif
+
+#ifdef TRACE
+  std::cout << "  - TRACE: ENABLED" << std::endl;
+#else
+  std::cout << "  - TRACE: DISABLED" << std::endl;
+#endif
+
+  std::cout << std::endl;
+}
   
 int main(int argc, char **argv) {
+    print_config();
+    
     Verilated::commandArgs(argc, argv);
     top = new VysyxSoCFull;
 
