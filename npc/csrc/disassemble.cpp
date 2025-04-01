@@ -1,5 +1,4 @@
-/*
-include "include/disassemble.h"
+#include "include/disassemble.h"
 #include <capstone/capstone.h>
 
 // Disassemble signle instruction
@@ -27,4 +26,4 @@ std::string disassemble_instruction(uint32_t inst) {
         return "Unknown instruction";
     }
 }
-*/
+
