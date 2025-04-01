@@ -30,10 +30,13 @@ VysyxSoCFull* top;      // Top module (global)
 static bool step_mode;  // Step mode flag (global)
 static riscv32_CPU_state ref;
 static int total_cycles;
-InstructionTrace itrace;
-MemoryTrace mtrace;
 
 #ifdef TRACE
+InstructionTrace itrace;
+MemoryTrace mtrace;
+#endif
+
+#ifdef ENABLE_WAVEFORM
 static int time_i = 0;
 VerilatedVcdC* tfp;
 #endif
@@ -91,12 +94,13 @@ void tick(void) {
     total_cycles++;
     top->clock = 0;
     top->eval();
-#ifdef TRACE
+#ifdef ENABLE_WAVEFORM
     tfp->dump(time_i);
     time_i++;
 #endif
 
   if ((top->io_wbu_state_debug == 2)) {
+#ifdef TRACE
     // instruction trace
     itrace.addEntry(top->io_pc_debug, top->io_inst_debug);
 
@@ -120,7 +124,8 @@ void tick(void) {
     } else if (store_instructions.count(mnemonic)) {
         mtrace.addEntry(addr, top->io_dmem_wdata_debug, false, true);
     }
-  
+#endif
+
     // print cpu execution information
 #ifndef SILENT_MODE
     printf("------------------------------------------------------------------------------\n");
@@ -315,7 +320,7 @@ int main(int argc, char **argv) {
     Verilated::commandArgs(argc, argv);
     top = new VysyxSoCFull;
 
-#ifdef TRACE
+#ifdef ENABLE_WAVEFORM
     Verilated::traceEverOn(true);
     tfp = new VerilatedVcdC;
     top ->trace(tfp, 3);
@@ -357,14 +362,18 @@ int main(int argc, char **argv) {
     
     if (step_mode) {
       if (sdb_mainloop() < 0) {
+#ifdef TRACE
         itrace.printTrace();
         mtrace.printTrace();
+#endif
         return -1;
       }
     } else {
       if (cmd_c(NULL) < 0) {
+#ifdef TRACE
         itrace.printTrace();
         mtrace.printTrace();
+#endif
         return -1;
       }
     }
@@ -377,7 +386,7 @@ int main(int argc, char **argv) {
     std::cout << "Total time: " << seconds << " seconds" << std::endl;
     std::cout << "Simulation speed: " << cycles_per_second << " cycles/second" << std::endl;
 
-#ifdef TRACE
+#ifdef ENABLE_WAVEFORM
     tfp->close();
     delete tfp;
 #endif
