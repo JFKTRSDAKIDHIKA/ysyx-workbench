@@ -101,13 +101,20 @@ void tick(void) {
     // Memory trace
     std::string inst_str = disassemble_instruction(top->io_lsu_reg_inst_debug);
     
-    bool is_load = (inst_str[0] == 'l');  
-    bool is_store = (inst_str[0] == 's'); 
+    static const std::set<std::string> load_instructions = {
+        "lb", "lh", "lw", "lbu", "lhu"
+    };
+    static const std::set<std::string> store_instructions = {
+        "sb", "sh", "sw"
+    };
 
     uint32_t addr = top->io_lsu_reg_dmem_addr_debug;
-    uint32_t data = is_load ? top->io_dmem_rdata_debug : top->io_dmem_wdata_debug;
 
-    mtrace.addEntry(addr, data, is_load, is_store);
+    if (load_instructions.count(inst_str)) {
+        mtrace.addEntry(addr, top->io_dmem_rdata_debug, true, false);
+    } else if (store_instructions.count(inst_str)) {
+        mtrace.addEntry(addr, top->io_dmem_wdata_debug, false, true);
+    }
   
     // print cpu execution information
 #ifndef SILENT_MODE
