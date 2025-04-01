@@ -30,11 +30,6 @@ static int time_i = 0;
 VerilatedVcdC* tfp;
 #endif
 
-extern "C" void get_register_values(uint32_t rf[32]) {
-    set_register_values(rf);  // set the register values
-}
-
-
 void print_memory(paddr_t start_addr, size_t size) {
     // Allocate buffers for memory data
     std::vector<uint8_t> ref_mem(size, 0); // Buffer for REF memory

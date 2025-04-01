@@ -2,6 +2,10 @@
 #include <iomanip>
 #include "include/registers.h"
 
+extern "C" void get_register_values(uint32_t rf[32]) {
+    set_register_values(rf);  // set the register values
+}
+
 uint32_t rf_values[32];  // define the register values array
 const char *regs[] = {
     "$0", "ra", "sp", "gp", "tp", "t0", "t1", "t2",
