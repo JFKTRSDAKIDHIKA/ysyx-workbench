@@ -19,6 +19,8 @@
 
 #define NEED_CHECK(top) ((top)->io_wbu_state_debug == 2)
 
+void print_config();
+
 // Declare global variables
 VysyxSoCFull* top;      // Top module (global)
 static bool step_mode;  // Step mode flag (global)
@@ -279,6 +281,8 @@ int sdb_mainloop() {
 }
   
 int main(int argc, char **argv) {
+    print_config();
+
     Verilated::commandArgs(argc, argv);
     top = new VysyxSoCFull;
 
@@ -345,6 +349,27 @@ int main(int argc, char **argv) {
     return 0;
 }
 
+void print_config() {
+  std::cout << "[INFO] Program Configuration:" << std::endl;
 
+#ifdef DIFFTEST
+  std::cout << "  - DIFFTEST: ENABLED" << std::endl;
+#else
+  std::cout << "  - DIFFTEST: DISABLED" << std::endl;
+#endif
 
+#ifdef SILENT_MODE
+  std::cout << "  - SILENT_MODE: ENABLED" << std::endl;
+#else
+  std::cout << "  - SILENT_MODE: DISABLED" << std::endl;
+#endif
+
+#ifdef TRACE
+  std::cout << "  - TRACE: ENABLED" << std::endl;
+#else
+  std::cout << "  - TRACE: DISABLED" << std::endl;
+#endif
+
+  std::cout << std::endl;
+}
 
