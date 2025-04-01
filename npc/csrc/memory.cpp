@@ -3,6 +3,7 @@
 
 std::vector<uint8_t> Memory::mrom(MROM_SIZE, 0);  // Initialize mrom with size MROM_SIZE and set all elements to 0
 std::vector<uint8_t> Memory::flash(FLASH_SIZE, 0);  // Initialize mrom with size MROM_SIZE and set all elements to 0
+std::unordered_map<int, std::vector<std::vector<std::vector<uint16_t>>>> SDRAM::sdram_instances;
 
 void Memory::write_memory_region(std::vector<uint8_t>& memory, uint32_t offset, uint32_t data, char write_mask) {
     if (write_mask & 0x1) {
@@ -63,6 +64,51 @@ void Memory::init_flash(){
     for (int i = 0; i <= FLASH_SIZE - 1; i = i + 4){
         uint32_t addr = i + FLASH_BASE_ADDR;
         pmem_write(addr, i, (char)0xf);
+    }
+}
+
+void SDRAM::init(int instance_id) {
+    if (sdram_instances.find(instance_id) == sdram_instances.end()) {
+        sdram_instances[instance_id] = std::vector<std::vector<std::vector<uint16_t>>>(BANK_COUNT,
+            std::vector<std::vector<uint16_t>>(ROW_COUNT,
+                std::vector<uint16_t>(COL_COUNT, 0)));
+        printf("[INFO] Initialized SDRAM instance %d\n", instance_id);
+    }
+}
+
+void SDRAM::write(int instance_id, int bank, int row, int col, int data, int mask) {
+    if (sdram_instances.find(instance_id) == sdram_instances.end()) {
+        printf("Error: SDRAM instance %d not initialized!\n", instance_id);
+        return;
+    }
+
+    auto& sdram_memory = sdram_instances[instance_id];
+
+    if (bank < BANK_COUNT && row < ROW_COUNT && col < COL_COUNT) {
+        uint16_t old_data = sdram_memory[bank][row][col];
+        uint16_t new_data = (old_data & ~mask) | (data & mask);
+
+        sdram_memory[bank][row][col] = new_data;
+    } else {
+        printf("Error: Invalid memory access (instance=%d, bank=%d, row=%d, col=%d)\n", 
+               instance_id, bank, row, col);
+    }
+}
+
+int SDRAM::read(int instance_id, int bank, int row, int col) {
+    if (sdram_instances.find(instance_id) == sdram_instances.end()) {
+        printf("Error: SDRAM instance %d not initialized!\n", instance_id);
+        return -1;
+    }
+
+    auto& sdram_memory = sdram_instances[instance_id];
+
+    if (bank < BANK_COUNT && row < ROW_COUNT && col < COL_COUNT) {
+        return sdram_memory[bank][row][col];
+    } else {
+        printf("Error: Invalid memory access (instance=%d, bank=%d, row=%d, col=%d)\n", 
+               instance_id, bank, row, col);
+        return -1;
     }
 }
 

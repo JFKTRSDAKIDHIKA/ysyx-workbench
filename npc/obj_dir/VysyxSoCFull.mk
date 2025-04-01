@@ -44,6 +44,7 @@ VM_USER_LDLIBS = \
 VM_USER_CLASSES = \
 	difftest \
 	disassemble \
+	dpi_interface \
 	main \
 	memory \
 	program_loader \
@@ -66,6 +67,8 @@ VPATH += $(VM_USER_DIR)
 difftest.o: csrc/difftest.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 disassemble.o: csrc/disassemble.cpp
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+dpi_interface.o: csrc/dpi_interface.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 main.o: csrc/main.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<

@@ -8,20 +8,15 @@
 #include "include/disassemble.h"
 #include "include/device.h"
 #include "include/config.h"
+#include "include/dpi_interface.h"
 #include <iostream>
 #include <svdpi.h>
 #include <iomanip> 
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <cassert>    
-// sdram_model
-#include <cstdio>
-#include <cstdlib>
-#include <vector>
-
 
 #define NEED_CHECK(top) ((top)->io_wbu_state_debug == 2)
-
 
 // Declare global variables
 VysyxSoCFull* top;      // Top module (global)
@@ -33,77 +28,6 @@ static int total_cycles;
 static int time_i = 0;
 VerilatedVcdC* tfp;
 #endif
-
-// SDRAM memory, using vector instead of a three-dimensional array
-std::unordered_map<int, std::vector<std::vector<std::vector<uint16_t>>>> sdram_instances;
-
-// Initialize SDRAM
-void init_sdram(int instance_id) {
-  if (sdram_instances.find(instance_id) == sdram_instances.end()) {
-      sdram_instances[instance_id] = std::vector<std::vector<std::vector<uint16_t>>>(BANK_COUNT,
-          std::vector<std::vector<uint16_t>>(ROW_COUNT,
-              std::vector<uint16_t>(COL_COUNT, 0)));
-      printf("[INFO] Initialized SDRAM instance %d\n", instance_id);
-  }
-}
-
-// define the DPI-C functions
-// note: extern "C" 是 C++ 中的一个声明方式，用来告诉编译器，函数使用 C 的链接方式，而不是 C++ 默认的链接方式。
-extern "C" void flash_read(int32_t addr, int32_t *data) {
-  *data = Memory::pmem_read(addr + FLASH_BASE_ADDR); 
-  // std::cout << "[DEBUG] Flash read "<< "addr: " << std::hex << addr << ", data: " << std::hex << *data << std::endl;
-}
-
-extern "C" void mrom_read(int32_t addr, int32_t *data) { 
-  *data = Memory::pmem_read(addr); 
-}
-
-// Write SDRAM
-extern "C" void write_mem(int instance_id, int bank, int row, int col, int data, int mask) {
-  if (sdram_instances.find(instance_id) == sdram_instances.end()) {
-      printf("Error: SDRAM instance %d not initialized!\n", instance_id);
-      return;
-  }
-
-  auto& sdram_memory = sdram_instances[instance_id];
-
-  if (bank < BANK_COUNT && row < ROW_COUNT && col < COL_COUNT) {
-      uint16_t old_data = sdram_memory[bank][row][col];
-      uint16_t new_data = (old_data & ~mask) | (data & mask);
-
-      sdram_memory[bank][row][col] = new_data;  
-
-      //uint16_t written_data = sdram_memory[bank][row][col];
-      //printf("[DEBUG] Writing to SDRAM: instance=%d, bank=%d, row=%d, col=%d, old_data=0x%04x, written_data=0x%04x, mask=0x%04x\n",
-      //       instance_id, bank, row, col, old_data, written_data, mask);
-  } else {
-      printf("Error: Invalid memory access (instance=%d, bank=%d, row=%d, col=%d)\n", 
-             instance_id, bank, row, col);
-  }
-}
-
-// Read SDRAM
-extern "C" int read_mem(int instance_id, int bank, int row, int col) {
-  if (sdram_instances.find(instance_id) == sdram_instances.end()) {
-      printf("Error: SDRAM instance %d not initialized!\n", instance_id);
-      return -1;
-  }
-
-  auto& sdram_memory = sdram_instances[instance_id];
-
-  if (bank < BANK_COUNT && row < ROW_COUNT && col < COL_COUNT) {
-      int value = sdram_memory[bank][row][col];
-
-      //printf("[DEBUG] Read SDRAM (Instance: %d, Bank: %d, Row: %d, Column: %d) -> Data: 0x%04X\n", 
-      //       instance_id, bank, row, col, value);
-
-      return value;
-  } else {
-      printf("Error: Invalid memory access (instance=%d, bank=%d, row=%d, col=%d)\n", 
-             instance_id, bank, row, col);
-      return -1;
-  }
-}
 
 extern "C" void simulation_exit() {
     Verilated::gotFinish(true); 
@@ -460,10 +384,10 @@ int main(int argc, char **argv) {
     load_program(argv[1]);
 
     // Initialize SDRAM chips
-    init_sdram(0);
-    init_sdram(1);
-    init_sdram(2);
-    init_sdram(3);
+    SDRAM::init(0);
+    SDRAM::init(1);
+    SDRAM::init(2);
+    SDRAM::init(3);
 
 #ifdef DIFFTEST
     // Initialize difftest
