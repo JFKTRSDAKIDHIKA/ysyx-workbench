@@ -15,9 +15,11 @@
 #include <iostream>
 #include <svdpi.h>
 #include <iomanip> 
+#include <cassert>    
+#include <sstream>
 #include <readline/readline.h>
 #include <readline/history.h>
-#include <cassert>    
+
 
 #define NEED_CHECK(top) ((top)->io_wbu_state_debug == 2)
 
@@ -100,7 +102,10 @@ void tick(void) {
 
     // Memory trace
     std::string inst_str = disassemble_instruction(top->io_lsu_reg_inst_debug);
-    
+    std::istringstream iss(inst_str);
+    std::string mnemonic;
+    iss >> mnemonic;  
+
     static const std::set<std::string> load_instructions = {
         "lb", "lh", "lw", "lbu", "lhu"
     };
@@ -110,9 +115,9 @@ void tick(void) {
 
     uint32_t addr = top->io_lsu_reg_dmem_addr_debug;
 
-    if (load_instructions.count(inst_str)) {
+    if (load_instructions.count(mnemonic)) {
         mtrace.addEntry(addr, top->io_dmem_rdata_debug, true, false);
-    } else if (store_instructions.count(inst_str)) {
+    } else if (store_instructions.count(mnemonic)) {
         mtrace.addEntry(addr, top->io_dmem_wdata_debug, false, true);
     }
   
