@@ -49,6 +49,7 @@ VM_USER_CLASSES = \
 	memory \
 	program_loader \
 	registers \
+	simulation \
 
 # User .cpp directories (from .cpp's on Verilator command line)
 VM_USER_DIR = \
@@ -77,6 +78,8 @@ memory.o: csrc/memory.cpp
 program_loader.o: csrc/program_loader.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 registers.o: csrc/registers.cpp
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+simulation.o: csrc/simulation.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 
 ### Link rules... (from --exe)

@@ -9,6 +9,7 @@
 #include "include/device.h"
 #include "include/config.h"
 #include "include/dpi_interface.h"
+#include "include/simulation.h"
 #include <iostream>
 #include <svdpi.h>
 #include <iomanip> 
@@ -28,11 +29,6 @@ static int total_cycles;
 static int time_i = 0;
 VerilatedVcdC* tfp;
 #endif
-
-extern "C" void simulation_exit() {
-    Verilated::gotFinish(true); 
-}
-
 
 extern "C" void get_register_values(uint32_t rf[32]) {
     set_register_values(rf);  // set the register values
