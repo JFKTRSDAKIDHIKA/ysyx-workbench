@@ -102,8 +102,8 @@ void tick(void) {
     if (top->io_lsu_is_ld_or_st_debug) {  
       std::string inst_str = disassemble_instruction(top->io_lsu_reg_inst_debug);
       
-      bool is_load = (inst_str[0] == 'L');  
-      bool is_store = (inst_str[0] == 'S'); 
+      bool is_load = (inst_str[0] == 'l');  
+      bool is_store = (inst_str[0] == 's'); 
   
       uint32_t addr = top->io_lsu_reg_dmem_addr_debug;
       uint32_t data = is_load ? top->io_dmem_rdata_debug : top->io_dmem_wdata_debug;
@@ -371,6 +371,8 @@ int main(int argc, char **argv) {
     delete tfp;
 #endif
 
+    mtrace.printTrace();
+    
     delete top;
     return 0;
 }
