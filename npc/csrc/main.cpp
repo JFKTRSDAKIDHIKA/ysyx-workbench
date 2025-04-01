@@ -20,11 +20,11 @@
 
 // #define ENABLE_MEMORY_CHECK 1
 //#define DIFFTEST 1
-#define is_silent_mode 0
+#define SILENT_MODE 
 //#define TRACE
 
 // Declare global variables
-VysyxSoCFull* top;  // Top module (global)
+VysyxSoCFull* top;      // Top module (global)
 static bool step_mode;  // Step mode flag (global)
 static riscv32_CPU_state ref;
 static int total_cycles;
@@ -230,7 +230,7 @@ int check_dut_and_ref(VysyxSoCFull* top, paddr_t start_addr, size_t size) {
 }
 #endif
 
-void tick(VysyxSoCFull* top, bool silent_mode ) {
+void tick(void) {
     total_cycles++;
     top->clock = 0;
     top->eval();
@@ -239,7 +239,8 @@ void tick(VysyxSoCFull* top, bool silent_mode ) {
     time_i++;
 #endif
 
-  if ((!silent_mode) && (top->io_wbu_state_debug == 2)) {
+#ifdef SILENT_MODE
+  if ((top->io_wbu_state_debug == 2)) {
       printf("------------------------------------------------------------------------------\n");
       std::cout << "Instruction Info: "
                 << "Instruction: " << std::setw(8) << disassemble_instruction(top->io_inst_debug)
@@ -263,34 +264,18 @@ void tick(VysyxSoCFull* top, bool silent_mode ) {
                 << ", Arbiter_state: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->io_Arbiter_state_debug)
                 << std::dec << std::endl;
   }
-
-
-/*
-    // print some debug info of memory write
-    if (top->mem_wen_debug == 1 && !silent_mode ) {  
-        print_memory(top->dmem_addr_debug, 20);
-                << ", Data: 0x" << std::setw(8) << std::setfill('0') << top->dmem_wdata_debug
-                << ", Mask: 0x" << std::setw(2) << static_cast<unsigned>(top->wmask_debug) 
-                << std::dec << std::endl;
-    }
-
-    // print some debug info of memory read
-    if (top->mem_en_debug == 1 && top->mem_wen_debug != 1 && !silent_mode ) {  
-            std::cout << "Memory Read  - Addr: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->dmem_addr_debug
-                      << std::dec << std::endl;
-    }
-*/
+#endif
 
     top->clock = 1;
     top->eval();
-    Verilated::timeInc(1); // 增加仿真时间
+    Verilated::timeInc(1);
 }
 
 
 void reset(VysyxSoCFull* top, int cycles) {
     top->reset = 1;
     for (int i = 0; i < cycles; ++i) {
-        tick(top, true);  // forbidden single-step mode
+        tick();  // forbidden single-step mode
     }
     top->reset = 0;
 }
@@ -315,7 +300,7 @@ static char* rl_gets() {
 
 static int need_check = 0;
 static int execute_single_step() {
-  tick(top, is_silent_mode);  
+  tick();
 #ifdef DIFFTEST
   if (need_check) {
     need_check = (top->io_wbu_state_debug == 2);
