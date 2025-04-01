@@ -5,26 +5,24 @@
 #include "include/registers.h"
 #include "include/program_loader.h"
 #include "include/memory.h"
-// #include "include/disassemble.h"
+#include "include/disassemble.h"
 #include "include/device.h"
+#include "include/config.h"
+#include "include/dpi_interface.h"
+#include "include/simulation.h"
 #include <iostream>
 #include <svdpi.h>
 #include <iomanip> 
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <cassert>    
-// sdram_model
-#include <cstdio>
-#include <cstdlib>
-#include <vector>
 
-// #define ENABLE_MEMORY_CHECK 1
-//#define DIFFTEST 1
-#define is_silent_mode 1
-//#define TRACE
+#define NEED_CHECK(top) ((top)->io_wbu_state_debug == 2)
+
+void print_config();
 
 // Declare global variables
-VysyxSoCFull* top;  // Top module (global)
+VysyxSoCFull* top;      // Top module (global)
 static bool step_mode;  // Step mode flag (global)
 static riscv32_CPU_state ref;
 static int total_cycles;
@@ -33,120 +31,6 @@ static int total_cycles;
 static int time_i = 0;
 VerilatedVcdC* tfp;
 #endif
-
-// SDRAM memory, using vector instead of a three-dimensional array
-std::unordered_map<int, std::vector<std::vector<std::vector<uint16_t>>>> sdram_instances;
-
-// Initialize SDRAM
-void init_sdram(int instance_id) {
-  if (sdram_instances.find(instance_id) == sdram_instances.end()) {
-      sdram_instances[instance_id] = std::vector<std::vector<std::vector<uint16_t>>>(BANK_COUNT,
-          std::vector<std::vector<uint16_t>>(ROW_COUNT,
-              std::vector<uint16_t>(COL_COUNT, 0)));
-      printf("[INFO] Initialized SDRAM instance %d\n", instance_id);
-  }
-}
-
-// define the DPI-C functions
-// note: extern "C" 是 C++ 中的一个声明方式，用来告诉编译器，函数使用 C 的链接方式，而不是 C++ 默认的链接方式。
-extern "C" void flash_read(int32_t addr, int32_t *data) {
-  *data = Memory::pmem_read(addr + FLASH_BASE_ADDR); 
-  // std::cout << "[DEBUG] Flash read "<< "addr: " << std::hex << addr << ", data: " << std::hex << *data << std::endl;
-}
-
-extern "C" void mrom_read(int32_t addr, int32_t *data) { 
-  *data = Memory::pmem_read(addr); 
-}
-
-// Write SDRAM
-extern "C" void write_mem(int instance_id, int bank, int row, int col, int data, int mask) {
-  if (sdram_instances.find(instance_id) == sdram_instances.end()) {
-      printf("Error: SDRAM instance %d not initialized!\n", instance_id);
-      return;
-  }
-
-  auto& sdram_memory = sdram_instances[instance_id];
-
-  if (bank < BANK_COUNT && row < ROW_COUNT && col < COL_COUNT) {
-      uint16_t old_data = sdram_memory[bank][row][col];
-      uint16_t new_data = (old_data & ~mask) | (data & mask);
-
-      sdram_memory[bank][row][col] = new_data;  
-
-      //uint16_t written_data = sdram_memory[bank][row][col];
-      //printf("[DEBUG] Writing to SDRAM: instance=%d, bank=%d, row=%d, col=%d, old_data=0x%04x, written_data=0x%04x, mask=0x%04x\n",
-      //       instance_id, bank, row, col, old_data, written_data, mask);
-  } else {
-      printf("Error: Invalid memory access (instance=%d, bank=%d, row=%d, col=%d)\n", 
-             instance_id, bank, row, col);
-  }
-}
-
-// Read SDRAM
-extern "C" int read_mem(int instance_id, int bank, int row, int col) {
-  if (sdram_instances.find(instance_id) == sdram_instances.end()) {
-      printf("Error: SDRAM instance %d not initialized!\n", instance_id);
-      return -1;
-  }
-
-  auto& sdram_memory = sdram_instances[instance_id];
-
-  if (bank < BANK_COUNT && row < ROW_COUNT && col < COL_COUNT) {
-      int value = sdram_memory[bank][row][col];
-
-      //printf("[DEBUG] Read SDRAM (Instance: %d, Bank: %d, Row: %d, Column: %d) -> Data: 0x%04X\n", 
-      //       instance_id, bank, row, col, value);
-
-      return value;
-  } else {
-      printf("Error: Invalid memory access (instance=%d, bank=%d, row=%d, col=%d)\n", 
-             instance_id, bank, row, col);
-      return -1;
-  }
-}
-
-extern "C" void simulation_exit() {
-    Verilated::gotFinish(true); 
-}
-
-
-extern "C" void get_register_values(uint32_t rf[32]) {
-    set_register_values(rf);  // set the register values
-}
-
-
-void print_memory(paddr_t start_addr, size_t size) {
-    // Allocate buffers for memory data
-    std::vector<uint8_t> ref_mem(size, 0); // Buffer for REF memory
-    std::vector<uint8_t> dut_mem(size, 0); // Buffer for DUT memory
-
-    // Fetch memory data from REF
-    ref_difftest_memcpy(start_addr, ref_mem.data(), size, DIFFTEST_TO_DUT);
-
-    // Fetch memory data from DUT
-    for (size_t i = 0; i < size; ++i) {
-        dut_mem[i] = Memory::pmem_read(start_addr + i) & 0xFF; // Read byte by byte
-    }
-
-    // Print the memory in a more readable format
-    std::cout << "\nMemory Dump (Start Address: 0x" << std::hex << start_addr << ", Size: " << std::dec << size << " bytes)" << std::endl;
-    std::cout << "-------------------------------------------------------------------------------" << std::endl;
-    std::cout << "| Address      | REF Value  | DUT Value  | Match |" << std::endl;
-    std::cout << "-------------------------------------------------------------------------------" << std::endl;
-
-    for (size_t i = 0; i < size; ++i) {
-        paddr_t addr = start_addr + i;
-        bool match = (ref_mem[i] == dut_mem[i]);
-
-        // Print memory content with formatting
-        std::cout << "| 0x" << std::setw(10) << std::setfill('0') << std::hex << addr
-                  << " | 0x" << std::setw(8) << std::setfill('0') << static_cast<int>(ref_mem[i])
-                  << " | 0x" << std::setw(8) << std::setfill('0') << static_cast<int>(dut_mem[i])
-                  << " |  " << (match ? "Yes" : "No ") << "  |" << std::endl;
-    }
-
-    std::cout << "-------------------------------------------------------------------------------" << std::endl;
-}
 
 #ifdef DIFFTEST
 int check_dut_and_ref(VysyxSoCFull* top, paddr_t start_addr, size_t size) {
@@ -168,9 +52,6 @@ int check_dut_and_ref(VysyxSoCFull* top, paddr_t start_addr, size_t size) {
           for (int j = 0; j < 32; j++) {
               std::cerr << regs[j] << ": 0x" << std::hex << ref.gpr[j] << std::endl;
           }
-
-          // Dump memory
-          print_memory(top->io_lsu_reg_dmem_addr_debug, 20);
 
           // Stop the simulation on a mismatch
           return -1;  
@@ -194,43 +75,13 @@ int check_dut_and_ref(VysyxSoCFull* top, paddr_t start_addr, size_t size) {
 
       return -1;  // End simulation
   }
-/*
-#ifdef ENABLE_MEMORY_CHECK
-  // ----------- 检查内存 -----------
-  // Allocate buffers for memory comparison
-  std::vector<uint8_t> ref_mem(size, 0); // Buffer to store memory from REF
-  std::vector<uint8_t> dut_mem(size, 0); // Buffer to store memory from DUT
-
-  // Copy memory from REF to ref_mem buffer
-  ref_difftest_memcpy(start_addr, ref_mem.data(), size, DIFFTEST_TO_DUT);
-
-  // Copy memory from DUT to dut_mem buffer
-  for (size_t i = 0; i < size; ++i) {
-      dut_mem[i] = Memory::pmem_read(start_addr + i) & 0xFF; // Read one byte at a time
-  }
-
-  // Compare REF memory and DUT memory
-  if (memcmp(ref_mem.data(), dut_mem.data(), size) != 0) {
-      // If there's a mismatch, find the first mismatched byte
-      for (size_t i = 0; i < size; ++i) {
-          if (ref_mem[i] != dut_mem[i]) {
-              std::cerr << "Memory mismatch detected!" << std::endl;
-              std::cerr << "Address: 0x" << std::hex << (start_addr + i) << std::endl;
-              std::cerr << "REF: 0x" << std::hex << static_cast<int>(ref_mem[i]) << std::endl;
-              std::cerr << "DUT: 0x" << std::hex << static_cast<int>(dut_mem[i]) << std::endl;
-              print_memory((start_addr + i), 40); // Optional memory dump
-              return -1;
-          }
-      }
-  }
-#endif
-*/
   // If no mismatches, return 0
   return 0;
 }
 #endif
 
-void tick(VysyxSoCFull* top, bool silent_mode ) {
+
+void tick(void) {
     total_cycles++;
     top->clock = 0;
     top->eval();
@@ -239,10 +90,11 @@ void tick(VysyxSoCFull* top, bool silent_mode ) {
     time_i++;
 #endif
 
-  if ((!silent_mode) && (top->io_wbu_state_debug == 2)) {
+#ifndef SILENT_MODE
+  if ((top->io_wbu_state_debug == 2)) {
       printf("------------------------------------------------------------------------------\n");
       std::cout << "Instruction Info: "
-                << "Instruction: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_inst_debug
+                << "Instruction: " << std::setw(8) << disassemble_instruction(top->io_inst_debug)
                 << ", PC: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_pc_debug << "\n"
                 << "Write-Back Info: "
                 << "wb_data: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_wb_data_debug
@@ -263,39 +115,23 @@ void tick(VysyxSoCFull* top, bool silent_mode ) {
                 << ", Arbiter_state: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->io_Arbiter_state_debug)
                 << std::dec << std::endl;
   }
-
-
-/*
-    // print some debug info of memory write
-    if (top->mem_wen_debug == 1 && !silent_mode ) {  
-        print_memory(top->dmem_addr_debug, 20);
-                << ", Data: 0x" << std::setw(8) << std::setfill('0') << top->dmem_wdata_debug
-                << ", Mask: 0x" << std::setw(2) << static_cast<unsigned>(top->wmask_debug) 
-                << std::dec << std::endl;
-    }
-
-    // print some debug info of memory read
-    if (top->mem_en_debug == 1 && top->mem_wen_debug != 1 && !silent_mode ) {  
-            std::cout << "Memory Read  - Addr: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->dmem_addr_debug
-                      << std::dec << std::endl;
-    }
-*/
+#endif
 
     top->clock = 1;
     top->eval();
-    Verilated::timeInc(1); // 增加仿真时间
+    Verilated::timeInc(1);
 }
 
 
 void reset(VysyxSoCFull* top, int cycles) {
     top->reset = 1;
     for (int i = 0; i < cycles; ++i) {
-        tick(top, true);  // forbidden single-step mode
+        tick();  // forbidden single-step mode
     }
     top->reset = 0;
 }
 
-/* We use the `readline' library to provide more flexibility to read from stdin. */
+/* We use the 'readline' library to provide more flexibility to read from stdin. */
 static char* rl_gets() {
     static char *line_read = NULL;
   
@@ -315,15 +151,15 @@ static char* rl_gets() {
 
 static int need_check = 0;
 static int execute_single_step() {
-  tick(top, is_silent_mode);  
+  tick();
 #ifdef DIFFTEST
   if (need_check) {
-    need_check = (top->io_wbu_state_debug == 2);
+    need_check = NEED_CHECK(top);
     ref_difftest_exec(1);
     ref_difftest_regcpy(&ref, DIFFTEST_TO_REF);
     return check_dut_and_ref(top, 0, 0);
   } else {
-    need_check = (top->io_wbu_state_debug == 2);
+    need_check = NEED_CHECK(top);
     return 0;
   }
 #else 
@@ -386,7 +222,7 @@ static int cmd_info(char* args){
   char *arg = strtok(NULL, "");
 
   if (arg == NULL){
-    printf("info r : 打印寄存器状态\n");
+    printf("Note: Currently only the 'info r' command is available, which prints register contents\n");
   } else if (strcmp(arg, "r") == 0) {
     print_register_values();
   } else {
@@ -411,8 +247,7 @@ static int cmd_x(char* args){
   
   int len = 4 * arg0;
 
-  print_memory((paddr_t)((uintptr_t)arg1 & 0xFFFFFFFF), len);
-
+  printf("Memory dump skipped (SDRAM access is non-trivial)\n");
   return 0;
 }
 
@@ -472,14 +307,12 @@ int main(int argc, char **argv) {
 
     // Load program
     load_program(argv[1]);
-    // Initialize flash
-    // Memory::init_flash();
 
     // Initialize SDRAM chips
-    init_sdram(0);
-    init_sdram(1);
-    init_sdram(2);
-    init_sdram(3);
+    SDRAM::init(0);
+    SDRAM::init(1);
+    SDRAM::init(2);
+    SDRAM::init(3);
 
 #ifdef DIFFTEST
     // Initialize difftest
@@ -513,7 +346,5 @@ int main(int argc, char **argv) {
     delete top;
     return 0;
 }
-
-
 
 

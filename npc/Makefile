@@ -2,6 +2,7 @@
 VERILATOR = verilator
 TOP_MODULE = ../ysyxSoC/build/ysyxSoCFull.v
 CSRC = $(wildcard csrc/*.cpp)
+HEADERS = $(wildcard csrc/include/*.h) $(wildcard include/*.hpp) $(wildcard csrc/*.h) $(wildcard csrc/*.hpp)
 V_FILES = $(shell find vsrc -name "*.v")
 SV_FILES = $(shell find vsrc -name "*.sv")
 VSRC = $(V_FILES) $(SV_FILES)
@@ -9,19 +10,19 @@ INCLUDE_DIRS = -Ivsrc/perip/uart16550/rtl -Ivsrc/perip/spi/rtl
 CHISEL_DIR := ./npc-chisel
 OBJ_DIR = obj_dir
 EXEC = $(OBJ_DIR)/VysyxSoCFull
-STEP_MODE = run
 FLAGS += -Wno-lint -Wno-style --timescale "1ns/1ns" --no-timing  --autoflush --stats 
+STEP_MODE = step
 
 
 # 默认目标
 all: $(EXEC)
 
 # 编译 Verilator 模型并生成可执行文件
-$(EXEC): $(TOP_MODULE) $(CSRC) $(VSRC)
+$(EXEC): $(TOP_MODULE) $(CSRC) $(VSRC) $(HEADERS)
 	$(VERILATOR) $(FLAGS) --cc $(TOP_MODULE) --trace --exe $(CSRC) $(VSRC) $(INCLUDE_DIRS) \
                     --build -j 0 --top-module ysyxSoCFull \
                     --Mdir $(OBJ_DIR)  \
-                    -LDFLAGS "-lreadline -L/usr/local/lib"
+					-LDFLAGS "-lcapstone -lreadline -L/usr/local/lib"
 	+make -C $(OBJ_DIR) -f VysyxSoCFull.mk 
 
 verilog: 
