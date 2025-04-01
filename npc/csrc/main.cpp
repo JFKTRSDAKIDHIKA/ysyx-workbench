@@ -100,8 +100,6 @@ void tick(void) {
 
     // Memory trace
     std::string inst_str = disassemble_instruction(top->io_lsu_reg_inst_debug);
-
-    printf("Instruction: %s\n", inst_str.c_str());
     
     bool is_load = (inst_str[0] == 'l');  
     bool is_store = (inst_str[0] == 's'); 
