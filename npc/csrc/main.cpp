@@ -358,15 +358,16 @@ int main(int argc, char **argv) {
     if (step_mode) {
       if (sdb_mainloop() < 0) {
         itrace.printTrace();
+        mtrace.printTrace();
         return -1;
       }
     } else {
       if (cmd_c(NULL) < 0) {
         itrace.printTrace();
+        mtrace.printTrace();
         return -1;
       }
     }
-    mtrace.printTrace();
 
     auto end_time = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> elapsed = end_time - start_time;
