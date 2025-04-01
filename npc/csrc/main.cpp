@@ -10,6 +10,7 @@
 #include "include/config.h"
 #include "include/dpi_interface.h"
 #include "include/simulation.h"
+#include "include/itrace.h"
 #include <iostream>
 #include <svdpi.h>
 #include <iomanip> 
@@ -26,6 +27,7 @@ VysyxSoCFull* top;      // Top module (global)
 static bool step_mode;  // Step mode flag (global)
 static riscv32_CPU_state ref;
 static int total_cycles;
+InstructionTrace itrace;
 
 #ifdef TRACE
 static int time_i = 0;
@@ -90,32 +92,37 @@ void tick(void) {
     time_i++;
 #endif
 
-#ifndef SILENT_MODE
   if ((top->io_wbu_state_debug == 2)) {
-      printf("------------------------------------------------------------------------------\n");
-      std::cout << "Instruction Info: "
-                << "Instruction: " << std::setw(8) << disassemble_instruction(top->io_inst_debug)
-                << ", PC: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_pc_debug << "\n"
-                << "Write-Back Info: "
-                << "wb_data: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_wb_data_debug
-                << ", wbu_reg_dmem_rdata: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_wbu_reg_dmem_rdata_debug
-                << ", wb_wen: 0x" << std::hex << static_cast<int>(top->io_wb_wen_debug)
-                << ", wb_sel: 0x" << std::hex << static_cast<int>(top->io_wb_sel_debug) << "\n"
-                << "LSU Info: "
-                << "lsu_reg_inst: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_lsu_reg_inst_debug
-                << ", lsu_reg_dmem_addr: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_lsu_reg_dmem_addr_debug
-                << ", dmem_rdata: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_dmem_rdata_debug
-                << ", dmem_wdata: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_dmem_wdata_debug
-                << ", lsu_is_ld_or_st: 0x" << std::hex << static_cast<int>(top->io_lsu_is_ld_or_st_debug) 
-                << ", lsu_memory_ar_size 0x:" << std::hex << static_cast<int>(top->io_lsu_memory_ar_size) << "\n"
-                << "State Machines: "
-                << "ifu_state: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->io_ifu_state_debug)
-                << ", lsu_state: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->io_lsu_state_debug)
-                << ", wbu_state: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->io_wbu_state_debug)
-                << ", Arbiter_state: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->io_Arbiter_state_debug)
-                << std::dec << std::endl;
-  }
+    // instruction trace
+    itrace.addEntry(top->io_pc_debug, top->io_inst_debug);
+
+    // print cpu execution information
+#ifndef SILENT_MODE
+    printf("------------------------------------------------------------------------------\n");
+    std::cout << "Instruction Info: "
+              << "Instruction: " << std::setw(8) << disassemble_instruction(top->io_inst_debug)
+              << ", PC: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_pc_debug << "\n"
+              << "Write-Back Info: "
+              << "wb_data: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_wb_data_debug
+              << ", wbu_reg_dmem_rdata: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_wbu_reg_dmem_rdata_debug
+              << ", wb_wen: 0x" << std::hex << static_cast<int>(top->io_wb_wen_debug)
+              << ", wb_sel: 0x" << std::hex << static_cast<int>(top->io_wb_sel_debug) << "\n"
+              << "LSU Info: "
+              << "lsu_reg_inst: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_lsu_reg_inst_debug
+              << ", lsu_reg_dmem_addr: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_lsu_reg_dmem_addr_debug
+              << ", dmem_rdata: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_dmem_rdata_debug
+              << ", dmem_wdata: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_dmem_wdata_debug
+              << ", lsu_is_ld_or_st: 0x" << std::hex << static_cast<int>(top->io_lsu_is_ld_or_st_debug) 
+              << ", lsu_memory_ar_size 0x:" << std::hex << static_cast<int>(top->io_lsu_memory_ar_size) << "\n"
+              << "State Machines: "
+              << "ifu_state: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->io_ifu_state_debug)
+              << ", lsu_state: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->io_lsu_state_debug)
+              << ", wbu_state: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->io_wbu_state_debug)
+              << ", Arbiter_state: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->io_Arbiter_state_debug)
+              << std::dec << std::endl;
 #endif
+
+  }
 
     top->clock = 1;
     top->eval();
@@ -325,9 +332,15 @@ int main(int argc, char **argv) {
     auto start_time = std::chrono::high_resolution_clock::now();
     
     if (step_mode) {
-      if (sdb_mainloop() < 0) return -1;
+      if (sdb_mainloop() < 0) {
+        itrace.printTrace();
+        return -1;
+      }
     } else {
-      if (cmd_c(NULL) < 0) return -1;
+      if (cmd_c(NULL) < 0) {
+        itrace.printTrace();
+        return -1;
+      }
     }
 
     auto end_time = std::chrono::high_resolution_clock::now();

@@ -45,6 +45,7 @@ VM_USER_CLASSES = \
 	difftest \
 	disassemble \
 	dpi_interface \
+	itrace \
 	main \
 	memory \
 	program_loader \
@@ -70,6 +71,8 @@ difftest.o: csrc/difftest.cpp
 disassemble.o: csrc/disassemble.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 dpi_interface.o: csrc/dpi_interface.cpp
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+itrace.o: csrc/itrace.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 main.o: csrc/main.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
