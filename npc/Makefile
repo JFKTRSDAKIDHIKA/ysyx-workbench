@@ -9,7 +9,7 @@ INCLUDE_DIRS = -Ivsrc/perip/uart16550/rtl -Ivsrc/perip/spi/rtl
 CHISEL_DIR := ./npc-chisel
 OBJ_DIR = obj_dir
 EXEC = $(OBJ_DIR)/VysyxSoCFull
-STEP_MODE = run
+STEP_MODE = step
 FLAGS += -Wno-lint -Wno-style --timescale "1ns/1ns" --no-timing  --autoflush --stats 
 
 
