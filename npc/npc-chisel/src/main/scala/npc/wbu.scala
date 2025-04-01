@@ -104,8 +104,8 @@ class WBU extends Module with RISCVConstants{
   wb_wen := MuxLookup(opcode, false.B)(Seq(
     OPCODE_LUI    -> false.B, // LUI
     OPCODE_AUIPC  -> true.B, // AUIPC
-    OPCODE_RTYPE  -> true.B, // R-type
-    OPCODE_ITYPE  -> true.B, // I-type
+    OPCODE_RTYPE  -> false.B, // R-type
+    OPCODE_ITYPE  -> false.B, // I-type
     OPCODE_LOAD   -> true.B, // LOAD
     OPCODE_JAL    -> true.B, // JAL
     OPCODE_JALR   -> true.B  // JALR
