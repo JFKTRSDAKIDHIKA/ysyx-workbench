@@ -8,5 +8,5 @@ test:
 	sbt test
 
 clean:
-	rm -rf ./generated ./project ./target ./test_run_dir ../vsrc/generated
+	rm -rf ./generated ./project ./target ./test_run_dir ../vsrc/generated ./Core.sv
 

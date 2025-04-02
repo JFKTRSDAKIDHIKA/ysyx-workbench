@@ -25,6 +25,7 @@ $(EXEC): $(TOP_MODULE) $(CSRC) $(VSRC) $(HEADERS)
 					-LDFLAGS "-lcapstone -lreadline -L/usr/local/lib"
 	+make -C $(OBJ_DIR) -f VysyxSoCFull.mk 
 
+# Compile chisel to verilog
 verilog: 
 	$(MAKE) -C $(CHISEL_DIR)
 
@@ -36,6 +37,7 @@ sim: $(EXEC)
 # 清理生成文件
 clean:
 	rm -rf $(OBJ_DIR)
+	$(MAKE) -C $(CHISEL_DIR) clean
 
 # 包含上级目录的 Makefile
 include ../Makefile
