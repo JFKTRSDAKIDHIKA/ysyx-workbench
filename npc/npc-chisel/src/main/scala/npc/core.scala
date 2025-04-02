@@ -4,6 +4,7 @@ import chisel3._
 import chisel3.util._
 import common._
 import common.constants.RISCVConstants 
+import _root_.circt.stage.{ChiselStage, FirtoolOption}
 
 class Core extends Module with RISCVConstants {
     val io = IO(new Bundle {
@@ -116,6 +117,16 @@ class Core extends Module with RISCVConstants {
 }
 
 object Main extends App {
-    println("Generating the core hardware")
-    emitVerilog(new Core(), Array("--target-dir", "../vsrc/generated"))
+  println("Generating the core hardware")
+  ChiselStage.emitSystemVerilogFile(new Core(),
+    firtoolOpts = Array(
+      "--lowering-options=noAlwaysComb,disallowLocalVariables,disallowPackedArrays,disallowPortDeclSharing,disallowExpressionInliningInPorts,disallowMuxInlining,locationInfoStyle=none",
+      "-O=release",
+      "--disable-all-randomization",
+      "--preserve-values=named",
+      "--export-module-hierarchy",
+      "--split-verilog",              
+      "-o=../vsrc/generated/"
+    )
+  )
 }

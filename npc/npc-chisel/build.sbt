@@ -19,4 +19,3 @@ val chiselVersion = "6.5.0"
 addCompilerPlugin("org.chipsalliance" % "chisel-plugin" % chiselVersion cross CrossVersion.full)
 libraryDependencies += "org.chipsalliance" %% "chisel" % chiselVersion
 libraryDependencies += "edu.berkeley.cs" %% "chiseltest" % "6.0.0"
-
