@@ -28,4 +28,7 @@ class Xbar extends Module with RISCVConstants {
   }.otherwise {
     io.soc <> io.in
   }
+
+  // This XBar does not handle address decoding errors (e.g., 0x0400_0000).  
+  // The downstream SoC XBar performs this check and returns a DECERR via AXI4-Lite resp.
 }
