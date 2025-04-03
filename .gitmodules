@@ -4,3 +4,9 @@
 [submodule "am-kernels"]
 	path = am-kernels
 	url = git@github.com:NJU-ProjectN/am-kernels.git
+[submodule "third_party/yosys-sta"]
+	path = third_party/yosys-sta
+	url = git@github.com:OSCPU/yosys-sta.git
+[submodule "yosys-sta"]
+	path = yosys-sta
+	url = git@github.com:OSCPU/yosys-sta.git

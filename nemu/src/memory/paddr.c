@@ -53,6 +53,8 @@ uint8_t* guest_to_host(paddr_t paddr) {
     return sram + paddr - CONFIG_SRAM_BASE;
   } else if (IS_FLASH_ADDR(paddr)) {
     return flash + paddr - CONFIG_FLASH_BASE;
+  } else if (IS_PMEM_ADDR(paddr)) {
+    return pmem + paddr - CONFIG_MBASE; 
   } else {
     assert("Invalid memory");
     return NULL; 
@@ -66,6 +68,8 @@ paddr_t host_to_guest(uint8_t *haddr) {
     return haddr - sram + CONFIG_SRAM_BASE;
   } else if (IS_FLASH_ADDR(haddr - flash + CONFIG_FLASH_BASE)) {
     return haddr - flash + CONFIG_FLASH_BASE;
+  } else if (IS_PMEM_ADDR(haddr - pmem + CONFIG_MBASE)) {
+    return haddr - pmem + CONFIG_MBASE; 
   } else {
     assert("Invalid memory");
     return -1; 
@@ -115,7 +119,7 @@ void init_mem() {
 }
 
 word_t paddr_read(paddr_t addr, int len) {
-  if (IS_SDRAM_ADDR(addr) || IS_SRAM_ADDR(addr) || IS_FLASH_ADDR(addr)) {
+  if (IS_PMEM_ADDR(addr) || IS_SDRAM_ADDR(addr) || IS_SRAM_ADDR(addr) || IS_FLASH_ADDR(addr)) {
     word_t data = pmem_read(addr, len);
 
 #ifdef CONFIG_MTRACE
@@ -133,7 +137,7 @@ word_t paddr_read(paddr_t addr, int len) {
 }
 
 void paddr_write(paddr_t addr, int len, word_t data) {
-  if (IS_SDRAM_ADDR(addr) || IS_SRAM_ADDR(addr)) {
+  if (IS_PMEM_ADDR(addr) || IS_SDRAM_ADDR(addr) || IS_SRAM_ADDR(addr)) {
     pmem_write(addr, len, data);
 
 #ifdef CONFIG_MTRACE

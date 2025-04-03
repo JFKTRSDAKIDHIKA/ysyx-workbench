@@ -35,14 +35,6 @@ class RegisterFile extends BlackBox with HasBlackBoxInline {
       |    // DPI-C function to get the register values
       |    import "DPI-C" function void get_register_values(input logic [31:0] rf[31:0]);
       |
-      |    // initialize the register file 
-      |    initial begin
-      |        integer i;
-      |        for (i = 0; i < 2**ADDR_WIDTH; i = i + 1) begin
-      |            rf[i] = {DATA_WIDTH{1'b0}};
-      |        end
-      |    end
-      |
       |    // signal declaration
       |    reg [DATA_WIDTH-1:0] rf [2**ADDR_WIDTH-1:0];
       |

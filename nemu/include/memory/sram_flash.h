@@ -21,5 +21,7 @@
     ((addr) >= CONFIG_SRAM_BASE && (addr) <= CONFIG_SRAM_TOP)
 #define IS_FLASH_ADDR(addr) \
     ((addr) >= CONFIG_FLASH_BASE && (addr) <= CONFIG_FLASH_TOP)
+#define IS_PMEM_ADDR(addr) \
+    ((addr) >= CONFIG_MBASE && ((addr) <= (CONFIG_MBASE + CONFIG_MSIZE - 1)))
 
 #endif
