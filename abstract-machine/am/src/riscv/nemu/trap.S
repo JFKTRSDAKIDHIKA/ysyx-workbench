@@ -60,7 +60,7 @@ __am_asm_trap:
   mv a0, sp
   call __am_irq_handle
 
-  # 将栈顶指针切换到新进程的上下文结构
+  # Switch the stack pointer to the new process's context structure, a critical step in context switching
   mv sp, a0
 
   LOAD t1, OFFSET_STATUS(sp)
