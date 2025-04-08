@@ -10,7 +10,8 @@ class ExecuteMessage extends Message {
     val dmem_addr = UInt(32.W)       
     val result = UInt(32.W)         
     val rs2_data = UInt(32.W)     
-    val wb_addr = UInt(5.W)       
+    val wb_addr = UInt(5.W)  
+    val csr_rdata = UInt(32.W)
 }
 
 class EXUIO extends Bundle {
@@ -62,6 +63,7 @@ class EXU extends Module with RISCVConstants {
   val exu_reg_pc = RegEnable(io.in.bits.pc, io.in.fire)
   val exu_reg_rs2_data = RegEnable(io.in.bits.rs2_data, io.in.fire)
   val exu_reg_wb_addr = RegEnable(io.in.bits.wb_addr, io.in.fire)
+  val exu_reg_csr_rdata = RegEnable(io.in.bits.csr_rdata, io.in.fire)
 
   // Control logic
   val opcode = exu_reg_inst(OPCODE_MSB, OPCODE_LSB)
@@ -125,6 +127,7 @@ class EXU extends Module with RISCVConstants {
   io.out.bits.result := alu_result
   io.out.bits.rs2_data := exu_reg_rs2_data
   io.out.bits.wb_addr := exu_reg_wb_addr
+  io.out.bits.csr_rdata := exu_reg_csr_rdata
 }
 
 

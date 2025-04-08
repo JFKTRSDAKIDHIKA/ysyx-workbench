@@ -10,6 +10,7 @@ module LSU(
   input  [31:0] io_in_bits_result,
   input  [31:0] io_in_bits_rs2_data,
   input  [4:0]  io_in_bits_wb_addr,
+  input  [31:0] io_in_bits_csr_rdata,
   input         io_out_ready,
   output        io_out_valid,
   output [31:0] io_out_bits_inst,
@@ -17,6 +18,7 @@ module LSU(
   output [31:0] io_out_bits_dmem_rdata,
   output [31:0] io_out_bits_result,
   output [4:0]  io_out_bits_wb_addr,
+  output [31:0] io_out_bits_csr_rdata,
   output        io_lsu_axi_resp_err,
   output [31:0] io_memory_aw_addr,
   output [2:0]  io_memory_aw_size,
@@ -60,6 +62,7 @@ module LSU(
   reg  [31:0] lsu_reg_result;
   reg  [31:0] lsu_reg_rs2_data;
   reg  [4:0]  lsu_reg_wb_addr;
+  reg  [31:0] lsu_reg_csr_rdata;
   wire [9:0]  _mem_access_control_T = {lsu_reg_inst[6:0], lsu_reg_inst[14:12]};
   wire [1:0]  _mem_access_control_T_12 =
     _mem_access_control_T == 10'h18 ? 2'h0 : {_mem_access_control_T == 10'h1A, 1'h0};
@@ -113,6 +116,7 @@ module LSU(
       lsu_reg_result <= io_in_bits_result;
       lsu_reg_rs2_data <= io_in_bits_rs2_data;
       lsu_reg_wb_addr <= io_in_bits_wb_addr;
+      lsu_reg_csr_rdata <= io_in_bits_csr_rdata;
     end
     if (reset) begin
       delayedData <= 32'h0;
@@ -169,6 +173,7 @@ module LSU(
   assign io_out_bits_dmem_rdata = delayedData;
   assign io_out_bits_result = lsu_reg_result;
   assign io_out_bits_wb_addr = lsu_reg_wb_addr;
+  assign io_out_bits_csr_rdata = lsu_reg_csr_rdata;
   assign io_lsu_axi_resp_err = ~_GEN_12 & _GEN_5 & _GEN_10;
   assign io_memory_aw_addr = _GEN_8 ? 32'h0 : lsu_reg_dmem_addr;
   assign io_memory_aw_size = _GEN_8 ? 3'h2 : _memory_ctl_io_dmem_rw_size;

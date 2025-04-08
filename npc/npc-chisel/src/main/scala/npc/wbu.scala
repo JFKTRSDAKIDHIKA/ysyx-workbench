@@ -67,6 +67,7 @@ class WBU extends Module with RISCVConstants{
   val wbu_reg_result = RegEnable(io.in.bits.result, io.in.fire)
   val wbu_reg_dmem_rdata = RegEnable(io.in.bits.dmem_rdata, io.in.fire)
   val wbu_reg_wb_addr = RegEnable(io.in.bits.wb_addr, io.in.fire)
+  val wbu_reg_csr_rdata = RegEnable(io.in.bits.csr_rdata, io.in.fire)
 
   // Control signal
   val opcode = wbu_reg_inst(OPCODE_MSB, OPCODE_LSB)
@@ -77,7 +78,7 @@ class WBU extends Module with RISCVConstants{
   val pc_plus4 = wbu_reg_pc + 4.U
 
   // Write back select signal generation
-  val wb_sel = Wire(UInt(2.W))
+  val wb_sel = Wire(UInt(3.W))
   wb_sel := MuxLookup(opcode, WB_X)(Seq(
     OPCODE_LUI    -> WB_ALU, // LUI
     OPCODE_AUIPC  -> WB_ALU, // AUIPC
@@ -85,7 +86,7 @@ class WBU extends Module with RISCVConstants{
     OPCODE_ITYPE  -> WB_ALU, // I-type
     OPCODE_LOAD   -> WB_MEM, // LOAD
     OPCODE_BRANCH -> WB_X, // Branch
-    OPCODE_CSR    -> WB_X, // CSR
+    OPCODE_CSR    -> WB_CSR, // CSR
     OPCODE_JAL    -> WB_PC4, // JAL
     OPCODE_JALR   -> WB_PC4  // JALR
   ))
@@ -96,7 +97,8 @@ class WBU extends Module with RISCVConstants{
     WB_X   -> 0.U,             
     WB_PC4 -> pc_plus4,        
     WB_ALU -> wbu_reg_result,     
-    WB_MEM -> wbu_reg_dmem_rdata   
+    WB_MEM -> wbu_reg_dmem_rdata,
+    WB_CSR -> wbu_reg_csr_rdata
   ))
 
   // Register file write enable signal generation
@@ -108,7 +110,8 @@ class WBU extends Module with RISCVConstants{
     OPCODE_ITYPE  -> true.B, // I-type
     OPCODE_LOAD   -> true.B, // LOAD
     OPCODE_JAL    -> true.B, // JAL
-    OPCODE_JALR   -> true.B  // JALR
+    OPCODE_JALR   -> true.B, // JALR
+    OPCODE_CSR    -> true.B  // CSR
   ))
 
   // Assign output signals

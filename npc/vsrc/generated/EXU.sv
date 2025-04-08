@@ -10,6 +10,7 @@ module EXU(
   input  [31:0] io_in_bits_alu_op1,
   input  [31:0] io_in_bits_alu_op2,
   input  [31:0] io_in_bits_rs2_data,
+  input  [31:0] io_in_bits_csr_rdata,
   input         io_out_ready,
   output        io_out_valid,
   output [31:0] io_out_bits_inst,
@@ -17,7 +18,8 @@ module EXU(
   output [31:0] io_out_bits_dmem_addr,
   output [31:0] io_out_bits_result,
   output [31:0] io_out_bits_rs2_data,
-  output [4:0]  io_out_bits_wb_addr
+  output [4:0]  io_out_bits_wb_addr,
+  output [31:0] io_out_bits_csr_rdata
 );
 
   wire [31:0] _alu_instance_io_result;
@@ -30,6 +32,7 @@ module EXU(
   reg  [31:0] exu_reg_pc;
   reg  [31:0] exu_reg_rs2_data;
   reg  [4:0]  exu_reg_wb_addr;
+  reg  [31:0] exu_reg_csr_rdata;
   wire        _alu_op_T_24 = exu_reg_inst[31:25] == 7'h20;
   reg  [4:0]  casez_tmp;
   always @(*) begin
@@ -96,6 +99,7 @@ module EXU(
       exu_reg_pc <= io_in_bits_pc;
       exu_reg_rs2_data <= io_in_bits_rs2_data;
       exu_reg_wb_addr <= io_in_bits_wb_addr;
+      exu_reg_csr_rdata <= io_in_bits_csr_rdata;
     end
   end // always @(posedge)
   ALU alu_instance (
@@ -112,5 +116,6 @@ module EXU(
   assign io_out_bits_result = _alu_instance_io_result;
   assign io_out_bits_rs2_data = exu_reg_rs2_data;
   assign io_out_bits_wb_addr = exu_reg_wb_addr;
+  assign io_out_bits_csr_rdata = exu_reg_csr_rdata;
 endmodule
 

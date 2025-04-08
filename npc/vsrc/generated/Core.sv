@@ -120,6 +120,7 @@ module Core(
   wire [31:0] _lsu_io_out_bits_dmem_rdata;
   wire [31:0] _lsu_io_out_bits_result;
   wire [4:0]  _lsu_io_out_bits_wb_addr;
+  wire [31:0] _lsu_io_out_bits_csr_rdata;
   wire [31:0] _lsu_io_memory_aw_addr;
   wire [2:0]  _lsu_io_memory_aw_size;
   wire        _lsu_io_memory_aw_valid;
@@ -141,6 +142,7 @@ module Core(
   wire [31:0] _exu_io_out_bits_result;
   wire [31:0] _exu_io_out_bits_rs2_data;
   wire [4:0]  _exu_io_out_bits_wb_addr;
+  wire [31:0] _exu_io_out_bits_csr_rdata;
   wire        _idu_io_out_ready;
   wire [31:0] _idu_io_rs1_data;
   wire [31:0] _idu_io_rs2_data;
@@ -151,6 +153,7 @@ module Core(
   wire [31:0] _idu_io_out_bits_alu_op1;
   wire [31:0] _idu_io_out_bits_alu_op2;
   wire [31:0] _idu_io_out_bits_rs2_data;
+  wire [31:0] _idu_io_out_bits_csr_rdata;
   wire [4:0]  _idu_io_rs1_addr;
   wire [4:0]  _idu_io_rs2_addr;
   wire        _ifu_io_out_ready;
@@ -197,28 +200,29 @@ module Core(
     .io_ifu_state_debug  (io_ifu_state_debug)
   );
   IDU idu (
-    .clock                (clock),
-    .reset                (reset),
-    .io_in_ready          (_ifu_io_out_ready),
-    .io_in_valid          (_ifu_io_out_valid),
-    .io_in_bits_inst      (_ifu_io_out_bits_inst),
-    .io_in_bits_pc        (_ifu_io_out_bits_pc),
-    .io_out_ready         (_idu_io_out_ready),
-    .io_out_valid         (_idu_io_out_valid),
-    .io_out_bits_inst     (_idu_io_out_bits_inst),
-    .io_out_bits_pc       (_idu_io_out_bits_pc),
-    .io_out_bits_wb_addr  (_idu_io_out_bits_wb_addr),
-    .io_out_bits_alu_op1  (_idu_io_out_bits_alu_op1),
-    .io_out_bits_alu_op2  (_idu_io_out_bits_alu_op2),
-    .io_out_bits_rs2_data (_idu_io_out_bits_rs2_data),
-    .io_jump_reg_target   (_ifu_io_jump_reg_target),
-    .io_br_target         (_ifu_io_br_target),
-    .io_jmp_target        (_ifu_io_jmp_target),
-    .io_pc_sel            (_ifu_io_pc_sel),
-    .io_rs1_data          (_idu_io_rs1_data),
-    .io_rs2_data          (_idu_io_rs2_data),
-    .io_rs1_addr          (_idu_io_rs1_addr),
-    .io_rs2_addr          (_idu_io_rs2_addr)
+    .clock                 (clock),
+    .reset                 (reset),
+    .io_in_ready           (_ifu_io_out_ready),
+    .io_in_valid           (_ifu_io_out_valid),
+    .io_in_bits_inst       (_ifu_io_out_bits_inst),
+    .io_in_bits_pc         (_ifu_io_out_bits_pc),
+    .io_out_ready          (_idu_io_out_ready),
+    .io_out_valid          (_idu_io_out_valid),
+    .io_out_bits_inst      (_idu_io_out_bits_inst),
+    .io_out_bits_pc        (_idu_io_out_bits_pc),
+    .io_out_bits_wb_addr   (_idu_io_out_bits_wb_addr),
+    .io_out_bits_alu_op1   (_idu_io_out_bits_alu_op1),
+    .io_out_bits_alu_op2   (_idu_io_out_bits_alu_op2),
+    .io_out_bits_rs2_data  (_idu_io_out_bits_rs2_data),
+    .io_out_bits_csr_rdata (_idu_io_out_bits_csr_rdata),
+    .io_jump_reg_target    (_ifu_io_jump_reg_target),
+    .io_br_target          (_ifu_io_br_target),
+    .io_jmp_target         (_ifu_io_jmp_target),
+    .io_pc_sel             (_ifu_io_pc_sel),
+    .io_rs1_data           (_idu_io_rs1_data),
+    .io_rs2_data           (_idu_io_rs2_data),
+    .io_rs1_addr           (_idu_io_rs1_addr),
+    .io_rs2_addr           (_idu_io_rs2_addr)
   );
   EXU exu (
     .clock                 (clock),
@@ -231,6 +235,7 @@ module Core(
     .io_in_bits_alu_op1    (_idu_io_out_bits_alu_op1),
     .io_in_bits_alu_op2    (_idu_io_out_bits_alu_op2),
     .io_in_bits_rs2_data   (_idu_io_out_bits_rs2_data),
+    .io_in_bits_csr_rdata  (_idu_io_out_bits_csr_rdata),
     .io_out_ready          (_exu_io_out_ready),
     .io_out_valid          (_exu_io_out_valid),
     .io_out_bits_inst      (_exu_io_out_bits_inst),
@@ -238,7 +243,8 @@ module Core(
     .io_out_bits_dmem_addr (_exu_io_out_bits_dmem_addr),
     .io_out_bits_result    (_exu_io_out_bits_result),
     .io_out_bits_rs2_data  (_exu_io_out_bits_rs2_data),
-    .io_out_bits_wb_addr   (_exu_io_out_bits_wb_addr)
+    .io_out_bits_wb_addr   (_exu_io_out_bits_wb_addr),
+    .io_out_bits_csr_rdata (_exu_io_out_bits_csr_rdata)
   );
   LSU lsu (
     .clock                      (clock),
@@ -251,6 +257,7 @@ module Core(
     .io_in_bits_result          (_exu_io_out_bits_result),
     .io_in_bits_rs2_data        (_exu_io_out_bits_rs2_data),
     .io_in_bits_wb_addr         (_exu_io_out_bits_wb_addr),
+    .io_in_bits_csr_rdata       (_exu_io_out_bits_csr_rdata),
     .io_out_ready               (_lsu_io_out_ready),
     .io_out_valid               (_lsu_io_out_valid),
     .io_out_bits_inst           (_lsu_io_out_bits_inst),
@@ -258,6 +265,7 @@ module Core(
     .io_out_bits_dmem_rdata     (_lsu_io_out_bits_dmem_rdata),
     .io_out_bits_result         (_lsu_io_out_bits_result),
     .io_out_bits_wb_addr        (_lsu_io_out_bits_wb_addr),
+    .io_out_bits_csr_rdata      (_lsu_io_out_bits_csr_rdata),
     .io_lsu_axi_resp_err        (_ifu_io_lsu_axi_resp_err),
     .io_memory_aw_addr          (_lsu_io_memory_aw_addr),
     .io_memory_aw_size          (_lsu_io_memory_aw_size),
@@ -298,6 +306,7 @@ module Core(
     .io_in_bits_dmem_rdata       (_lsu_io_out_bits_dmem_rdata),
     .io_in_bits_result           (_lsu_io_out_bits_result),
     .io_in_bits_wb_addr          (_lsu_io_out_bits_wb_addr),
+    .io_in_bits_csr_rdata        (_lsu_io_out_bits_csr_rdata),
     .io_wb_data                  (_wbu_io_wb_data),
     .io_wb_addr                  (_wbu_io_wb_addr),
     .io_wb_wen                   (_wbu_io_wb_wen),

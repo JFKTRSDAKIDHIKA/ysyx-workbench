@@ -9,6 +9,7 @@ module WBU(
   input  [31:0] io_in_bits_dmem_rdata,
   input  [31:0] io_in_bits_result,
   input  [4:0]  io_in_bits_wb_addr,
+  input  [31:0] io_in_bits_csr_rdata,
   output [31:0] io_wb_data,
   output [4:0]  io_wb_addr,
   output        io_wb_wen,
@@ -40,34 +41,29 @@ module WBU(
   reg  [31:0] wbu_reg_result;
   reg  [31:0] wbu_reg_dmem_rdata;
   reg  [4:0]  wbu_reg_wb_addr;
+  reg  [31:0] wbu_reg_csr_rdata;
   wire        _wb_wen_T_1 = wbu_reg_inst[6:0] == 7'h37;
   wire        _wb_wen_T_2 = wbu_reg_inst[6:0] == 7'h17;
   wire        _wb_wen_T_4 = wbu_reg_inst[6:0] == 7'h33;
   wire        _wb_wen_T_6 = wbu_reg_inst[6:0] == 7'h13;
   wire        _wb_wen_T_8 = wbu_reg_inst[6:0] == 7'h3;
-  wire [1:0]  _wb_sel_T_9 =
-    _wb_wen_T_8 ? 2'h3 : {_wb_wen_T_6 | _wb_wen_T_4 | _wb_wen_T_2 | _wb_wen_T_1, 1'h0};
-  wire [1:0]  _wb_sel_T_13 =
-    wbu_reg_inst[6:0] == 7'h73 | wbu_reg_inst[6:0] == 7'h63 ? 2'h0 : _wb_sel_T_9;
+  wire [2:0]  _wb_sel_T_9 =
+    _wb_wen_T_8
+      ? 3'h3
+      : {1'h0, _wb_wen_T_6 | _wb_wen_T_4 | _wb_wen_T_2 | _wb_wen_T_1, 1'h0};
+  wire [2:0]  _wb_sel_T_11 = wbu_reg_inst[6:0] == 7'h63 ? 3'h0 : _wb_sel_T_9;
+  wire        _wb_wen_T_14 = wbu_reg_inst[6:0] == 7'h73;
+  wire [2:0]  _wb_sel_T_13 = _wb_wen_T_14 ? 3'h4 : _wb_sel_T_11;
   wire        _wb_wen_T_10 = wbu_reg_inst[6:0] == 7'h6F;
   wire        _wb_wen_T_12 = wbu_reg_inst[6:0] == 7'h67;
-  wire [1:0]  wb_sel = _wb_wen_T_12 | _wb_wen_T_10 ? 2'h1 : _wb_sel_T_13;
-  reg  [31:0] casez_tmp_0;
-  always @(*) begin
-    casez (wb_sel)
-      2'b00:
-        casez_tmp_0 = 32'h0;
-      2'b01:
-        casez_tmp_0 = wbu_reg_pc + 32'h4;
-      2'b10:
-        casez_tmp_0 = wbu_reg_result;
-      default:
-        casez_tmp_0 = wbu_reg_dmem_rdata;
-    endcase
-  end // always @(*)
+  wire [2:0]  wb_sel = _wb_wen_T_12 | _wb_wen_T_10 ? 3'h1 : _wb_sel_T_13;
+  wire [31:0] _wb_data_T_3 = wb_sel == 3'h1 ? wbu_reg_pc + 32'h4 : 32'h0;
+  wire [31:0] _wb_data_T_5 = wb_sel == 3'h2 ? wbu_reg_result : _wb_data_T_3;
+  wire [31:0] _wb_data_T_7 = wb_sel == 3'h3 ? wbu_reg_dmem_rdata : _wb_data_T_5;
+  wire [31:0] wb_data = wb_sel == 3'h4 ? wbu_reg_csr_rdata : _wb_data_T_7;
   wire        io_wb_wen_0 =
-    (_wb_wen_T_12 | _wb_wen_T_10 | _wb_wen_T_8 | _wb_wen_T_6 | _wb_wen_T_4 | _wb_wen_T_2
-     | _wb_wen_T_1) & state == 2'h1;
+    (_wb_wen_T_14 | _wb_wen_T_12 | _wb_wen_T_10 | _wb_wen_T_8 | _wb_wen_T_6 | _wb_wen_T_4
+     | _wb_wen_T_2 | _wb_wen_T_1) & state == 2'h1;
   always @(posedge clock) begin
     if (reset)
       state <= 2'h0;
@@ -79,17 +75,18 @@ module WBU(
       wbu_reg_result <= io_in_bits_result;
       wbu_reg_dmem_rdata <= io_in_bits_dmem_rdata;
       wbu_reg_wb_addr <= io_in_bits_wb_addr;
+      wbu_reg_csr_rdata <= io_in_bits_csr_rdata;
     end
   end // always @(posedge)
   assign io_in_ready = io_in_ready_0;
-  assign io_wb_data = casez_tmp_0;
+  assign io_wb_data = wb_data;
   assign io_wb_addr = wbu_reg_wb_addr;
   assign io_wb_wen = io_wb_wen_0;
   assign io_pc_wen = state == 2'h2;
   assign io_wbu_state_debug = state;
-  assign io_wb_data_debug = casez_tmp_0;
+  assign io_wb_data_debug = wb_data;
   assign io_wb_wen_debug = io_wb_wen_0;
-  assign io_wb_sel_debug = wb_sel;
+  assign io_wb_sel_debug = wb_sel[1:0];
   assign io_wbu_reg_dmem_rdata_debug = wbu_reg_dmem_rdata;
 endmodule
 
