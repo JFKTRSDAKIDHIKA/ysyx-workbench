@@ -58,13 +58,13 @@ __am_asm_trap:
   csrw mstatus, t1
 
   # 保存当前 sp
-  mv t3, sp
+  mv t0, sp
   # 为 __am_irq_handle 分配额外栈空间，例如 128 字节
   addi sp, sp, -128
-  mv a0, t3  
+  mv a0, t0  
   call __am_irq_handle
   # 恢复 sp
-  mv sp, t3
+  mv sp, t0
 
   # Switch the stack pointer to the new process's context structure, a critical step in context switching
   mv sp, a0
