@@ -19,6 +19,7 @@ module IDU(
   output [31:0] io_br_target,
   output [31:0] io_jmp_target,
   output [2:0]  io_pc_sel,
+  output [31:0] io_pc_csr,
   input  [31:0] io_rs1_data,
   input  [31:0] io_rs2_data,
   output [4:0]  io_rs1_addr,
@@ -36,13 +37,13 @@ module IDU(
   wire        _GEN_1 = state == 2'h2;
   wire        io_in_ready_0 = _GEN & io_in_valid;
   wire [19:0] _imm_i_sext_T_1 = {20{idu_reg_inst[31]}};
-  wire        _io_pc_sel_T_9 = idu_reg_inst[14:12] == 3'h0;
-  wire        _io_pc_sel_T_5 = idu_reg_inst[14:12] == 3'h1;
+  wire        _io_pc_sel_T_5 = idu_reg_inst[14:12] == 3'h0;
+  wire        _io_pc_sel_T_1 = idu_reg_inst[14:12] == 3'h1;
   reg         casez_tmp;
   wire        br_eq = io_rs1_data == io_rs2_data;
   wire        br_lt = $signed(io_rs1_data) < $signed(io_rs2_data);
   wire        br_ltu = io_rs1_data < io_rs2_data;
-  wire        _branch_taken_T_4 = _io_pc_sel_T_9 & br_eq;
+  wire        _branch_taken_T_4 = _io_pc_sel_T_5 & br_eq;
   always @(*) begin
     casez (idu_reg_inst[14:12])
       3'b000:
@@ -63,31 +64,31 @@ module IDU(
         casez_tmp = ~br_ltu;
     endcase
   end // always @(*)
-  wire        _io_pc_sel_T_7 = idu_reg_inst[14:12] == 3'h2;
+  wire        _io_pc_sel_T_3 = idu_reg_inst[14:12] == 3'h2;
   wire [11:0] _csr_instance_io_csr_addr_T_3 =
-    _io_pc_sel_T_7 | _io_pc_sel_T_5 ? idu_reg_inst[31:20] : 12'h0;
+    _io_pc_sel_T_3 | _io_pc_sel_T_1 ? idu_reg_inst[31:20] : 12'h0;
   wire [11:0] _csr_instance_io_csr_addr_T_5 =
-    _io_pc_sel_T_9 ? 12'h341 : _csr_instance_io_csr_addr_T_3;
-  wire [31:0] _csr_instance_io_csr_wdata_T_2 = _io_pc_sel_T_5 ? io_rs1_data : 32'h0;
+    _io_pc_sel_T_5 ? 12'h341 : _csr_instance_io_csr_addr_T_3;
+  wire [31:0] _csr_instance_io_csr_wdata_T_2 = _io_pc_sel_T_1 ? io_rs1_data : 32'h0;
   wire [31:0] _csr_instance_io_csr_wdata_T_4 =
-    _io_pc_sel_T_7
+    _io_pc_sel_T_3
       ? io_rs1_data | _csr_instance_io_csr_rdata
       : _csr_instance_io_csr_wdata_T_2;
   wire [31:0] _csr_instance_io_csr_wdata_T_6 =
-    _io_pc_sel_T_9 ? idu_reg_pc : _csr_instance_io_csr_wdata_T_4;
-  wire        _io_pc_sel_T_1 = idu_reg_inst[31:20] == 12'h0;
-  wire        _io_pc_sel_T_3 = idu_reg_inst[31:20] == 12'h302;
+    _io_pc_sel_T_5 ? idu_reg_pc : _csr_instance_io_csr_wdata_T_4;
+  wire        _io_pc_csr_T = idu_reg_inst[31:20] == 12'h0;
+  wire        _io_pc_csr_T_2 = idu_reg_inst[31:20] == 12'h302;
   reg         csr_instance_io_csr_wen_REG;
-  wire [2:0]  _io_pc_sel_T_2 = _io_pc_sel_T_1 ? _csr_instance_io_csr_mtvec[2:0] : 3'h0;
-  wire [2:0]  _io_pc_sel_T_4 =
-    _io_pc_sel_T_3 ? _csr_instance_io_csr_mepc[2:0] : _io_pc_sel_T_2;
-  wire [2:0]  _io_pc_sel_T_10 = _io_pc_sel_T_9 ? _io_pc_sel_T_4 : 3'h0;
+  wire [31:0] _io_pc_csr_T_1 = _io_pc_csr_T ? _csr_instance_io_csr_mtvec : 32'h0;
+  wire [31:0] _io_pc_csr_T_3 =
+    _io_pc_csr_T_2 ? _csr_instance_io_csr_mepc : _io_pc_csr_T_1;
+  wire [2:0]  _io_pc_sel_T_6 = _io_pc_sel_T_5 ? 3'h5 : 3'h0;
   wire        _alu_op2Sel_T_4 = idu_reg_inst[6:0] == 7'h67;
-  wire [2:0]  _io_pc_sel_T_12 = _alu_op2Sel_T_4 ? 3'h3 : 3'h0;
+  wire [2:0]  _io_pc_sel_T_8 = _alu_op2Sel_T_4 ? 3'h3 : 3'h0;
   wire        _alu_op2Sel_T_6 = idu_reg_inst[6:0] == 7'h6F;
-  wire [2:0]  _io_pc_sel_T_14 = _alu_op2Sel_T_6 ? 3'h2 : _io_pc_sel_T_12;
+  wire [2:0]  _io_pc_sel_T_10 = _alu_op2Sel_T_6 ? 3'h2 : _io_pc_sel_T_8;
   wire        _alu_op2Sel_T_8 = idu_reg_inst[6:0] == 7'h63;
-  wire [2:0]  _io_pc_sel_T_16 = _alu_op2Sel_T_8 ? {2'h0, casez_tmp} : _io_pc_sel_T_14;
+  wire [2:0]  _io_pc_sel_T_12 = _alu_op2Sel_T_8 ? {2'h0, casez_tmp} : _io_pc_sel_T_10;
   wire        _alu_op2Sel_T_11 = idu_reg_inst[6:0] == 7'h3;
   wire        _alu_op2Sel_T_12 = idu_reg_inst[6:0] == 7'h23;
   wire        _alu_op2Sel_T_14 = idu_reg_inst[6:0] == 7'h33;
@@ -114,7 +115,7 @@ module IDU(
       idu_reg_pc <= io_in_bits_pc;
     end
     csr_instance_io_csr_wen_REG <=
-      _io_pc_sel_T_9 ? ~_io_pc_sel_T_3 & _io_pc_sel_T_1 : _io_pc_sel_T_7 | _io_pc_sel_T_5;
+      _io_pc_sel_T_5 ? ~_io_pc_csr_T_2 & _io_pc_csr_T : _io_pc_sel_T_3 | _io_pc_sel_T_1;
     if (reset)
       state <= 2'h0;
     else if (_GEN) begin
@@ -166,7 +167,8 @@ module IDU(
        idu_reg_inst[20],
        idu_reg_inst[30:21],
        1'h0};
-  assign io_pc_sel = idu_reg_inst[6:0] == 7'h73 ? _io_pc_sel_T_10 : _io_pc_sel_T_16;
+  assign io_pc_sel = idu_reg_inst[6:0] == 7'h73 ? _io_pc_sel_T_6 : _io_pc_sel_T_12;
+  assign io_pc_csr = _io_pc_sel_T_5 ? _io_pc_csr_T_3 : 32'h0;
   assign io_rs1_addr = idu_reg_inst[19:15];
   assign io_rs2_addr = idu_reg_inst[24:20];
 endmodule

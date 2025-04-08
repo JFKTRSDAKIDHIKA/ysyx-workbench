@@ -12,6 +12,7 @@ module IFU(
   input  [31:0] io_jmp_target,
   input         io_pc_wen,
   input         io_lsu_axi_resp_err,
+  input  [31:0] io_pc_csr,
   output [31:0] io_memory_ar_addr,
   output        io_memory_ar_valid,
   input         io_memory_ar_ready,
@@ -27,6 +28,28 @@ module IFU(
 
   reg  [31:0] pc;
   reg  [31:0] if_inst_buffer;
+  reg  [31:0] casez_tmp;
+  wire [31:0] _pc_plus4_T = pc + 32'h4;
+  always @(*) begin
+    casez (io_pc_sel)
+      3'b000:
+        casez_tmp = _pc_plus4_T;
+      3'b001:
+        casez_tmp = io_br_target;
+      3'b010:
+        casez_tmp = io_jmp_target;
+      3'b011:
+        casez_tmp = io_jump_reg_target;
+      3'b100:
+        casez_tmp = 32'h0;
+      3'b101:
+        casez_tmp = io_pc_csr;
+      3'b110:
+        casez_tmp = _pc_plus4_T;
+      default:
+        casez_tmp = _pc_plus4_T;
+    endcase
+  end // always @(*)
   reg  [2:0]  state;
   wire        _GEN = state == 3'h0;
   wire        _GEN_0 = state == 3'h2;
@@ -44,18 +67,8 @@ module IFU(
       state <= 3'h1;
     end
     else begin
-      if (io_pc_wen) begin
-        if (io_pc_sel == 3'h4)
-          pc <= 32'h0;
-        else if (io_pc_sel == 3'h2)
-          pc <= io_jmp_target;
-        else if (io_pc_sel == 3'h1)
-          pc <= io_br_target;
-        else if (io_pc_sel == 3'h3)
-          pc <= io_jump_reg_target;
-        else
-          pc <= pc + 32'h4;
-      end
+      if (io_pc_wen)
+        pc <= casez_tmp;
       if (_GEN_4 | ~(_GEN_2 & io_memory_r_valid)) begin
       end
       else

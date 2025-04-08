@@ -25,6 +25,7 @@ class IDUIO extends Bundle {
     val br_target = Output(UInt(32.W))
     val jmp_target = Output(UInt(32.W))
     val pc_sel = Output(UInt(3.W))
+    val pc_csr = Output(UInt(32.W))
 
     // Interact with register file
     val rs1_data = Input(UInt(32.W))
@@ -139,6 +140,12 @@ class IDU extends Module with RISCVConstants{
         ))
       ))
     )
+    io.pc_csr := MuxLookup(funct3, PC_4)(Seq(
+        FUNCT3_ECALL -> MuxLookup(csr_funct12, PC_4)(Seq(
+            FUNCT12_ECALL -> csr_instance.io.csr_mtvec,
+            FUNCT12_MRET  -> csr_instance.io.csr_mepc
+        )),
+    ))
 
     // pc_sel signal generation
     io.pc_sel := MuxLookup(opcode, PC_4)(Seq(
@@ -148,10 +155,7 @@ class IDU extends Module with RISCVConstants{
         OPCODE_CSR -> MuxLookup(funct3, PC_4)(Seq(
             FUNCT3_CSRRW -> PC_4,
             FUNCT3_CSRRS -> PC_4,
-            FUNCT3_ECALL -> MuxLookup(csr_funct12, PC_4)(Seq(
-                FUNCT12_ECALL -> csr_instance.io.csr_mtvec,
-                FUNCT12_MRET -> csr_instance.io.csr_mepc
-            ))
+            FUNCT3_ECALL -> PC_CSR
         ))
     ))
 

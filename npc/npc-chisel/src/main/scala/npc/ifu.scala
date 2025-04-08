@@ -18,6 +18,7 @@ class IFU extends Module with RISCVConstants {
     val jmp_target = Input(UInt(32.W))
     val pc_wen = Input(Bool())
     val lsu_axi_resp_err = Input(Bool())
+    val pc_csr = Input(UInt(32.W))
 
     // AXI4-Lite memory interface
     val memory = new AXI4IO
@@ -56,7 +57,8 @@ class IFU extends Module with RISCVConstants {
     PC_JR -> io.jump_reg_target,
     PC_BR -> io.br_target,
     PC_J -> io.jmp_target,
-    PC_EXC -> exception
+    PC_EXC -> exception,
+    PC_CSR -> io.pc_csr
   ))
 
   // Output current pc

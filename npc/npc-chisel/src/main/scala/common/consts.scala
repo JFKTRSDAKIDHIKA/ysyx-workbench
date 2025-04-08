@@ -15,6 +15,7 @@ trait RISCVConstants
    val PC_J   = 2.asUInt(3.W)  // jump_target
    val PC_JR  = 3.asUInt(3.W)  // jump_reg_target
    val PC_EXC = 4.asUInt(3.W)  // exception
+   val PC_CSR = 5.asUInt(3.W)  // CSR target
 
    // abstract out instruction decode magic numbers
    val RD_MSB  = 11

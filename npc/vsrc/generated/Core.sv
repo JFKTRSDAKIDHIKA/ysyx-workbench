@@ -163,6 +163,7 @@ module Core(
   wire [31:0] _ifu_io_jmp_target;
   wire        _ifu_io_pc_wen;
   wire        _ifu_io_lsu_axi_resp_err;
+  wire [31:0] _ifu_io_pc_csr;
   wire        _ifu_io_memory_ar_ready;
   wire [31:0] _ifu_io_memory_r_data;
   wire        _ifu_io_memory_r_valid;
@@ -187,6 +188,7 @@ module Core(
     .io_jmp_target       (_ifu_io_jmp_target),
     .io_pc_wen           (_ifu_io_pc_wen),
     .io_lsu_axi_resp_err (_ifu_io_lsu_axi_resp_err),
+    .io_pc_csr           (_ifu_io_pc_csr),
     .io_memory_ar_addr   (_ifu_io_memory_ar_addr),
     .io_memory_ar_valid  (_ifu_io_memory_ar_valid),
     .io_memory_ar_ready  (_ifu_io_memory_ar_ready),
@@ -219,6 +221,7 @@ module Core(
     .io_br_target          (_ifu_io_br_target),
     .io_jmp_target         (_ifu_io_jmp_target),
     .io_pc_sel             (_ifu_io_pc_sel),
+    .io_pc_csr             (_ifu_io_pc_csr),
     .io_rs1_data           (_idu_io_rs1_data),
     .io_rs2_data           (_idu_io_rs2_data),
     .io_rs1_addr           (_idu_io_rs1_addr),
