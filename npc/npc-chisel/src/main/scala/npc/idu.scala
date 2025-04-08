@@ -131,12 +131,14 @@ class IDU extends Module with RISCVConstants{
         FUNCT3_ECALL -> idu_reg_pc
     )) 
     csr_instance.io.csr_wen := RegNext(
-      MuxLookup(funct3, false.B)(Seq(
-        FUNCT3_CSRRW -> true.B,
-        FUNCT3_CSRRS -> true.B,
-        FUNCT3_ECALL -> MuxLookup(csr_funct12, false.B)(Seq(
-          FUNCT12_ECALL -> true.B,
-          FUNCT12_MRET -> false.B
+      MuxLookup(opcode, false.B)(Seq(
+        OPCODE_CSR -> MuxLookup(funct3, false.B)(Seq(
+          FUNCT3_CSRRW -> true.B,
+          FUNCT3_CSRRS -> true.B,
+          FUNCT3_ECALL -> MuxLookup(csr_funct12, false.B)(Seq(
+            FUNCT12_ECALL -> true.B,
+            FUNCT12_MRET -> false.B
+          ))
         ))
       ))
     )
