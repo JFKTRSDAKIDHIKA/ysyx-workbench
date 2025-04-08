@@ -19,69 +19,68 @@ SECTIONS {
   . = ORIGIN(flash);
   _flash_start = .;
 
-  _sdram_start = ORIGIN(sdram);
-  _sdram_end = ORIGIN(sdram) + LENGTH(sdram);
-
-  /* First stage Bootloader 段：VMA 和 LMA 都在 Flash 中 */
+  /* FSBL: 加载地址和运行地址都在 flash */
   .FSBL : {
-    *(entry)   /* 程序入口点 */
-    *(.FSBL*)  /* 匹配所有 .FSBL 段 */
+    *(entry)
+    *(.FSBL*)
   } > flash AT> flash : FSBL
+  . = ALIGN(4);  /* 对齐下一个段 */
 
-  . = ALIGN(4K);
-
-  /* Second stage Bootloader 段：VMA 在SRAM， LMA 都在 Flash 中 */
-  .SSBL : {
-    _SSBL_lma = LOADADDR(.SSBL);
+  /* SSBL: 运行地址在 sram，加载地址在 flash */
+  _SSBL_load = .;  /* SSBL 在 flash 中的 LMA */
+  .SSBL : AT(_SSBL_load) {
     . = ORIGIN(sram);
     _SSBL = .;
-    *(.SSBL*)  /* 匹配所有 .SSBL 段 */
+    *(.SSBL*)
     _eSSBL = .;
-  } > sram AT> flash : SSBL
+  } > sram : SSBL
+  . = _SSBL_load + SIZEOF(.SSBL);
+  . = ALIGN(4);
 
-  . = ORIGIN(flash) + LENGTH(flash) / 2;
-
-  .text : {
-    _text_lma = LOADADDR(.text);
-    _text = .;    /* .text段在sdram的起始地址 */
+  /* text: VMA 在 sdram，LMA 继续在 flash 末尾 */
+  _text_load = .;
+  .text : AT(_text_load) {
+    _text = .;
     *(.text*)
     *(.rodata*)
     . = ALIGN(4);
-    _etext = .;   /* .text段在sdram的结束地址 */
-  } > sdram AT> flash : text
+    _etext = .;
+  } > sdram : text
+  . = _text_load + SIZEOF(.text);
+  . = ALIGN(4);
 
-  . = ALIGN(4K);
-
-  .data : {
-    _data_lma = LOADADDR(.data);  /* LMA（加载地址）来自 flash */
-    _data = .;                    /* VMA（运行时地址）在 sdram */
-    *(.data .data.* .sdata.*)     /* 匹配所有 .data 和 .data.* 子段 和.sdata.* 子段*/
+  /* data: VMA 在 sdram，LMA 继续在 flash 后 */
+  _data_load = .;
+  .data : AT(_data_load) {
+    _data = .;
+    *(.data .data.* .sdata.*)
     _edata = .;
-  } > sdram AT> flash : data
+  } > sdram : data
   _data_len = _edata - _data;
+  . = _data_load + SIZEOF(.data);
+  . = ALIGN(4);
 
+  /* bss: 运行时分配，不需要 LMA */
   .bss : {
-	  _bss_start = .;
+    _bss_start = .;
     *(.bss*)
     *(.sbss*)
     *(.scommon)
     _ebss = .;
   } > sdram : bss
 
-  /* 将栈分配到 SRAM 中 */
+  /* stack: 放在 sram 的末尾 */
   .stack : {
-    . = _eSSBL;         
-    _stack_bottom = .;        
-    . = ORIGIN(sram) + LENGTH(sram);  
-    _stack_top = .;            
-    _stack_pointer = .;       
+    . = _eSSBL;
+    _stack_bottom = .;
+    . = ORIGIN(sram) + LENGTH(sram);
+    _stack_top = .;
+    _stack_pointer = .;
   } > sram
-  
-  /* 堆起始地址仍放在 SDRAM 中，紧跟 .bss 之后 */
+
   . = _ebss;
   _heap_start = ALIGN(0x1000);
 
   end = .;
   _end = .;
-
 }
