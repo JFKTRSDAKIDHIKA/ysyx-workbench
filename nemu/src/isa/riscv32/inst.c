@@ -162,7 +162,7 @@ static int decode_exec(Decode *s) {
     switch (imm) {
       case 0x300: R(rd) = cpu.csr.mstatus; cpu.csr.mstatus |= src1; break;
       case 0x305: R(rd) = cpu.csr.mtvec;   cpu.csr.mtvec   |= src1; break;
-      case 0x341: R(rd) = cpu.csr.mtvec;   cpu.csr.mepc    |= src1; break;
+      case 0x341: R(rd) = cpu.csr.mepc;   cpu.csr.mepc    |= src1; break;
       case 0x342: R(rd) = cpu.csr.mcause;  cpu.csr.mcause  |= src1; break;
       default: INV(s->pc);
     }
