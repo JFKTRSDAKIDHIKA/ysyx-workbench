@@ -61,7 +61,7 @@ __am_asm_trap:
   call __am_irq_handle
 
   # Switch the stack pointer to the new process's context structure, a critical step in context switching
-  # mv sp, a0
+  mv sp, a0
 
   LOAD t1, OFFSET_STATUS(sp)
   LOAD t2, OFFSET_EPC(sp)
