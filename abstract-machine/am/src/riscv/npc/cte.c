@@ -1,6 +1,17 @@
 #include <am.h>
 #include <riscv/riscv.h>
 #include <klib.h>
+#include <stdio.h>
+
+void print_context(Context *c) {
+  printf("=== Context at %x ===\n", c);
+  for (int i = 0; i < NR_REGS; i++) {
+    printf("gpr[%d] = 0x%x\n", i, c->gpr[i]);
+  }
+  printf("mepc    = 0x%x\n", c->mepc);
+  printf("mcause  = 0x%x\n", c->mcause);
+  printf("mstatus = 0x%x\n", c->mstatus);
+}
 
 static Context* (*user_handler)(Event, Context*) = NULL;
 
@@ -39,6 +50,7 @@ Context *kcontext(Area kstack, void (*entry)(void *), void *arg) {
   c->mepc = (uintptr_t)entry;
   c->gpr[2] = (uintptr_t)kstack.end;
   c->gpr[10] = (uintptr_t)arg;  
+  print_context(c);
   return c;
 }
 
