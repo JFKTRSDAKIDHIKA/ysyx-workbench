@@ -3,7 +3,7 @@
 
 // Feature toggles
 #define DIFFTEST
-#define SILENT_MODE
+// #define SILENT_MODE
 //#define ENABLE_WAVEFORM
 //#define TRACE
 
