@@ -130,8 +130,7 @@ class IDU extends Module with RISCVConstants{
         FUNCT3_CSRRS -> (io.rs1_data | csr_instance.io.csr_rdata),
         FUNCT3_ECALL -> idu_reg_pc
     )) 
-    csr_instance.io.csr_wen := RegNext(
-      MuxLookup(opcode, false.B)(Seq(
+    csr_instance.io.csr_wen := MuxLookup(opcode, false.B)(Seq(
         OPCODE_CSR -> MuxLookup(funct3, false.B)(Seq(
           FUNCT3_CSRRW -> true.B,
           FUNCT3_CSRRS -> true.B,
@@ -141,7 +140,6 @@ class IDU extends Module with RISCVConstants{
           ))
         ))
       ))
-    )
     io.pc_csr := MuxLookup(funct3, PC_4)(Seq(
         FUNCT3_ECALL -> MuxLookup(csr_funct12, PC_4)(Seq(
             FUNCT12_ECALL -> csr_instance.io.csr_mtvec,

@@ -26,6 +26,7 @@ module IDU(
   output [4:0]  io_rs2_addr
 );
 
+  wire        _csr_instance_io_csr_wen;
   wire [31:0] _csr_instance_io_csr_rdata;
   wire [31:0] _csr_instance_io_csr_mtvec;
   wire [31:0] _csr_instance_io_csr_mepc;
@@ -78,8 +79,9 @@ module IDU(
     _io_pc_sel_T_5 ? idu_reg_pc : _csr_instance_io_csr_wdata_T_4;
   wire        _io_pc_csr_T = idu_reg_inst[31:20] == 12'h0;
   wire        _io_pc_csr_T_2 = idu_reg_inst[31:20] == 12'h302;
+  wire        _csr_instance_io_csr_wen_T_9 =
+    _io_pc_sel_T_5 ? ~_io_pc_csr_T_2 & _io_pc_csr_T : _io_pc_sel_T_3 | _io_pc_sel_T_1;
   wire        _io_pc_sel_T_13 = idu_reg_inst[6:0] == 7'h73;
-  reg         csr_instance_io_csr_wen_REG;
   wire [31:0] _io_pc_csr_T_1 = _io_pc_csr_T ? _csr_instance_io_csr_mtvec : 32'h0;
   wire [31:0] _io_pc_csr_T_3 =
     _io_pc_csr_T_2 ? _csr_instance_io_csr_mepc : _io_pc_csr_T_1;
@@ -110,14 +112,11 @@ module IDU(
         casez_tmp_0 = io_rs2_data;
     endcase
   end // always @(*)
-  wire        _csr_instance_io_csr_wen_T_9 =
-    _io_pc_sel_T_5 ? ~_io_pc_csr_T_2 & _io_pc_csr_T : _io_pc_sel_T_3 | _io_pc_sel_T_1;
   always @(posedge clock) begin
     if (io_in_ready_0 & io_in_valid) begin
       idu_reg_inst <= io_in_bits_inst;
       idu_reg_pc <= io_in_bits_pc;
     end
-    csr_instance_io_csr_wen_REG <= _io_pc_sel_T_13 & _csr_instance_io_csr_wen_T_9;
     if (reset)
       state <= 2'h0;
     else if (_GEN) begin
@@ -129,13 +128,14 @@ module IDU(
     else if (_GEN_1 & io_out_ready)
       state <= 2'h0;
   end // always @(posedge)
+  assign _csr_instance_io_csr_wen = _io_pc_sel_T_13 & _csr_instance_io_csr_wen_T_9;
   CSRFile csr_instance (
     .clock        (clock),
     .reset        (reset),
     .io_csr_addr  (_csr_instance_io_csr_addr_T_5),
     .io_csr_wdata (_csr_instance_io_csr_wdata_T_6),
     .io_csr_rdata (_csr_instance_io_csr_rdata),
-    .io_csr_wen   (csr_instance_io_csr_wen_REG),
+    .io_csr_wen   (_csr_instance_io_csr_wen),
     .io_csr_mtvec (_csr_instance_io_csr_mtvec),
     .io_csr_mepc  (_csr_instance_io_csr_mepc)
   );
