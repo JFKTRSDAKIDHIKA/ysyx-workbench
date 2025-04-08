@@ -57,14 +57,11 @@ __am_asm_trap:
   or t1, t1, a0
   csrw mstatus, t1
 
-  # 保存当前 sp
-  mv t1, sp
-  # 为 __am_irq_handle 分配额外栈空间，例如 128 字节
-  addi sp, sp, -128
-  mv a0, t1  // a0 = 上下文地址
+  mv a0, sp
   call __am_irq_handle
-  # 恢复 sp
-  mv sp, t1
+
+  # 切换到新上下文
+  mv sp, a0
 
   LOAD t1, OFFSET_STATUS(sp)
   LOAD t2, OFFSET_EPC(sp)
