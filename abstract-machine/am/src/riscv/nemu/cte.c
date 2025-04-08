@@ -8,7 +8,10 @@ Context* __am_irq_handle(Context *c) {
     Event ev = {0};
     switch (c->mcause) {
       // value in mcause is not standard 
-      case 0x8: ev.event = EVENT_YIELD; break;
+      case 0x8: 
+        ev.event = EVENT_YIELD; 
+        c->mepc += 4;
+        break;
       default: ev.event = EVENT_ERROR; break;
     }
 
