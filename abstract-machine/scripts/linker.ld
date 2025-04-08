@@ -4,8 +4,9 @@ PHDRS {
   FSBL PT_LOAD;  
   SSBL PT_LOAD;  
   text PT_LOAD; 
+  rodata PT_LOAD;
   data PT_LOAD;
-  bss  PT_NULL;
+  bss PT_NULL;
 }
 
 MEMORY {
@@ -18,69 +19,89 @@ MEMORY {
 SECTIONS {
   . = ORIGIN(flash);
   _flash_start = .;
+  _sdram_start = ORIGIN(sdram);
+  _sdram_end = ORIGIN(sdram) + LENGTH(sdram);
 
-  /* FSBL: 加载地址和运行地址都在 flash */
-  .FSBL : {
-    *(entry)
-    *(.FSBL*)
+  /* First stage bootloader */
+  .FSBL : ALIGN(8) {
+    *(entry)   
+    *(.FSBL*)  
+    . = ALIGN(8);
   } > flash AT> flash : FSBL
-  . = ALIGN(4);  /* 对齐下一个段 */
 
-  /* SSBL: 运行地址在 sram，加载地址在 flash */
-  _SSBL_load = .;  /* SSBL 在 flash 中的 LMA */
-  .SSBL : AT(_SSBL_load) {
-    . = ORIGIN(sram);
+  . = ALIGN(4);
+
+  /* Second stage bootloader - VMA in SRAM, LMA in flash */
+  .SSBL : ALIGN(8) {
+    _SSBL_lma = LOADADDR(.SSBL);
     _SSBL = .;
-    *(.SSBL*)
+    *(.SSBL*)  
+    . = ALIGN(8);
     _eSSBL = .;
-  } > sram : SSBL
-  . = _SSBL_load + SIZEOF(.SSBL);
+  } > sram AT> flash : SSBL
+
   . = ALIGN(4);
 
-  /* text: VMA 在 sdram，LMA 继续在 flash 末尾 */
-  _text_load = .;
-  .text : AT(_text_load) {
-    _text = .;
+  /* Text section */
+  .text : ALIGN(8) {
+    _text_lma = LOADADDR(.text);
+    _text = .;    
     *(.text*)
+    . = ALIGN(8);
+    _etext = .;   
+  } > sdram AT> flash : text
+
+  /* Read-only data */
+  .rodata : ALIGN(8) {
+    _rodata_lma = LOADADDR(.rodata);
+    _rodata = .;
     *(.rodata*)
-    . = ALIGN(4);
-    _etext = .;
-  } > sdram : text
-  . = _text_load + SIZEOF(.text);
-  . = ALIGN(4);
+    *(.srodata*)
+    . = ALIGN(8);
+    _erodata = .;
+  } > sdram AT> flash : rodata
 
-  /* data: VMA 在 sdram，LMA 继续在 flash 后 */
-  _data_load = .;
-  .data : AT(_data_load) {
-    _data = .;
-    *(.data .data.* .sdata.*)
+  /* Data sections */
+  .data : ALIGN(8) {
+    _data_lma = LOADADDR(.data);
+    _data = .;                    
+    *(.data*)
+    *(.sdata*)
+    *(.data.extra)
+    . = ALIGN(8);
     _edata = .;
-  } > sdram : data
+  } > sdram AT> flash : data
   _data_len = _edata - _data;
-  . = _data_load + SIZEOF(.data);
-  . = ALIGN(4);
 
-  /* bss: 运行时分配，不需要 LMA */
-  .bss : {
+  /* BSS section */
+  .bss (NOLOAD) : ALIGN(8) {
     _bss_start = .;
     *(.bss*)
     *(.sbss*)
     *(.scommon)
+    . = ALIGN(8);
     _ebss = .;
   } > sdram : bss
 
-  /* stack: 放在 sram 的末尾 */
-  .stack : {
+  /* Stack section in SRAM */
+  .stack (NOLOAD) : {
     . = _eSSBL;
     _stack_bottom = .;
-    . = ORIGIN(sram) + LENGTH(sram);
+    . = ORIGIN(sram) + LENGTH(sram) - 8;
     _stack_top = .;
     _stack_pointer = .;
   } > sram
 
-  . = _ebss;
-  _heap_start = ALIGN(0x1000);
-
+  /* Heap starts after BSS */
+  . = ALIGN(0x1000);
+  _heap_start = .;
+  
   end = .;
   _end = .;
+
+  /* Discard unused sections */
+  /DISCARD/ : {
+    *(.eh_frame)
+    *(.note.GNU-stack)
+  }
 }
