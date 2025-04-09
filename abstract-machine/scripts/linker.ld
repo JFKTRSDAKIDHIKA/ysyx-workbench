@@ -43,12 +43,13 @@ SECTIONS {
     _etext = .;
   } > sdram : text
   _flash_lma += SIZEOF(.text);
-  .data : AT( _flash_lma ) {
+  .data : AT(_flash_lma) {
     _data_lma = LOADADDR(.data);
     _data = .;
-    *(.data) *(.data.*) *(.sdata.*)
+    *(.data) *(.data.*) *(.sdata.*) *(.data.extra)  
     _edata = .;
   } > sdram : data
+  _flash_lma += SIZEOF(.data);
 
   .bss : {
     . = ALIGN(4);
@@ -60,7 +61,6 @@ SECTIONS {
     _ebss = .;
   } > sdram : bss
 
-  /* 将栈分配到 SRAM 中 */
   .stack : {
     . = _eSSBL;    
     . = ALIGN(4);       
@@ -70,7 +70,6 @@ SECTIONS {
     _stack_pointer = .;       
   } > sram
   
-  /* 堆起始地址仍放在 SDRAM 中，紧跟 .bss 之后 */
   . = _ebss;
   _heap_start = ALIGN(0x1000);
 
