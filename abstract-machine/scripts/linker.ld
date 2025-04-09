@@ -63,7 +63,7 @@ SECTIONS {
     *(.scommon)
     . = ALIGN(4);
     _ebss = .;
-  } > sdram : bss
+  } > sdram : NONE
 
   .stack : {
     . = _eSSBL;    
@@ -72,7 +72,7 @@ SECTIONS {
     . = ORIGIN(sram) + LENGTH(sram);  
     _stack_top = .;            
     _stack_pointer = .;       
-  } > sram
+  } > sram : NONE
   
   . = _ebss;
   _heap_start = ALIGN(0x1000);
