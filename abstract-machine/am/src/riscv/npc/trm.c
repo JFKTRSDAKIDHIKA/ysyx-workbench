@@ -26,7 +26,7 @@ __attribute__((section(".SSBL")))
 void second_stage_boot_loader() {
   // External symbols
   extern char _etext, _text, _text_lma;
-  extern char _edata, _data, _data_lma;
+  extern char _edata, _data, _data_extra_lma;
   extern int main(const char *args);
 
   // Copy .text section
@@ -54,7 +54,7 @@ void second_stage_boot_loader() {
 
   // Copy .data section
   if (&_edata > &_data) {
-    uint32_t *src = (uint32_t *)&_data_lma;
+    uint32_t *src = (uint32_t *)&_data_extra_lma;
     uint32_t *dst = (uint32_t *)&_data;
     unsigned long data_size = (uintptr_t)&_edata - (uintptr_t)&_data;
     

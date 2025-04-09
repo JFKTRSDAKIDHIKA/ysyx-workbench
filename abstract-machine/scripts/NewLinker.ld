@@ -55,16 +55,19 @@ SECTIONS {
   _data_len = _edata - _data;
 
   .bss : {
-	  _bss_start = .;
+    . = ALIGN(4);
+	_bss_start = .;
     *(.bss*)
     *(.sbss*)
     *(.scommon)
+    . = ALIGN(4);
     _ebss = .;
   } > sdram : bss
 
   /* 将栈分配到 SRAM 中 */
   .stack : {
-    . = _eSSBL;         
+    . = _eSSBL;    
+    . = ALIGN(4);       
     _stack_bottom = .;        
     . = ORIGIN(sram) + LENGTH(sram);  
     _stack_top = .;            

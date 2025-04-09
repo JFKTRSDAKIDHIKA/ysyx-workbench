@@ -57,7 +57,7 @@ SECTIONS {
   /* Add data.extra section */
   .data.extra : {
     _data_extra_lma = _flash_lma;
-    _data_extra = .;
+    _data = .;
     *(.data.extra*)
     . = ALIGN(4);
     _edata_extra = .;
@@ -67,7 +67,6 @@ SECTIONS {
 
   .data : {
     _data_lma = _flash_lma;
-    _data = .;
     *(.data .data.* .sdata.*)
     . = ALIGN(4);
     _edata = .;
