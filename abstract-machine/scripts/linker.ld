@@ -18,72 +18,45 @@ MEMORY {
 SECTIONS {
   . = ORIGIN(flash);
   _flash_start = .;
-  _flash_lma = ORIGIN(flash);
 
   _sdram_start = ORIGIN(sdram);
   _sdram_end = ORIGIN(sdram) + LENGTH(sdram);
 
-  /* First stage Bootloader */
+  /* First stage Bootloader 段：VMA 和 LMA 都在 Flash 中 */
   .FSBL : {
-    *(entry)   
-    *(.FSBL*)  
+    *(entry)   /* 程序入口点 */
+    *(.FSBL*)  /* 匹配所有 .FSBL 段 */
   } > flash AT> flash : FSBL
 
-  _flash_lma = _flash_lma + SIZEOF(.FSBL);
-
-  /* Second stage Bootloader */
+  /* Second stage Bootloader 段：VMA 在SRAM， LMA 都在 Flash 中 */
   .SSBL : {
-    _SSBL_lma = _flash_lma;  /* Fix: Set correct LMA for SSBL */
+    _SSBL_lma = LOADADDR(.SSBL);
     . = ORIGIN(sram);
     _SSBL = .;
-    *(.SSBL*)
+    *(.SSBL*)  /* 匹配所有 .SSBL 段 */
     _eSSBL = .;
   } > sram AT> flash : SSBL
 
-  _flash_lma = _flash_lma + SIZEOF(.SSBL);
-
   .text : {
-    _text_lma = _flash_lma;  /* Fix: Use tracked LMA */
-    _text = .;
+    _text_lma = LOADADDR(.text);
+    _text = .;    /* .text段在sdram的起始地址 */
     *(.text*)
     *(.rodata*)
-    *(.srodata*)
-    . = ALIGN(4);  /* Fix: Better alignment */
-    _etext = .;
+    . = ALIGN(4);
+    _etext = .;   /* .text段在sdram的结束地址 */
   } > sdram AT> flash : text
 
-  _flash_lma = _flash_lma + SIZEOF(.text);
-
-  /* Add data.extra section */
-  .data.extra : {
-    _data_extra_lma = _flash_lma;
-    _data = .;
-    *(.data.extra*)
-    . = ALIGN(4);
-    _edata_extra = .;
-  } > sdram AT> flash : data
-
-  _flash_lma = _flash_lma + SIZEOF(.data.extra);
-
   .data : {
-    _data_lma = _flash_lma;
-    *(.data .data.* .sdata.*)
-    . = ALIGN(4);
+    _data_lma = LOADADDR(.data);  /* LMA（加载地址）来自 flash */
+    _data = .;                    /* VMA（运行时地址）在 sdram */
+    *(.data .data.* .sdata.*)     /* 匹配所有 .data 和 .data.* 子段 和.sdata.* 子段*/
     _edata = .;
   } > sdram AT> flash : data
+  _data_len = _edata - _data;
 
-  /* Add bss.extra section */
-  .bss.extra (NOLOAD) : {
+  .bss : {
     . = ALIGN(4);
-    _bss_extra_start = .;
-    *(.bss.extra*)
-    . = ALIGN(4);
-    _bss_extra_end = .;
-  } > sdram : bss
-
-  .bss (NOLOAD) : {
-    . = ALIGN(4);
-    _bss_start = .;
+	_bss_start = .;
     *(.bss*)
     *(.sbss*)
     *(.scommon)
@@ -91,19 +64,21 @@ SECTIONS {
     _ebss = .;
   } > sdram : bss
 
-  /* Stack in SRAM */
-  .stack (NOLOAD) : {
-    . = _eSSBL;
-    . = ALIGN(4);         
+  /* 将栈分配到 SRAM 中 */
+  .stack : {
+    . = _eSSBL;    
+    . = ALIGN(4);       
     _stack_bottom = .;        
     . = ORIGIN(sram) + LENGTH(sram);  
     _stack_top = .;            
     _stack_pointer = .;       
-  } > sram : bss
-
+  } > sram
+  
+  /* 堆起始地址仍放在 SDRAM 中，紧跟 .bss 之后 */
   . = _ebss;
   _heap_start = ALIGN(0x1000);
 
   end = .;
   _end = .;
+
 }
