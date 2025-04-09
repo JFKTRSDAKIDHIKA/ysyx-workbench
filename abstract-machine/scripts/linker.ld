@@ -29,52 +29,73 @@ SECTIONS {
     *(.FSBL*)  
   } > flash AT> flash : FSBL
 
+  _flash_lma = _flash_lma + SIZEOF(.FSBL);
+
   /* Second stage Bootloader */
   .SSBL : {
-    _SSBL_lma = LOADADDR(.SSBL);
+    _SSBL_lma = _flash_lma;  /* Fix: Set correct LMA for SSBL */
     . = ORIGIN(sram);
     _SSBL = .;
     *(.SSBL*)
     _eSSBL = .;
   } > sram AT> flash : SSBL
 
-  /* Text section */
+  _flash_lma = _flash_lma + SIZEOF(.SSBL);
+
   .text : {
-    _text_lma = LOADADDR(.text);
+    _text_lma = _flash_lma;  /* Fix: Use tracked LMA */
     _text = .;
     *(.text*)
     *(.rodata*)
     *(.srodata*)
-    . = ALIGN(8);
+    . = ALIGN(4);  /* Fix: Better alignment */
     _etext = .;
   } > sdram AT> flash : text
 
-  /* Combine all data sections */
-  .data : ALIGN(8) {
-    _data_lma = LOADADDR(.data);
+  _flash_lma = _flash_lma + SIZEOF(.text);
+
+  /* Add data.extra section */
+  .data.extra : {
+    _data_extra_lma = _flash_lma;
+    _data_extra = .;
+    *(.data.extra*)
+    . = ALIGN(4);
+    _edata_extra = .;
+  } > sdram AT> flash : data
+
+  _flash_lma = _flash_lma + SIZEOF(.data.extra);
+
+  .data : {
+    _data_lma = _flash_lma;
     _data = .;
-    *(.data.extra)    /* Include .data.extra first */
-    *(.data .data.*)  /* Then regular .data sections */
-    *(.sdata .sdata.*)
-    . = ALIGN(8);
+    *(.data .data.* .sdata.*)
+    . = ALIGN(4);
     _edata = .;
   } > sdram AT> flash : data
 
-  /* Combine all bss sections */
-  .bss (NOLOAD) : ALIGN(8) {
+  /* Add bss.extra section */
+  .bss.extra (NOLOAD) : {
+    . = ALIGN(4);
+    _bss_extra_start = .;
+    *(.bss.extra*)
+    . = ALIGN(4);
+    _bss_extra_end = .;
+  } > sdram : bss
+
+  .bss (NOLOAD) : {
+    . = ALIGN(4);
     _bss_start = .;
-    *(.bss.extra)     /* Include .bss.extra first */
-    *(.bss .bss.*)    /* Then regular .bss sections */
-    *(.sbss .sbss.*)
+    *(.bss*)
+    *(.sbss*)
     *(.scommon)
-    . = ALIGN(8);
+    . = ALIGN(4);
     _ebss = .;
   } > sdram : bss
 
   /* Stack in SRAM */
   .stack (NOLOAD) : {
     . = _eSSBL;
-    . = ALIGN(8);         
+    . = ALIGN(4);         
     _stack_bottom = .;        
     . = ORIGIN(sram) + LENGTH(sram);  
     _stack_top = .;            
@@ -86,9 +107,4 @@ SECTIONS {
 
   end = .;
   _end = .;
-
-  /DISCARD/ : {
-    *(.eh_frame)
-    *(.note.GNU-stack)
-  }
 }
