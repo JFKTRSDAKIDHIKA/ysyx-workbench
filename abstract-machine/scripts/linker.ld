@@ -40,7 +40,7 @@ SECTIONS {
     _eSSBL = .;
   } > sram AT> flash : SSBL
 
-  _sdram_start = _sdram_start + SIZEOF(.SSBL);
+  _flash_lma = _flash_lma + SIZEOF(.SSBL);
 
   .text : {
     _text_lma = LOADADDR(.text);
@@ -52,7 +52,7 @@ SECTIONS {
     _etext = .;   /* .text段在sdram的结束地址 */
   } > sdram AT> flash : text
 
-  _sdram_start = _sdram_start + SIZEOF(.text);
+  _flash_lma = _flash_lma + SIZEOF(.text);
 
   .data : {
     _data_lma = LOADADDR(.data);  /* LMA（加载地址）来自 flash */
