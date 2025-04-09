@@ -1,12 +1,5 @@
 ENTRY(_start)
 
-PHDRS {
-  flash PT_LOAD;
-  sram PT_LOAD;
-  sdram PT_LOAD;
-  bss PT_LOAD;
-}
-
 MEMORY {
   flash : ORIGIN = 0x30000000, LENGTH = 256M
   psram : ORIGIN = 0x80000000, LENGTH = 4M
@@ -25,7 +18,7 @@ SECTIONS {
     *(entry)
     *(.FSBL*)
     . = ALIGN(4);
-  } > flash : flash
+  } > flash 
 
   _flash_lma += SIZEOF(.FSBL);
 
@@ -37,7 +30,7 @@ SECTIONS {
     *(.SSBL*)
     . = ALIGN(4);
     _eSSBL = .;
-  } > sram : sram
+  } > sram 
 
   _flash_lma += SIZEOF(.SSBL);
 
@@ -52,7 +45,7 @@ SECTIONS {
     *(.text*)
     . = ALIGN(4);
     _etext = .;
-  } > sdram : sdram
+  } > sdram 
 
   _flash_lma += SIZEOF(.text);
 
@@ -64,7 +57,7 @@ SECTIONS {
     *(.srodata.*)
     . = ALIGN(4);
     _erodata = .;
-  } > sdram : sdram
+  } > sdram 
 
   _flash_lma += SIZEOF(.rodata);
 
@@ -75,7 +68,7 @@ SECTIONS {
     /* Removed *(.data.extra) */
     . = ALIGN(4);
     _edata = .;
-  } > sdram : sdram
+  } > sdram 
 
   .bss : {
     . = ALIGN(4);
@@ -86,7 +79,7 @@ SECTIONS {
     *(.scommon)
     . = ALIGN(4);
     _ebss = .;
-  } > sdram : bss
+  } > sdram 
 
   . = _eSSBL;
   . = ALIGN(4);
