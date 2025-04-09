@@ -51,7 +51,7 @@ SECTIONS {
     _data = .;                    /* VMA（运行时地址）在 sdram */
     *(.data .data.* .sdata.*)     /* 匹配所有 .data 和 .data.* 子段 和.sdata.* 子段*/
     _edata = .;
-  } > sdram AT> flash : data
+  } > sdram AT (ADDR (.text) + SIZEOF (.text)) : data
   _data_len = _edata - _data;
 
   .bss : {

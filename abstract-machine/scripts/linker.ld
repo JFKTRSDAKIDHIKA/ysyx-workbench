@@ -42,6 +42,7 @@ SECTIONS {
     _text = .;    /* .text段在sdram的起始地址 */
     *(.text*)
     *(.rodata*)
+    *(.srodata*)
     . = ALIGN(4);
     _etext = .;   /* .text段在sdram的结束地址 */
   } > sdram AT> flash : text
