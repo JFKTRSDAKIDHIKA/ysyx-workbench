@@ -1,11 +1,8 @@
 ENTRY(_start)
 
 PHDRS { 
-  FSBL PT_LOAD;  
-  SSBL PT_LOAD;  
   text PT_LOAD; 
   data PT_LOAD;
-  bss  PT_NULL;
 }
 
 MEMORY {
@@ -23,47 +20,57 @@ SECTIONS {
     *(entry)
     *(.FSBL*)
     . = ALIGN(4);
-  } > flash : FSBL
+  } > flash : text
+
   _flash_lma += SIZEOF(.FSBL);
   .SSBL : AT( _flash_lma ) {
     _SSBL_lma = LOADADDR(.SSBL);
     . = ORIGIN(sram);
     _SSBL = .;
     *(.SSBL*)
+    . = ALIGN(4);
     _eSSBL = .;
-  } > sram : SSBL
+  } > sram : text
+
   _flash_lma += SIZEOF(.SSBL);
   .text : AT( _flash_lma ) {
     _text_lma = LOADADDR(.text);
     _text = .;
     *(.text*)
-    *(.rodata*)
-    *(.srodata*)
     . = ALIGN(4);
     _etext = .;
   } > sdram : text
+
   _flash_lma += SIZEOF(.text);
-  .data.extra : AT(_flash_lma) {
-    *(.data.extra)
-  } > sdram : data
-  _flash_lma += SIZEOF(.data.extra);
+  .rodata : AT( _flash_lma ) {
+    _rodata_lma = LOADADDR(.rodata);
+    _rodata = .;
+    *(.rodata*)
+    *(.rodata.*)
+    *(.srodata.*)
+    . = ALIGN(4);
+    _erodata = .;
+  } > sdram : text
+
+  _flash_lma += SIZEOF(.rodata);
   .data : AT(_flash_lma) {
     _data_lma = LOADADDR(.data);
     _data = .;
     *(.data) *(.data.*) *(.sdata.*) *(.data.extra)  
+    . = ALIGN(4);
     _edata = .;
   } > sdram : data
-  _flash_lma += SIZEOF(.data);
 
   .bss : {
     . = ALIGN(4);
-	_bss_start = .;
+	  _bss_start = .;
     *(.bss*)
+    *(.bss.extra)
     *(.sbss*)
     *(.scommon)
     . = ALIGN(4);
     _ebss = .;
-  } > sdram : bss
+  } > sdram : data
 
   .stack : {
     . = _eSSBL;    
