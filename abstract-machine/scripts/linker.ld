@@ -18,68 +18,59 @@ MEMORY {
 SECTIONS {
   . = ORIGIN(flash);
   _flash_start = .;
+  _flash_lma = ORIGIN(flash);
 
   _sdram_start = ORIGIN(sdram);
   _sdram_end = ORIGIN(sdram) + LENGTH(sdram);
 
-  /* First stage Bootloader: VMA and LMA in flash */
+  /* First stage Bootloader 段：VMA 和 LMA 都在 Flash 中 */
   .FSBL : {
-    *(entry)   /* Program entry point */
-    *(.FSBL*)  /* Match all .FSBL sections */
-    . = ALIGN(4);
+    *(entry)   /* 程序入口点 */
+    *(.FSBL*)  /* 匹配所有 .FSBL 段 */
   } > flash AT> flash : FSBL
 
-  /* Advance location counter in flash */
-  . = _flash_start + SIZEOF(.FSBL);
+  _flash_lma = _flash_lma + SIZEOF(.FSBL);
 
-  /* Second stage Bootloader: VMA in SRAM, LMA in flash */
+  /* Second stage Bootloader 段：VMA 在SRAM， LMA 都在 Flash 中 */
   .SSBL : {
     _SSBL_lma = LOADADDR(.SSBL);
-    . = ORIGIN(sram);  /* VMA starts in SRAM */
+    . = ORIGIN(sram);
     _SSBL = .;
-    *(.SSBL*)  /* Match all .SSBL sections */
+    *(.SSBL*)  /* 匹配所有 .SSBL 段 */
     _eSSBL = .;
   } > sram AT> flash : SSBL
 
-  /* Advance location counter in flash */
-  . = _flash_start + SIZEOF(.FSBL) + SIZEOF(.SSBL);
+  _sdram_start = _sdram_start + SIZEOF(.SSBL);
 
-  /* Text section: VMA in SDRAM, LMA in flash */
   .text : {
     _text_lma = LOADADDR(.text);
-    _text = .;    /* Start of .text in SDRAM */
+    _text = .;    /* .text段在sdram的起始地址 */
     *(.text*)
     *(.rodata*)
+    *(.srodata*)
     . = ALIGN(4);
-    _etext = .;   /* End of .text in SDRAM */
+    _etext = .;   /* .text段在sdram的结束地址 */
   } > sdram AT> flash : text
 
-  /* Advance location counter in flash */
-  . = _flash_start + SIZEOF(.FSBL) + SIZEOF(.SSBL) + SIZEOF(.text);
+  _sdram_start = _sdram_start + SIZEOF(.text);
 
-  /* Data section: VMA in SDRAM, LMA in flash */
   .data : {
-    _data_lma = LOADADDR(.data);  /* LMA from flash */
-    _data = .;                    /* VMA in SDRAM */
-    *(.data)                      /* Standard .data */
-    *(.data.*)                    /* All .data.* sections */
-    *(.sdata.*)                   /* Small data sections */
-    *(.data.extra)                /* Explicitly include .data.extra */
-    . = ALIGN(4);
+    _data_lma = LOADADDR(.data);  /* LMA（加载地址）来自 flash */
+    _data = .;                    /* VMA（运行时地址）在 sdram */
+    *(.data .data.* .sdata.*)     /* 匹配所有 .data 和 .data.* 子段 和.sdata.* 子段*/
     _edata = .;
   } > sdram AT> flash : data
   _data_len = _edata - _data;
 
-  /* BSS section: VMA in SDRAM, no LMA */
   .bss : {
-    _bss_start = .;
+	  _bss_start = .;
     *(.bss*)
     *(.sbss*)
     *(.scommon)
     _ebss = .;
   } > sdram : bss
 
-  /* Stack in SRAM */
+  /* 将栈分配到 SRAM 中 */
   .stack : {
     . = _eSSBL;         
     _stack_bottom = .;        
@@ -88,10 +79,11 @@ SECTIONS {
     _stack_pointer = .;       
   } > sram
   
-  /* Heap starts in SDRAM after .bss */
+  /* 堆起始地址仍放在 SDRAM 中，紧跟 .bss 之后 */
   . = _ebss;
   _heap_start = ALIGN(0x1000);
 
   end = .;
   _end = .;
+
 }
