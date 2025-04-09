@@ -63,7 +63,7 @@ SECTIONS {
     *(.scommon)
     . = ALIGN(4);
     _ebss = .;
-  } > sdram : NONE
+  } > sdram : bss
 
   .stack : {
     . = _eSSBL;    
