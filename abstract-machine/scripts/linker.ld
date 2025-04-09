@@ -43,6 +43,10 @@ SECTIONS {
     _etext = .;
   } > sdram : text
   _flash_lma += SIZEOF(.text);
+  .data.extra : AT(_flash_lma) {
+    *(.data.extra)
+  } > sdram : data
+  _flash_lma += SIZEOF(.data.extra);
   .data : AT(_flash_lma) {
     _data_lma = LOADADDR(.data);
     _data = .;
