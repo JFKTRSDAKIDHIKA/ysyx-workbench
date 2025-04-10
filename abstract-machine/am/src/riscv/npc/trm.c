@@ -159,7 +159,7 @@ void init_uart() {
 
 __attribute__((section(".SSBL")))
 void _trm_init() {
-  // init_uart();
+  init_uart();
   second_stage_boot_loader();
 }
 
