@@ -11,6 +11,8 @@ Context* __am_irq_handle(Context *c) {
       default: ev.event = EVENT_ERROR; break;
     }
 
+    // Not standard approach
+    ev.event = EVENT_YIELD; 
     c->mepc += 4;
 
     c = user_handler(ev, c);
