@@ -15,6 +15,7 @@ trait RISCVConstants
    val PC_J   = 2.asUInt(3.W)  // jump_target
    val PC_JR  = 3.asUInt(3.W)  // jump_reg_target
    val PC_EXC = 4.asUInt(3.W)  // exception
+   val PC_CSR = 5.asUInt(3.W)  // CSR target
 
    // abstract out instruction decode magic numbers
    val RD_MSB  = 11
@@ -122,10 +123,11 @@ trait RISCVConstants
    val MEM_ACCESS_HALF_U = 5.U  // Halfword unsigned (16-bit)
 
    // Writeback Select Signal
-   val WB_ALU  = 2.asUInt(2.W)
-   val WB_MEM  = 3.asUInt(2.W)
-   val WB_PC4  = 1.asUInt(2.W)
-   val WB_X    = 0.asUInt(2.W)
+   val WB_ALU  = 2.asUInt(3.W)
+   val WB_MEM  = 3.asUInt(3.W)
+   val WB_PC4  = 1.asUInt(3.W)
+   val WB_CSR  = 4.asUInt(3.W)
+   val WB_X    = 0.asUInt(3.W)
 
    // Define write address types
    val UART_ADDR =  0.U(3.W)
@@ -170,7 +172,23 @@ trait RISCVConstants
    // Memoey config
    val MEM_BASE   = 0x80000000L.U(32.W) 
    val MEM_TOP    = 0x80ffffffL.U(32.W)
-   
+
+   // CSR 
+   val CSR_ADDR_MSTATUS = 0x300.U(12.W) // Machine Status Register
+   val CSR_ADDR_MTVEC = 0x305.U(12.W) // Machine Trap Vector Register
+   val CSR_ADDR_MEPC  = 0x341.U(12.W) // Machine Exception Program Counter
+   val CSR_ADDR_MCAUSE = 0x342.U(12.W) // Machine Cause Register
+
+   // Funct3 constants for CSR instructions
+   val FUNCT3_CSRRW  = "b001".U(3.W) // CSR Read and Write
+   val FUNCT3_CSRRS  = "b010".U(3.W) // CSR Read and Set
+   val FUNCT3_ECALL  = "b000".U(3.W) // Environment Call
+   val FUNCT3_MRET   = "b000".U(3.W) // Environment Break
+
+   // Funct12 constants for CSR instructions
+   val FUNCT12_ECALL  = "b000000000000".U(12.W)
+   val FUNCT12_MRET   = "b001100000010".U(12.W)
+
    // The Bubble Instruction (Machine generated NOP)
    // Insert (XOR x0,x0,x0) which is different from software compiler
    // generated NOPs which are (ADDI x0, x0, 0).

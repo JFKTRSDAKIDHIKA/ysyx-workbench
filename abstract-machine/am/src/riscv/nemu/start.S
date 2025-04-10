@@ -5,6 +5,6 @@
 _start:
   mv s0, zero
   la sp, _stack_pointer
-  call _trm_init
+  call first_stage_boot_loader
 
 .size _start, . - _start

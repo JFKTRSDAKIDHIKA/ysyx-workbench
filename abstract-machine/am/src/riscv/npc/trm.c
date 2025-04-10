@@ -13,7 +13,7 @@ Area heap = RANGE(&_heap_start, &_sdram_end);
 static const char mainargs[MAINARGS_MAX_LEN] = MAINARGS_PLACEHOLDER; // defined in CFLAGS
 
 void putch(char ch) {
-  while ((inb(UART_LSR) & UART_LSR_THRE) == 0);
+  while ((inb(UART_LSR) & UART_LSR_THRE) == 0) ;
   outb(UART_TX, ch);
 }
 
@@ -27,6 +27,8 @@ void second_stage_boot_loader() {
   // External symbols
   extern char _etext, _text, _text_lma;
   extern char _edata, _data, _data_lma;
+  extern char _erodata, _rodata, _rodata_lma;
+  extern char _edata_extra, _data_extra, _data_extra_lma;
   extern int main(const char *args);
 
   // Copy .text section
@@ -52,11 +54,57 @@ void second_stage_boot_loader() {
     }
   }
 
+  // Copy .rodata section
+  if (&_erodata > &_rodata) {
+    uint32_t *src = (uint32_t *)&_rodata_lma;  // Source addr in Flash
+    uint32_t *dst = (uint32_t *)&_rodata;      // Target addr in PSRAM 
+    unsigned long rodata_size = (uintptr_t)&_erodata - (uintptr_t)&_rodata;
+    
+    // Copy in 4-byte chunks
+    unsigned long word_count = rodata_size / 4;
+    while (word_count--) {
+        *dst++ = *src++;
+    }
+    
+    // Handle remaining bytes (if size not multiple of 4)
+    unsigned long remainder = rodata_size % 4;
+    if (remainder) {
+        char *byte_src = (char *)src;
+        char *byte_dst = (char *)dst;
+        while (remainder--) {
+            *byte_dst++ = *byte_src++;
+        }
+    }
+  }
+
   // Copy .data section
   if (&_edata > &_data) {
     uint32_t *src = (uint32_t *)&_data_lma;
     uint32_t *dst = (uint32_t *)&_data;
     unsigned long data_size = (uintptr_t)&_edata - (uintptr_t)&_data;
+    
+    // Copy in 4-byte chunks
+    unsigned long word_count = data_size / 4;
+    while (word_count--) {
+        *dst++ = *src++;
+    }
+    
+    // Handle remaining bytes (if size not multiple of 4)
+    unsigned long remainder = data_size % 4;
+    if (remainder) {
+        char *byte_src = (char *)src;
+        char *byte_dst = (char *)dst;
+        while (remainder--) {
+            *byte_dst++ = *byte_src++;
+        }
+    }
+  }
+
+  // Copy .data.extra section
+  if (&_edata_extra > &_data_extra) {
+    uint32_t *src = (uint32_t *)&_data_extra_lma;
+    uint32_t *dst = (uint32_t *)&_data_extra;
+    unsigned long data_size = (uintptr_t)&_edata_extra - (uintptr_t)&_data_extra;
     
     // Copy in 4-byte chunks
     unsigned long word_count = data_size / 4;
@@ -111,7 +159,7 @@ void init_uart() {
 
 __attribute__((section(".SSBL")))
 void _trm_init() {
-  init_uart();
+  // init_uart();
   second_stage_boot_loader();
 }
 

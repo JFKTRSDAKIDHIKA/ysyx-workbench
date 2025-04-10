@@ -20,7 +20,6 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
-
 #define NEED_CHECK(top) ((top)->io_wbu_state_debug == 2)
 
 void print_config();

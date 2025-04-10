@@ -73,6 +73,7 @@ class Core extends Module with RISCVConstants {
     ifu.io.br_target        := idu.io.br_target
     ifu.io.jmp_target       := idu.io.jmp_target
     ifu.io.pc_sel           := idu.io.pc_sel
+    ifu.io.pc_csr           := idu.io.pc_csr
     // LSU -> IFU
     ifu.io.lsu_axi_resp_err := lsu.io.lsu_axi_resp_err
     // WBU -> IFU
