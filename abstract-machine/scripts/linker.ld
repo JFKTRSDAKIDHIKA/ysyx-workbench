@@ -61,6 +61,8 @@ SECTIONS {
 
   _flash_lma += SIZEOF(.rodata);
   .data.extra : AT(_flash_lma) {
+    _data_extra_lma = LOADADDR(.data.extra);
+    _data_extra = .;
     /* section information for finsh shell */
     __fsymtab_start = .;
     KEEP(*(FSymTab))
@@ -88,6 +90,7 @@ SECTIONS {
     *(__am_apps.sdata*)
     __am_apps_data_end = .;
     . = ALIGN(8);
+    _edata_extra = .;
   } > sdram
 
   _flash_lma += SIZEOF(.data.extra);

@@ -26,6 +26,7 @@ void second_stage_boot_loader() {
   extern char _etext, _text, _text_lma;
   extern char _edata, _data, _data_lma;
   extern char _erodata, _rodata, _rodata_lma;
+  extern char _edata_extra, _data_extra, _data_extra_lma;
   extern int main(const char *args);
 
   // Copy .text section
@@ -79,6 +80,29 @@ void second_stage_boot_loader() {
     uint32_t *src = (uint32_t *)&_data_lma;
     uint32_t *dst = (uint32_t *)&_data;
     unsigned long data_size = (uintptr_t)&_edata - (uintptr_t)&_data;
+    
+    // Copy in 4-byte chunks
+    unsigned long word_count = data_size / 4;
+    while (word_count--) {
+        *dst++ = *src++;
+    }
+    
+    // Handle remaining bytes (if size not multiple of 4)
+    unsigned long remainder = data_size % 4;
+    if (remainder) {
+        char *byte_src = (char *)src;
+        char *byte_dst = (char *)dst;
+        while (remainder--) {
+            *byte_dst++ = *byte_src++;
+        }
+    }
+  }
+
+  // Copy .data.extra section
+  if (&_edata_extra > &_data_extra) {
+    uint32_t *src = (uint32_t *)&_data_extra_lma;
+    uint32_t *dst = (uint32_t *)&_data_extra;
+    unsigned long data_size = (uintptr_t)&_edata_extra - (uintptr_t)&_data_extra;
     
     // Copy in 4-byte chunks
     unsigned long word_count = data_size / 4;
