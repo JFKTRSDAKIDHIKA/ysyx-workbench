@@ -178,6 +178,8 @@ trait RISCVConstants
    val CSR_ADDR_MTVEC = 0x305.U(12.W) // Machine Trap Vector Register
    val CSR_ADDR_MEPC  = 0x341.U(12.W) // Machine Exception Program Counter
    val CSR_ADDR_MCAUSE = 0x342.U(12.W) // Machine Cause Register
+   val CSR_ADDR_MVENDORID = 0xF11.U(12.W) // Vendor ID Register
+   val CSR_ADDR_MARCHID = 0xF12.U(12.W) // Architecture ID Register
 
    // Funct3 constants for CSR instructions
    val FUNCT3_CSRRW  = "b001".U(3.W) // CSR Read and Write

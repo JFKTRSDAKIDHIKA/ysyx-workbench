@@ -23,6 +23,16 @@ void halt(int code) {
 }
 
 __attribute__((section(".SSBL")))
+void put_hex(uint32_t value) {
+  putch('0');
+  putch('x');
+  for (int i = 7; i >= 0; i--) {
+    uint8_t nibble = (value >> (i * 4)) & 0xF;
+    putch(nibble < 10 ? '0' + nibble : 'a' + (nibble - 10));
+  }
+}
+
+__attribute__((section(".SSBL")))
 void second_stage_boot_loader() {
   // External symbols
   extern char _etext, _text, _text_lma;
@@ -123,6 +133,31 @@ void second_stage_boot_loader() {
     }
   }
 
+  // ??
+  uint32_t mvendorid, marchid;
+  asm volatile(
+    "csrrw %0, mvendorid, zero"  
+    : "=r"(mvendorid)           
+    :                            
+  );
+  asm volatile(
+    "csrrw %0, marchid, zero"  
+    : "=r"(marchid)             
+    :                          
+  );
+
+  // Print mvendorid
+  putch('m'); putch('v'); putch('e'); putch('n'); putch('d'); putch('o');  putch('r'); 
+  putch('i'); putch('d'); putch(':'); putch(' '); 
+  put_hex(mvendorid);
+  putch('\n');
+
+  // Print marchid
+  putch('m'); putch('a'); putch('r'); putch('c'); putch('h'); putch('i'); 
+  putch('d'); putch(':'); putch(' '); 
+  put_hex(marchid);
+  putch('\n');
+
   // Jump to main with mainargs as parameter
   __asm__ volatile (
     "mv t0, %0\n\t"      
@@ -159,7 +194,7 @@ void init_uart() {
 
 __attribute__((section(".SSBL")))
 void _trm_init() {
-  // init_uart();
+  init_uart();
   second_stage_boot_loader();
 }
 

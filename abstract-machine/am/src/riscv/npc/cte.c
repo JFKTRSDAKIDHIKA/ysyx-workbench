@@ -11,7 +11,9 @@ Context* __am_irq_handle(Context *c) {
       default: ev.event = EVENT_ERROR; break;
     }
 
-    // Not standard approach
+    // Note: The current exception mechanism in npc is highly simplified.
+    //       During the pipeline stage, the mechanism will need to be restructured.
+    //       Specifically, during 'ecall', we have not yet implemented the writing of 'mstatus' and 'mcause'.
     ev.event = EVENT_YIELD; 
     c->mepc += 4;
 

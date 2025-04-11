@@ -20,13 +20,17 @@ class CSRFile extends Module with RISCVConstants {
   val mtvec   = RegInit(0.U(32.W)) // Machine Trap Vector Register
   val mepc    = RegInit(0.U(32.W)) // Machine Exception Program Counter
   val mcause  = RegInit(0.U(32.W)) // Machine Cause Register
+  val mvendorid = RegInit(0x79737978.U(32.W)) // Vendor ID Register
+  val marchid = RegInit(24120009.U(32.W)) // Architecture ID Register
 
   // Read CSR value
   io.csr_rdata := MuxLookup(io.csr_addr, 0.U(32.W))(Seq(
     CSR_ADDR_MSTATUS -> mstatus,
     CSR_ADDR_MTVEC   -> mtvec,
     CSR_ADDR_MEPC    -> mepc,
-    CSR_ADDR_MCAUSE  -> mcause
+    CSR_ADDR_MCAUSE  -> mcause,
+    CSR_ADDR_MVENDORID -> mvendorid,
+    CSR_ADDR_MARCHID  -> marchid
   ))
 
   // Write CSR value
@@ -36,6 +40,8 @@ class CSRFile extends Module with RISCVConstants {
       is(CSR_ADDR_MTVEC)   { mtvec   := io.csr_wdata }
       is(CSR_ADDR_MEPC)    { mepc    := io.csr_wdata }
       is(CSR_ADDR_MCAUSE)  { mcause  := io.csr_wdata }
+      is(CSR_ADDR_MVENDORID) { mvendorid := 0x79737978.U(32.W) }
+      is(CSR_ADDR_MARCHID)  { marchid := 24120009.U(32.W) }
     }
   }
 

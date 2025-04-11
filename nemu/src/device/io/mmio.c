@@ -15,6 +15,8 @@
 
 #include <device/map.h>
 #include <memory/paddr.h>
+#include <cpu/cpu.h>
+#include <isa.h>
 
 #define NR_MAP 16
 
@@ -68,7 +70,7 @@ void add_mmio_map(const char *name, paddr_t addr, void *space, uint32_t len, io_
 word_t mmio_read(paddr_t addr, int len) {
   IOMap *map = fetch_mmio_map(addr);
   if (map == NULL) {
-    printf("Error: No MMIO map found for address 0x%08x\n", addr);
+    printf("[MMIO] Unmapped access @ 0x%x (pc=0x%x)\n", addr, cpu.pc);
     return 0;
   }
 
@@ -83,7 +85,7 @@ word_t mmio_read(paddr_t addr, int len) {
 void mmio_write(paddr_t addr, int len, word_t data) {
   IOMap *map = fetch_mmio_map(addr);
   if (map == NULL) {
-    printf("Error: No MMIO map found for address 0x%08x\n", addr);
+    printf("[MMIO] Unmapped access @ 0x%x (pc=0x%x)\n", addr, cpu.pc);
     return;
   }
   

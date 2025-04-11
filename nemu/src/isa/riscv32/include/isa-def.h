@@ -34,6 +34,9 @@ typedef struct {
   uint32_t inst;
 } MUXDEF(CONFIG_RV64, riscv64_ISADecodeInfo, riscv32_ISADecodeInfo);
 
+// Exception code for environment call from user mode (ecall from U-mode)
+#define EXC_CODE_ECALL_U 8
+
 #define isa_mmu_check(vaddr, len, type) (MMU_DIRECT)
 
 #endif

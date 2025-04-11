@@ -9,18 +9,15 @@ Context* __am_irq_handle(Context *c) {
     Event ev = {0};
     switch (c->mcause) {
       // value in mcause is not standard 
-      // case 0x8: 
-      //   ev.event = EVENT_YIELD; 
-      //   c->mepc += 4;
-      //   break;
+      case EXC_CODE_ECALL_U: 
+        ev.event = EVENT_YIELD; 
+        c->mepc += 4;
+        break;
       default: ev.event = EVENT_ERROR; break;
     }
 
-    // Not standard approach
-    ev.event = EVENT_YIELD; 
-    c->mepc += 4;
-
     c = user_handler(ev, c);
+
     assert(c != NULL);
   }
 
