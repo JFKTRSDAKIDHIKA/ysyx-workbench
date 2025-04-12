@@ -12,6 +12,7 @@
 #include "include/simulation.h"
 #include "include/itrace.h"
 #include "include/mtrace.h"
+#include "include/sim_stat.h"
 #include <iostream>
 #include <svdpi.h>
 #include <iomanip> 
@@ -20,15 +21,18 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
+// Define macros
 #define NEED_CHECK(top) ((top)->io_wbu_state_debug == 2)
-
-void print_config();
 
 // Declare global variables
 VysyxSoCFull* top;      // Top module (global)
 static bool step_mode;  // Step mode flag (global)
 static riscv32_CPU_state ref;
-static int total_cycles;
+static uint64_t instr_exec_cycles;
+
+// function prototypes declaration
+void print_perf_report(double seconds, double cycles_per_second);
+void print_config();
 
 #ifdef TRACE
 InstructionTrace itrace;
@@ -88,7 +92,6 @@ int check_dut_and_ref(VysyxSoCFull* top, paddr_t start_addr, size_t size) {
 }
 #endif
 
-
 void tick(void) {
     total_cycles++;
     top->clock = 0;
@@ -97,8 +100,68 @@ void tick(void) {
     tfp->dump(time_i);
     time_i++;
 #endif
+  // Performance counter
+  if (static_cast<int>(top->io_ifu_state_debug) == 4)
+    perf_ifu_inst_fetch++;
+  if (static_cast<int>(top->io_ifu_state_debug) == 3)
+    total_imem_latency++;
+  if ((static_cast<int>(top->io_lsu_state_debug) == 2) && (static_cast<int>(top->io_lsu_is_ld_or_st_debug)  == 1))
+    perf_lsu_data_mem++;
+  if (static_cast<int>(top->io_lsu_state_debug) == 3)
+    total_dmem_latency++;
+  
+  // Increment the cycle counter for the current instruction
+  instr_exec_cycles++;
+
+  // If a new instruction is being issued (IFU state debug signal is 1),
+  // reset the instruction execution cycle counter
+  if (static_cast<int>(top->io_ifu_state_debug) == 1)
+      instr_exec_cycles = 0;
 
   if ((top->io_wbu_state_debug == 2)) {
+    // Dynamic instruction count
+    total_inst++;
+
+    // Performance counter
+    uint32_t inst = top->io_inst_debug;
+    switch (decode_inst_type(inst)) {
+        case ALU:
+            alu_count++;
+            alu_total_cycles += instr_exec_cycles;
+            break;
+        case LOAD:
+            load_count++;
+            load_total_cycles += instr_exec_cycles;
+            break;
+        case STORE:
+            store_count++;
+            store_total_cycles += instr_exec_cycles;
+            break;
+        case BRANCH:
+            branch_count++;
+            branch_total_cycles += instr_exec_cycles;
+            break;
+        case CSR:
+            csr_count++;
+            csr_total_cycles += instr_exec_cycles;
+            break;
+        case SYSTEM:
+            system_count++;
+            system_total_cycles += instr_exec_cycles;
+            break;
+        case JUMP:
+            jump_count++;
+            jump_total_cycles += instr_exec_cycles;
+            break;
+        case ATOMIC:
+            atomic_count++;
+            atomic_total_cycles += instr_exec_cycles;
+            break;
+        default:
+            break;
+    }
+
+
 #ifdef TRACE
     // instruction trace
     itrace.addEntry(top->io_pc_debug, top->io_inst_debug);
@@ -382,8 +445,9 @@ int main(int argc, char **argv) {
     double seconds = elapsed.count();
     double cycles_per_second = total_cycles / seconds;
 
-    std::cout << "Total time: " << seconds << " seconds" << std::endl;
-    std::cout << "Simulation speed: " << cycles_per_second << " cycles/second" << std::endl;
+    // Print performance report
+    print_perf_report(seconds, cycles_per_second);
+
 
 #ifdef ENABLE_WAVEFORM
     tfp->close();
@@ -395,3 +459,93 @@ int main(int argc, char **argv) {
 }
 
 
+void print_perf_report(double seconds, double cycles_per_second) {
+  using std::cout;
+  using std::endl;
+  using std::left;
+  using std::right;
+  using std::setw;
+  using std::fixed;
+  using std::setprecision;
+
+  const int label_width = 30;
+  const int value_width = 20;
+
+  auto percent = [](uint64_t count) {
+    return (total_inst == 0) ? 0.0 : 100.0 * static_cast<double>(count) / total_inst;
+  };
+
+  auto avg_cycles = [](uint64_t total_cycles, uint64_t count) {
+    return (count == 0) ? 0.0 : static_cast<double>(total_cycles) / count;
+  };
+
+  double avg_lsu_latency = 0.0;
+  if (perf_lsu_data_mem > 0)
+      avg_lsu_latency = static_cast<double>(total_dmem_latency) / perf_lsu_data_mem;
+  double avg_ifu_latency = 0.0;
+  if (perf_ifu_inst_fetch > 0)
+      avg_ifu_latency = static_cast<double>(total_imem_latency) / perf_ifu_inst_fetch;
+
+  cout << "\n";
+  cout << "╔════════════════════════════════════════════════════════════╗\n";
+  cout << "║                  🚀 Performance Statistics                 ║\n";
+  cout << "╠════════════════════════════════════════════════════════════╣\n";
+
+  cout << "║ " << left << setw(label_width) << "LSU Data Accesses"
+       << " : " << right << setw(value_width) << perf_lsu_data_mem << " ║\n";
+
+  cout << "║ " << left << setw(label_width) << "LSU Avg Data Mem Latency"
+       << " : " << right << setw(value_width) << fixed << setprecision(2) << avg_lsu_latency << " ║\n";
+  
+  cout << "║ " << left << setw(label_width) << "IFU Instructions Fetched"
+       << " : " << right << setw(value_width) << perf_ifu_inst_fetch << " ║\n";
+
+  cout << "║ " << left << setw(label_width) << "IFU Avg Instruction Mem Latency"
+       << " : " << right << setw(value_width) << fixed << setprecision(2) << avg_ifu_latency << " ║\n";
+
+  cout << "╠════════════════════════════════════════════════════════════╣\n";
+
+  cout << "║ " << left << setw(label_width) << "Total Time (s)"
+       << " : " << right << setw(value_width) << fixed << setprecision(3) << seconds << " ║\n";
+
+  cout << "║ " << left << setw(label_width) << "Total Cycles"
+       << " : " << right << setw(value_width) << total_cycles << " ║\n";
+
+  cout << "║ " << left << setw(label_width) << "Total Instructions"
+       << " : " << right << setw(value_width) << total_inst << " ║\n";
+
+  cout << "║ " << left << setw(label_width) << "IPC (Instructions/Cycle)"
+       << " : " << right << setw(value_width) << fixed << setprecision(3)
+       << ((total_cycles == 0) ? 0.0 : static_cast<double>(total_inst) / total_cycles) << " ║\n";
+
+  cout << "║ " << left << setw(label_width) << "CPI (Cycles/Instruction)"
+       << " : " << right << setw(value_width)
+       << ((total_inst == 0) ? 0.0 : static_cast<double>(total_cycles) / total_inst) << " ║\n";
+
+  cout << "║ " << left << setw(label_width) << "Sim Speed (Cycles/sec)"
+       << " : " << right << setw(value_width) << static_cast<uint64_t>(cycles_per_second) << " ║\n";
+
+  cout << "╠════════════════════════════════════════════════════════════╣\n";
+  cout << "║              🧠 Instruction Type Breakdown                ║\n";
+  cout << "╠════════════════════════════════════════════════════════════╣\n";
+
+  auto print_inst_line = [&](const std::string& name, uint64_t count, uint64_t total_cycles) {
+    cout << "║ " << left << setw(label_width) << name
+         << " : " << right << setw(6) << count
+         << " (" << fixed << setprecision(2) << setw(5) << percent(count) << "%)"
+         << " | avg: " << fixed << setprecision(2) << setw(6) << avg_cycles(total_cycles, count)
+         << " cycles ║\n";
+  };
+
+  print_inst_line("ALU Instructions", alu_count, alu_total_cycles);
+  print_inst_line("Load Instructions", load_count, load_total_cycles);
+  print_inst_line("Store Instructions", store_count, store_total_cycles);
+  print_inst_line("Branch Instructions", branch_count, branch_total_cycles);
+  print_inst_line("CSR Instructions", csr_count, csr_total_cycles);
+  print_inst_line("System Instructions", system_count, system_total_cycles);
+  print_inst_line("Jump Instructions", jump_count, jump_total_cycles);
+  print_inst_line("Atomic Instructions", atomic_count, atomic_total_cycles);
+
+  cout << "╚════════════════════════════════════════════════════════════╝\n";
+  cout << "\n";
+}
