@@ -82,8 +82,11 @@ class Core extends Module with RISCVConstants {
     // Memory interface
     // Module instantiation
     val arbiter = Module(new MemoryArbiter)
+    // Connect ifu to ICache
+    val ICache = Module(new ICache)
+    ifu.io.memory <> ICache.io.ifu
     // Connect arbiter to ifu, lsu.
-    arbiter.io.ifu <> ifu.io.memory
+    arbiter.io.ifu <> ICache.io.memory
     arbiter.io.lsu <> lsu.io.memory
     arbiter.io.ifu_handshake <> ifu.io.arbiter
     arbiter.io.lsu_handshake <> lsu.io.arbiter

@@ -132,7 +132,7 @@ void second_stage_boot_loader() {
         }
     }
   }
-
+  
   // ??
   uint32_t mvendorid, marchid;
   asm volatile(

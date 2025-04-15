@@ -12,3 +12,5 @@
 !init.sh
 /nvboard
 /fceux-am
+/yosys-sta
+/pc_trace.cache
