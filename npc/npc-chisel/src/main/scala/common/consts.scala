@@ -193,7 +193,7 @@ trait RISCVConstants
 
    // ICache
    val block_size = 4
-   val num_blocks = 16
+   val num_blocks = 24
 
    // The Bubble Instruction (Machine generated NOP)
    // Insert (XOR x0,x0,x0) which is different from software compiler
