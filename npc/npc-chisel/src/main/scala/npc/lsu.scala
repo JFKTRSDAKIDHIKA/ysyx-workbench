@@ -10,7 +10,6 @@ import common.AXI4Constants
 class LoadStoreMessage extends Message {
   val dmem_rdata = Output(UInt(32.W)) 
   val result = Output(UInt(32.W))    
-  val wb_addr = Output(UInt(5.W))    
   val csr_rdata = Output(UInt(32.W))
 }
 
@@ -58,7 +57,6 @@ class LSU extends Module with RISCVConstants{
   val lsu_reg_dmem_addr = RegEnable(io.in.bits.dmem_addr, io.in.fire)
   val lsu_reg_result = RegEnable(io.in.bits.result, io.in.fire)
   val lsu_reg_rs2_data = RegEnable(io.in.bits.rs2_data, io.in.fire)
-  val lsu_reg_wb_addr = RegEnable(io.in.bits.wb_addr, io.in.fire)
   val lsu_reg_csr_rdata = RegEnable(io.in.bits.csr_rdata, io.in.fire)
 
   // Control signals
@@ -69,32 +67,25 @@ class LSU extends Module with RISCVConstants{
 
   // 'mem_access_control' signal generation
   val mem_access_control = Wire(UInt(3.W))
-  mem_access_control := MuxLookup(Cat(opcode, funct3), 0.U)(Seq(
-    Cat(OPCODE_LOAD, FUNCT3_LW)  -> MEM_ACCESS_WORD,   // LW
-    Cat(OPCODE_LOAD, FUNCT3_LB)  -> MEM_ACCESS_BYTE,   // LB
-    Cat(OPCODE_LOAD, FUNCT3_LBU) -> MEM_ACCESS_BYTE_U, // LBU
-    Cat(OPCODE_LOAD, FUNCT3_LH)  -> MEM_ACCESS_HALF,   // LH
-    Cat(OPCODE_LOAD, FUNCT3_LHU) -> MEM_ACCESS_HALF_U, // LHU
-    Cat(OPCODE_STORE, FUNCT3_SW) -> MEM_ACCESS_WORD,   // SW
-    Cat(OPCODE_STORE, FUNCT3_SB) -> MEM_ACCESS_BYTE,   // SB
-    Cat(OPCODE_STORE, FUNCT3_SH) -> MEM_ACCESS_HALF    // SH
+  mem_access_control := MuxLookup(funct3, 0.U)(Seq(
+    FUNCT3_W  -> MEM_ACCESS_WORD,   // W
+    FUNCT3_B  -> MEM_ACCESS_BYTE,   // B
+    FUNCT3_BU -> MEM_ACCESS_BYTE_U, // BU
+    FUNCT3_H  -> MEM_ACCESS_HALF,   // H
+    FUNCT3_HU -> MEM_ACCESS_HALF_U, // HU
   ))
 
-  // Instantiate alignment_network
-  val alignment_network = Module(new AlignmentNetwork)
-  alignment_network.io.data_in := io.memory.r.data
-  alignment_network.io.dmem_addr := lsu_reg_dmem_addr
-  alignment_network.io.control := mem_access_control
+  // Instantiate UnifiedMemoryController
+  val UnifiedMemoryController = Module(new UnifiedMemoryController)
+  UnifiedMemoryController.io.data_in := io.memory.r.data
+  UnifiedMemoryController.io.dmem_addr := lsu_reg_dmem_addr
+  UnifiedMemoryController.io.control := mem_access_control
+  UnifiedMemoryController.io.dmem_wdata_raw := lsu_reg_rs2_data
+
   // Coordinate between wbu and lsu
   val delayedData = RegInit(0.U(32.W))
-  delayedData := alignment_network.io.data_out
+  delayedData := UnifiedMemoryController.io.data_out
   io.out.bits.dmem_rdata := delayedData
-
-  // Instantiate memory_ctl
-  val memory_ctl = Module(new MemoryController)
-  memory_ctl.io.dmem_addr := lsu_reg_dmem_addr
-  memory_ctl.io.control := mem_access_control
-  memory_ctl.io.dmem_wdata_raw := lsu_reg_rs2_data
 
   // State machine state definition
   val sIdle :: sArbiterPrepare :: sPrepare :: sMemAccess :: sDone :: Nil = Enum(5)
@@ -158,7 +149,7 @@ class LSU extends Module with RISCVConstants{
           io.memory.ar.valid := true.B
           io.memory.ar.addr := lsu_reg_dmem_addr
           io.memory.ar.len := 0.U
-          io.memory.ar.size := memory_ctl.io.dmem_rw_size
+          io.memory.ar.size := UnifiedMemoryController.io.dmem_rw_size
           io.memory.ar.burst := AXI4Constants.BURST_INCR
           io.memory.ar.id := 0.U
           // Wait memory ready to process request
@@ -170,10 +161,10 @@ class LSU extends Module with RISCVConstants{
           io.memory.aw.valid := true.B
           io.memory.w.valid := true.B
           io.memory.aw.addr := lsu_reg_dmem_addr
-          io.memory.w.data := memory_ctl.io.dmem_wdata
-          io.memory.w.strb := memory_ctl.io.wmask
+          io.memory.w.data := UnifiedMemoryController.io.dmem_wdata
+          io.memory.w.strb := UnifiedMemoryController.io.wmask
           io.memory.aw.len := 0.U
-          io.memory.aw.size := memory_ctl.io.dmem_rw_size
+          io.memory.aw.size := UnifiedMemoryController.io.dmem_rw_size
           io.memory.aw.burst := AXI4Constants.BURST_INCR
           io.memory.aw.id := 0.U
           io.memory.w.last := 1.B
@@ -202,7 +193,7 @@ class LSU extends Module with RISCVConstants{
         io.memory.ar.valid := false.B
         io.memory.r.ready := true.B
         io.memory.ar.len := 0.U
-        io.memory.ar.size := memory_ctl.io.dmem_rw_size
+        io.memory.ar.size := UnifiedMemoryController.io.dmem_rw_size
         io.memory.ar.burst := AXI4Constants.BURST_INCR
         io.memory.ar.id := 0.U
         // Wait memory return data valid
@@ -224,18 +215,18 @@ class LSU extends Module with RISCVConstants{
         io.memory.w.valid := false.B
         io.memory.b.ready := true.B
         io.memory.aw.len := 0.U
-        io.memory.aw.size := memory_ctl.io.dmem_rw_size
+        io.memory.aw.size := UnifiedMemoryController.io.dmem_rw_size
         io.memory.aw.burst := AXI4Constants.BURST_INCR
         io.memory.aw.id := 0.U
         io.memory.w.last := 1.B
         // Wait memeory finish write
         when(io.memory.b.valid) {
             io.lsu_axi_resp_err := MuxLookup(io.memory.b.resp, false.B)(Seq(
-              AXI4Constants.RESP_OKAY -> false.B,
-              AXI4Constants.RESP_EXOKAY -> false.B,
-              AXI4Constants.RESP_SLVERR -> true.B,
-              AXI4Constants.RESP_DECERR -> true.B
-          ))
+                AXI4Constants.RESP_OKAY -> false.B,
+                AXI4Constants.RESP_EXOKAY -> false.B,
+                AXI4Constants.RESP_SLVERR -> true.B,
+                AXI4Constants.RESP_DECERR -> true.B
+            ))
           state := sDone
         }
        }
@@ -276,14 +267,13 @@ class LSU extends Module with RISCVConstants{
   io.out.bits.inst := lsu_reg_inst
   io.out.bits.pc := lsu_reg_pc
   io.out.bits.result := lsu_reg_result
-  io.out.bits.wb_addr := lsu_reg_wb_addr
   io.out.bits.csr_rdata := lsu_reg_csr_rdata
 
   // Debug signals assignment
   io.lsu_state_debug := state
   io.lsu_is_ld_or_st_debug := isLoad || isStore
   io.lsu_reg_inst_debug := lsu_reg_inst
-  io.dmem_wdata_debug := memory_ctl.io.dmem_wdata
+  io.dmem_wdata_debug := UnifiedMemoryController.io.dmem_wdata
   io.dmem_rdata_debug := io.memory.r.data
   io.lsu_reg_dmem_addr_debug := lsu_reg_dmem_addr
 }

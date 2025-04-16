@@ -133,7 +133,7 @@ void second_stage_boot_loader() {
     }
   }
   
-  // ??
+  // Read the hardware identifiers mvendorid and marchid using CSR instructions
   uint32_t mvendorid, marchid;
   asm volatile(
     "csrrw %0, mvendorid, zero"  

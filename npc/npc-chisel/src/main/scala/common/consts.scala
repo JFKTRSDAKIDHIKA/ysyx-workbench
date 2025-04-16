@@ -10,12 +10,10 @@ trait RISCVConstants
 {
    
    // PC Select Signal
-   val PC_4   = 0.asUInt(3.W)  // PC + 4
-   val PC_BR  = 1.asUInt(3.W)  // branch_target
-   val PC_J   = 2.asUInt(3.W)  // jump_target
-   val PC_JR  = 3.asUInt(3.W)  // jump_reg_target
-   val PC_EXC = 4.asUInt(3.W)  // exception
-   val PC_CSR = 5.asUInt(3.W)  // CSR target
+   val PC_4   = 0.asUInt(2.W)  // PC + 4
+   val PC_REDIRECT = 1.asUInt(2.W) // Jump or branch target
+   val PC_EXC = 2.asUInt(2.W)  // exception
+   val PC_CSR = 3.asUInt(2.W)  // CSR target
 
    // abstract out instruction decode magic numbers
    val RD_MSB  = 11
@@ -55,14 +53,11 @@ trait RISCVConstants
    val OPCODE_JALR     = "b1100111".U(7.W) // Jump and Link Register
 
    // Funct3 constants for LOAD and STORE instructions
-   val FUNCT3_LB       = "b000".U(3.W) // Load Byte
-   val FUNCT3_LH       = "b001".U(3.W) // Load Halfword
-   val FUNCT3_LW       = "b010".U(3.W) // Load Word
-   val FUNCT3_LBU      = "b100".U(3.W) // Load Byte Unsigned
-   val FUNCT3_LHU      = "b101".U(3.W) // Load Halfword Unsigned
-   val FUNCT3_SB       = "b000".U(3.W) // Store Byte
-   val FUNCT3_SH       = "b001".U(3.W) // Store Halfword
-   val FUNCT3_SW       = "b010".U(3.W) // Store Word
+   val FUNCT3_B       = "b000".U(3.W) // Load Byte
+   val FUNCT3_H       = "b001".U(3.W) // Load Halfword
+   val FUNCT3_W       = "b010".U(3.W) // Load Word
+   val FUNCT3_BU      = "b100".U(3.W) // Load Byte Unsigned
+   val FUNCT3_HU      = "b101".U(3.W) // Load Halfword Unsigned
 
    // Funct3 constants for branch instructions 
    val FUNCT3_BEQ      = "b000".U(3.W) // Branch if Equal
@@ -193,7 +188,7 @@ trait RISCVConstants
 
    // ICache
    val block_size = 4
-   val num_blocks = 24
+   val num_blocks = 16
 
    // The Bubble Instruction (Machine generated NOP)
    // Insert (XOR x0,x0,x0) which is different from software compiler

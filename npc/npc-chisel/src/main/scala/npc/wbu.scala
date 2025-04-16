@@ -66,7 +66,6 @@ class WBU extends Module with RISCVConstants{
   val wbu_reg_pc = RegEnable(io.in.bits.pc, io.in.fire)
   val wbu_reg_result = RegEnable(io.in.bits.result, io.in.fire)
   val wbu_reg_dmem_rdata = RegEnable(io.in.bits.dmem_rdata, io.in.fire)
-  val wbu_reg_wb_addr = RegEnable(io.in.bits.wb_addr, io.in.fire)
   val wbu_reg_csr_rdata = RegEnable(io.in.bits.csr_rdata, io.in.fire)
 
   // Control signal
@@ -116,7 +115,7 @@ class WBU extends Module with RISCVConstants{
 
   // Assign output signals
   io.wb_data := wb_data
-  io.wb_addr := wbu_reg_wb_addr
+  io.wb_addr := wbu_reg_inst(RD_MSB,  RD_LSB)
   io.wb_wen := wb_wen && (state === sWB)
   io.pc_wen := (state === sDone)
 

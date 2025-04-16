@@ -10,7 +10,6 @@ class ExecuteMessage extends Message {
     val dmem_addr = UInt(32.W)       
     val result = UInt(32.W)         
     val rs2_data = UInt(32.W)     
-    val wb_addr = UInt(5.W)  
     val csr_rdata = UInt(32.W)
 }
 
@@ -20,6 +19,8 @@ class EXUIO extends Bundle {
   val in = Flipped(Decoupled(new DecodedMessage))
   // Signals passed to LSU
   val out = Decoupled(new ExecuteMessage)
+  // Signals passed back to IFU
+  val pc_redirect_target = Output(UInt(32.W))
 }
 
 class EXU extends Module with RISCVConstants {
@@ -62,7 +63,6 @@ class EXU extends Module with RISCVConstants {
   val exu_reg_inst = RegEnable(io.in.bits.inst, io.in.fire)
   val exu_reg_pc = RegEnable(io.in.bits.pc, io.in.fire)
   val exu_reg_rs2_data = RegEnable(io.in.bits.rs2_data, io.in.fire)
-  val exu_reg_wb_addr = RegEnable(io.in.bits.wb_addr, io.in.fire)
   val exu_reg_csr_rdata = RegEnable(io.in.bits.csr_rdata, io.in.fire)
 
   // Control logic
@@ -110,7 +110,11 @@ class EXU extends Module with RISCVConstants {
       )),
       FUNCT3_OR -> ALU_OR, // OR
       FUNCT3_AND -> ALU_AND // AND
-    ))
+    )),
+    // Address calculation for control instructions reuses the ALU adder
+    OPCODE_JAL -> ALU_ADD,
+    OPCODE_JALR -> ALU_ADD,
+    OPCODE_BRANCH -> ALU_ADD
   ))
 
   // Instantiate ALU module
@@ -126,8 +130,8 @@ class EXU extends Module with RISCVConstants {
   io.out.bits.dmem_addr := alu_result
   io.out.bits.result := alu_result
   io.out.bits.rs2_data := exu_reg_rs2_data
-  io.out.bits.wb_addr := exu_reg_wb_addr
   io.out.bits.csr_rdata := exu_reg_csr_rdata
+  io.pc_redirect_target := alu_result
 }
 
 

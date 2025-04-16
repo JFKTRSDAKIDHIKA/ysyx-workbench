@@ -6,7 +6,6 @@ import common._
 import common.constants.RISCVConstants 
 
 class DecodedMessage extends Message {
-    val wb_addr = Output(UInt(5.W))  
     val alu_op1 = Output(UInt(32.W))    
     val alu_op2 = Output(UInt(32.W))     
     val rs2_data = Output(UInt(32.W)) 
@@ -21,9 +20,6 @@ class IDUIO extends Bundle {
     val out = Decoupled(new DecodedMessage)
 
     // Feedback signals from IDU and WBU
-    val jump_reg_target = Output(UInt(32.W))
-    val br_target = Output(UInt(32.W))
-    val jmp_target = Output(UInt(32.W))
     val pc_sel = Output(UInt(3.W))
     val pc_csr = Output(UInt(32.W))
 
@@ -75,7 +71,6 @@ class IDU extends Module with RISCVConstants{
     }
 
     // Decode
-    val wb_addr  = idu_reg_inst(RD_MSB,  RD_LSB)
     io.rs1_addr := idu_reg_inst(RS1_MSB, RS1_LSB)
     io.rs2_addr := idu_reg_inst(RS2_MSB,  RS2_LSB)
 
@@ -92,11 +87,6 @@ class IDU extends Module with RISCVConstants{
     val imm_b_sext = Cat(Fill(19,imm_b(11)), imm_b, 0.U)
     val imm_u_sext = Cat(imm_u, Fill(12,0.U))
     val imm_j_sext = Cat(Fill(11,imm_j(19)), imm_j, 0.U)
-
-    // Branch/Jump Target Calculation
-    io.jump_reg_target := (io.rs1_data.asUInt + imm_i_sext.asUInt) & ~1.U(32.W) 
-    io.br_target := idu_reg_pc + imm_b_sext
-    io.jmp_target := idu_reg_pc + imm_j_sext 
 
     // Control signals
     val opcode = idu_reg_inst(OPCODE_MSB, OPCODE_LSB)
@@ -119,10 +109,9 @@ class IDU extends Module with RISCVConstants{
 
     // CSR interface    
     val csr_instance = Module(new CSRFile)
-    val csr_funct12 = idu_reg_inst(CSR_ADDR_MSB, CSR_ADDR_LSB)
     csr_instance.io.csr_addr := MuxLookup(funct3, 0.U)(Seq(
-        FUNCT3_CSRRW -> csr_funct12,
-        FUNCT3_CSRRS -> csr_funct12,
+        FUNCT3_CSRRW -> imm_i,
+        FUNCT3_CSRRS -> imm_i,
         FUNCT3_ECALL -> CSR_ADDR_MEPC
     ))
     csr_instance.io.csr_wdata := MuxLookup(funct3, 0.U)(Seq(
@@ -134,14 +123,14 @@ class IDU extends Module with RISCVConstants{
         OPCODE_CSR -> MuxLookup(funct3, false.B)(Seq(
         FUNCT3_CSRRW -> true.B,
         FUNCT3_CSRRS -> true.B,
-        FUNCT3_ECALL -> MuxLookup(csr_funct12, false.B)(Seq(
+        FUNCT3_ECALL -> MuxLookup(imm_i, false.B)(Seq(
           FUNCT12_ECALL -> true.B,
           FUNCT12_MRET -> false.B
         ))
       ))
     ))
     io.pc_csr := MuxLookup(funct3, PC_4)(Seq(
-        FUNCT3_ECALL -> MuxLookup(csr_funct12, PC_4)(Seq(
+        FUNCT3_ECALL -> MuxLookup(imm_i, PC_4)(Seq(
             FUNCT12_ECALL -> csr_instance.io.csr_mtvec,
             FUNCT12_MRET  -> csr_instance.io.csr_mepc
         )),
@@ -149,9 +138,9 @@ class IDU extends Module with RISCVConstants{
 
     // pc_sel signal generation
     io.pc_sel := MuxLookup(opcode, PC_4)(Seq(
-        OPCODE_JALR -> PC_JR,
-        OPCODE_JAL  -> PC_J,
-        OPCODE_BRANCH -> Mux(branch_taken, PC_BR, PC_4),
+        OPCODE_JALR -> PC_REDIRECT,
+        OPCODE_JAL  -> PC_REDIRECT,
+        OPCODE_BRANCH -> Mux(branch_taken, PC_REDIRECT, PC_4),
         OPCODE_CSR -> MuxLookup(funct3, PC_4)(Seq(
             FUNCT3_CSRRW -> PC_4,
             FUNCT3_CSRRS -> PC_4,
@@ -167,8 +156,8 @@ class IDU extends Module with RISCVConstants{
         OPCODE_LUI    -> 1.U, // LUI
         OPCODE_AUIPC  -> 1.U, // AUIPC
         OPCODE_JALR   -> 0.U, // JALR
-        OPCODE_JAL    -> 0.U, // JAL
-        OPCODE_BRANCH -> 0.U, // Branch
+        OPCODE_JAL    -> 3.U, // JAL
+        OPCODE_BRANCH -> 2.U, // Branch
         OPCODE_LOAD   -> 0.U, // LOAD
         OPCODE_STORE  -> 0.U, // STORE
         OPCODE_RTYPE  -> 0.U, // R-type
@@ -178,7 +167,7 @@ class IDU extends Module with RISCVConstants{
     alu_op2Sel := MuxLookup(opcode, 0.U)(Seq(
         OPCODE_LUI    -> 0.U, // LUI
         OPCODE_AUIPC  -> 0.U, // AUIPC
-        OPCODE_JALR   -> 0.U, // JALR
+        OPCODE_JALR   -> 1.U, // JALR
         OPCODE_JAL    -> 0.U, // JAL
         OPCODE_BRANCH -> 0.U, // Branch
         OPCODE_LOAD   -> 1.U, // LOAD
@@ -190,20 +179,21 @@ class IDU extends Module with RISCVConstants{
     // Mux for alu_op1 and alu_op2
     val alu_op1 = MuxLookup(alu_op1Sel, 0.U)(Seq(
       0.U -> io.rs1_data,
-      1.U -> imm_u_sext
+      1.U -> imm_u_sext,
+      2.U -> imm_b_sext,
+      3.U -> imm_j_sext
     ))
 
     val alu_op2 = MuxLookup(alu_op2Sel, 0.U)(Seq(
         0.U -> idu_reg_pc,
         1.U -> imm_i_sext,
         2.U -> imm_s_sext,
-        3.U -> io.rs2_data
+        3.U -> io.rs2_data,
     ))
 
     // Assign output signals
     io.out.bits.inst := idu_reg_inst
     io.out.bits.pc := idu_reg_pc
-    io.out.bits.wb_addr := wb_addr
     io.out.bits.alu_op1 := alu_op1
     io.out.bits.alu_op2 := alu_op2
     io.out.bits.rs2_data := io.rs2_data

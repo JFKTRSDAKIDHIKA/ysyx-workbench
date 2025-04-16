@@ -11,14 +11,12 @@ class IFU extends Module with RISCVConstants {
     // Forward signals
     val out = Decoupled(new Message)
 
-    // Feedback signals from IDU, LSU and WBU
+    // Feedback signals from IDU, LSU, EXU and WBU
     val pc_sel = Input(UInt(3.W))
-    val jump_reg_target = Input(UInt(32.W))
-    val br_target = Input(UInt(32.W))
-    val jmp_target = Input(UInt(32.W))
     val pc_wen = Input(Bool())
     val lsu_axi_resp_err = Input(Bool())
     val pc_csr = Input(UInt(32.W))
+    val pc_redirect_target = Input(UInt(32.W))
 
     // AXI4-Lite memory interface
     val memory = new AXI4IO
@@ -54,9 +52,7 @@ class IFU extends Module with RISCVConstants {
   // Calculate next pc
   pc_next := MuxLookup(io.pc_sel, pc_plus4)(Seq(
     PC_4 -> pc_plus4,
-    PC_JR -> io.jump_reg_target,
-    PC_BR -> io.br_target,
-    PC_J -> io.jmp_target,
+    PC_REDIRECT -> io.pc_redirect_target,
     PC_EXC -> exception,
     PC_CSR -> io.pc_csr
   ))
