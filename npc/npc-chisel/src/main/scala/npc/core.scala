@@ -124,7 +124,7 @@ object Main extends App {
   println("Generating the core hardware")
   ChiselStage.emitSystemVerilogFile(new Core(),
     firtoolOpts = Array(
-      // "--lowering-options=noAlwaysComb,disallowLocalVariables,disallowPackedArrays,disallowPortDeclSharing,disallowExpressionInliningInPorts,disallowMuxInlining,locationInfoStyle=none",
+      "--lowering-options=noAlwaysComb,disallowLocalVariables,disallowPortDeclSharing,disallowExpressionInliningInPorts,disallowMuxInlining,locationInfoStyle=none",
       "-O=release",
       "--disable-all-randomization",
       "--preserve-values=named",
