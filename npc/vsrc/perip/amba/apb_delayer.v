@@ -1,4 +1,4 @@
-// `define ENABLE_APB_DELAY
+`define ENABLE_APB_DELAY
 
 module apb_delayer(
   input         clock,
@@ -42,12 +42,12 @@ module apb_delayer(
 
   reg [1:0] state;
 
-  // 累加用的定点数参数
+  // Fixed-point parameters for accumulation
   localparam integer r_times_s = 88;   // r=5.5, s=16
   localparam integer s = 16;
 
-  reg [31:0] acc;             // 累加器：累加 r * s
-  reg [15:0] delay_counter;   // 最终等待的周期数（acc / s）
+  reg [31:0] acc;             // Accumulator: stores r * s
+  reg [15:0] delay_counter;   // Final wait cycle count (acc / s)
 
   always @(posedge clock or posedge reset) begin
     if (reset) begin
@@ -69,24 +69,29 @@ module apb_delayer(
           in_pready <= 0;
         end
 
-        WAIT_DEVICE: begin
-          // 设备尚未ready，表示正在处理
-          if (!out_pready) begin
-            acc <= acc + r_times_s;
-            state <= WAIT_DEVICE;
-          end else begin
-            // 设备处理完成，保存数据和错误信号
-            in_prdata <= out_prdata;
-            in_pslverr <= out_pslverr;
-            delay_counter <= acc >> 4; 
-            state <= DELAY;
-          end
-        end
+        WAIT_DEVICE: begin  
+          // Device is not ready yet (still processing)  
+          if (!out_pready) begin  
+            acc <= acc + r_times_s;  
+            state <= WAIT_DEVICE;  
+          end else begin  
+            // Device processing complete, save data and error signals  
+            in_prdata <= out_prdata;  
+            in_pslverr <= out_pslverr;  
+            delay_counter <= acc >> 4;  // Equivalent to (acc / s) since s=16 (2^4)  
+            state <= DELAY;  
+          end  
+        end  
 
         DELAY: begin
           if (delay_counter == 0) begin
             in_pready <= 1;
-            state <= IDLE;
+            // Important: Only return to IDLE when both PSEL and PENABLE are low
+            // Otherwise, returning to IDLE too early can cause the FSM to immediately
+            // re-enter DELAY due to active PSEL/PENABLE, leading to faulty behavior
+            if (~in_psel && ~in_penable) begin
+              state <= IDLE;
+            end
           end else begin
             delay_counter <= delay_counter - 1;
             state <= DELAY;

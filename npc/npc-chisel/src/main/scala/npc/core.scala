@@ -82,6 +82,7 @@ class Core extends Module with RISCVConstants {
     // Module instantiation
     val arbiter = Module(new MemoryArbiter)
     // Connect ifu to ICache
+    implicit val icacheParams = DefaultICacheParams
     val ICache = Module(new ICache)
     ifu.io.memory <> ICache.io.ifu
     // Connect arbiter to ifu, lsu.
@@ -123,7 +124,7 @@ object Main extends App {
   println("Generating the core hardware")
   ChiselStage.emitSystemVerilogFile(new Core(),
     firtoolOpts = Array(
-      "--lowering-options=noAlwaysComb,disallowLocalVariables,disallowPackedArrays,disallowPortDeclSharing,disallowExpressionInliningInPorts,disallowMuxInlining,locationInfoStyle=none",
+      // "--lowering-options=noAlwaysComb,disallowLocalVariables,disallowPackedArrays,disallowPortDeclSharing,disallowExpressionInliningInPorts,disallowMuxInlining,locationInfoStyle=none",
       "-O=release",
       "--disable-all-randomization",
       "--preserve-values=named",

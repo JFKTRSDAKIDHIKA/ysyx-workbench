@@ -1,9 +1,9 @@
 # 定义变量
 VERILATOR = verilator
-TOP_MODULE = ../ysyxSoC/build/ysyxSoCFull.v
+TOP_MODULE = ./vsrc/ysyxSoCFull.v
 CSRC = $(wildcard csrc/*.cpp)
 HEADERS = $(wildcard csrc/include/*.h) $(wildcard include/*.hpp) $(wildcard csrc/*.h) $(wildcard csrc/*.hpp)
-V_FILES = $(shell find vsrc -name "*.v")
+V_FILES = $(shell find vsrc -name "*.v" ! -name "ysyxSoCFull.v")
 SV_FILES = $(shell find vsrc -name "*.sv")
 VSRC = $(V_FILES) $(SV_FILES)
 INCLUDE_DIRS = -Ivsrc/perip/uart16550/rtl -Ivsrc/perip/spi/rtl
