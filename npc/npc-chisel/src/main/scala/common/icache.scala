@@ -56,7 +56,7 @@ class Metadata(implicit val p: ICacheParams) extends Module {
 /**
  * Instruction Cache (supports 4-word read with 1-cycle gap between)
  */
-class ICache(implicit val p: ICacheParams) extends Module {
+class ICache(implicit val p: ICacheParams) extends Module with RISCVConstants {
   val io = IO(new Bundle {
     val ifu    = Flipped(new AXI4IO)
     val memory = new AXI4IO
@@ -93,10 +93,16 @@ class ICache(implicit val p: ICacheParams) extends Module {
   val bufferIndex = RegInit(0.U(log2Ceil(p.wordsPerBlock).W))
 
   val baseAddr = Cat(reqAddr(31, p.offsetBits), 0.U(p.offsetBits.W))
-  val readAddr = baseAddr + (bufferIndex << 2)
 
   val sIdle :: sLookup :: sResp :: sMemReq :: sMemRead :: sWaitGap :: sUpdate :: Nil = Enum(7)
   val state = RegInit(sIdle)
+
+  val isSDRAM = baseAddr >= SDRAM_BASE && baseAddr <= SDRAM_TOP
+
+  val burstLen = (p.wordsPerBlock - 1).U
+  val burstCnt = RegInit(0.U(log2Ceil(p.wordsPerBlock).W))
+
+  val singleReadAddr = RegInit(baseAddr)
 
   io.ifu.ar.ready := state === sIdle
   io.ifu.r.valid := false.B
@@ -119,16 +125,18 @@ class ICache(implicit val p: ICacheParams) extends Module {
         state := sIdle
       }.otherwise {
         bufferIndex := 0.U
+        burstCnt := 0.U
+        singleReadAddr := baseAddr
         state := sMemReq
       }
     }
 
     is(sMemReq) {
       io.memory.ar.valid := true.B
-      io.memory.ar.addr := readAddr
-      io.memory.ar.len := 0.U
+      io.memory.ar.addr := Mux(isSDRAM, baseAddr, singleReadAddr)
+      io.memory.ar.len := Mux(isSDRAM, burstLen, 0.U)
       io.memory.ar.size := 2.U
-      io.memory.ar.burst := 0.U
+      io.memory.ar.burst := Mux(isSDRAM, 1.U, 0.U)
       when(io.memory.ar.ready) {
         state := sMemRead
       }
@@ -137,21 +145,27 @@ class ICache(implicit val p: ICacheParams) extends Module {
     is(sMemRead) {
       io.memory.r.ready := true.B
       when(io.memory.r.valid) {
-        blockBuffer(bufferIndex) := io.memory.r.data
-        when(bufferIndex === (p.wordsPerBlock - 1).U) {
-          state := sUpdate
+        blockBuffer(burstCnt) := io.memory.r.data
+        when(isSDRAM) {
+          when(io.memory.r.last) {
+            state := sUpdate
+          }.otherwise {
+            burstCnt := burstCnt + 1.U
+          }
         }.otherwise {
-          bufferIndex := bufferIndex + 1.U
-          state := sWaitGap
+          when(burstCnt === (p.wordsPerBlock - 1).U) {
+            state := sUpdate
+          }.otherwise {
+            burstCnt := burstCnt + 1.U
+            singleReadAddr := baseAddr + ((burstCnt + 1.U) << 2)
+            state := sWaitGap 
+          }
         }
       }
     }
 
-    // Wait one cycle between memory reads
     is(sWaitGap) {
-      when(io.memory.ar.ready) {
-        state := sMemReq
-      }
+      state := sMemReq
     }
 
     is(sUpdate) {
