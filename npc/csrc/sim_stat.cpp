@@ -27,6 +27,9 @@ uint64_t atomic_total_cycles = 0;
 uint64_t total_dmem_latency = 0;
 uint64_t total_imem_latency = 0;
 
+uint64_t total_miss_penalty = 0;
+uint64_t total_miss_time = 0;
+
 // decode function definition
 InstType decode_inst_type(uint32_t inst) {
     uint8_t opcode = inst & 0x7F;

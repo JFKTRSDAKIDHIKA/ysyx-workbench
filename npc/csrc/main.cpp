@@ -103,12 +103,16 @@ void tick(void) {
   // Performance counter
   if (static_cast<int>(top->io_ifu_state_debug) == 4)
     perf_ifu_inst_fetch++;
-  if (static_cast<int>(top->io_ifu_state_debug) == 3)
+  if (static_cast<int>(top->io_ifu_state_debug) >= 1 && static_cast<int>(top->io_ifu_state_debug) <= 3)
     total_imem_latency++;
   if ((static_cast<int>(top->io_lsu_state_debug) == 2) && (static_cast<int>(top->io_lsu_is_ld_or_st_debug)  == 1))
     perf_lsu_data_mem++;
   if (static_cast<int>(top->io_lsu_state_debug) == 3)
     total_dmem_latency++;
+  if (static_cast<int>(top->io_icache_state_debug) >= 3 && static_cast<int>(top->io_icache_state_debug) <= 6)
+    total_miss_penalty++;
+  if (static_cast<int>(top->io_icache_state_debug) == 6)
+    total_miss_time++;
   
   // Increment the cycle counter for the current instruction
   instr_exec_cycles++;
@@ -485,6 +489,9 @@ void print_perf_report(double seconds, double cycles_per_second) {
   double avg_ifu_latency = 0.0;
   if (perf_ifu_inst_fetch > 0)
       avg_ifu_latency = static_cast<double>(total_imem_latency) / perf_ifu_inst_fetch;
+  double avg_miss_penalty = 0.0;
+  if (perf_ifu_inst_fetch > 0)
+      avg_miss_penalty = static_cast<double>(total_miss_penalty) / total_miss_time;
 
   cout << "\n";
   cout << "╔════════════════════════════════════════════════════════════╗\n";
@@ -502,6 +509,9 @@ void print_perf_report(double seconds, double cycles_per_second) {
 
   cout << "║ " << left << setw(label_width) << "IFU Avg Instruction Mem Latency"
        << " : " << right << setw(value_width) << fixed << setprecision(2) << avg_ifu_latency << " ║\n";
+
+  cout << "║ " << left << setw(label_width) << "ICache Average Miss Penalty"
+       << " : " << right << setw(value_width) << fixed << setprecision(2) << avg_miss_penalty << " ║\n";
 
   cout << "╠════════════════════════════════════════════════════════════╣\n";
 

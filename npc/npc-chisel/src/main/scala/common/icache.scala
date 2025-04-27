@@ -9,7 +9,7 @@ import common.constants.RISCVConstants
  */
 trait ICacheParams {
   val blockBytes = 16          // Size of each cache block in bytes
-  val numSets    = 2           // Number of cache sets
+  val numSets    = 4           // Number of cache sets
   val numWays    = 2           // Number of ways per set
   val wordBytes  = 4           // Size of each word in bytes
   val wordsPerBlock = blockBytes / wordBytes
@@ -60,6 +60,8 @@ class ICache(implicit val p: ICacheParams) extends Module with RISCVConstants {
   val io = IO(new Bundle {
     val ifu    = Flipped(new AXI4IO)
     val memory = new AXI4IO
+    // Debug signals
+    val icache_state_debug = Output(UInt(3.W))
   })
 
   AXI4Defaults(io.memory)
@@ -111,7 +113,9 @@ class ICache(implicit val p: ICacheParams) extends Module with RISCVConstants {
 
   switch(state) {
     is(sIdle) {
-      when(io.ifu.ar.valid) { state := sLookup }
+      when(io.ifu.ar.valid) { 
+        state := sLookup 
+      }
     }
 
     is(sLookup) {
@@ -186,4 +190,7 @@ class ICache(implicit val p: ICacheParams) extends Module with RISCVConstants {
       state := sIdle
     }
   }
+
+  // Debug signals assignment
+  io.icache_state_debug := state;
 }

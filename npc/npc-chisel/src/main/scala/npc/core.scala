@@ -36,6 +36,8 @@ class Core extends Module with RISCVConstants {
         val wbu_reg_dmem_rdata_debug = Output(UInt(32.W))
         // Arbiter
         val Arbiter_state_debug = Output(UInt(2.W))
+        // ICache
+        val icache_state_debug = Output(UInt(3.W))
     })
 
     // Set AXI4 default values
@@ -118,6 +120,8 @@ class Core extends Module with RISCVConstants {
     io.wbu_reg_dmem_rdata_debug := wbu.io.wbu_reg_dmem_rdata_debug
     // Arbiter
     io.Arbiter_state_debug := arbiter.io.Arbiter_state_debug
+    // ICache
+    io.icache_state_debug := ICache.io.icache_state_debug
 }
 
 object Main extends App {

@@ -35,5 +35,7 @@ extern uint64_t jump_total_cycles;
 extern uint64_t atomic_total_cycles;
 extern uint64_t total_dmem_latency;  
 extern uint64_t total_imem_latency;  
+extern uint64_t total_miss_penalty;
+extern uint64_t total_miss_time;
 
 #endif // SIM_STAT_H
