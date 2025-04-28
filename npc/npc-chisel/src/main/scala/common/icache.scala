@@ -95,16 +95,14 @@ class ICache(implicit val p: ICacheParams) extends Module with RISCVConstants {
   val bufferIndex = RegInit(0.U(log2Ceil(p.wordsPerBlock).W))
 
   val baseAddr = Cat(reqAddr(31, p.offsetBits), 0.U(p.offsetBits.W))
-
-  val sIdle :: sLookup :: sResp :: sMemReq :: sMemRead :: sWaitGap :: sUpdate :: Nil = Enum(7)
-  val state = RegInit(sIdle)
-
   val isSDRAM = baseAddr >= SDRAM_BASE && baseAddr <= SDRAM_TOP
+  val singleReadAddr = RegInit(baseAddr)
 
   val burstLen = (p.wordsPerBlock - 1).U
   val burstCnt = RegInit(0.U(log2Ceil(p.wordsPerBlock).W))
 
-  val singleReadAddr = RegInit(baseAddr)
+  val sIdle :: sLookup :: sResp :: sMemReq :: sMemRead :: sWaitGap :: sUpdate :: Nil = Enum(7)
+  val state = RegInit(sIdle)
 
   io.ifu.ar.ready := state === sIdle
   io.ifu.r.valid := false.B
