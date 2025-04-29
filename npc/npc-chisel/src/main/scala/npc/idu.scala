@@ -10,6 +10,7 @@ class DecodedMessage extends Message {
     val alu_op2 = Output(UInt(32.W))     
     val rs2_data = Output(UInt(32.W)) 
     val csr_rdata = Output(UInt(32.W))
+    val branch_taken = Output(Bool())
 }
 
 class IDUIO extends Bundle {
@@ -20,8 +21,18 @@ class IDUIO extends Bundle {
     val out = Decoupled(new DecodedMessage)
 
     // Feedback signals from IDU and WBU
-    val pc_sel = Output(UInt(3.W))
-    val pc_csr = Output(UInt(32.W))
+    // val pc_sel = Output(UInt(3.W))
+    // val pc_csr = Output(UInt(32.W))
+
+    // Bypassed result from EXU and LSU to resolve data hazards in IDU stage.
+    val exuResultBypass = Input(UInt(32.W))
+    val wb_addr_exu = Input(UInt(5.W))
+    val ex_is_load  = Input(Bool())
+    val bypassedLsuData = Input(UInt(32.W))
+    val wb_addr_lsu = Input(UInt(5.W))
+
+    // Flush instructions
+    val redirect_valid = Input(Bool())  
 
     // Interact with register file
     val rs1_data = Input(UInt(32.W))
@@ -40,35 +51,6 @@ class IDU extends Module with RISCVConstants{
     // Set default values
     io.in.ready := false.B
     io.out.valid := false.B
-
-    // State machine state definition
-    val sIdle :: sDecode :: sDone :: Nil = Enum(3)
-    val state = RegInit(sIdle)
-
-    // State machine logic
-    switch(state) {
-      is(sIdle) {
-        io.out.valid := false.B
-        when(io.in.valid) {
-          io.in.ready := true.B
-          state := sDecode
-        }
-      }
-
-      is(sDecode) {
-          io.in.ready := false.B
-          io.out.valid := false.B
-          state := sDone
-      }
-
-      is(sDone) {
-        io.in.ready := false.B
-        io.out.valid := true.B
-          when(io.out.ready) {
-            state := sIdle
-          }
-      }
-    }
 
     // Decode
     io.rs1_addr := idu_reg_inst(RS1_MSB, RS1_LSB)
@@ -92,13 +74,36 @@ class IDU extends Module with RISCVConstants{
     val opcode = idu_reg_inst(OPCODE_MSB, OPCODE_LSB)
     val funct3 = idu_reg_inst(FUNCT3_MSB, FUNCT3_LSB)
 
+    // Forwarding condition check
+    val rs1_conflict_exu = (io.rs1_addr =/= 0.U) && (io.rs1_addr === io.wb_addr_exu)
+    val rs2_conflict_exu = (io.rs2_addr =/= 0.U) && (io.rs2_addr === io.wb_addr_exu)
+
+    val rs1_conflict_lsu = (io.rs1_addr =/= 0.U) && (io.rs1_addr === io.wb_addr_lsu)
+    val rs2_conflict_lsu = (io.rs2_addr =/= 0.U) && (io.rs2_addr === io.wb_addr_lsu)
+
+    val load_use_hazard = io.ex_is_load && (rs1_conflict_exu || rs2_conflict_exu)
+
+    // Avoid combinational cycle
+    val exuResultReg = RegNext(io.exuResultBypass)
+    val lsuResultReg = RegNext(io.bypassedLsuData)
+
+    val rs1_data = MuxCase(io.rs1_data, Seq(
+      rs1_conflict_exu -> exuResultReg,
+      rs1_conflict_lsu -> lsuResultReg
+    ))
+
+    val rs2_data = MuxCase(io.rs2_data, Seq(
+      rs2_conflict_exu -> exuResultReg,
+      rs2_conflict_lsu -> lsuResultReg
+    ))
+
     // Generate branch condition
-    val br_eq = io.rs1_data === io.rs2_data 
-    val br_lt = io.rs1_data.asSInt < io.rs2_data.asSInt 
-    val br_ltu = io.rs1_data.asUInt < io.rs2_data.asUInt 
+    val br_eq = rs1_data === rs2_data 
+    val br_lt = rs1_data.asSInt < rs2_data.asSInt 
+    val br_ltu = rs1_data.asUInt < rs2_data.asUInt 
 
     // Mux for branch taken signal
-    val branch_taken = MuxLookup(funct3, false.B)(Seq(
+    io.out.bits.branch_taken := MuxLookup(funct3, false.B)(Seq(
         FUNCT3_BEQ -> br_eq,
         FUNCT3_BNE -> !br_eq,
         FUNCT3_BLT -> br_lt,
@@ -115,8 +120,8 @@ class IDU extends Module with RISCVConstants{
         FUNCT3_ECALL -> CSR_ADDR_MEPC
     ))
     csr_instance.io.csr_wdata := MuxLookup(funct3, 0.U)(Seq(
-        FUNCT3_CSRRW -> io.rs1_data,
-        FUNCT3_CSRRS -> (io.rs1_data | csr_instance.io.csr_rdata),
+        FUNCT3_CSRRW -> rs1_data,
+        FUNCT3_CSRRS -> (rs1_data | csr_instance.io.csr_rdata),
         FUNCT3_ECALL -> idu_reg_pc
     )) 
     csr_instance.io.csr_wen := MuxLookup(opcode, false.B)(Seq(
@@ -129,13 +134,16 @@ class IDU extends Module with RISCVConstants{
         ))
       ))
     ))
+    /*
     io.pc_csr := MuxLookup(funct3, PC_4)(Seq(
         FUNCT3_ECALL -> MuxLookup(imm_i, PC_4)(Seq(
             FUNCT12_ECALL -> csr_instance.io.csr_mtvec,
             FUNCT12_MRET  -> csr_instance.io.csr_mepc
         )),
     ))
+    */
 
+    /*
     // pc_sel signal generation
     io.pc_sel := MuxLookup(opcode, PC_4)(Seq(
         OPCODE_JALR -> PC_REDIRECT,
@@ -147,6 +155,7 @@ class IDU extends Module with RISCVConstants{
             FUNCT3_ECALL -> PC_CSR
         ))
     ))
+    */
 
     // Mux for alu_op1 and alu_op2 selection
     val alu_op1Sel = Wire(UInt(2.W))
@@ -178,7 +187,7 @@ class IDU extends Module with RISCVConstants{
 
     // Mux for alu_op1 and alu_op2
     val alu_op1 = MuxLookup(alu_op1Sel, 0.U)(Seq(
-      0.U -> io.rs1_data,
+      0.U -> rs1_data,
       1.U -> imm_u_sext,
       2.U -> imm_b_sext,
       3.U -> imm_j_sext
@@ -188,14 +197,51 @@ class IDU extends Module with RISCVConstants{
         0.U -> idu_reg_pc,
         1.U -> imm_i_sext,
         2.U -> imm_s_sext,
-        3.U -> io.rs2_data,
+        3.U -> rs2_data,
     ))
 
     // Assign output signals
-    io.out.bits.inst := idu_reg_inst
+    io.out.bits.inst := Mux(io.redirect_valid, BUBBLE, idu_reg_inst)
     io.out.bits.pc := idu_reg_pc
     io.out.bits.alu_op1 := alu_op1
     io.out.bits.alu_op2 := alu_op2
-    io.out.bits.rs2_data := io.rs2_data
+    io.out.bits.rs2_data := rs2_data
     io.out.bits.csr_rdata := csr_instance.io.csr_rdata
+
+    // State machine state definition
+    val sIdle :: sDecode :: sStall :: sDone :: Nil = Enum(4)
+    val state = RegInit(sIdle)
+
+    // State machine logic
+    switch(state) {
+      is(sIdle) {
+        io.out.valid := false.B
+        when(io.in.valid) {
+          io.in.ready := true.B
+          state := sDecode
+        }
+      }
+
+      is(sDecode) {
+          io.in.ready := false.B
+          io.out.valid := false.B
+          when (load_use_hazard) {
+            state := sStall
+          }.otherwise {
+            state := sDone
+          }
+      }
+
+      is(sStall) {
+        state := sDone
+      }
+
+      is(sDone) {
+        io.in.ready := false.B
+        io.out.valid := true.B
+          when(io.out.ready) {
+            state := sIdle
+          }
+      }
+    }
 }

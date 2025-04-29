@@ -24,6 +24,7 @@ class WBU_IO extends Bundle {
   val wb_wen_debug = Output(Bool())
   val wb_sel_debug = Output(UInt(2.W))
   val wbu_reg_dmem_rdata_debug = Output(UInt(32.W))
+  val wbu_reg_inst_debug = Output(UInt(32.W))
 }
 
 class WBU extends Module with RISCVConstants{
@@ -125,6 +126,7 @@ class WBU extends Module with RISCVConstants{
   io.wb_wen_debug := io.wb_wen
   io.wb_sel_debug := wb_sel
   io.wbu_reg_dmem_rdata_debug := wbu_reg_dmem_rdata
+  io.wbu_reg_inst_debug := wbu_reg_inst
 }
 
 

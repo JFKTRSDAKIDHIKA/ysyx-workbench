@@ -133,6 +133,7 @@ void second_stage_boot_loader() {
     }
   }
   
+  /*
   // Read the hardware identifiers mvendorid and marchid using CSR instructions
   uint32_t mvendorid, marchid;
   asm volatile(
@@ -157,6 +158,7 @@ void second_stage_boot_loader() {
   putch('d'); putch(':'); putch(' '); 
   put_hex(marchid);
   putch('\n');
+  */
 
   // Jump to main with mainargs as parameter
   __asm__ volatile (
@@ -194,7 +196,7 @@ void init_uart() {
 
 __attribute__((section(".SSBL")))
 void _trm_init() {
-  init_uart();
+  // init_uart();
   second_stage_boot_loader();
 }
 

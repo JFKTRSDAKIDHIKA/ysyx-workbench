@@ -34,6 +34,7 @@ class Core extends Module with RISCVConstants {
         val wb_wen_debug = Output(Bool())
         val wb_sel_debug = Output(UInt(2.W))
         val wbu_reg_dmem_rdata_debug = Output(UInt(32.W))
+        val wbu_reg_inst_debug = Output(UInt(32.W))
         // Arbiter
         val Arbiter_state_debug = Output(UInt(2.W))
         // ICache
@@ -71,8 +72,8 @@ class Core extends Module with RISCVConstants {
 
     // Feedback signals
     // IDU -> IFU
-    ifu.io.pc_sel           := idu.io.pc_sel
-    ifu.io.pc_csr           := idu.io.pc_csr
+    // ifu.io.pc_sel           := idu.io.pc_sel
+    // ifu.io.pc_csr           := idu.io.pc_csr
     // EXU -> IFU
     ifu.io.pc_redirect_target := exu.io.pc_redirect_target
     // LSU -> IFU
@@ -99,6 +100,15 @@ class Core extends Module with RISCVConstants {
     xbar.io.clint <> clint.io.in
     xbar.io.soc <> io.master
 
+    // Pipeline hazard resolution signals connection
+    ifu.io.redirect_valid := exu.io.redirect_valid
+    idu.io.exuResultBypass := exu.io.exuResultBypass
+    idu.io.wb_addr_exu := exu.io.wb_addr_exu
+    idu.io.ex_is_load := exu.io.ex_is_load
+    idu.io.bypassedLsuData := lsu.io.bypassedLsuData
+    idu.io.wb_addr_lsu := lsu.io.wb_addr_lsu
+    idu.io.redirect_valid := exu.io.redirect_valid
+
     // Debus signals
     // ifu
     io.pc_debug := ifu.io.pc_debug
@@ -118,6 +128,7 @@ class Core extends Module with RISCVConstants {
     io.wb_wen_debug := wbu.io.wb_wen_debug
     io.wb_sel_debug := wbu.io.wb_sel_debug
     io.wbu_reg_dmem_rdata_debug := wbu.io.wbu_reg_dmem_rdata_debug
+    io.wbu_reg_inst_debug := wbu.io.wbu_reg_inst_debug
     // Arbiter
     io.Arbiter_state_debug := arbiter.io.Arbiter_state_debug
     // ICache

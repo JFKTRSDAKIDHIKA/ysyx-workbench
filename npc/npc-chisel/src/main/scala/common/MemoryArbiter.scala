@@ -94,6 +94,8 @@ class MemoryArbiter extends Module {
         when(io.lsu_handshake.valid) {
           // LSU requested while we were busy with IFU, grant LSU next.
           state := sGrantLSU
+          io.ifu_handshake.ready := false.B
+          io.lsu_handshake.ready := true.B
           last_granted_lsu := true.B // LSU is now the one granted
         } .otherwise {
           // No pending LSU request, go back to idle.
@@ -123,6 +125,8 @@ class MemoryArbiter extends Module {
         when(io.ifu_handshake.valid) {
           // IFU requested while we were busy with LSU, grant IFU next.
           state := sGrantIFU
+          io.ifu_handshake.ready := true.B
+          io.lsu_handshake.ready := false.B
           last_granted_lsu := false.B // IFU is now the one granted
           ifu_granted_is_read := io.ifu.ar.valid // Remember IFU transaction type
         } .otherwise {

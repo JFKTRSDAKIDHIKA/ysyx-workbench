@@ -24,6 +24,10 @@ class LSUIO extends Bundle {
   // Signals pass backed to IFU
   val lsu_axi_resp_err = Output(Bool())
 
+  // Bypassed data from LSU to avoid pipeline stalls caused by memory dependencies.
+  val bypassedLsuData = Output(UInt(32.W))
+  val wb_addr_lsu = Output(UInt(5.W))
+
   // Memory interface
   val memory = new AXI4IO
 
@@ -58,6 +62,9 @@ class LSU extends Module with RISCVConstants{
   val lsu_reg_result = RegEnable(io.in.bits.result, io.in.fire)
   val lsu_reg_rs2_data = RegEnable(io.in.bits.rs2_data, io.in.fire)
   val lsu_reg_csr_rdata = RegEnable(io.in.bits.csr_rdata, io.in.fire)
+
+  // Write destination in LSU stage
+  io.wb_addr_lsu := lsu_reg_inst(RD_MSB,  RD_LSB)
 
   // Control signals
   val opcode = lsu_reg_inst(OPCODE_MSB, OPCODE_LSB)
@@ -126,8 +133,15 @@ class LSU extends Module with RISCVConstants{
     }
 
     is(sArbiterPrepare) {
-      // Arbiter interface
-      io.arbiter.valid := true.B
+      // tell if the instruction is a load or stor
+      isLoad := opcode === OPCODE_LOAD
+      isStore := opcode === OPCODE_STORE
+      when (isLoad || isStore) {
+        // Arbiter interface
+        io.arbiter.valid := true.B
+      } .otherwise {
+        state := sDone
+      }
       // Wait arbiter ready
       when(io.arbiter.ready) {
         state := sPrepare
@@ -268,6 +282,7 @@ class LSU extends Module with RISCVConstants{
   io.out.bits.pc := lsu_reg_pc
   io.out.bits.result := lsu_reg_result
   io.out.bits.csr_rdata := lsu_reg_csr_rdata
+  io.bypassedLsuData := delayedData
 
   // Debug signals assignment
   io.lsu_state_debug := state
