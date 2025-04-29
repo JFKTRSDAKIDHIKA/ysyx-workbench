@@ -22,6 +22,7 @@ void halt(int code) {
   while (1);
 }
 
+/*
 __attribute__((section(".SSBL")))
 void put_hex(uint32_t value) {
   putch('0');
@@ -31,6 +32,7 @@ void put_hex(uint32_t value) {
     putch(nibble < 10 ? '0' + nibble : 'a' + (nibble - 10));
   }
 }
+*/
 
 __attribute__((section(".SSBL")))
 void second_stage_boot_loader() {
@@ -196,7 +198,7 @@ void init_uart() {
 
 __attribute__((section(".SSBL")))
 void _trm_init() {
-  // init_uart();
+  init_uart();
   second_stage_boot_loader();
 }
 

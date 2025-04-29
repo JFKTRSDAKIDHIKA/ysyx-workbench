@@ -2599,6 +2599,7 @@ module CPU(	// root/ysyx-workbench/ysyxSoC/src/CPU.scala:33:9
   output [1:0]  io_wb_sel_debug,
   output [31:0] io_wbu_reg_dmem_rdata_debug,
   output [31:0] io_wbu_reg_inst_debug,
+  output [31:0] io_wbu_reg_pc_debug,
   output [1:0]  io_Arbiter_state_debug,
   output [31:0] io_wb_data_debug,
   output [2:0]  io_lsu_memory_ar_size,
@@ -2682,6 +2683,7 @@ module CPU(	// root/ysyx-workbench/ysyxSoC/src/CPU.scala:33:9
     .io_wb_sel_debug(io_wb_sel_debug),
     .io_wbu_reg_dmem_rdata_debug(io_wbu_reg_dmem_rdata_debug),
     .io_wbu_reg_inst_debug(io_wbu_reg_inst_debug),
+    .io_wbu_reg_pc_debug(io_wbu_reg_pc_debug),
     .io_Arbiter_state_debug(io_Arbiter_state_debug),
     .io_wb_data_debug(io_wb_data_debug),
     .io_lsu_memory_ar_size(io_lsu_memory_ar_size),
@@ -4805,6 +4807,7 @@ module ysyxSoCASIC(	// root/ysyx-workbench/ysyxSoC/src/SoC.scala:59:9
   output [1:0]  io_wb_sel_debug,
   output [31:0] io_wbu_reg_dmem_rdata_debug,
   output [31:0] io_wbu_reg_inst_debug,
+  output [31:0] io_wbu_reg_pc_debug,
   output [1:0]  io_Arbiter_state_debug,
   output [31:0] io_wb_data_debug,
   output [2:0]  io_lsu_memory_ar_size,
@@ -5408,6 +5411,7 @@ module ysyxSoCASIC(	// root/ysyx-workbench/ysyxSoC/src/SoC.scala:59:9
     .io_wb_sel_debug(io_wb_sel_debug),
     .io_wbu_reg_dmem_rdata_debug(io_wbu_reg_dmem_rdata_debug),
     .io_wbu_reg_inst_debug(io_wbu_reg_inst_debug),
+    .io_wbu_reg_pc_debug(io_wbu_reg_pc_debug),
     .io_Arbiter_state_debug(io_Arbiter_state_debug),
     .io_wb_data_debug(io_wb_data_debug),
     .io_lsu_memory_ar_size(io_lsu_memory_ar_size),
@@ -5891,6 +5895,7 @@ module ysyxSoCFull(	// root/ysyx-workbench/ysyxSoC/src/SoC.scala:111:9
   output [1:0] io_wb_sel_debug,
   output [31:0] io_wbu_reg_dmem_rdata_debug,
   output [31:0] io_wbu_reg_inst_debug,
+  output [31:0] io_wbu_reg_pc_debug,
   output [1:0]  io_Arbiter_state_debug,
   output [31:0] io_wb_data_debug,
   output [2:0] io_lsu_memory_ar_size,
@@ -5973,6 +5978,7 @@ module ysyxSoCFull(	// root/ysyx-workbench/ysyxSoC/src/SoC.scala:111:9
     .io_wb_sel_debug(io_wb_sel_debug),
     .io_wbu_reg_dmem_rdata_debug(io_wbu_reg_dmem_rdata_debug),
     .io_wbu_reg_inst_debug(io_wbu_reg_inst_debug),
+    .io_wbu_reg_pc_debug(io_wbu_reg_pc_debug),
     .io_Arbiter_state_debug(io_Arbiter_state_debug),
     .io_wb_data_debug(io_wb_data_debug),
     .io_lsu_memory_ar_size(io_lsu_memory_ar_size),
@@ -6022,6 +6028,7 @@ module ysyxSoCTop(	// root/ysyx-workbench/ysyxSoC/src/Top.scala:13:7
   output [1:0] io_wb_sel_debug,
   output [31:0] io_wbu_reg_dmem_rdata_debug,
   output [31:0] io_wbu_reg_inst_debug,
+  output [31:0] io_wbu_reg_pc_debug,
   output [1:0]  io_Arbiter_state_debug,
   output [31:0] io_wb_data_debug,
   output [2:0] io_lsu_memory_ar_size,
@@ -6069,7 +6076,8 @@ module ysyxSoCTop(	// root/ysyx-workbench/ysyxSoC/src/Top.scala:13:7
     .io_wb_data_debug(io_wb_data_debug),
     .io_lsu_memory_ar_size(io_lsu_memory_ar_size),
     .io_icache_state_debug(io_icache_state_debug),
-    .io_wbu_reg_inst_debug(io_wbu_reg_inst_debug)
+    .io_wbu_reg_inst_debug(io_wbu_reg_inst_debug),
+    .io_wbu_reg_pc_debug(io_wbu_reg_pc_debug)
   );	// root/ysyx-workbench/ysyxSoC/src/Top.scala:18:20
 endmodule
 

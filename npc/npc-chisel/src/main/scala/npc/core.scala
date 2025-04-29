@@ -35,6 +35,7 @@ class Core extends Module with RISCVConstants {
         val wb_sel_debug = Output(UInt(2.W))
         val wbu_reg_dmem_rdata_debug = Output(UInt(32.W))
         val wbu_reg_inst_debug = Output(UInt(32.W))
+        val wbu_reg_pc_debug = Output(UInt(32.W))
         // Arbiter
         val Arbiter_state_debug = Output(UInt(2.W))
         // ICache
@@ -129,6 +130,7 @@ class Core extends Module with RISCVConstants {
     io.wb_sel_debug := wbu.io.wb_sel_debug
     io.wbu_reg_dmem_rdata_debug := wbu.io.wbu_reg_dmem_rdata_debug
     io.wbu_reg_inst_debug := wbu.io.wbu_reg_inst_debug
+    io.wbu_reg_pc_debug := wbu.io.wbu_reg_pc_debug
     // Arbiter
     io.Arbiter_state_debug := arbiter.io.Arbiter_state_debug
     // ICache
