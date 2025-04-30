@@ -28,6 +28,7 @@ class Core extends Module with RISCVConstants {
         val dmem_rdata_debug = Output(UInt(32.W))
         val lsu_reg_dmem_addr_debug = Output(UInt(32.W))
         val lsu_memory_ar_size = Output(UInt(3.W))
+        val lsu_reg_pc_debug = Output(UInt(32.W))
         // wbu
         val wbu_state_debug = Output(UInt(2.W))
         val wb_data_debug = Output(UInt(32.W))
@@ -77,8 +78,8 @@ class Core extends Module with RISCVConstants {
     // ifu.io.pc_csr           := idu.io.pc_csr
     // EXU -> IFU
     ifu.io.pc_redirect_target := exu.io.pc_redirect_target
-    // LSU -> IFU
-    ifu.io.lsu_axi_resp_err := lsu.io.lsu_axi_resp_err
+    // LSU -> WBU
+    wbu.io.lsu_axi_resp_err := lsu.io.lsu_axi_resp_err
     // WBU -> IFU
     ifu.io.pc_wen           := wbu.io.pc_wen
 
@@ -109,6 +110,7 @@ class Core extends Module with RISCVConstants {
     idu.io.bypassedLsuData := lsu.io.bypassedLsuData
     idu.io.wb_addr_lsu := lsu.io.wb_addr_lsu
     idu.io.redirect_valid := exu.io.redirect_valid
+    idu.io.lsu_finish := lsu.io.lsu_finish
 
     // Debus signals
     // ifu
@@ -123,6 +125,7 @@ class Core extends Module with RISCVConstants {
     io.dmem_wdata_debug := lsu.io.dmem_wdata_debug
     io.lsu_reg_dmem_addr_debug := lsu.io.lsu_reg_dmem_addr_debug
     io.lsu_memory_ar_size := lsu.io.memory.ar.size
+    io.lsu_reg_pc_debug := lsu.io.lsu_reg_pc_debug
     // wbu
     io.wbu_state_debug := wbu.io.wbu_state_debug
     io.wb_data_debug := wbu.io.wb_data_debug

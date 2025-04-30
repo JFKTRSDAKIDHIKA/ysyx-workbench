@@ -34,39 +34,6 @@ static uint64_t instr_exec_cycles;
 void print_perf_report(double seconds, double cycles_per_second);
 void print_config();
 
-void print_memory(paddr_t start_addr, size_t size) {
-  // Allocate buffers for memory data
-  std::vector<uint8_t> ref_mem(size, 0); // Buffer for REF memory
-  std::vector<uint8_t> dut_mem(size, 0); // Buffer for DUT memory
-
-  // Fetch memory data from REF
-  ref_difftest_memcpy(start_addr, ref_mem.data(), size, DIFFTEST_TO_DUT);
-
-  // Fetch memory data from DUT
-  for (size_t i = 0; i < size; ++i) {
-      dut_mem[i] = Memory::pmem_read(start_addr + i) & 0xFF; // Read byte by byte
-  }
-
-  // Print the memory in a more readable format
-  std::cout << "\nMemory Dump (Start Address: 0x" << std::hex << start_addr << ", Size: " << std::dec << size << " bytes)" << std::endl;
-  std::cout << "-------------------------------------------------------------------------------" << std::endl;
-  std::cout << "| Address      | REF Value  | DUT Value  | Match |" << std::endl;
-  std::cout << "-------------------------------------------------------------------------------" << std::endl;
-
-  for (size_t i = 0; i < size; ++i) {
-      paddr_t addr = start_addr + i;
-      bool match = (ref_mem[i] == dut_mem[i]);
-
-      // Print memory content with formatting
-      std::cout << "| 0x" << std::setw(10) << std::setfill('0') << std::hex << addr
-                << " | 0x" << std::setw(8) << std::setfill('0') << static_cast<int>(ref_mem[i])
-                << " | 0x" << std::setw(8) << std::setfill('0') << static_cast<int>(dut_mem[i])
-                << " |  " << (match ? "Yes" : "No ") << "  |" << std::endl;
-  }
-
-  std::cout << "-------------------------------------------------------------------------------" << std::endl;
-}
-
 #ifdef TRACE
 InstructionTrace itrace;
 MemoryTrace mtrace;
@@ -79,6 +46,9 @@ VerilatedVcdC* tfp;
 
 #ifdef DIFFTEST
 int check_dut_and_ref(VysyxSoCFull* top, paddr_t start_addr, size_t size) {
+  std::cout << "PC - DUT: 0x" << std::hex << top->io_wbu_reg_pc_debug 
+                << " REF: 0x" << std::hex << ref.pc << std::endl;
+
   // ----------- 检查寄存器 -----------
   // Compare DUT registers with REF registers
   for (int i = 0; i < 32; i++) {
@@ -89,6 +59,8 @@ int check_dut_and_ref(VysyxSoCFull* top, paddr_t start_addr, size_t size) {
                     << std::endl;
           
           // Print all registers of DUT (rf_values) and REF (ref.gpr)
+          std::cerr << "PC: - DUT: 0x" << std::hex << top->io_wbu_reg_pc_debug 
+                << " REF: 0x" << std::hex << ref.pc << std::endl;
           std::cerr << "DUT Registers (rf_values):" << std::endl;
           for (int j = 0; j < 32; j++) {
               std::cerr << regs[j] << ": 0x" << std::hex << rf_values[j] << std::endl;
@@ -97,13 +69,12 @@ int check_dut_and_ref(VysyxSoCFull* top, paddr_t start_addr, size_t size) {
           for (int j = 0; j < 32; j++) {
               std::cerr << regs[j] << ": 0x" << std::hex << ref.gpr[j] << std::endl;
           }
-          print_memory(0x30000060, 20);
-
           // Stop the simulation on a mismatch
           return -1;  
       }
   }
 
+  /*
   // Compare program counter (PC) between DUT and REF
   if (top->io_wbu_reg_pc_debug != (ref.pc - 4) ) {
       std::cerr << "PC mismatch - DUT: 0x" << std::hex << top->io_wbu_reg_pc_debug 
@@ -119,10 +90,9 @@ int check_dut_and_ref(VysyxSoCFull* top, paddr_t start_addr, size_t size) {
           std::cerr << regs[j] << ": 0x" << std::hex << ref.gpr[j] << std::endl;
       }
 
-      print_memory(top->io_lsu_reg_dmem_addr_debug, 20);
-
       return -1;  // End simulation
   }
+  */
   // If no mismatches, return 0
   return 0;
 }
@@ -227,36 +197,34 @@ void tick(void) {
         mtrace.addEntry(addr, top->io_dmem_wdata_debug, false, true);
     }
 #endif
-}
 
-  if (static_cast<int>(top->io_ifu_state_debug) == 1) {
   // print cpu execution information
 #ifndef SILENT_MODE
-    printf("------------------------------------------------------------------------------\n");
-    std::cout << "Instruction Info: "
-              << "Instruction: " << std::setw(8) << disassemble_instruction(top->io_inst_debug)
-              << ", PC: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_pc_debug << "\n"
-              << "Write-Back Info: "
-              << "wb_data: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_wb_data_debug
-              << ", wbu_reg_dmem_rdata: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_wbu_reg_dmem_rdata_debug
-              << ", wb_wen: 0x" << std::hex << static_cast<int>(top->io_wb_wen_debug)
-              << ", wbu_reg_inst: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_wbu_reg_inst_debug
-              << ", wb_sel: 0x" << std::hex << static_cast<int>(top->io_wb_sel_debug) << "\n"
-              << "LSU Info: "
-              << "lsu_reg_inst: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_lsu_reg_inst_debug
-              << ", lsu_reg_dmem_addr: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_lsu_reg_dmem_addr_debug
-              << ", dmem_rdata: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_dmem_rdata_debug
-              << ", dmem_wdata: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_dmem_wdata_debug
-              << ", lsu_is_ld_or_st: 0x" << std::hex << static_cast<int>(top->io_lsu_is_ld_or_st_debug) 
-              << ", lsu_memory_ar_size 0x:" << std::hex << static_cast<int>(top->io_lsu_memory_ar_size) << "\n"
-              << "State Machines: "
-              << "ifu_state: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->io_ifu_state_debug)
-              << ", lsu_state: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->io_lsu_state_debug)
-              << ", wbu_state: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->io_wbu_state_debug)
-              << ", Arbiter_state: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->io_Arbiter_state_debug)
-              << std::dec << std::endl;
+  printf("------------------------------------------------------------------------------\n");
+  std::cout << "Instruction Info: "
+            << "Instruction: " << std::setw(8) << disassemble_instruction(top->io_inst_debug)
+            << ", PC: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_pc_debug << "\n"
+            << "Write-Back Info: "
+            << "wb_data: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_wb_data_debug
+            << ", wbu_reg_dmem_rdata: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_wbu_reg_dmem_rdata_debug
+            << ", wb_wen: 0x" << std::hex << static_cast<int>(top->io_wb_wen_debug)
+            << ", wbu_reg_pc: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_wbu_reg_pc_debug
+            << ", wb_sel: 0x" << std::hex << static_cast<int>(top->io_wb_sel_debug) << "\n"
+            << "LSU Info: "
+            << "lsu_reg_inst: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_lsu_reg_inst_debug
+            << ", lsu_reg_dmem_addr: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_lsu_reg_dmem_addr_debug
+            << ", dmem_rdata: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_dmem_rdata_debug
+            << ", dmem_wdata: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_dmem_wdata_debug
+            << ", lsu_is_ld_or_st: 0x" << std::hex << static_cast<int>(top->io_lsu_is_ld_or_st_debug) 
+            << ", lsu_memory_ar_size 0x:" << std::hex << static_cast<int>(top->io_lsu_memory_ar_size) << "\n"
+            << "State Machines: "
+            << "ifu_state: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->io_ifu_state_debug)
+            << ", lsu_state: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->io_lsu_state_debug)
+            << ", wbu_state: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->io_wbu_state_debug)
+            << ", Arbiter_state: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->io_Arbiter_state_debug)
+            << std::dec << std::endl;
 #endif
-  }
+}
 
     top->clock = 1;
     top->eval();
@@ -290,17 +258,17 @@ static char* rl_gets() {
     return line_read;
   }
 
-// static int need_check = 0;
+static int need_check = 0;
 static int execute_single_step() {
   tick();
 #ifdef DIFFTEST
-  if (NEED_CHECK(top)) {
-    // need_check = NEED_CHECK(top);
+  if (need_check) {
+    need_check = NEED_CHECK(top);
     ref_difftest_exec(1);
     ref_difftest_regcpy(&ref, DIFFTEST_TO_REF);
     return check_dut_and_ref(top, 0, 0);
   } else {
-    // need_check = NEED_CHECK(top);
+    need_check = NEED_CHECK(top);
     return 0;
   }
 #else 

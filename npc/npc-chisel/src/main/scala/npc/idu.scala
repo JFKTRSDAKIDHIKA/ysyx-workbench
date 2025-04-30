@@ -27,11 +27,13 @@ class IDUIO extends Bundle {
     // Bypassed result from EXU and LSU to resolve data hazards in IDU stage.
     val exuResultBypass = Input(UInt(32.W))
     val wb_addr_exu = Input(UInt(5.W))
-    val ex_is_load  = Input(Bool())
     val bypassedLsuData = Input(UInt(32.W))
     val wb_addr_lsu = Input(UInt(5.W))
+    // Read after Load hazard
+    val ex_is_load  = Input(Bool())
+    val lsu_finish = Input(Bool())
 
-    // Flush instructions
+    // Signals to handle control hazard
     val redirect_valid = Input(Bool())  
 
     // Interact with register file
@@ -77,22 +79,23 @@ class IDU extends Module with RISCVConstants{
     // Forwarding condition check
     val rs1_conflict_exu = (io.rs1_addr =/= 0.U) && (io.rs1_addr === io.wb_addr_exu)
     val rs2_conflict_exu = (io.rs2_addr =/= 0.U) && (io.rs2_addr === io.wb_addr_exu)
-
     val rs1_conflict_lsu = (io.rs1_addr =/= 0.U) && (io.rs1_addr === io.wb_addr_lsu)
     val rs2_conflict_lsu = (io.rs2_addr =/= 0.U) && (io.rs2_addr === io.wb_addr_lsu)
-
     val load_use_hazard = io.ex_is_load && (rs1_conflict_exu || rs2_conflict_exu)
 
     // Avoid combinational cycle
     val exuResultReg = RegNext(io.exuResultBypass)
     val lsuResultReg = RegNext(io.bypassedLsuData)
 
+    // Read register values from rf and bypass signals
     val rs1_data = MuxCase(io.rs1_data, Seq(
+      (load_use_hazard && rs1_conflict_lsu) -> lsuResultReg,
       rs1_conflict_exu -> exuResultReg,
       rs1_conflict_lsu -> lsuResultReg
     ))
 
     val rs2_data = MuxCase(io.rs2_data, Seq(
+      (load_use_hazard && rs2_conflict_lsu) -> lsuResultReg,
       rs2_conflict_exu -> exuResultReg,
       rs2_conflict_lsu -> lsuResultReg
     ))
@@ -201,7 +204,7 @@ class IDU extends Module with RISCVConstants{
     ))
 
     // Assign output signals
-    io.out.bits.inst := Mux(io.redirect_valid, BUBBLE, idu_reg_inst)
+    io.out.bits.inst := Mux(io.redirect_valid, BUBBLE, idu_reg_inst)  // Insert Bubble when mispredict next pc!
     io.out.bits.pc := idu_reg_pc
     io.out.bits.alu_op1 := alu_op1
     io.out.bits.alu_op2 := alu_op2
@@ -233,7 +236,9 @@ class IDU extends Module with RISCVConstants{
       }
 
       is(sStall) {
-        state := sDone
+        when (io.lsu_finish) {
+          state := sDone
+        }
       }
 
       is(sDone) {

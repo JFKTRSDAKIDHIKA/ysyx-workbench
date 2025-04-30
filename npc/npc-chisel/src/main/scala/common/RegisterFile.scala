@@ -19,7 +19,7 @@ class RegisterFile extends BlackBox with HasBlackBoxInline {
   setInline("RegisterFile.v",
     s"""
       |module RegisterFile #(
-      |    parameter ADDR_WIDTH = 5,
+      |    parameter ADDR_WIDTH = 4,
       |    parameter DATA_WIDTH = 32
       |)(
       |    input clk,
@@ -33,7 +33,7 @@ class RegisterFile extends BlackBox with HasBlackBoxInline {
       |);
       |
       |    // DPI-C function to get the register values
-      |    import "DPI-C" function void get_register_values(input logic [31:0] rf[31:0]);
+      |    import "DPI-C" function void get_register_values(input logic [31:0] rf[15:0]);
       |
       |    // signal declaration
       |    reg [DATA_WIDTH-1:0] rf [2**ADDR_WIDTH-1:0];

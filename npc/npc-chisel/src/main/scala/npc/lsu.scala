@@ -27,6 +27,7 @@ class LSUIO extends Bundle {
   // Bypassed data from LSU to avoid pipeline stalls caused by memory dependencies.
   val bypassedLsuData = Output(UInt(32.W))
   val wb_addr_lsu = Output(UInt(5.W))
+  val lsu_finish = Output(Bool())
 
   // Memory interface
   val memory = new AXI4IO
@@ -41,6 +42,7 @@ class LSUIO extends Bundle {
   val dmem_wdata_debug = Output(UInt(32.W))
   val dmem_rdata_debug = Output(UInt(32.W))
   val lsu_reg_dmem_addr_debug = Output(UInt(32.W))
+  val lsu_reg_pc_debug = Output(UInt(32.W))
 }
 
 class LSU extends Module with RISCVConstants{
@@ -63,14 +65,17 @@ class LSU extends Module with RISCVConstants{
   val lsu_reg_rs2_data = RegEnable(io.in.bits.rs2_data, io.in.fire)
   val lsu_reg_csr_rdata = RegEnable(io.in.bits.csr_rdata, io.in.fire)
 
-  // Write destination in LSU stage
-  io.wb_addr_lsu := lsu_reg_inst(RD_MSB,  RD_LSB)
-
   // Control signals
   val opcode = lsu_reg_inst(OPCODE_MSB, OPCODE_LSB)
   val funct3 = lsu_reg_inst(FUNCT3_MSB, FUNCT3_LSB)
   val isLoad  = WireInit(false.B)  
   val isStore = WireInit(false.B)  
+
+  // Write destination in LSU stage
+  val is_branch = opcode === OPCODE_BRANCH
+  val is_store = opcode === OPCODE_STORE
+  // branch and store instructions do not write back!
+  io.wb_addr_lsu := Mux(is_branch || is_store, 0.U(5.W), lsu_reg_inst(RD_MSB,  RD_LSB))
 
   // 'mem_access_control' signal generation
   val mem_access_control = Wire(UInt(3.W))
@@ -285,9 +290,11 @@ class LSU extends Module with RISCVConstants{
   io.bypassedLsuData := delayedData
 
   // Debug signals assignment
+  io.lsu_finish := (state === sDone)
   io.lsu_state_debug := state
   io.lsu_is_ld_or_st_debug := isLoad || isStore
   io.lsu_reg_inst_debug := lsu_reg_inst
+  io.lsu_reg_pc_debug := lsu_reg_pc
   io.dmem_wdata_debug := UnifiedMemoryController.io.dmem_wdata
   io.dmem_rdata_debug := io.memory.r.data
   io.lsu_reg_dmem_addr_debug := lsu_reg_dmem_addr

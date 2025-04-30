@@ -14,11 +14,10 @@ class IFU extends Module with RISCVConstants {
     // Feedback signals from IDU, LSU, EXU and WBU
     // val pc_sel = Input(UInt(3.W))
     val pc_wen = Input(Bool())
-    val lsu_axi_resp_err = Input(Bool())
     // val pc_csr = Input(UInt(32.W))
     val pc_redirect_target = Input(UInt(32.W))
 
-    // Flush instructions
+    // Signals to handle Control Hazard
     val redirect_valid = Input(Bool())  
 
     // AXI4-Lite memory interface
@@ -52,7 +51,6 @@ class IFU extends Module with RISCVConstants {
   val pc_plus4 = pc + 4.U 
   val exception = 0.U(32.W) 
 
-  // Calculate next pc
   /*
   pc_next := MuxLookup(io.pc_sel, pc_plus4)(Seq(
     PC_4 -> pc_plus4,
@@ -61,16 +59,11 @@ class IFU extends Module with RISCVConstants {
     PC_CSR -> io.pc_csr
   ))
   */
-  // Speculative execuation
+  // Calculate next pc (Speculative execuation)
   pc_next := Mux(io.redirect_valid, io.pc_redirect_target, pc_plus4)
 
   // Output current pc
   io.out.bits.pc := pc
-
-  // Handle ebreak instruction and lsu memory access error
-  val ebreakHandler = Module(new EBreakHandler)
-  ebreakHandler.io.inst := io.out.bits.inst
-  ebreakHandler.io.lsu_axi_resp_err := io.lsu_axi_resp_err
 
   // State machine state definition
   val sIdle :: sFetchReq :: sFetchPrepare :: sFetchWait :: sFetchDone :: Nil = Enum(5)
@@ -177,37 +170,5 @@ class IFU extends Module with RISCVConstants {
   io.ifu_state_debug := state
 }
 
-class EBreakHandler extends BlackBox with HasBlackBoxInline {
-  val io = IO(new Bundle {
-    val inst = Input(UInt(32.W)) 
-    val lsu_axi_resp_err = Input(Bool())
-  })
 
-  setInline("EBreakHandler.v",
-    """
-      |
-      |module EBreakHandler(
-      |    input wire [31:0] inst,
-      |    input wire        lsu_axi_resp_err
-      |);
-      |
-      |import "DPI-C" function void simulation_exit();
-      |
-      |    always @(*) begin
-      |        if (inst == 32'h00100073) begin
-      |            $display("EBREAK: Simulation exiting...");
-      |            simulation_exit(); // 通知仿真环境结束
-      |        end
-      |    end
-      |
-      |    always @(*) begin
-      |        if (lsu_axi_resp_err == 1'b1) begin
-      |            $display("LSU memory access error...");
-      |            simulation_exit(); // 通知仿真环境结束
-      |        end
-      |    end
-      |
-      |endmodule
-    """.stripMargin)
-}
 

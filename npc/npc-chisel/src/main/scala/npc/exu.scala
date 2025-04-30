@@ -25,7 +25,7 @@ class EXUIO extends Bundle {
   val exuResultBypass = Output(UInt(32.W))
   val wb_addr_exu = Output(UInt(5.W))
   val ex_is_load  = Output(Bool())
-  // Flush instructions
+  // Signals to handle control hazard
   val redirect_valid = Output(Bool())  
 }
 
@@ -75,9 +75,6 @@ class EXU extends Module with RISCVConstants {
   val alu_op1 = RegEnable(io.in.bits.alu_op1, io.in.fire)
   val alu_op2 = RegEnable(io.in.bits.alu_op2, io.in.fire)
 
-  // Write destination in EXU stage
-  io.wb_addr_exu := exu_reg_inst(RD_MSB,  RD_LSB)
-
   // Control logic
   val opcode = exu_reg_inst(OPCODE_MSB, OPCODE_LSB)
   val funct3 = exu_reg_inst(FUNCT3_MSB, FUNCT3_LSB)
@@ -86,10 +83,14 @@ class EXU extends Module with RISCVConstants {
   // Handle control hazard
   val is_jal   = opcode === OPCODE_JAL
   val is_jalr  = opcode === OPCODE_JALR
-  val is_branch= opcode === OPCODE_BRANCH
+  val is_branch = opcode === OPCODE_BRANCH
+  val is_store = opcode === OPCODE_STORE
   val is_control_flow = is_jal || is_jalr || (is_branch && exu_reg_branch_taken)
   val pc_plus_4 = exu_reg_pc + 4.U
   val jump_mispredict = is_control_flow && (io.pc_redirect_target =/= pc_plus_4)
+
+  // Write destination in EXU stage (branch and store instructions do not write back!)
+  io.wb_addr_exu := Mux(is_branch || is_store, 0.U(5.W), exu_reg_inst(RD_MSB,  RD_LSB))
 
   // ALU operation selection
   val alu_op = Wire(UInt(5.W))
@@ -142,7 +143,7 @@ class EXU extends Module with RISCVConstants {
   val alu_result = alu_instance.io.result
 
   // Assign output signals
-  io.out.bits.inst := Mux(jump_mispredict, BUBBLE, exu_reg_inst)
+  io.out.bits.inst := exu_reg_inst
   io.out.bits.pc := exu_reg_pc
   io.out.bits.dmem_addr := alu_result
   io.out.bits.result := alu_result
@@ -150,7 +151,7 @@ class EXU extends Module with RISCVConstants {
   io.out.bits.csr_rdata := exu_reg_csr_rdata
   io.pc_redirect_target := alu_result
   io.exuResultBypass := alu_result
-  io.ex_is_load := (opcode =/= OPCODE_LOAD)
+  io.ex_is_load := (opcode === OPCODE_LOAD)
   io.redirect_valid := jump_mispredict
 }
 

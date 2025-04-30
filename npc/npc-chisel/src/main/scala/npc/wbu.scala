@@ -15,8 +15,9 @@ class WBU_IO extends Bundle {
   val wb_addr = Output(UInt(5.W))         
   val wb_wen = Output(Bool())         
 
-  // Feedback signals (WBU -> IFU)
+  // Feedback signals 
   val pc_wen = Output(Bool())
+  val lsu_axi_resp_err = Input(Bool())
 
   // Debug signals
   val wbu_state_debug = Output(UInt(2.W))
@@ -121,6 +122,11 @@ class WBU extends Module with RISCVConstants{
   io.wb_wen := wb_wen && (state === sWB)
   io.pc_wen := (state === sDone)
 
+  // Handle ebreak instruction and lsu memory access error
+  val ebreakHandler = Module(new EBreakHandler)
+  ebreakHandler.io.inst := wbu_reg_inst
+  ebreakHandler.io.lsu_axi_resp_err := io.lsu_axi_resp_err
+
   // Debug signals assignment
   io.wbu_state_debug := state
   io.wb_data_debug := wb_data
@@ -131,4 +137,36 @@ class WBU extends Module with RISCVConstants{
   io.wbu_reg_pc_debug := wbu_reg_pc
 }
 
+class EBreakHandler extends BlackBox with HasBlackBoxInline {
+  val io = IO(new Bundle {
+    val inst = Input(UInt(32.W)) 
+    val lsu_axi_resp_err = Input(Bool())
+  })
 
+  setInline("EBreakHandler.v",
+    """
+      |
+      |module EBreakHandler(
+      |    input wire [31:0] inst,
+      |    input wire        lsu_axi_resp_err
+      |);
+      |
+      |import "DPI-C" function void simulation_exit();
+      |
+      |    always @(*) begin
+      |        if (inst == 32'h00100073) begin
+      |            $display("EBREAK: Simulation exiting...");
+      |            simulation_exit(); // 通知仿真环境结束
+      |        end
+      |    end
+      |
+      |    always @(*) begin
+      |        if (lsu_axi_resp_err == 1'b1) begin
+      |            $display("LSU memory access error...");
+      |            simulation_exit(); // 通知仿真环境结束
+      |        end
+      |    end
+      |
+      |endmodule
+    """.stripMargin)
+}
