@@ -2604,7 +2604,10 @@ module CPU(	// root/ysyx-workbench/ysyxSoC/src/CPU.scala:33:9
   output [1:0]  io_Arbiter_state_debug,
   output [31:0] io_wb_data_debug,
   output [2:0]  io_lsu_memory_ar_size,
-  output [2:0]  io_icache_state_debug
+  output [2:0]  io_icache_state_debug,
+  output [1:0]  io_idu_state_debug,
+  output        io_jump_mispredict_debug,
+  output [1:0]  io_exu_state_debug
 );
 
   Core cpu (	// root/ysyx-workbench/ysyxSoC/src/CPU.scala:38:21
@@ -2689,7 +2692,10 @@ module CPU(	// root/ysyx-workbench/ysyxSoC/src/CPU.scala:33:9
     .io_Arbiter_state_debug(io_Arbiter_state_debug),
     .io_wb_data_debug(io_wb_data_debug),
     .io_lsu_memory_ar_size(io_lsu_memory_ar_size),
-    .io_icache_state_debug(io_icache_state_debug)
+    .io_icache_state_debug(io_icache_state_debug),
+    .io_idu_state_debug(io_idu_state_debug),
+    .io_jump_mispredict_debug(io_jump_mispredict_debug),
+    .io_exu_state_debug(io_exu_state_debug)
   );	// root/ysyx-workbench/ysyxSoC/src/CPU.scala:38:21
 endmodule
 
@@ -4814,7 +4820,10 @@ module ysyxSoCASIC(	// root/ysyx-workbench/ysyxSoC/src/SoC.scala:59:9
   output [1:0]  io_Arbiter_state_debug,
   output [31:0] io_wb_data_debug,
   output [2:0]  io_lsu_memory_ar_size,
-  output [2:0]  io_icache_state_debug
+  output [2:0]  io_icache_state_debug,
+  output [1:0]  io_idu_state_debug,
+  output        io_jump_mispredict_debug,
+  output [1:0]  io_exu_state_debug
 );
 
   wire        _cpu_reset_chain_io_q;	// root/ysyx-workbench/ysyxSoC/rocket-chip/src/main/scala/util/ShiftReg.scala:45:23
@@ -5419,7 +5428,10 @@ module ysyxSoCASIC(	// root/ysyx-workbench/ysyxSoC/src/SoC.scala:59:9
     .io_Arbiter_state_debug(io_Arbiter_state_debug),
     .io_wb_data_debug(io_wb_data_debug),
     .io_lsu_memory_ar_size(io_lsu_memory_ar_size),
-    .io_icache_state_debug(io_icache_state_debug)
+    .io_icache_state_debug(io_icache_state_debug),
+    .io_idu_state_debug(io_idu_state_debug),
+    .io_jump_mispredict_debug(io_jump_mispredict_debug),
+    .io_exu_state_debug(io_exu_state_debug)
   );	// root/ysyx-workbench/ysyxSoC/src/SoC.scala:30:23
   APBUart16550 luart (	// root/ysyx-workbench/ysyxSoC/src/SoC.scala:34:25
     .clock           (clock),
@@ -5904,7 +5916,10 @@ module ysyxSoCFull(	// root/ysyx-workbench/ysyxSoC/src/SoC.scala:111:9
   output [1:0]  io_Arbiter_state_debug,
   output [31:0] io_wb_data_debug,
   output [2:0] io_lsu_memory_ar_size,
-  output [2:0]  io_icache_state_debug
+  output [2:0]  io_icache_state_debug,
+  output [1:0]  io_idu_state_debug,
+  output        io_jump_mispredict_debug,
+  output [1:0]  io_exu_state_debug
 );
 
   wire        _bitrev_miso;	// root/ysyx-workbench/ysyxSoC/src/SoC.scala:138:24
@@ -5988,7 +6003,10 @@ module ysyxSoCFull(	// root/ysyx-workbench/ysyxSoC/src/SoC.scala:111:9
     .io_Arbiter_state_debug(io_Arbiter_state_debug),
     .io_wb_data_debug(io_wb_data_debug),
     .io_lsu_memory_ar_size(io_lsu_memory_ar_size),
-    .io_icache_state_debug(io_icache_state_debug)
+    .io_icache_state_debug(io_icache_state_debug),
+    .io_idu_state_debug(io_idu_state_debug),
+    .io_jump_mispredict_debug(io_jump_mispredict_debug),
+    .io_exu_state_debug(io_exu_state_debug)
   );	// root/ysyx-workbench/ysyxSoC/src/SoC.scala:107:24
   flash flash (	// root/ysyx-workbench/ysyxSoC/src/SoC.scala:135:23
     .sck  (_asic_spi_sck),	// root/ysyx-workbench/ysyxSoC/src/SoC.scala:107:24
@@ -6039,7 +6057,10 @@ module ysyxSoCTop(	// root/ysyx-workbench/ysyxSoC/src/Top.scala:13:7
   output [1:0]  io_Arbiter_state_debug,
   output [31:0] io_wb_data_debug,
   output [2:0] io_lsu_memory_ar_size,
-  output [2:0]  io_icache_state_debug
+  output [2:0]  io_icache_state_debug,
+  output [1:0]  io_idu_state_debug,
+  output        io_jump_mispredict_debug,
+  output [1:0]  io_exu_state_debug
 );
 
   ysyxSoCFull dut (	// root/ysyx-workbench/ysyxSoC/src/Top.scala:18:20
@@ -6086,7 +6107,10 @@ module ysyxSoCTop(	// root/ysyx-workbench/ysyxSoC/src/Top.scala:13:7
     .io_wbu_reg_inst_debug(io_wbu_reg_inst_debug),
     .io_lsu_reg_pc_debug(io_lsu_reg_pc_debug),
     .io_wbu_reg_pc_debug(io_wbu_reg_pc_debug),
-    .io_lsu_reg_pc_debug(io_lsu_reg_pc_debug)
+    .io_lsu_reg_pc_debug(io_lsu_reg_pc_debug),
+    .io_idu_state_debug(io_idu_state_debug),
+    .io_jump_mispredict_debug(io_jump_mispredict_debug),
+    .io_exu_state_debug(io_exu_state_debug)
   );	// root/ysyx-workbench/ysyxSoC/src/Top.scala:18:20
 endmodule
 

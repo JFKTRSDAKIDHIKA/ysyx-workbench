@@ -37,5 +37,8 @@ extern uint64_t total_dmem_latency;
 extern uint64_t total_imem_latency;  
 extern uint64_t total_miss_penalty;
 extern uint64_t total_miss_time;
+extern uint64_t total_stall_penalty;
+extern uint64_t jump_mispredict_count;
+extern uint64_t id_stall_cycles_due_to_ifetch;
 
 #endif // SIM_STAT_H

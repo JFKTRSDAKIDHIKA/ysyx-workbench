@@ -30,6 +30,10 @@ uint64_t total_imem_latency = 0;
 uint64_t total_miss_penalty = 0;
 uint64_t total_miss_time = 0;
 
+uint64_t total_stall_penalty = 0;
+uint64_t jump_mispredict_count = 0;
+uint64_t id_stall_cycles_due_to_ifetch = 0;
+
 // decode function definition
 InstType decode_inst_type(uint32_t inst) {
     uint8_t opcode = inst & 0x7F;

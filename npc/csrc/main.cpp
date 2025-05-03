@@ -119,6 +119,12 @@ void tick(void) {
     total_miss_penalty++;
   if (static_cast<int>(top->io_icache_state_debug) == 6)
     total_miss_time++;
+  if (static_cast<int>(top->io_idu_state_debug) == 2)
+    total_stall_penalty++;
+  if (static_cast<int>(top->io_jump_mispredict_debug) == 1 && static_cast<int>(top->io_exu_state_debug) == 1)
+    jump_mispredict_count++;
+  if (static_cast<int>(top->io_idu_state_debug) == 0)
+    id_stall_cycles_due_to_ifetch++;
   
   // Increment the cycle counter for the current instruction
   instr_exec_cycles++;
@@ -499,6 +505,12 @@ void print_perf_report(double seconds, double cycles_per_second) {
   double avg_miss_penalty = 0.0;
   if (perf_ifu_inst_fetch > 0)
       avg_miss_penalty = static_cast<double>(total_miss_penalty) / total_miss_time;
+  if (id_stall_cycles_due_to_ifetch > total_inst)
+      id_stall_cycles_due_to_ifetch = id_stall_cycles_due_to_ifetch - total_inst;
+  double cpi_orig = (total_inst == 0) ? 0.0 : static_cast<double>(total_cycles) / total_inst;
+  double cpi_no_stall = (total_inst == 0) ? 0.0 : static_cast<double>(total_cycles - total_stall_penalty) / total_inst;
+  double cpi_no_jmp_mispredict = (total_inst == 0) ? 0.0 : static_cast<double>(total_cycles - jump_mispredict_count) / total_inst;
+  double cpi_perfect = (total_inst == 0) ? 0.0 : static_cast<double>(total_cycles - total_stall_penalty - jump_mispredict_count) / total_inst;   
 
   cout << "\n";
   cout << "╔════════════════════════════════════════════════════════════╗\n";
@@ -520,6 +532,34 @@ void print_perf_report(double seconds, double cycles_per_second) {
   cout << "║ " << left << setw(label_width) << "ICache Average Miss Penalty"
        << " : " << right << setw(value_width) << fixed << setprecision(2) << avg_miss_penalty << " ║\n";
 
+  cout << "║ " << left << setw(label_width) << "Total stall penalty (Cycles)"
+       << " : " << right << setw(value_width) << total_stall_penalty << " ║\n";
+  
+  cout << "║ " << left << setw(label_width) << "Jump Mispredict Count"
+       << " : " << right << setw(value_width) << jump_mispredict_count << " ║\n";
+
+  cout << "║ " << left << setw(label_width) << "ID Stall Cycles Due to IFetch"
+       << " : " << right << setw(value_width) << id_stall_cycles_due_to_ifetch << " ║\n";
+
+  cout << "╠════════════════════════════════════════════════════════════╣\n";
+
+  cout << "║ " << left << setw(label_width) << "CPI w/o Stall Penalty"
+       << " : " << right << setw(value_width) << fixed << setprecision(3) << cpi_no_stall << " ║\n";
+  
+  cout << "║ " << left << setw(label_width) << "CPI w/o Jump Mispredict"
+       << " : " << right << setw(value_width) << fixed << setprecision(3) << cpi_no_jmp_mispredict << " ║\n";
+  
+  cout << "║ " << left << setw(label_width) << "CPI w/o Stall + Jump MP"
+       << " : " << right << setw(value_width) << fixed << setprecision(3) << cpi_perfect << " ║\n";
+
+  cout << "║ " << left << setw(label_width) << "Stall Penalty CPI Reduction"
+       << " : " << right << setw(value_width)
+       << fixed << setprecision(2) << ((cpi_orig == 0) ? 0.0 : (1.0 - cpi_no_stall / cpi_orig) * 100) << "% ║\n";
+
+  cout << "║ " << left << setw(label_width) << "Jump MP CPI Reduction"
+       << " : " << right << setw(value_width)
+       << fixed << setprecision(2) << ((cpi_orig == 0) ? 0.0 : (1.0 - cpi_no_jmp_mispredict / cpi_orig) * 100) << "% ║\n";
+  
   cout << "╠════════════════════════════════════════════════════════════╣\n";
 
   cout << "║ " << left << setw(label_width) << "Total Time (s)"

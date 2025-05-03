@@ -27,6 +27,9 @@ class EXUIO extends Bundle {
   val ex_is_load  = Output(Bool())
   // Signals to handle control hazard
   val redirect_valid = Output(Bool())  
+  // Degus signals
+  val jump_mispredict_debug = Output(Bool())
+  val exu_state_debug = Output(UInt(2.W))
 }
 
 class EXU extends Module with RISCVConstants {
@@ -153,6 +156,8 @@ class EXU extends Module with RISCVConstants {
   io.exuResultBypass := alu_result
   io.ex_is_load := (opcode === OPCODE_LOAD)
   io.redirect_valid := jump_mispredict
+  io.jump_mispredict_debug := jump_mispredict
+  io.exu_state_debug := state
 }
 
 

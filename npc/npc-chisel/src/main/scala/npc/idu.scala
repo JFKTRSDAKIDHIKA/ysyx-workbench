@@ -41,6 +41,9 @@ class IDUIO extends Bundle {
     val rs2_data = Input(UInt(32.W))
     val rs1_addr = Output(UInt(5.W)) 
     val rs2_addr = Output(UInt(5.W))
+
+    // Debug signals
+    val idu_state_debug = Output(UInt(2.W))
 }
 
 class IDU extends Module with RISCVConstants{
@@ -203,14 +206,6 @@ class IDU extends Module with RISCVConstants{
         3.U -> rs2_data,
     ))
 
-    // Assign output signals
-    io.out.bits.inst := Mux(io.redirect_valid, BUBBLE, idu_reg_inst)  // Insert Bubble when mispredict next pc!
-    io.out.bits.pc := idu_reg_pc
-    io.out.bits.alu_op1 := alu_op1
-    io.out.bits.alu_op2 := alu_op2
-    io.out.bits.rs2_data := rs2_data
-    io.out.bits.csr_rdata := csr_instance.io.csr_rdata
-
     // State machine state definition
     val sIdle :: sDecode :: sStall :: sDone :: Nil = Enum(4)
     val state = RegInit(sIdle)
@@ -249,4 +244,13 @@ class IDU extends Module with RISCVConstants{
           }
       }
     }
+
+    // Assign output signals
+    io.out.bits.inst := Mux(io.redirect_valid, BUBBLE, idu_reg_inst)  // Insert Bubble when mispredict next pc!
+    io.out.bits.pc := idu_reg_pc
+    io.out.bits.alu_op1 := alu_op1
+    io.out.bits.alu_op2 := alu_op2
+    io.out.bits.rs2_data := rs2_data
+    io.out.bits.csr_rdata := csr_instance.io.csr_rdata
+    io.idu_state_debug := state
 }
