@@ -1,1 +1,13 @@
-Shaw-oh Chia's Golden Apple Architecture
+# CPU Microarchitecture Optimization Progress
+
+```text
+IPC
+│
+│                             ╭──────╮
+│                      ╭────→│0.158 │ ← 7: ICache流水化
+│               ╭────→│      ╰──────╯
+│        ╭────→│0.099 ←──────6: 流水+静态推测
+│ ╭────→│0.053       ←──────5: 扩大iCache容量
+│ │0.009 → 0.007 → 0.036 → 0.048
+│1      2      3      4      5      6      7
+╰────────────────────────────────────────→ commit
