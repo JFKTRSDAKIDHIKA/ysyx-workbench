@@ -290,7 +290,9 @@ class LSU extends Module with RISCVConstants{
   io.bypassedLsuData := delayedData
 
   // Debug signals assignment
-  io.lsu_finish := (state === sDone) && (opcode === OPCODE_LOAD) // only signal finish when it's a load; other ops in LSU may cause issues
+  // only signal finish when it's a load; other ops in LSU may cause issues
+  // Only mark LSU finish for loads when EXU-issued load reaches LSU;
+  io.lsu_finish := (state === sDone) && (opcode === OPCODE_LOAD) && (io.in.bits.pc === io.out.bits.pc)
   io.lsu_state_debug := state
   io.lsu_is_ld_or_st_debug := isLoad || isStore
   io.lsu_reg_inst_debug := lsu_reg_inst

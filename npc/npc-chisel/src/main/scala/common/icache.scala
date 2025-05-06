@@ -319,7 +319,7 @@ class ICacheCore (implicit val p: ICacheParams) extends Module with RISCVConstan
       }
 
       io.out.valid := true.B
-      io.in.ready := true.B
+      io.in.ready := io.out.ready
       io.out.bits.inst := Mux(redirect_pending || icache_core_reg_redirect_valid || io.redirect_valid, BUBBLE, blockBuffer(icache_core_reg_wordOffset))  // Insert Bubble when mispredict next pc!
 
       replaceWay := replaceWay + 1.U
