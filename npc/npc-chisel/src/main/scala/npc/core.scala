@@ -54,6 +54,8 @@ class Core extends Module with RISCVConstants {
 
     // Module instantiation
     val ifu = Module(new IFU)
+    implicit val icacheParams = DefaultICacheParams
+    val ICache = Module(new ICache)
     val idu = Module(new IDU)
     val exu = Module(new EXU)
     val lsu = Module(new LSU)
@@ -61,10 +63,11 @@ class Core extends Module with RISCVConstants {
     val regfile = Module(new RegisterFile)
 
     // Forward signals connection
-    StageConnect(ifu.io.out, idu.io.in) // IFU -> IDU
-    StageConnect(idu.io.out, exu.io.in) // IDU -> EXU
-    StageConnect(exu.io.out, lsu.io.in) // EXU -> LSU
-    StageConnect(lsu.io.out, wbu.io.in) // LSU -> WBU
+    StageConnect(ifu.io.out, ICache.io.in) // IFU -> ICache
+    StageConnect(ICache.io.out, idu.io.in) // ICache -> IDU
+    StageConnect(idu.io.out, exu.io.in)    // IDU -> EXU
+    StageConnect(exu.io.out, lsu.io.in)    // EXU -> LSU
+    StageConnect(lsu.io.out, wbu.io.in)    // LSU -> WBU
 
     // Register file interface 
     regfile.io.clk      := clock
@@ -82,23 +85,17 @@ class Core extends Module with RISCVConstants {
     // ifu.io.pc_sel           := idu.io.pc_sel
     // ifu.io.pc_csr           := idu.io.pc_csr
     // EXU -> IFU
-    ifu.io.pc_redirect_target := exu.io.pc_redirect_target
+    ifu.io.redirect_target := exu.io.pc_redirect_target
     // LSU -> WBU
     wbu.io.lsu_axi_resp_err := lsu.io.lsu_axi_resp_err
-    // WBU -> IFU
-    ifu.io.pc_wen           := wbu.io.pc_wen
 
     // Memory interface
     // Module instantiation
     val arbiter = Module(new MemoryArbiter)
-    // Connect ifu to ICache
-    implicit val icacheParams = DefaultICacheParams
-    val ICache = Module(new ICache)
-    ifu.io.memory <> ICache.io.ifu
     // Connect arbiter to ifu, lsu.
     arbiter.io.ifu <> ICache.io.memory
     arbiter.io.lsu <> lsu.io.memory
-    arbiter.io.ifu_handshake <> ifu.io.arbiter
+    arbiter.io.ifu_handshake <> ICache.io.arbiter
     arbiter.io.lsu_handshake <> lsu.io.arbiter
     // Connect xbar to clint and arbiter.
     val xbar = Module(new Xbar)
@@ -109,6 +106,7 @@ class Core extends Module with RISCVConstants {
 
     // Pipeline hazard resolution signals connection
     ifu.io.redirect_valid := exu.io.redirect_valid
+    ICache.io.redirect_valid := exu.io.redirect_valid
     idu.io.exuResultBypass := exu.io.exuResultBypass
     idu.io.wb_addr_exu := exu.io.wb_addr_exu
     idu.io.ex_is_load := exu.io.ex_is_load
@@ -120,7 +118,7 @@ class Core extends Module with RISCVConstants {
     // Debus signals
     // ifu
     io.pc_debug := ifu.io.pc_debug
-    io.inst_debug := ifu.io.inst_debug
+    io.inst_debug := 0.U
     io.ifu_state_debug := ifu.io.ifu_state_debug
     // idu
     io.idu_state_debug := idu.io.idu_state_debug

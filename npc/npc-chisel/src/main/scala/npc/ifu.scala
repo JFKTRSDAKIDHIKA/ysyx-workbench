@@ -3,172 +3,46 @@ package npc
 import chisel3._
 import chisel3.util._
 import common._
-import common.constants.RISCVConstants 
-import chisel3.util.HasBlackBoxInline
+import common.constants.RISCVConstants
 
+/**
+ * Minimal IFU module with simple Decoupled handshake.
+ *
+ * Sends the current PC downstream whenever the downstream is ready.
+ */
 class IFU extends Module with RISCVConstants {
   val io = IO(new Bundle {
     // Forward signals
-    val out = Decoupled(new Message)
+    // Signals passed to ICache
+    val out = Decoupled(new ICacheRequestBundle)
 
-    // Feedback signals from IDU, LSU, EXU and WBU
-    // val pc_sel = Input(UInt(3.W))
-    val pc_wen = Input(Bool())
-    // val pc_csr = Input(UInt(32.W))
-    val pc_redirect_target = Input(UInt(32.W))
+    // Redirect control signal from EXU or IDU
+    val redirect_valid = Input(Bool())
+    val redirect_target = Input(UInt(32.W))
 
-    // Signals to handle Control Hazard
-    val redirect_valid = Input(Bool())  
-
-    // AXI4-Lite memory interface
-    val memory = new AXI4IO
-
-    // Arbiter handshake
-    val arbiter = new ValidReadyBundle
-
-    // Degus signals
+    // Debug signals
     val pc_debug = Output(UInt(32.W))
-    val inst_debug = Output(UInt(32.W))
     val ifu_state_debug = Output(UInt(3.W))
   })
 
-  // Degus signals assignment
-  io.pc_debug := io.out.bits.pc
-  io.inst_debug := io.out.bits.inst
+  // Internal Registers 
+  val pc_reg = RegInit(RESET_VECTOR) // Current PC
+  val next_pc = Wire(UInt(32.W))     // Next PC logic
 
-  // Set AXI4 default values
-  AXI4Defaults(io.memory)
+  // Determine next PC: redirect has priority
+  next_pc := Mux(io.redirect_valid, io.redirect_target, pc_reg + 4.U)
 
-  // Set default values
-  io.out.valid := false.B
-  io.out.bits.inst := 0.U 
-  io.arbiter.valid := false.B
+  // Only send PC when downstream is ready
+  io.out.valid := io.out.ready      // valid iff downstream is ready
+  io.out.bits.pc := pc_reg
 
-  // Internal signals and registers declaration
-  val pc = RegInit(RESET_VECTOR) // Program Counter
-  val if_inst_buffer = RegInit(0.U(32.W)) 
-  val pc_next = Wire(UInt(32.W))
-  val pc_plus4 = pc + 4.U 
-  val exception = 0.U(32.W) 
-
-  /*
-  pc_next := MuxLookup(io.pc_sel, pc_plus4)(Seq(
-    PC_4 -> pc_plus4,
-    PC_REDIRECT -> io.pc_redirect_target,
-    PC_EXC -> exception,
-    PC_CSR -> io.pc_csr
-  ))
-  */
-  // Calculate next pc (Speculative execuation)
-  pc_next := Mux(io.redirect_valid, io.pc_redirect_target, pc_plus4)
-
-  // Output current pc
-  io.out.bits.pc := pc
-
-  // State machine state definition
-  val sIdle :: sFetchReq :: sFetchPrepare :: sFetchWait :: sFetchDone :: Nil = Enum(5)
-  val state = RegInit(sIdle)
-
-  // State machine logic
-  switch(state) {
-    is(sIdle) {
-      // Arbiter interface
-      io.arbiter.valid := false.B
-      // Forward signals
-      io.out.valid := false.B
-      io.out.bits.inst := if_inst_buffer 
-      // Read Address Channel
-      io.memory.ar.addr := pc 
-      io.memory.ar.valid := false.B
-      io.memory.ar.len := 0.U
-      io.memory.ar.size := 2.U
-      io.memory.ar.burst := AXI4Constants.BURST_INCR
-      io.memory.ar.id := 0.U
-      // Read Data Channel
-      io.memory.r.ready := false.B
-      // Start fetch instruction
-      state := sFetchPrepare
-    }
-
-    is(sFetchPrepare) {
-      // Arbiter interface
-      io.arbiter.valid := true.B
-      // Wait arbiter ready
-      when(io.arbiter.ready) {
-        state := sFetchReq
-      }      
-    }
-
-    is(sFetchReq) {
-      // Arbiter interface
-      io.arbiter.valid := true.B
-      // Forward signals
-      io.out.valid := false.B
-      io.out.bits.inst := if_inst_buffer 
-      // Read Address Channel
-      io.memory.ar.addr := pc 
-      io.memory.ar.valid := true.B  // Send memory read request
-      io.memory.ar.len := 0.U
-      io.memory.ar.size := 2.U
-      io.memory.ar.burst := AXI4Constants.BURST_INCR
-      io.memory.ar.id := 0.U
-      // Read Data Channel
-      io.memory.r.ready := false.B
-      // Wait memory ready to process request
-      when(io.memory.ar.ready) {
-        state := sFetchWait
-      }
-    }
-
-    is(sFetchWait) {
-      // Arbiter interface
-      io.arbiter.valid := true.B
-      // Forward signals
-      io.out.valid := false.B
-      io.out.bits.inst := if_inst_buffer 
-      // Read Address Channel
-      io.memory.ar.addr := pc 
-      io.memory.ar.valid := false.B // Clear memory read request
-      io.memory.ar.len := 0.U
-      io.memory.ar.size := 2.U
-      io.memory.ar.burst := AXI4Constants.BURST_INCR
-      io.memory.ar.id := 0.U
-      // Read Data Channel
-      io.memory.r.ready := true.B // Ready to read data from memory
-      // Wait fetched instruction data valid
-      when(io.memory.r.valid) {
-        if_inst_buffer := io.memory.r.data 
-        state := sFetchDone
-      }
-    }
-
-    is(sFetchDone) {
-      // Arbiter interface
-      io.arbiter.valid := false.B  // arbiter.valid signal maintains hign during instruction fetch
-      // Forward signals
-      io.out.valid := true.B
-      io.out.bits.inst := if_inst_buffer 
-      // Read Address Channel
-      io.memory.ar.addr := pc 
-      io.memory.ar.valid := false.B
-      io.memory.ar.len := 0.U
-      io.memory.ar.size := 2.U
-      io.memory.ar.burst := AXI4Constants.BURST_INCR
-      io.memory.ar.id := 0.U
-      // Read Data Channel
-      io.memory.r.ready := false.B
-      // Wait idu ready to process instruction
-      when(io.out.ready) {
-        state := sIdle
-        // Update PC value
-        pc := pc_next
-      }
-    }
+  // Update PC when data was accepted by downstream
+  when(io.out.fire) {
+    pc_reg := next_pc
   }
 
-  // Debug signals assignment
-  io.ifu_state_debug := state
+  // Debug signals
+  io.pc_debug := pc_reg
+  io.ifu_state_debug := 0.U  // No state machine used
 }
-
-
 

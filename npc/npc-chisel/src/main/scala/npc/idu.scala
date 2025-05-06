@@ -16,7 +16,7 @@ class DecodedMessage extends Message {
 class IDUIO extends Bundle {
     // Forward signals
     // Signals passed from IFU
-    val in = Flipped(Decoupled(new Message))
+    val in = Flipped(Decoupled(new ICacheRespBundle))
     // Signals passed to EXU
     val out = Decoupled(new DecodedMessage)
 

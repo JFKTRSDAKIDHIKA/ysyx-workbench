@@ -22,7 +22,7 @@
 #include <readline/history.h>
 
 // Define macros
-#define NEED_CHECK(top) ((top->io_wbu_state_debug == 2) && (top->io_wbu_reg_inst_debug != 0x4033))
+#define NEED_CHECK(top) ((top->io_wbu_state_debug == 2) && (top->io_wbu_reg_inst_debug != 0x4033) && (top->io_wbu_reg_pc_debug != 0x0))
 
 // Declare global variables
 VysyxSoCFull* top;      // Top module (global)
