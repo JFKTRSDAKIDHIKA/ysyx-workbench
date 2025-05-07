@@ -107,6 +107,7 @@ void tick(void) {
     time_i++;
 #endif
   // Performance counter
+  // ICache performance counter
   if (static_cast<int>(top->io_ifu_state_debug) == 4)
     perf_ifu_inst_fetch++;
   if (static_cast<int>(top->io_ifu_state_debug) >= 1 && static_cast<int>(top->io_ifu_state_debug) <= 3)
@@ -115,10 +116,11 @@ void tick(void) {
     perf_lsu_data_mem++;
   if (static_cast<int>(top->io_lsu_state_debug) == 3)
     total_dmem_latency++;
-  if (static_cast<int>(top->io_icache_state_debug) >= 3 && static_cast<int>(top->io_icache_state_debug) <= 6)
+  if (static_cast<int>(top->io_icache_state_debug) != 0 && static_cast<int>(top->io_icache_state_debug) != 5)
     total_miss_penalty++;
   if (static_cast<int>(top->io_icache_state_debug) == 6)
     total_miss_time++;
+  // Pipeline performance counter
   if (static_cast<int>(top->io_idu_state_debug) == 2)
     total_stall_penalty++;
   if (static_cast<int>(top->io_jump_mispredict_debug) == 1 && static_cast<int>(top->io_exu_state_debug) == 1)
@@ -134,7 +136,7 @@ void tick(void) {
   if (static_cast<int>(top->io_ifu_state_debug) == 1)
       instr_exec_cycles = 0;
 
-  if ((top->io_wbu_state_debug == 2)) {
+  if ((top->io_wbu_state_debug == 2) && (top->io_wbu_reg_inst_debug != 0x4033) && (top->io_wbu_reg_pc_debug != 0x0)) {
     // Dynamic instruction count
     total_inst++;
 
@@ -531,6 +533,9 @@ void print_perf_report(double seconds, double cycles_per_second) {
 
   cout << "║ " << left << setw(label_width) << "ICache Average Miss Penalty"
        << " : " << right << setw(value_width) << fixed << setprecision(2) << avg_miss_penalty << " ║\n";
+      
+  cout << "║ " << left << setw(label_width) << "ICache Total Miss Penalty"
+       << " : " << right << setw(value_width) << fixed << setprecision(2) << total_miss_penalty << " ║\n";
 
   cout << "║ " << left << setw(label_width) << "Total stall penalty (Cycles)"
        << " : " << right << setw(value_width) << total_stall_penalty << " ║\n";

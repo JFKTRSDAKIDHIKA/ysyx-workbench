@@ -123,7 +123,7 @@ class ICache(implicit val p: ICacheParams) extends Module with RISCVConstants {
   core.io.redirect_valid := io.redirect_valid
 
   // Expose internal FSM state for debugging purposes
-  io.icache_state_debug := 0x0200ffffL.U(32.W)
+  io.icache_state_debug := core.io.icache_state_debug
 }
 
 class ICacheFrontend(implicit val p: ICacheParams) extends Module with RISCVConstants {
@@ -169,6 +169,8 @@ class ICacheCore (implicit val p: ICacheParams) extends Module with RISCVConstan
     val arbiter = new ValidReadyBundle
     // Signals to handle control hazard
     val redirect_valid = Input(Bool())  
+    // Debug signals
+    val icache_state_debug = Output(UInt())
   })
 
   // Set default values
@@ -327,8 +329,9 @@ class ICacheCore (implicit val p: ICacheParams) extends Module with RISCVConstan
     }
   }
 
-  // Assign output signals
+  // Assign output and debug signals
   io.out.bits.pc := icache_core_reg_pc
+  io.icache_state_debug := state
 
 }
 
