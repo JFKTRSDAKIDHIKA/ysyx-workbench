@@ -25,6 +25,7 @@ class Core extends Module with RISCVConstants {
         // exu
         val jump_mispredict_debug = Output(Bool())
         val exu_state_debug = Output(UInt(2.W))
+        val perf_jump_mispredict_count = Output(UInt(64.W))
         // lsu
         val lsu_state_debug = Output(UInt(3.W))
         val lsu_is_ld_or_st_debug = Output(Bool())
@@ -46,6 +47,7 @@ class Core extends Module with RISCVConstants {
         val Arbiter_state_debug = Output(UInt(2.W))
         // ICache
         val icache_state_debug = Output(UInt(3.W))
+        val icache_miss_count = Output(UInt(64.W)) 
     })
 
     // Set AXI4 default values
@@ -122,6 +124,7 @@ class Core extends Module with RISCVConstants {
     // exu
     io.jump_mispredict_debug := exu.io.jump_mispredict_debug
     io.exu_state_debug := exu.io.exu_state_debug
+    io.perf_jump_mispredict_count := exu.io.perf_jump_mispredict_count
     // lsu
     io.lsu_state_debug := lsu.io.lsu_state_debug
     io.lsu_is_ld_or_st_debug := lsu.io.lsu_is_ld_or_st_debug
@@ -143,6 +146,7 @@ class Core extends Module with RISCVConstants {
     io.Arbiter_state_debug := arbiter.io.Arbiter_state_debug
     // ICache
     io.icache_state_debug := ICache.io.icache_state_debug
+    io.icache_miss_count := ICache.io.icache_miss_count
 }
 
 object Main extends App {

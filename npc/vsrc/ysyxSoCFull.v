@@ -2607,7 +2607,9 @@ module CPU(	// root/ysyx-workbench/ysyxSoC/src/CPU.scala:33:9
   output [2:0]  io_icache_state_debug,
   output [1:0]  io_idu_state_debug,
   output        io_jump_mispredict_debug,
-  output [1:0]  io_exu_state_debug
+  output [1:0]  io_exu_state_debug,
+  output [63:0] io_perf_jump_mispredict_count,
+  output [63:0] io_icache_miss_count
 );
 
   Core cpu (	// root/ysyx-workbench/ysyxSoC/src/CPU.scala:38:21
@@ -2695,7 +2697,9 @@ module CPU(	// root/ysyx-workbench/ysyxSoC/src/CPU.scala:33:9
     .io_icache_state_debug(io_icache_state_debug),
     .io_idu_state_debug(io_idu_state_debug),
     .io_jump_mispredict_debug(io_jump_mispredict_debug),
-    .io_exu_state_debug(io_exu_state_debug)
+    .io_exu_state_debug(io_exu_state_debug),
+    .io_perf_jump_mispredict_count(io_perf_jump_mispredict_count),
+    .io_icache_miss_count(io_icache_miss_count)
   );	// root/ysyx-workbench/ysyxSoC/src/CPU.scala:38:21
 endmodule
 
@@ -4823,7 +4827,9 @@ module ysyxSoCASIC(	// root/ysyx-workbench/ysyxSoC/src/SoC.scala:59:9
   output [2:0]  io_icache_state_debug,
   output [1:0]  io_idu_state_debug,
   output        io_jump_mispredict_debug,
-  output [1:0]  io_exu_state_debug
+  output [1:0]  io_exu_state_debug,
+  output [63:0] io_perf_jump_mispredict_count,
+  output [63:0] io_icache_miss_count
 );
 
   wire        _cpu_reset_chain_io_q;	// root/ysyx-workbench/ysyxSoC/rocket-chip/src/main/scala/util/ShiftReg.scala:45:23
@@ -5431,7 +5437,9 @@ module ysyxSoCASIC(	// root/ysyx-workbench/ysyxSoC/src/SoC.scala:59:9
     .io_icache_state_debug(io_icache_state_debug),
     .io_idu_state_debug(io_idu_state_debug),
     .io_jump_mispredict_debug(io_jump_mispredict_debug),
-    .io_exu_state_debug(io_exu_state_debug)
+    .io_exu_state_debug(io_exu_state_debug),
+    .io_perf_jump_mispredict_count(io_perf_jump_mispredict_count),
+    .io_icache_miss_count(io_icache_miss_count)
   );	// root/ysyx-workbench/ysyxSoC/src/SoC.scala:30:23
   APBUart16550 luart (	// root/ysyx-workbench/ysyxSoC/src/SoC.scala:34:25
     .clock           (clock),
@@ -5919,7 +5927,9 @@ module ysyxSoCFull(	// root/ysyx-workbench/ysyxSoC/src/SoC.scala:111:9
   output [2:0]  io_icache_state_debug,
   output [1:0]  io_idu_state_debug,
   output        io_jump_mispredict_debug,
-  output [1:0]  io_exu_state_debug
+  output [1:0]  io_exu_state_debug,
+  output [63:0] io_perf_jump_mispredict_count,
+  output [63:0] io_icache_miss_count
 );
 
   wire        _bitrev_miso;	// root/ysyx-workbench/ysyxSoC/src/SoC.scala:138:24
@@ -6006,7 +6016,9 @@ module ysyxSoCFull(	// root/ysyx-workbench/ysyxSoC/src/SoC.scala:111:9
     .io_icache_state_debug(io_icache_state_debug),
     .io_idu_state_debug(io_idu_state_debug),
     .io_jump_mispredict_debug(io_jump_mispredict_debug),
-    .io_exu_state_debug(io_exu_state_debug)
+    .io_exu_state_debug(io_exu_state_debug),
+    .io_perf_jump_mispredict_count(io_perf_jump_mispredict_count),
+    .io_icache_miss_count(io_icache_miss_count)
   );	// root/ysyx-workbench/ysyxSoC/src/SoC.scala:107:24
   flash flash (	// root/ysyx-workbench/ysyxSoC/src/SoC.scala:135:23
     .sck  (_asic_spi_sck),	// root/ysyx-workbench/ysyxSoC/src/SoC.scala:107:24
@@ -6060,7 +6072,9 @@ module ysyxSoCTop(	// root/ysyx-workbench/ysyxSoC/src/Top.scala:13:7
   output [2:0]  io_icache_state_debug,
   output [1:0]  io_idu_state_debug,
   output        io_jump_mispredict_debug,
-  output [1:0]  io_exu_state_debug
+  output [1:0]  io_exu_state_debug,
+  output [63:0] io_perf_jump_mispredict_count,
+  output [63:0] io_icache_miss_count
 );
 
   ysyxSoCFull dut (	// root/ysyx-workbench/ysyxSoC/src/Top.scala:18:20
@@ -6110,7 +6124,9 @@ module ysyxSoCTop(	// root/ysyx-workbench/ysyxSoC/src/Top.scala:13:7
     .io_lsu_reg_pc_debug(io_lsu_reg_pc_debug),
     .io_idu_state_debug(io_idu_state_debug),
     .io_jump_mispredict_debug(io_jump_mispredict_debug),
-    .io_exu_state_debug(io_exu_state_debug)
+    .io_exu_state_debug(io_exu_state_debug),
+    .io_perf_jump_mispredict_count(io_perf_jump_mispredict_count),
+    .io_icache_miss_count(io_icache_miss_count)
   );	// root/ysyx-workbench/ysyxSoC/src/Top.scala:18:20
 endmodule
 

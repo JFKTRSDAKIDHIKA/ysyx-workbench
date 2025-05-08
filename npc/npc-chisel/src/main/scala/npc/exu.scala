@@ -29,6 +29,7 @@ class EXUIO extends Bundle {
   // Degus signals
   val jump_mispredict_debug = Output(Bool())
   val exu_state_debug = Output(UInt(2.W))
+  val perf_jump_mispredict_count = Output(UInt(64.W))
 }
 
 class EXU extends Module with RISCVConstants {
@@ -42,30 +43,8 @@ class EXU extends Module with RISCVConstants {
   io.in.ready := false.B
   io.out.valid := false.B
 
-  // State machine logic
-  switch(state) {
-    is(sIdle) {
-      when(io.in.valid) {
-        io.in.ready := true.B
-        io.out.valid := false.B
-        state := sExecute
-      }
-    }
-
-    is(sExecute) {
-      io.in.ready := false.B
-      io.out.valid := false.B
-      state := sDone
-    }
-
-    is(sDone) {
-      io.in.ready := false.B
-      io.out.valid := true.B
-      when(io.out.ready) {
-        state := sIdle
-      }
-    }
-  }
+  // Perfromance counter
+  val perf_jump_mispredict_count = RegInit(0.U(64.W))
 
   // Pipeline registers
   val exu_reg_inst = RegEnable(io.in.bits.inst, io.in.fire)
@@ -189,6 +168,34 @@ class EXU extends Module with RISCVConstants {
   csr_file.io.csr_wen := csr_wen
   csr_file.io.csr_cmd := csr_cmd
 
+  // State machine logic
+  switch(state) {
+    is(sIdle) {
+      when(io.in.valid) {
+        io.in.ready := true.B
+        io.out.valid := false.B
+        state := sExecute
+      }
+    }
+
+    is(sExecute) {
+      io.in.ready := false.B
+      io.out.valid := false.B
+      when(jump_mispredict) {
+        perf_jump_mispredict_count := perf_jump_mispredict_count + 1.U
+      }
+      state := sDone
+    }
+
+    is(sDone) {
+      io.in.ready := false.B
+      io.out.valid := true.B
+      when(io.out.ready) {
+        state := sIdle
+      }
+    }
+  }
+
   // Assign output signals
   io.out.bits.inst := exu_reg_inst
   io.out.bits.pc := exu_reg_pc
@@ -201,6 +208,7 @@ class EXU extends Module with RISCVConstants {
   io.redirect_valid := jump_mispredict
   io.jump_mispredict_debug := jump_mispredict
   io.exu_state_debug := state
+  io.perf_jump_mispredict_count := perf_jump_mispredict_count
 }
 
 

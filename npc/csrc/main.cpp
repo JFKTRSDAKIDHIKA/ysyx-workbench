@@ -118,15 +118,18 @@ void tick(void) {
     total_dmem_latency++;
   if (static_cast<int>(top->io_icache_state_debug) != 0 && static_cast<int>(top->io_icache_state_debug) != 5)
     total_miss_penalty++;
-  if (static_cast<int>(top->io_icache_state_debug) == 6)
-    total_miss_time++;
+  // if (static_cast<int>(top->io_icache_state_debug) == 6)
+  //   total_miss_time++;
   // Pipeline performance counter
   if (static_cast<int>(top->io_idu_state_debug) == 2)
     total_stall_penalty++;
-  if (static_cast<int>(top->io_jump_mispredict_debug) == 1 && static_cast<int>(top->io_exu_state_debug) == 1)
-    jump_mispredict_count++;
+  //if (static_cast<int>(top->io_jump_mispredict_debug) == 1 && static_cast<int>(top->io_exu_state_debug) == 1)
+  //  jump_mispredict_count++;
   if (static_cast<int>(top->io_idu_state_debug) == 0)
     id_stall_cycles_due_to_ifetch++;
+
+  jump_mispredict_count = top->io_perf_jump_mispredict_count;
+  total_miss_time = top->io_icache_miss_count;
   
   // Increment the cycle counter for the current instruction
   instr_exec_cycles++;
@@ -530,6 +533,9 @@ void print_perf_report(double seconds, double cycles_per_second) {
 
   cout << "║ " << left << setw(label_width) << "IFU Avg Instruction Mem Latency"
        << " : " << right << setw(value_width) << fixed << setprecision(2) << avg_ifu_latency << " ║\n";
+
+  cout << "║ " << left << setw(label_width) << "ICache Total Miss Count"
+       << " : " << right << setw(value_width) << fixed << setprecision(2) << total_miss_time << " ║\n";
 
   cout << "║ " << left << setw(label_width) << "ICache Average Miss Penalty"
        << " : " << right << setw(value_width) << fixed << setprecision(2) << avg_miss_penalty << " ║\n";

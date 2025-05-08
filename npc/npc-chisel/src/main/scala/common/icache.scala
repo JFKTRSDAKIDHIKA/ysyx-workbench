@@ -86,7 +86,8 @@ class ICache(implicit val p: ICacheParams) extends Module with RISCVConstants {
     // Signals to handle control hazard
     val redirect_valid = Input(Bool())  
     // Debug signals
-    val icache_state_debug = Output(UInt()) 
+    val icache_state_debug = Output(UInt())
+    val icache_miss_count = Output(UInt(64.W)) 
   })
 
   // Set default values
@@ -124,6 +125,7 @@ class ICache(implicit val p: ICacheParams) extends Module with RISCVConstants {
 
   // Expose internal FSM state for debugging purposes
   io.icache_state_debug := core.io.icache_state_debug
+  io.icache_miss_count := core.io.icache_miss_count
 }
 
 class ICacheFrontend(implicit val p: ICacheParams) extends Module with RISCVConstants {
@@ -171,6 +173,7 @@ class ICacheCore (implicit val p: ICacheParams) extends Module with RISCVConstan
     val redirect_valid = Input(Bool())  
     // Debug signals
     val icache_state_debug = Output(UInt())
+    val icache_miss_count = Output(UInt(64.W))
   })
 
   // Set default values
@@ -180,6 +183,9 @@ class ICacheCore (implicit val p: ICacheParams) extends Module with RISCVConstan
   io.out.bits.pc := 0.U
   io.out.bits.inst := 0.U
   io.arbiter.valid := false.B
+
+  // Performance counter
+  val icacheMissCounter = RegInit(0.U(64.W))
 
   // Pipeline registers
   val icache_core_reg_pc = RegEnable(io.in.bits.pc, io.in.fire)
@@ -236,6 +242,7 @@ class ICacheCore (implicit val p: ICacheParams) extends Module with RISCVConstan
         io.in.ready := io.out.ready
         io.out.bits.inst := Mux(redirect_pending || icache_core_reg_redirect_valid || io.redirect_valid, BUBBLE, dataArray(icache_core_reg_index)(hitWay)(icache_core_reg_wordOffset))
       } .elsewhen (!hit) {
+        icacheMissCounter := icacheMissCounter + 1.U
         io.in.ready := false.B
         io.out.valid := false.B
         state := sMemPrepare
@@ -332,6 +339,7 @@ class ICacheCore (implicit val p: ICacheParams) extends Module with RISCVConstan
   // Assign output and debug signals
   io.out.bits.pc := icache_core_reg_pc
   io.icache_state_debug := state
+  io.icache_miss_count := icacheMissCounter
 
 }
 
