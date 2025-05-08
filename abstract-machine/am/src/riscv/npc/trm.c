@@ -22,7 +22,6 @@ void halt(int code) {
   while (1);
 }
 
-/*
 __attribute__((section(".SSBL")))
 void put_hex(uint32_t value) {
   putch('0');
@@ -32,7 +31,6 @@ void put_hex(uint32_t value) {
     putch(nibble < 10 ? '0' + nibble : 'a' + (nibble - 10));
   }
 }
-*/
 
 __attribute__((section(".SSBL")))
 void second_stage_boot_loader() {
@@ -135,7 +133,6 @@ void second_stage_boot_loader() {
     }
   }
   
-  /*
   // Read the hardware identifiers mvendorid and marchid using CSR instructions
   uint32_t mvendorid, marchid;
   asm volatile(
@@ -160,7 +157,6 @@ void second_stage_boot_loader() {
   putch('d'); putch(':'); putch(' '); 
   put_hex(marchid);
   putch('\n');
-  */
 
   // Jump to main with mainargs as parameter
   __asm__ volatile (

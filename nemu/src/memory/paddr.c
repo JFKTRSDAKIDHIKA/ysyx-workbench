@@ -44,7 +44,7 @@ static inline bool need_mtrace(paddr_t addr) {
     // If MTRACE is not enabled, return false directly
     return false;
   #endif
-  }
+}
   
 uint8_t* guest_to_host(paddr_t paddr) { 
   if (IS_SDRAM_ADDR(paddr)) {
@@ -121,14 +121,6 @@ void init_mem() {
 word_t paddr_read(paddr_t addr, int len) {
   if (IS_PMEM_ADDR(addr) || IS_SDRAM_ADDR(addr) || IS_SRAM_ADDR(addr) || IS_FLASH_ADDR(addr)) {
     word_t data = pmem_read(addr, len);
-
-#ifdef CONFIG_MTRACE
-    if (need_mtrace(addr)) {
-      log_write("[MTRACE] Read  %d bytes at paddr 0x%08"PRIx64" (PC=0x%08"PRIx64"): 0x%016"PRIx64,
-                len, (uint64_t)addr, (uint64_t)cpu.pc, (uint64_t)data);
-    }
-#endif
-
     return data;
   }
   IFDEF(CONFIG_DEVICE, return mmio_read(addr, len));
@@ -139,13 +131,6 @@ word_t paddr_read(paddr_t addr, int len) {
 void paddr_write(paddr_t addr, int len, word_t data) {
   if (IS_PMEM_ADDR(addr) || IS_SDRAM_ADDR(addr) || IS_SRAM_ADDR(addr)) {
     pmem_write(addr, len, data);
-
-#ifdef CONFIG_MTRACE
-    if (need_mtrace(addr)) {
-      log_write("[MTRACE] Write %d bytes at paddr 0x%08"PRIx64" (PC=0x%08"PRIx64"): 0x%016"PRIx64,
-                len, (uint64_t)addr, (uint64_t)cpu.pc, (uint64_t)data);
-    }
-#endif
 
     return;
   }

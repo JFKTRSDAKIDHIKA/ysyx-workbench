@@ -2,52 +2,87 @@ package common
 
 import chisel3._
 import chisel3.util._
-import common._
-import common.constants.RISCVConstants 
+import common.constants.RISCVConstants
+import scala.collection.immutable.Map 
 
 class CSRFile extends Module with RISCVConstants {
   val io = IO(new Bundle {
-    val csr_addr = Input(UInt(12.W))
+    val csr_raddr = Input(UInt(12.W))
+    val csr_waddr = Input(UInt(12.W))
     val csr_wdata = Input(UInt(32.W))
+    val csr_wen   = Input(Bool())
+    val csr_cmd   = Input(UInt(2.W))
     val csr_rdata = Output(UInt(32.W))
-    val csr_wen = Input(Bool())
-    val csr_mtvec = Output(UInt(32.W))
-    val csr_mepc = Output(UInt(32.W))
+
+    val mtvec_out = Output(UInt(32.W))
+    val mepc_out  = Output(UInt(32.W))
   })
 
-  // CSR register file
-  val mstatus = RegInit(0.U(32.W)) // Machine Status Register
-  val mtvec   = RegInit(0.U(32.W)) // Machine Trap Vector Register
-  val mepc    = RegInit(0.U(32.W)) // Machine Exception Program Counter
-  val mcause  = RegInit(0.U(32.W)) // Machine Cause Register
-  val mvendorid = RegInit(0x79737978.U(32.W)) // Vendor ID Register
-  val marchid = RegInit(24120009.U(32.W)) // Architecture ID Register
+  // Declare and initialize CSR registers
+  val mstatus   = RegInit(0.U(32.W))
+  val mtvec     = RegInit(0.U(32.W))
+  val mepc      = RegInit(0.U(32.W))
+  val mcause    = RegInit(0.U(32.W))
+  val mvendorid = 0x79737978.U(32.W) // Read-only
+  val marchid   = 24120009.U(32.W)  // Read-only
 
-  // Read CSR value
-  io.csr_rdata := MuxLookup(io.csr_addr, 0.U(32.W))(Seq(
+  // Writable CSR map: maps address constants to their respective register references
+  val csrWritableMap = Map(
     CSR_ADDR_MSTATUS -> mstatus,
     CSR_ADDR_MTVEC   -> mtvec,
     CSR_ADDR_MEPC    -> mepc,
-    CSR_ADDR_MCAUSE  -> mcause,
-    CSR_ADDR_MVENDORID -> mvendorid,
-    CSR_ADDR_MARCHID  -> marchid
-  ))
+    CSR_ADDR_MCAUSE  -> mcause
+  )
 
-  // Write CSR value
+  // Read logic for CSR file:
+  io.csr_rdata := MuxLookup(io.csr_raddr, 0.U(32.W))(
+    csrWritableMap.toSeq ++ Seq(
+      CSR_ADDR_MVENDORID -> mvendorid,
+      CSR_ADDR_MARCHID   -> marchid
+    )
+  )
+
+  // Write logic:
   when(io.csr_wen) {
-    switch(io.csr_addr) {
-      is(CSR_ADDR_MSTATUS) { mstatus := io.csr_wdata }
-      is(CSR_ADDR_MTVEC)   { mtvec   := io.csr_wdata }
-      is(CSR_ADDR_MEPC)    { mepc    := io.csr_wdata }
-      is(CSR_ADDR_MCAUSE)  { mcause  := io.csr_wdata }
-      is(CSR_ADDR_MVENDORID) { mvendorid := 0x79737978.U(32.W) }
-      is(CSR_ADDR_MARCHID)  { marchid := 24120009.U(32.W) }
+    switch(io.csr_waddr) {
+      is(CSR_ADDR_MSTATUS) {
+        mstatus := MuxLookup(io.csr_cmd, mstatus)(Seq(
+          CSR_CMD_RW -> io.csr_wdata,
+          CSR_CMD_RS -> (mstatus | io.csr_wdata),
+          CSR_CMD_RC -> (mstatus & ~io.csr_wdata)
+        ))
+      }
+      is(CSR_ADDR_MTVEC) {
+        mtvec := MuxLookup(io.csr_cmd, mtvec)(Seq(
+          CSR_CMD_RW -> io.csr_wdata,
+          CSR_CMD_RS -> (mtvec | io.csr_wdata),
+          CSR_CMD_RC -> (mtvec & ~io.csr_wdata)
+        ))
+      }
+      is(CSR_ADDR_MEPC) {
+        mepc := MuxLookup(io.csr_cmd, mepc)(Seq(
+          CSR_CMD_RW -> io.csr_wdata,
+          CSR_CMD_RS -> (mepc | io.csr_wdata),
+          CSR_CMD_RC -> (mepc & ~io.csr_wdata)
+        ))
+      }
+      is(CSR_ADDR_MCAUSE) {
+        mcause := MuxLookup(io.csr_cmd, mcause)(Seq(
+          CSR_CMD_RW -> io.csr_wdata,
+          CSR_CMD_RS -> (mcause | io.csr_wdata),
+          CSR_CMD_RC -> (mcause & ~io.csr_wdata)
+        ))
+      }
+      is(CSR_ADDR_MVENDORID) {
+        // printf("Warning: Attempted write to read-only CSR mvendorid\n")
+      }
+      is(CSR_ADDR_MARCHID) {
+        // printf("Warning: Attempted write to read-only CSR marchid\n")
+      }
     }
   }
 
-  // Output CSR values
-  io.csr_mtvec := mtvec
-  io.csr_mepc := mepc
+  // Expose mtvec and mepc for use in exception handling logic
+  io.mtvec_out := mtvec
+  io.mepc_out  := mepc
 }
-
-

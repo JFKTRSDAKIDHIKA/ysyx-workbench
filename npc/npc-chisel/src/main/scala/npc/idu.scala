@@ -7,9 +7,9 @@ import common.constants.RISCVConstants
 
 class DecodedMessage extends Message {
     val alu_op1 = Output(UInt(32.W))    
-    val alu_op2 = Output(UInt(32.W))     
+    val alu_op2 = Output(UInt(32.W))   
+    val rs1_data = Output(UInt(32.W))   
     val rs2_data = Output(UInt(32.W)) 
-    val csr_rdata = Output(UInt(32.W))
     val branch_taken = Output(Bool())
 }
 
@@ -19,10 +19,6 @@ class IDUIO extends Bundle {
     val in = Flipped(Decoupled(new ICacheRespBundle))
     // Signals passed to EXU
     val out = Decoupled(new DecodedMessage)
-
-    // Feedback signals from IDU and WBU
-    // val pc_sel = Output(UInt(3.W))
-    // val pc_csr = Output(UInt(32.W))
 
     // Bypassed result from EXU and LSU to resolve data hazards in IDU stage.
     val exuResultBypass = Input(UInt(32.W))
@@ -118,51 +114,6 @@ class IDU extends Module with RISCVConstants{
         FUNCT3_BGEU -> !br_ltu
     ))
 
-    // CSR interface    
-    val csr_instance = Module(new CSRFile)
-    csr_instance.io.csr_addr := MuxLookup(funct3, 0.U)(Seq(
-        FUNCT3_CSRRW -> imm_i,
-        FUNCT3_CSRRS -> imm_i,
-        FUNCT3_ECALL -> CSR_ADDR_MEPC
-    ))
-    csr_instance.io.csr_wdata := MuxLookup(funct3, 0.U)(Seq(
-        FUNCT3_CSRRW -> rs1_data,
-        FUNCT3_CSRRS -> (rs1_data | csr_instance.io.csr_rdata),
-        FUNCT3_ECALL -> idu_reg_pc
-    )) 
-    csr_instance.io.csr_wen := MuxLookup(opcode, false.B)(Seq(
-        OPCODE_CSR -> MuxLookup(funct3, false.B)(Seq(
-        FUNCT3_CSRRW -> true.B,
-        FUNCT3_CSRRS -> true.B,
-        FUNCT3_ECALL -> MuxLookup(imm_i, false.B)(Seq(
-          FUNCT12_ECALL -> true.B,
-          FUNCT12_MRET -> false.B
-        ))
-      ))
-    ))
-    /*
-    io.pc_csr := MuxLookup(funct3, PC_4)(Seq(
-        FUNCT3_ECALL -> MuxLookup(imm_i, PC_4)(Seq(
-            FUNCT12_ECALL -> csr_instance.io.csr_mtvec,
-            FUNCT12_MRET  -> csr_instance.io.csr_mepc
-        )),
-    ))
-    */
-
-    /*
-    // pc_sel signal generation
-    io.pc_sel := MuxLookup(opcode, PC_4)(Seq(
-        OPCODE_JALR -> PC_REDIRECT,
-        OPCODE_JAL  -> PC_REDIRECT,
-        OPCODE_BRANCH -> Mux(branch_taken, PC_REDIRECT, PC_4),
-        OPCODE_CSR -> MuxLookup(funct3, PC_4)(Seq(
-            FUNCT3_CSRRW -> PC_4,
-            FUNCT3_CSRRS -> PC_4,
-            FUNCT3_ECALL -> PC_CSR
-        ))
-    ))
-    */
-
     // Mux for alu_op1 and alu_op2 selection
     val alu_op1Sel = Wire(UInt(2.W))
     val alu_op2Sel = Wire(UInt(2.W))
@@ -250,7 +201,7 @@ class IDU extends Module with RISCVConstants{
     io.out.bits.pc := idu_reg_pc
     io.out.bits.alu_op1 := alu_op1
     io.out.bits.alu_op2 := alu_op2
+    io.out.bits.rs1_data := rs1_data
     io.out.bits.rs2_data := rs2_data
-    io.out.bits.csr_rdata := csr_instance.io.csr_rdata
     io.idu_state_debug := state
 }

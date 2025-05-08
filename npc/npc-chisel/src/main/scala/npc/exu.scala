@@ -10,7 +10,6 @@ class ExecuteMessage extends Message {
     val dmem_addr = UInt(32.W)       
     val result = UInt(32.W)         
     val rs2_data = UInt(32.W)     
-    val csr_rdata = UInt(32.W)
 }
 
 class EXUIO extends Bundle {
@@ -71,8 +70,8 @@ class EXU extends Module with RISCVConstants {
   // Pipeline registers
   val exu_reg_inst = RegEnable(io.in.bits.inst, io.in.fire)
   val exu_reg_pc = RegEnable(io.in.bits.pc, io.in.fire)
+  val exu_reg_rs1_data = RegEnable(io.in.bits.rs1_data, io.in.fire)
   val exu_reg_rs2_data = RegEnable(io.in.bits.rs2_data, io.in.fire)
-  val exu_reg_csr_rdata = RegEnable(io.in.bits.csr_rdata, io.in.fire)
   val exu_reg_branch_taken = RegEnable(io.in.bits.branch_taken, io.in.fire)
   // ALU oprand
   val alu_op1 = RegEnable(io.in.bits.alu_op1, io.in.fire)
@@ -82,13 +81,23 @@ class EXU extends Module with RISCVConstants {
   val opcode = exu_reg_inst(OPCODE_MSB, OPCODE_LSB)
   val funct3 = exu_reg_inst(FUNCT3_MSB, FUNCT3_LSB)
   val funct7 = exu_reg_inst(FUNCT7_MSB, FUNCT7_LSB)
+  val imm_i = exu_reg_inst(31, 20)
+
+  // Decode CSR instruction type
+  val is_csr_op  = opcode === OPCODE_CSR
+  val is_csrrw   = is_csr_op && funct3 === FUNCT3_CSRRW
+  val is_csrrs   = is_csr_op && funct3 === FUNCT3_CSRRS
+  val is_ecall   = is_csr_op && funct3 === FUNCT3_ECALL && imm_i === FUNCT12_ECALL
+  val is_mret    = is_csr_op && funct3 === FUNCT3_ECALL && imm_i === FUNCT12_MRET
+  val is_csr_read = is_csrrw || is_csrrs
+  val is_exception_flow = is_ecall || is_mret
 
   // Handle control hazard
   val is_jal   = opcode === OPCODE_JAL
   val is_jalr  = opcode === OPCODE_JALR
   val is_branch = opcode === OPCODE_BRANCH
   val is_store = opcode === OPCODE_STORE
-  val is_control_flow = is_jal || is_jalr || (is_branch && exu_reg_branch_taken)
+  val is_control_flow = is_jal || is_jalr || (is_branch && exu_reg_branch_taken) || is_exception_flow
   val pc_plus_4 = exu_reg_pc + 4.U
   val jump_mispredict = is_control_flow && (io.pc_redirect_target =/= pc_plus_4)
 
@@ -145,14 +154,48 @@ class EXU extends Module with RISCVConstants {
   alu_instance.io.aluOp := alu_op
   val alu_result = alu_instance.io.result
 
+  // Generate CSR command signal
+  val csr_cmd = WireDefault(CSR_CMD_NOP)
+  when (is_csrrw) { csr_cmd := CSR_CMD_RW }
+  when (is_csrrs) { csr_cmd := CSR_CMD_RS }
+  when (is_ecall) { csr_cmd := CSR_CMD_RW } // ecall will write mepc
+  when (is_mret)  { csr_cmd := CSR_CMD_NOP } // handled separately
+
+  // Generate CSR interface values
+  val csr_raddr = Wire(UInt(12.W))
+  val csr_waddr = Wire(UInt(12.W))
+  val csr_wdata = Wire(UInt(32.W))
+  val csr_wen = Wire(Bool())
+
+  csr_waddr := Mux(is_ecall, CSR_ADDR_MEPC, imm_i)
+  csr_raddr := MuxCase(0.U, Seq(
+    is_csrrw -> imm_i,
+    is_csrrs -> imm_i,
+    is_ecall -> CSR_ADDR_MTVEC,
+    is_mret ->  CSR_ADDR_MEPC
+  ))
+  csr_wdata := MuxCase(0.U, Seq(
+    is_csrrw -> exu_reg_rs1_data,
+    is_csrrs -> exu_reg_rs1_data,
+    is_ecall -> exu_reg_pc
+  ))
+  csr_wen := is_csrrw || is_csrrs || is_ecall
+
+  // Connect to CSR module
+  val csr_file = Module(new CSRFile)
+  csr_file.io.csr_waddr := csr_waddr
+  csr_file.io.csr_raddr := csr_raddr
+  csr_file.io.csr_wdata := csr_wdata
+  csr_file.io.csr_wen := csr_wen
+  csr_file.io.csr_cmd := csr_cmd
+
   // Assign output signals
   io.out.bits.inst := exu_reg_inst
   io.out.bits.pc := exu_reg_pc
   io.out.bits.dmem_addr := alu_result
-  io.out.bits.result := alu_result
+  io.out.bits.result := Mux(is_csr_read, csr_file.io.csr_rdata, alu_result)
   io.out.bits.rs2_data := exu_reg_rs2_data
-  io.out.bits.csr_rdata := exu_reg_csr_rdata
-  io.pc_redirect_target := alu_result
+  io.pc_redirect_target := Mux(is_exception_flow, csr_file.io.csr_rdata, alu_result)
   io.exuResultBypass := alu_result
   io.ex_is_load := (opcode === OPCODE_LOAD)
   io.redirect_valid := jump_mispredict

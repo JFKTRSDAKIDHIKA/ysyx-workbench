@@ -81,9 +81,6 @@ class Core extends Module with RISCVConstants {
     idu.io.rs2_data := regfile.io.rs2_data
 
     // Feedback signals
-    // IDU -> IFU
-    // ifu.io.pc_sel           := idu.io.pc_sel
-    // ifu.io.pc_csr           := idu.io.pc_csr
     // EXU -> IFU
     ifu.io.redirect_target := exu.io.pc_redirect_target
     // LSU -> WBU

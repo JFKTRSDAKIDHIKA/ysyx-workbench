@@ -14,4 +14,5 @@
 !README.md
 !*.scala
 !*.sbt
+!*.py
 build/

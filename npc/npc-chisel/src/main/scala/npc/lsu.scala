@@ -10,7 +10,6 @@ import common.AXI4Constants
 class LoadStoreMessage extends Message {
   val dmem_rdata = Output(UInt(32.W)) 
   val result = Output(UInt(32.W))    
-  val csr_rdata = Output(UInt(32.W))
 }
 
 class LSUIO extends Bundle {
@@ -63,7 +62,6 @@ class LSU extends Module with RISCVConstants{
   val lsu_reg_dmem_addr = RegEnable(io.in.bits.dmem_addr, io.in.fire)
   val lsu_reg_result = RegEnable(io.in.bits.result, io.in.fire)
   val lsu_reg_rs2_data = RegEnable(io.in.bits.rs2_data, io.in.fire)
-  val lsu_reg_csr_rdata = RegEnable(io.in.bits.csr_rdata, io.in.fire)
 
   // Control signals
   val opcode = lsu_reg_inst(OPCODE_MSB, OPCODE_LSB)
@@ -286,7 +284,6 @@ class LSU extends Module with RISCVConstants{
   io.out.bits.inst := lsu_reg_inst
   io.out.bits.pc := lsu_reg_pc
   io.out.bits.result := lsu_reg_result
-  io.out.bits.csr_rdata := lsu_reg_csr_rdata
   io.bypassedLsuData := delayedData
 
   // Debug signals assignment

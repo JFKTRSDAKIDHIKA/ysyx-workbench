@@ -186,6 +186,12 @@ trait RISCVConstants
    val FUNCT12_ECALL  = "b000000000000".U(12.W)
    val FUNCT12_MRET   = "b001100000010".U(12.W)
 
+   // CSR command encoding
+   val CSR_CMD_NOP = 0.U(2.W)
+   val CSR_CMD_RW  = 1.U(2.W)
+   val CSR_CMD_RS  = 2.U(2.W)
+   val CSR_CMD_RC  = 3.U(2.W)
+
    // The Bubble Instruction (Machine generated NOP)
    // Insert (XOR x0,x0,x0) which is different from software compiler
    // generated NOPs which are (ADDI x0, x0, 0).
