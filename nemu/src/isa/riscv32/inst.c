@@ -191,7 +191,9 @@ static int decode_exec(Decode *s) {
       case 0x305: R(rd) = cpu.csr.mtvec;   cpu.csr.mtvec   |= src1; break;
       case 0x341: R(rd) = cpu.csr.mepc;   cpu.csr.mepc    |= src1; break;
       case 0x342: R(rd) = cpu.csr.mcause;  cpu.csr.mcause  |= src1; break;
-      default: INV(s->pc);
+      case 0xffffff11: R(rd) = 0x79737978; break;  // mvendorid
+      case 0xffffff12: R(rd) = 24120009; break;  // marchid
+      default: printf("bihao\n");INV(s->pc);
     }
   );
   INSTPAT("??????? ????? ????? 001 ????? 1110011", csrrw  , I, 
@@ -200,14 +202,16 @@ static int decode_exec(Decode *s) {
       case 0x305: R(rd) = cpu.csr.mtvec;   cpu.csr.mtvec = src1; break;
       case 0x341: R(rd) = cpu.csr.mepc;    cpu.csr.mepc = src1; break;
       case 0x342: R(rd) = cpu.csr.mcause;  cpu.csr.mcause = src1; break;
-      default: INV(s->pc);
+      case 0xffffff11: R(rd) = 0x79737978; break;  // mvendorid
+      case 0xffffff12: R(rd) = 24120009; break;  // marchid
+      default: printf("imm: %x\n", imm);INV(s->pc);
     }
   );
   INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak , N, NEMUTRAP(s->pc, R(10))); // R(10) is $a0
   INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall  , N, s->dnpc = cpu.csr.mtvec; isa_raise_intr(EXC_CODE_ECALL_U, s->pc));
   INSTPAT("0011000 00010 00000 000 00000 11100 11", mret   , N, s->dnpc = cpu.csr.mepc); 
   
-  INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv    , N, INV(s->pc));
+  INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv    , N, printf("bihao\n");INV(s->pc));
 
   INSTPAT_END();
 

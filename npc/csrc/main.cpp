@@ -20,6 +20,8 @@
 #include <sstream>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <filesystem>  
+#include <fstream>
 
 // Define macros
 #define NEED_CHECK(top) ((top->io_wbu_state_debug == 2) && (top->io_wbu_reg_inst_debug != 0x4033) && (top->io_wbu_reg_pc_debug != 0x0))
@@ -29,6 +31,9 @@ VysyxSoCFull* top;      // Top module (global)
 static bool step_mode;  // Step mode flag (global)
 static riscv32_CPU_state ref;
 static uint64_t instr_exec_cycles;
+static uint64_t ref_pc_prev = 0x30000000;
+std::vector<std::string> commit_log_buffer;
+constexpr int MAX_COMMIT_LOGS = 10;
 
 // function prototypes declaration
 void print_perf_report(double seconds, double cycles_per_second);
@@ -46,54 +51,61 @@ VerilatedVcdC* tfp;
 
 #ifdef DIFFTEST
 int check_dut_and_ref(VysyxSoCFull* top, paddr_t start_addr, size_t size) {
-  std::cout << "PC - DUT: 0x" << std::hex << top->io_wbu_reg_pc_debug 
-                << " REF: 0x" << std::hex << ref.pc << std::endl;
-
   // ----------- 检查寄存器 -----------
-  // Compare DUT registers with REF registers
   for (int i = 0; i < 32; i++) {
-      if (rf_values[i] != ref.gpr[i]) {
-          std::cerr << "Register mismatch at " << regs[i]
-                    << " - DUT: 0x" << std::hex << rf_values[i] 
-                    << " REF: 0x" << ref.gpr[i] 
-                    << std::endl;
-          
-          // Print all registers of DUT (rf_values) and REF (ref.gpr)
-          std::cerr << "PC: - DUT: 0x" << std::hex << top->io_wbu_reg_pc_debug 
-                << " REF: 0x" << std::hex << ref.pc << std::endl;
-          std::cerr << "DUT Registers (rf_values):" << std::endl;
-          for (int j = 0; j < 32; j++) {
-              std::cerr << regs[j] << ": 0x" << std::hex << rf_values[j] << std::endl;
-          }
-          std::cerr << "REF Registers (ref.gpr):" << std::endl;
-          for (int j = 0; j < 32; j++) {
-              std::cerr << regs[j] << ": 0x" << std::hex << ref.gpr[j] << std::endl;
-          }
-          // Stop the simulation on a mismatch
-          return -1;  
-      }
-  }
+    if (rf_values[i] != ref.gpr[i]) {
+      std::cerr << RED << BOLD;
+      std::cerr << "┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓\n";
+      std::cerr << "┃                 ❌ REGISTER MISMATCH DETECTED         ┃\n";
+      std::cerr << "┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛\n" << RESET;
 
-  /*
-  // Compare program counter (PC) between DUT and REF
-  if (top->io_wbu_reg_pc_debug != (ref.pc - 4) ) {
-      std::cerr << "PC mismatch - DUT: 0x" << std::hex << top->io_wbu_reg_pc_debug 
-                << " REF: 0x" << std::hex << ref.pc << std::endl;
-      
-      // Print DUT and REF register values (optional)
-      std::cerr << "DUT Registers (rf_values):" << std::endl;
+      std::cerr << "  ➤ Mismatch at register " << YELLOW << regs[i] << RESET << "\n";
+      std::cerr << "     DUT: 0x" << std::hex << rf_values[i]
+                << "    REF: 0x" << ref.gpr[i] << "\n\n";
+
+      std::cerr << "  ➤ Program Counter:\n";
+      std::cerr << "     DUT: 0x" << std::hex << top->io_wbu_reg_pc_debug 
+                << "    REF: 0x" << ref_pc_prev << "\n\n";
+
+      std::cerr << "  ➤ DUT Registers:\n";
       for (int j = 0; j < 32; j++) {
-          std::cerr << regs[j] << ": 0x" << std::hex << rf_values[j] << std::endl;
+        std::cerr << "     " << regs[j] << ": 0x" << std::hex << rf_values[j] << "\n";
       }
-      std::cerr << "REF Registers (ref.gpr):" << std::endl;
+      std::cerr << "\n  ➤ REF Registers:\n";
       for (int j = 0; j < 32; j++) {
-          std::cerr << regs[j] << ": 0x" << std::hex << ref.gpr[j] << std::endl;
+        std::cerr << "     " << regs[j] << ": 0x" << std::hex << ref.gpr[j] << "\n";
       }
 
-      return -1;  // End simulation
+      std::cerr << RED << BOLD << "\n[!] Simulation Aborted due to register mismatch.\n" << RESET;
+      return -1;
+    }
   }
-  */
-  // If no mismatches, return 0
+
+  // ----------- 检查 PC -----------
+  if (top->io_wbu_reg_pc_debug != ref_pc_prev) {
+    std::cerr << RED << BOLD;
+    std::cerr << "┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓\n";
+    std::cerr << "┃                    ❌ PC MISMATCH DETECTED            ┃\n";
+    std::cerr << "┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛\n" << RESET;
+
+    std::cerr << "  ➤ PC mismatch:\n";
+    std::cerr << "     DUT: 0x" << std::hex << top->io_wbu_reg_pc_debug 
+              << "    REF: 0x" << ref.pc << "\n\n";
+
+    std::cerr << "  ➤ DUT Registers:\n";
+    for (int j = 0; j < 32; j++) {
+      std::cerr << "     " << regs[j] << ": 0x" << std::hex << rf_values[j] << "\n";
+    }
+    std::cerr << "\n  ➤ REF Registers:\n";
+    for (int j = 0; j < 32; j++) {
+      std::cerr << "     " << regs[j] << ": 0x" << std::hex << ref.gpr[j] << "\n";
+    }
+
+    std::cerr << RED << BOLD << "\n[!] Simulation Aborted due to PC mismatch.\n" << RESET;
+    return -1;
+  }
+
+  ref_pc_prev = ref.pc;
   return 0;
 }
 #endif
@@ -211,29 +223,18 @@ void tick(void) {
 
   // print cpu execution information
 #ifndef SILENT_MODE
-  printf("------------------------------------------------------------------------------\n");
-  std::cout << "Instruction Info: "
-            << "Instruction: " << std::setw(8) << disassemble_instruction(top->io_inst_debug)
-            << ", PC: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_pc_debug << "\n"
-            << "Write-Back Info: "
-            << "wb_data: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_wb_data_debug
-            << ", wbu_reg_dmem_rdata: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_wbu_reg_dmem_rdata_debug
-            << ", wb_wen: 0x" << std::hex << static_cast<int>(top->io_wb_wen_debug)
-            << ", wbu_reg_pc: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_wbu_reg_pc_debug
-            << ", wb_sel: 0x" << std::hex << static_cast<int>(top->io_wb_sel_debug) << "\n"
-            << "LSU Info: "
-            << "lsu_reg_inst: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_lsu_reg_inst_debug
-            << ", lsu_reg_dmem_addr: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_lsu_reg_dmem_addr_debug
-            << ", dmem_rdata: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_dmem_rdata_debug
-            << ", dmem_wdata: 0x" << std::setw(8) << std::setfill('0') << std::hex << top->io_dmem_wdata_debug
-            << ", lsu_is_ld_or_st: 0x" << std::hex << static_cast<int>(top->io_lsu_is_ld_or_st_debug) 
-            << ", lsu_memory_ar_size 0x:" << std::hex << static_cast<int>(top->io_lsu_memory_ar_size) << "\n"
-            << "State Machines: "
-            << "ifu_state: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->io_ifu_state_debug)
-            << ", lsu_state: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->io_lsu_state_debug)
-            << ", wbu_state: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->io_wbu_state_debug)
-            << ", Arbiter_state: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(top->io_Arbiter_state_debug)
-            << std::dec << std::endl;
+if (commit_log_buffer.size() < MAX_COMMIT_LOGS) {
+    std::ostringstream oss;
+    oss << "=============================================\n";
+    oss << "[COMMIT INFO]\n";
+    oss << "Instruction    : " << std::uppercase << std::hex << std::setw(8) << std::setfill('0') << disassemble_instruction(top->io_wbu_reg_inst_debug) << "\n";
+    oss << "PC             : 0x" << std::uppercase << std::hex << std::setw(8) << std::setfill('0') << top->io_wbu_reg_pc_debug << "\n";
+    oss << "WB Data        : 0x" << std::uppercase << std::hex << std::setw(8) << std::setfill('0') << top->io_wb_data_debug << "\n";
+    oss << "DMem RData     : 0x" << std::uppercase << std::hex << std::setw(8) << std::setfill('0') << top->io_wbu_reg_dmem_rdata_debug << "\n";
+    oss << "WB Write Enable: 0x" << std::uppercase << std::hex << static_cast<int>(top->io_wb_wen_debug) << "\n";
+    oss << "=============================================\n\n";
+    commit_log_buffer.push_back(oss.str());
+}
 #endif
 }
 
@@ -404,6 +405,9 @@ int main(int argc, char **argv) {
     Verilated::commandArgs(argc, argv);
     top = new VysyxSoCFull;
 
+    std::string dirname = "sim_output";
+    std::filesystem::create_directory(dirname); 
+
 #ifdef ENABLE_WAVEFORM
     Verilated::traceEverOn(true);
     tfp = new VerilatedVcdC;
@@ -450,6 +454,20 @@ int main(int argc, char **argv) {
         itrace.printTrace();
         mtrace.printTrace();
 #endif
+#ifndef SILENT_MODE
+    std::ofstream commit_log_file("./sim_output/commit_log.txt");
+    if (commit_log_file.is_open()) {
+        for (const auto& entry : commit_log_buffer) {
+            commit_log_file << entry;
+        }
+        commit_log_file.close();
+        std::cout << COLOR_GREEN << "[LOG] " << COLOR_RESET
+                  << "Commit info saved to " << COLOR_CYAN << "./sim_output/commit_log.txt" << COLOR_RESET << std::endl;
+    } else {
+        std::cerr << COLOR_RED << "[ERROR] " << COLOR_RESET
+                  << "Unable to open " << COLOR_CYAN << "./sim_output/commit_log.txt" << COLOR_RESET << " for writing!" << std::endl;
+    }
+#endif
         return -1;
       }
     } else {
@@ -457,6 +475,20 @@ int main(int argc, char **argv) {
 #ifdef TRACE
         itrace.printTrace();
         mtrace.printTrace();
+#endif
+#ifndef SILENT_MODE
+    std::ofstream commit_log_file("./sim_output/commit_log.txt");
+    if (commit_log_file.is_open()) {
+        for (const auto& entry : commit_log_buffer) {
+            commit_log_file << entry;
+        }
+        commit_log_file.close();
+        std::cout << COLOR_GREEN << "[LOG] " << COLOR_RESET
+                  << "Commit info saved to " << COLOR_CYAN << "./sim_output/commit_log.txt" << COLOR_RESET << std::endl;
+    } else {
+        std::cerr << COLOR_RED << "[ERROR] " << COLOR_RESET
+                  << "Unable to open " << COLOR_CYAN << "./sim_output/commit_log.txt" << COLOR_RESET << " for writing!" << std::endl;
+    }
 #endif
         return -1;
       }
@@ -517,88 +549,98 @@ void print_perf_report(double seconds, double cycles_per_second) {
   double cpi_no_jmp_mispredict = (total_inst == 0) ? 0.0 : static_cast<double>(total_cycles - jump_mispredict_count) / total_inst;
   double cpi_perfect = (total_inst == 0) ? 0.0 : static_cast<double>(total_cycles - total_stall_penalty - jump_mispredict_count) / total_inst;   
 
-  cout << "\n";
-  cout << "╔════════════════════════════════════════════════════════════╗\n";
-  cout << "║                  🚀 Performance Statistics                 ║\n";
-  cout << "╠════════════════════════════════════════════════════════════╣\n";
+  std::string filename = "./sim_output/stats.txt";
+  std::ofstream fout(filename);
 
-  cout << "║ " << left << setw(label_width) << "LSU Data Accesses"
+  if (!fout) {
+      std::cerr << "Failed to open file: " << filename << "\n";
+      exit(1);
+  }
+
+  std::cout << COLOR_GREEN << "[INFO] " << COLOR_RESET 
+          << "Generating performance report to: " 
+          << COLOR_CYAN << "./sim_output/stats.txt" << COLOR_RESET << std::endl;
+
+  fout << "\n";
+  fout << "┌────────────────────────────────────────────────────────────┐\n";
+  fout << "│                Performance Statistics v1.0                  │\n";
+  fout << "├────────────────────────────────────────────────────────────┤\n";
+
+  fout << "║ " << left << setw(label_width) << "LSU Data Accesses"
        << " : " << right << setw(value_width) << perf_lsu_data_mem << " ║\n";
 
-  cout << "║ " << left << setw(label_width) << "LSU Avg Data Mem Latency"
+  fout << "║ " << left << setw(label_width) << "LSU Avg Data Mem Latency"
        << " : " << right << setw(value_width) << fixed << setprecision(2) << avg_lsu_latency << " ║\n";
   
-  cout << "║ " << left << setw(label_width) << "IFU Instructions Fetched"
+  fout << "║ " << left << setw(label_width) << "IFU Instructions Fetched"
        << " : " << right << setw(value_width) << perf_ifu_inst_fetch << " ║\n";
 
-  cout << "║ " << left << setw(label_width) << "IFU Avg Instruction Mem Latency"
+  fout << "║ " << left << setw(label_width) << "IFU Avg Instruction Mem Latency"
        << " : " << right << setw(value_width) << fixed << setprecision(2) << avg_ifu_latency << " ║\n";
 
-  cout << "║ " << left << setw(label_width) << "ICache Total Miss Count"
+  fout << "║ " << left << setw(label_width) << "ICache Total Miss Count"
        << " : " << right << setw(value_width) << fixed << setprecision(2) << total_miss_time << " ║\n";
 
-  cout << "║ " << left << setw(label_width) << "ICache Average Miss Penalty"
+  fout << "║ " << left << setw(label_width) << "ICache Average Miss Penalty"
        << " : " << right << setw(value_width) << fixed << setprecision(2) << avg_miss_penalty << " ║\n";
       
-  cout << "║ " << left << setw(label_width) << "ICache Total Miss Penalty"
+  fout << "║ " << left << setw(label_width) << "ICache Total Miss Penalty"
        << " : " << right << setw(value_width) << fixed << setprecision(2) << total_miss_penalty << " ║\n";
 
-  cout << "║ " << left << setw(label_width) << "Total stall penalty (Cycles)"
+  fout << "║ " << left << setw(label_width) << "Total stall penalty (Cycles)"
        << " : " << right << setw(value_width) << total_stall_penalty << " ║\n";
   
-  cout << "║ " << left << setw(label_width) << "Jump Mispredict Count"
+  fout << "║ " << left << setw(label_width) << "Jump Mispredict Count"
        << " : " << right << setw(value_width) << jump_mispredict_count << " ║\n";
 
-  cout << "║ " << left << setw(label_width) << "ID Stall Cycles Due to IFetch"
+  fout << "║ " << left << setw(label_width) << "ID Stall Cycles Due to IFetch"
        << " : " << right << setw(value_width) << id_stall_cycles_due_to_ifetch << " ║\n";
 
-  cout << "╠════════════════════════════════════════════════════════════╣\n";
-
-  cout << "║ " << left << setw(label_width) << "CPI w/o Stall Penalty"
+  fout << "║ " << left << setw(label_width) << "CPI w/o Stall Penalty"
        << " : " << right << setw(value_width) << fixed << setprecision(3) << cpi_no_stall << " ║\n";
   
-  cout << "║ " << left << setw(label_width) << "CPI w/o Jump Mispredict"
+  fout << "║ " << left << setw(label_width) << "CPI w/o Jump Mispredict"
        << " : " << right << setw(value_width) << fixed << setprecision(3) << cpi_no_jmp_mispredict << " ║\n";
   
-  cout << "║ " << left << setw(label_width) << "CPI w/o Stall + Jump MP"
+  fout << "║ " << left << setw(label_width) << "CPI w/o Stall + Jump MP"
        << " : " << right << setw(value_width) << fixed << setprecision(3) << cpi_perfect << " ║\n";
 
-  cout << "║ " << left << setw(label_width) << "Stall Penalty CPI Reduction"
+  fout << "║ " << left << setw(label_width) << "Stall Penalty CPI Reduction"
        << " : " << right << setw(value_width)
        << fixed << setprecision(2) << ((cpi_orig == 0) ? 0.0 : (1.0 - cpi_no_stall / cpi_orig) * 100) << "% ║\n";
 
-  cout << "║ " << left << setw(label_width) << "Jump MP CPI Reduction"
+  fout << "║ " << left << setw(label_width) << "Jump MP CPI Reduction"
        << " : " << right << setw(value_width)
        << fixed << setprecision(2) << ((cpi_orig == 0) ? 0.0 : (1.0 - cpi_no_jmp_mispredict / cpi_orig) * 100) << "% ║\n";
   
-  cout << "╠════════════════════════════════════════════════════════════╣\n";
+  fout << "│                   System Performance                       │\n";
 
-  cout << "║ " << left << setw(label_width) << "Total Time (s)"
+  fout << "║ " << left << setw(label_width) << "Total Time (s)"
        << " : " << right << setw(value_width) << fixed << setprecision(3) << seconds << " ║\n";
 
-  cout << "║ " << left << setw(label_width) << "Total Cycles"
+  fout << "║ " << left << setw(label_width) << "Total Cycles"
        << " : " << right << setw(value_width) << total_cycles << " ║\n";
 
-  cout << "║ " << left << setw(label_width) << "Total Instructions"
+  fout << "║ " << left << setw(label_width) << "Total Instructions"
        << " : " << right << setw(value_width) << total_inst << " ║\n";
 
-  cout << "║ " << left << setw(label_width) << "IPC (Instructions/Cycle)"
+  fout << "║ " << left << setw(label_width) << "IPC (Instructions/Cycle)"
        << " : " << right << setw(value_width) << fixed << setprecision(3)
        << ((total_cycles == 0) ? 0.0 : static_cast<double>(total_inst) / total_cycles) << " ║\n";
 
-  cout << "║ " << left << setw(label_width) << "CPI (Cycles/Instruction)"
+  fout << "║ " << left << setw(label_width) << "CPI (Cycles/Instruction)"
        << " : " << right << setw(value_width)
        << ((total_inst == 0) ? 0.0 : static_cast<double>(total_cycles) / total_inst) << " ║\n";
 
-  cout << "║ " << left << setw(label_width) << "Sim Speed (Cycles/sec)"
+  fout << "║ " << left << setw(label_width) << "Sim Speed (Cycles/sec)"
        << " : " << right << setw(value_width) << static_cast<uint64_t>(cycles_per_second) << " ║\n";
 
-  cout << "╠════════════════════════════════════════════════════════════╣\n";
-  cout << "║              🧠 Instruction Type Breakdown                ║\n";
-  cout << "╠════════════════════════════════════════════════════════════╣\n";
+  fout << "├────────────────────────────────────────────────────────────┤\n";
+  fout << "│                Instruction Analysis                        │\n";
+  fout << "├────────────────────────────────────────────────────────────┤\n";
 
   auto print_inst_line = [&](const std::string& name, uint64_t count, uint64_t total_cycles) {
-    cout << "║ " << left << setw(label_width) << name
+    fout << "║ " << left << setw(label_width) << name
          << " : " << right << setw(6) << count
          << " (" << fixed << setprecision(2) << setw(5) << percent(count) << "%)"
          << " | avg: " << fixed << setprecision(2) << setw(6) << avg_cycles(total_cycles, count)
@@ -614,6 +656,10 @@ void print_perf_report(double seconds, double cycles_per_second) {
   print_inst_line("Jump Instructions", jump_count, jump_total_cycles);
   print_inst_line("Atomic Instructions", atomic_count, atomic_total_cycles);
 
-  cout << "╚════════════════════════════════════════════════════════════╝\n";
-  cout << "\n";
+  fout << "└────────────────────────────────────────────────────────────┘\n";
+  fout << "\n";
+
+  std::cout << COLOR_GREEN << "[INFO] " << COLOR_RESET 
+          << "Performance report generated successfully!" << std::endl;
+
 }

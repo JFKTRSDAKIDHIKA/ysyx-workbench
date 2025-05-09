@@ -4,6 +4,7 @@
 #include "../riscv.h"
 #include "include/npc.h"
 #include <stdio.h>
+#include "../../../../../npc/csrc/include/config.h"
 
 extern char _heap_start;
 extern char _sdram_start;
@@ -13,7 +14,9 @@ Area heap = RANGE(&_heap_start, &_sdram_end);
 static const char mainargs[MAINARGS_MAX_LEN] = MAINARGS_PLACEHOLDER; // defined in CFLAGS
 
 void putch(char ch) {
+#ifndef DIFFTEST
   while ((inb(UART_LSR) & UART_LSR_THRE) == 0) ;
+#endif
   outb(UART_TX, ch);
 }
 

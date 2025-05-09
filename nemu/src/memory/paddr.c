@@ -20,6 +20,7 @@
 #include <isa.h>
 #include <cpu/cpu.h>
 #include <utils.h> 
+#include "../../../../npc/csrc/include/config.h"
 
 #if   defined(CONFIG_PMEM_MALLOC)
 static uint8_t *pmem = NULL;
@@ -85,6 +86,7 @@ static void pmem_write(paddr_t addr, int len, word_t data) {
   host_write(guest_to_host(addr), len, data);
 }
 
+#ifndef DIFFTEST
 static void out_of_bound(paddr_t addr) {
   panic("Address " FMT_PADDR " is out of bound: "
         "Physical Memory [" FMT_PADDR ", " FMT_PADDR "], "
@@ -97,6 +99,7 @@ static void out_of_bound(paddr_t addr) {
         CONFIG_FLASH_BASE, CONFIG_FLASH_TOP,
         cpu.pc);
 }
+#endif
 
 void init_mem() {
 #if   defined(CONFIG_PMEM_MALLOC)
@@ -124,7 +127,9 @@ word_t paddr_read(paddr_t addr, int len) {
     return data;
   }
   IFDEF(CONFIG_DEVICE, return mmio_read(addr, len));
+#ifndef DIFFTEST
   out_of_bound(addr);
+#endif
   return 0;
 }
 
@@ -135,5 +140,7 @@ void paddr_write(paddr_t addr, int len, word_t data) {
     return;
   }
   IFDEF(CONFIG_DEVICE, mmio_write(addr, len, data); return);
+#ifndef DIFFTEST
   out_of_bound(addr);
+#endif
 }

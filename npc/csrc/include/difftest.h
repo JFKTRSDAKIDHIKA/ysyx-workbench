@@ -35,4 +35,19 @@ void init_difftest(const char *ref_so_file, int port);
 // Function to convert guest physical address to host address
 uint8_t* guest_to_host(paddr_t paddr);
 
+// Macro for colored output
+#define RED     "\033[1;31m"
+#define YELLOW  "\033[1;33m"
+#define GREEN   "\033[1;32m"
+#define BLUE    "\033[1;34m"
+#define RESET   "\033[0m"
+#define BOLD    "\033[1m"
+#define COLOR_RED     "\033[31m"
+#define COLOR_GREEN   "\033[32m"
+#define COLOR_YELLOW  "\033[33m"
+#define COLOR_BLUE    "\033[34m"
+#define COLOR_MAGENTA "\033[35m"
+#define COLOR_CYAN    "\033[36m"
+#define COLOR_RESET   "\033[0m"
+
 #endif // DIFFTEST_H

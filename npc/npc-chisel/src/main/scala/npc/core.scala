@@ -22,6 +22,9 @@ class Core extends Module with RISCVConstants {
         val ifu_state_debug = Output(UInt(3.W))
         // idu
         val idu_state_debug = Output(UInt(2.W))
+        val idu_rs1_data_debug = Output(UInt(32.W))   
+        val idu_rs2_data_debug = Output(UInt(32.W)) 
+        val idu_branch_taken_debug = Output(Bool())
         // exu
         val jump_mispredict_debug = Output(Bool())
         val exu_state_debug = Output(UInt(2.W))
@@ -124,6 +127,9 @@ class Core extends Module with RISCVConstants {
     io.ifu_state_debug := ifu.io.ifu_state_debug
     // idu
     io.idu_state_debug := idu.io.idu_state_debug
+    io.idu_rs1_data_debug := idu.io.idu_rs1_data_debug
+    io.idu_rs2_data_debug := idu.io.idu_rs2_data_debug
+    io.idu_branch_taken_debug := idu.io.idu_branch_taken_debug
     // exu
     io.jump_mispredict_debug := exu.io.jump_mispredict_debug
     io.exu_state_debug := exu.io.exu_state_debug

@@ -40,6 +40,9 @@ class IDUIO extends Bundle {
 
     // Debug signals
     val idu_state_debug = Output(UInt(2.W))
+    val idu_rs1_data_debug = Output(UInt(32.W))   
+    val idu_rs2_data_debug = Output(UInt(32.W)) 
+    val idu_branch_taken_debug = Output(Bool())
 }
 
 class IDU extends Module with RISCVConstants{
@@ -204,4 +207,7 @@ class IDU extends Module with RISCVConstants{
     io.out.bits.rs1_data := rs1_data
     io.out.bits.rs2_data := rs2_data
     io.idu_state_debug := state
+    io.idu_rs1_data_debug := rs1_data
+    io.idu_rs2_data_debug := rs2_data
+    io.idu_branch_taken_debug := io.out.bits.branch_taken
 }

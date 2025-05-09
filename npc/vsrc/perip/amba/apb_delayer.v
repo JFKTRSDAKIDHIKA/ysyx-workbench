@@ -1,4 +1,4 @@
-`define ENABLE_APB_DELAY
+// `define ENABLE_APB_DELAY
 
 module apb_delayer(
   input         clock,

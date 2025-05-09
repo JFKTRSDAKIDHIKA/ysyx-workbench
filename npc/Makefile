@@ -37,6 +37,7 @@ sim: $(EXEC)
 # 清理生成文件
 clean:
 	rm -rf $(OBJ_DIR)
+	rm -rf ./sim_output
 	$(MAKE) -C $(CHISEL_DIR) clean
 
 # 包含上级目录的 Makefile
