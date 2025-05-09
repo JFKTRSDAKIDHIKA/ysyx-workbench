@@ -114,6 +114,9 @@ class Core extends Module with RISCVConstants {
     idu.io.redirect_valid := exu.io.redirect_valid
     idu.io.lsu_finish := lsu.io.lsu_finish
 
+    // Handle fence.i inst
+    ICache.io.fenceIEnable := exu.io.fenceIEnable
+
     // Debus signals
     // ifu
     io.pc_debug := ifu.io.pc_debug

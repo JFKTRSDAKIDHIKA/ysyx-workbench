@@ -39,6 +39,7 @@ class Metadata(implicit val p: ICacheParams) extends Module {
       val valid  = Input(Bool())
       val tag    = Input(UInt(p.tagBits.W))
     }
+    val fenceIEnable = Input(Bool())
   })
 
   val validArray = RegInit(VecInit(Seq.fill(p.numSets)(VecInit(Seq.fill(p.numWays)(false.B)))))
@@ -47,7 +48,13 @@ class Metadata(implicit val p: ICacheParams) extends Module {
   io.read.valid := validArray(io.read.index)
   io.read.tag   := tagArray(io.read.index)
 
-  when(io.write.enable) {
+  when (io.fenceIEnable) {
+    for (i <- 0 until p.numSets) {
+      for (j <- 0 until p.numWays) {
+        validArray(i)(j) := false.B
+      }
+    }
+  } .elsewhen(io.write.enable) {
     validArray(io.write.index)(io.write.way) := io.write.valid
     tagArray(io.write.index)(io.write.way) := io.write.tag
   }
@@ -85,6 +92,8 @@ class ICache(implicit val p: ICacheParams) extends Module with RISCVConstants {
     val arbiter = new ValidReadyBundle
     // Signals to handle control hazard
     val redirect_valid = Input(Bool())  
+    // Trigger signal for fence.i — invalidates the instruction cache
+    val fenceIEnable = Input(Bool())
     // Debug signals
     val icache_state_debug = Output(UInt())
     val icache_miss_count = Output(UInt(64.W)) 
@@ -122,6 +131,9 @@ class ICache(implicit val p: ICacheParams) extends Module with RISCVConstants {
   // Pass signals which handle control hazard
   frontend.io.redirect_valid := io.redirect_valid
   core.io.redirect_valid := io.redirect_valid
+
+  // Pass the signal which handle fence.i inst
+  core.io.fenceIEnable := io.fenceIEnable
 
   // Expose internal FSM state for debugging purposes
   io.icache_state_debug := core.io.icache_state_debug
@@ -171,6 +183,8 @@ class ICacheCore (implicit val p: ICacheParams) extends Module with RISCVConstan
     val arbiter = new ValidReadyBundle
     // Signals to handle control hazard
     val redirect_valid = Input(Bool())  
+    // Trigger signal for fence.i — invalidates the instruction cache
+    val fenceIEnable = Input(Bool())
     // Debug signals
     val icache_state_debug = Output(UInt())
     val icache_miss_count = Output(UInt(64.W))
@@ -208,6 +222,7 @@ class ICacheCore (implicit val p: ICacheParams) extends Module with RISCVConstan
   metadata.io.write.way := 0.U
   metadata.io.write.valid := false.B
   metadata.io.write.tag := 0.U
+  metadata.io.fenceIEnable := io.fenceIEnable
 
   // Check for a hit in the cache: valid && tag match
   val hits = VecInit(metadata.io.read.valid.zip(metadata.io.read.tag).map {

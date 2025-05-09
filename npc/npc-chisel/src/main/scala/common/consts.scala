@@ -192,6 +192,10 @@ trait RISCVConstants
    val CSR_CMD_RS  = 2.U(2.W)
    val CSR_CMD_RC  = 3.U(2.W)
 
+   // FENCE
+   val OPCODE_FENCE = "b0001111".U(7.W)
+   val FUNCT3_FENCE_I = "b001".U(3.W)
+
    // The Bubble Instruction (Machine generated NOP)
    // Insert (XOR x0,x0,x0) which is different from software compiler
    // generated NOPs which are (ADDI x0, x0, 0).

@@ -26,6 +26,8 @@ class EXUIO extends Bundle {
   val ex_is_load  = Output(Bool())
   // Signals to handle control hazard
   val redirect_valid = Output(Bool())  
+  // Trigger signal for fence.i — invalidates the instruction cache
+  val fenceIEnable = Output(Bool())
   // Degus signals
   val jump_mispredict_debug = Output(Bool())
   val exu_state_debug = Output(UInt(2.W))
@@ -71,6 +73,9 @@ class EXU extends Module with RISCVConstants {
   val is_csr_read = is_csrrw || is_csrrs
   val is_exception_flow = is_ecall || is_mret
 
+  // Decode fence.i instruction
+  val is_fence_i = opcode === OPCODE_FENCE && funct3 === FUNCT3_FENCE_I
+
   // Handle control hazard
   val is_jal   = opcode === OPCODE_JAL
   val is_jalr  = opcode === OPCODE_JALR
@@ -78,7 +83,7 @@ class EXU extends Module with RISCVConstants {
   val is_store = opcode === OPCODE_STORE
   val is_control_flow = is_jal || is_jalr || (is_branch && exu_reg_branch_taken) || is_exception_flow
   val pc_plus_4 = exu_reg_pc + 4.U
-  val jump_mispredict = is_control_flow && (io.pc_redirect_target =/= pc_plus_4)
+  val jump_mispredict = (is_control_flow && (io.pc_redirect_target =/= pc_plus_4)) || is_fence_i
 
   // Write destination in EXU stage (branch and store instructions do not write back!)
   io.wb_addr_exu := Mux(is_branch || is_store, 0.U(5.W), exu_reg_inst(RD_MSB,  RD_LSB))
@@ -202,10 +207,11 @@ class EXU extends Module with RISCVConstants {
   io.out.bits.dmem_addr := alu_result
   io.out.bits.result := Mux(is_csr_read, csr_file.io.csr_rdata, alu_result)
   io.out.bits.rs2_data := exu_reg_rs2_data
-  io.pc_redirect_target := Mux(is_exception_flow, csr_file.io.csr_rdata, alu_result)
+  io.pc_redirect_target := Mux(is_fence_i, exu_reg_pc + 4.U, Mux(is_exception_flow, csr_file.io.csr_rdata, alu_result))
   io.exuResultBypass := alu_result
   io.ex_is_load := (opcode === OPCODE_LOAD)
   io.redirect_valid := jump_mispredict
+  io.fenceIEnable := is_fence_i
   io.jump_mispredict_debug := jump_mispredict
   io.exu_state_debug := state
   io.perf_jump_mispredict_count := perf_jump_mispredict_count
