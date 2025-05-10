@@ -16,7 +16,6 @@ class WBU_IO extends Bundle {
   val wb_wen = Output(Bool())         
 
   // Feedback signals 
-  val pc_wen = Output(Bool())
   val lsu_axi_resp_err = Input(Bool())
 
   // Debug signals
@@ -119,7 +118,6 @@ class WBU extends Module with RISCVConstants{
   io.wb_data := wb_data
   io.wb_addr := wbu_reg_inst(RD_MSB,  RD_LSB)
   io.wb_wen := wb_wen && (state === sWB)
-  io.pc_wen := (state === sDone)
 
   // Handle ebreak instruction and lsu memory access error
   val ebreakHandler = Module(new EBreakHandler)

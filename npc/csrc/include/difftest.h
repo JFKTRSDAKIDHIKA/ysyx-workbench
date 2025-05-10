@@ -11,7 +11,7 @@ typedef uint32_t paddr_t;
 typedef struct {
     uint32_t gpr[32];
     uint32_t pc;
-  } riscv32_CPU_state;
+} riscv32_CPU_state;
 
 // Direction for register copy (DUT to REF or REF to DUT)
 enum { DIFFTEST_TO_DUT, DIFFTEST_TO_REF };

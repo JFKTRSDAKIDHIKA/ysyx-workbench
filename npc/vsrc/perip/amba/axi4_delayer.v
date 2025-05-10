@@ -1,7 +1,7 @@
-// `define ENABLE_AXI_DELAY
+`define ENABLE_AXI_DELAY
 
 module axi4_delayer #(
-  parameter integer r_times_s = 88, // r=5.5, s=16, 可配置
+  parameter integer r_times_s = 120, // r=5.5, s=16, 可配置
   parameter integer s = 16,
   parameter integer BURST_MAX = 16
 )(

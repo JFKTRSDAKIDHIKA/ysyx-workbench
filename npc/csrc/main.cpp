@@ -25,6 +25,7 @@
 
 // Define macros
 #define NEED_CHECK(top) ((top->io_wbu_state_debug == 2) && (top->io_wbu_reg_inst_debug != 0x4033) && (top->io_wbu_reg_pc_debug != 0x0))
+#define IN_SDRAM(pc) ((pc) >= 0xa0000000 && (pc) <= 0xbfffffff)
 
 // Declare global variables
 VysyxSoCFull* top;      // Top module (global)
@@ -33,11 +34,12 @@ static riscv32_CPU_state ref;
 static uint64_t instr_exec_cycles;
 static uint64_t ref_pc_prev = 0x30000000;
 std::vector<std::string> commit_log_buffer;
-constexpr int MAX_COMMIT_LOGS = 10;
+static int MAX_COMMIT_LOGS = 10;
 
 // function prototypes declaration
 void print_perf_report(double seconds, double cycles_per_second);
 void print_config();
+void finalize_and_log(const std::string& commit_log_path = "./sim_output/commit_log.txt");
 
 #ifdef TRACE
 InstructionTrace itrace;
@@ -111,7 +113,7 @@ int check_dut_and_ref(VysyxSoCFull* top, paddr_t start_addr, size_t size) {
 #endif
 
 void tick(void) {
-    total_cycles++;
+    if (IN_SDRAM(top->io_wbu_reg_pc_debug)) total_cycles++;
     top->clock = 0;
     top->eval();
 #ifdef ENABLE_WAVEFORM
@@ -130,16 +132,11 @@ void tick(void) {
     total_dmem_latency++;
   if (static_cast<int>(top->io_icache_state_debug) != 0 && static_cast<int>(top->io_icache_state_debug) != 5)
     total_miss_penalty++;
-  // if (static_cast<int>(top->io_icache_state_debug) == 6)
-  //   total_miss_time++;
   // Pipeline performance counter
   if (static_cast<int>(top->io_idu_state_debug) == 2)
     total_stall_penalty++;
-  //if (static_cast<int>(top->io_jump_mispredict_debug) == 1 && static_cast<int>(top->io_exu_state_debug) == 1)
-  //  jump_mispredict_count++;
   if (static_cast<int>(top->io_idu_state_debug) == 0)
     id_stall_cycles_due_to_ifetch++;
-
   jump_mispredict_count = top->io_perf_jump_mispredict_count;
   total_miss_time = top->io_icache_miss_count;
   
@@ -153,7 +150,7 @@ void tick(void) {
 
   if ((top->io_wbu_state_debug == 2) && (top->io_wbu_reg_inst_debug != 0x4033) && (top->io_wbu_reg_pc_debug != 0x0)) {
     // Dynamic instruction count
-    total_inst++;
+    if (IN_SDRAM(top->io_wbu_reg_pc_debug))  total_inst++;
 
     // Performance counter
     uint32_t inst = top->io_inst_debug;
@@ -223,18 +220,18 @@ void tick(void) {
 
   // print cpu execution information
 #ifndef SILENT_MODE
-if (commit_log_buffer.size() < MAX_COMMIT_LOGS) {
-    std::ostringstream oss;
-    oss << "=============================================\n";
-    oss << "[COMMIT INFO]\n";
-    oss << "Instruction    : " << std::uppercase << std::hex << std::setw(8) << std::setfill('0') << disassemble_instruction(top->io_wbu_reg_inst_debug) << "\n";
-    oss << "PC             : 0x" << std::uppercase << std::hex << std::setw(8) << std::setfill('0') << top->io_wbu_reg_pc_debug << "\n";
-    oss << "WB Data        : 0x" << std::uppercase << std::hex << std::setw(8) << std::setfill('0') << top->io_wb_data_debug << "\n";
-    oss << "DMem RData     : 0x" << std::uppercase << std::hex << std::setw(8) << std::setfill('0') << top->io_wbu_reg_dmem_rdata_debug << "\n";
-    oss << "WB Write Enable: 0x" << std::uppercase << std::hex << static_cast<int>(top->io_wb_wen_debug) << "\n";
-    oss << "=============================================\n\n";
-    commit_log_buffer.push_back(oss.str());
-}
+    if (commit_log_buffer.size() < MAX_COMMIT_LOGS) {
+        std::ostringstream oss;
+        oss << "=============================================\n";
+        oss << "[COMMIT INFO]\n";
+        oss << "Instruction    : " << std::uppercase << std::hex << std::setw(8) << std::setfill('0') << disassemble_instruction(top->io_wbu_reg_inst_debug) << "\n";
+        oss << "PC             : 0x" << std::uppercase << std::hex << std::setw(8) << std::setfill('0') << top->io_wbu_reg_pc_debug << "\n";
+        oss << "WB Data        : 0x" << std::uppercase << std::hex << std::setw(8) << std::setfill('0') << top->io_wb_data_debug << "\n";
+        oss << "DMem RData     : 0x" << std::uppercase << std::hex << std::setw(8) << std::setfill('0') << top->io_wbu_reg_dmem_rdata_debug << "\n";
+        oss << "WB Write Enable: 0x" << std::uppercase << std::hex << static_cast<int>(top->io_wb_wen_debug) << "\n";
+        oss << "=============================================\n\n";
+        commit_log_buffer.push_back(oss.str());
+    }
 #endif
 }
 
@@ -268,7 +265,7 @@ static char* rl_gets() {
     }
   
     return line_read;
-  }
+}
 
 static int need_check = 0;
 static int execute_single_step() {
@@ -440,7 +437,8 @@ int main(int argc, char **argv) {
 
 #ifdef DIFFTEST
     // Initialize difftest
-    init_difftest("/root/ysyx-workbench/nemu/build/riscv32-nemu-interpreter-so", 0);
+    auto so_path = std::filesystem::canonical(std::filesystem::current_path() / "../nemu/build/riscv32-nemu-interpreter-so");
+    init_difftest(so_path.c_str(), 0);
 #endif
 
     // Reset
@@ -450,46 +448,12 @@ int main(int argc, char **argv) {
     
     if (step_mode) {
       if (sdb_mainloop() < 0) {
-#ifdef TRACE
-        itrace.printTrace();
-        mtrace.printTrace();
-#endif
-#ifndef SILENT_MODE
-    std::ofstream commit_log_file("./sim_output/commit_log.txt");
-    if (commit_log_file.is_open()) {
-        for (const auto& entry : commit_log_buffer) {
-            commit_log_file << entry;
-        }
-        commit_log_file.close();
-        std::cout << COLOR_GREEN << "[LOG] " << COLOR_RESET
-                  << "Commit info saved to " << COLOR_CYAN << "./sim_output/commit_log.txt" << COLOR_RESET << std::endl;
-    } else {
-        std::cerr << COLOR_RED << "[ERROR] " << COLOR_RESET
-                  << "Unable to open " << COLOR_CYAN << "./sim_output/commit_log.txt" << COLOR_RESET << " for writing!" << std::endl;
-    }
-#endif
+        finalize_and_log();
         return -1;
       }
     } else {
       if (cmd_c(NULL) < 0) {
-#ifdef TRACE
-        itrace.printTrace();
-        mtrace.printTrace();
-#endif
-#ifndef SILENT_MODE
-    std::ofstream commit_log_file("./sim_output/commit_log.txt");
-    if (commit_log_file.is_open()) {
-        for (const auto& entry : commit_log_buffer) {
-            commit_log_file << entry;
-        }
-        commit_log_file.close();
-        std::cout << COLOR_GREEN << "[LOG] " << COLOR_RESET
-                  << "Commit info saved to " << COLOR_CYAN << "./sim_output/commit_log.txt" << COLOR_RESET << std::endl;
-    } else {
-        std::cerr << COLOR_RED << "[ERROR] " << COLOR_RESET
-                  << "Unable to open " << COLOR_CYAN << "./sim_output/commit_log.txt" << COLOR_RESET << " for writing!" << std::endl;
-    }
-#endif
+        finalize_and_log();
         return -1;
       }
     }
@@ -662,4 +626,27 @@ void print_perf_report(double seconds, double cycles_per_second) {
   std::cout << COLOR_GREEN << "[INFO] " << COLOR_RESET 
           << "Performance report generated successfully!" << std::endl;
 
+}
+
+
+void finalize_and_log(const std::string& commit_log_path) {
+#ifdef TRACE
+    itrace.printTrace();
+    mtrace.printTrace();
+#endif
+
+#ifndef SILENT_MODE
+    std::ofstream commit_log_file(commit_log_path);
+    if (commit_log_file.is_open()) {
+        for (const auto& entry : commit_log_buffer) {
+            commit_log_file << entry;
+        }
+        commit_log_file.close();
+        std::cout << COLOR_GREEN << "[LOG] " << COLOR_RESET
+                  << "Commit info saved to " << COLOR_CYAN << commit_log_path << COLOR_RESET << std::endl;
+    } else {
+        std::cerr << COLOR_RED << "[ERROR] " << COLOR_RESET
+                  << "Unable to open " << COLOR_CYAN << commit_log_path << COLOR_RESET << " for writing!" << std::endl;
+    }
+#endif
 }

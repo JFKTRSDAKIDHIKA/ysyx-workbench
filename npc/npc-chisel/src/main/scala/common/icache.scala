@@ -49,11 +49,11 @@ class Metadata(implicit val p: ICacheParams) extends Module {
   io.read.tag   := tagArray(io.read.index)
 
   when (io.fenceIEnable) {
-    for (i <- 0 until p.numSets) {
-      for (j <- 0 until p.numWays) {
+    (0 until p.numSets).foreach { i =>
+      (0 until p.numWays).foreach { j =>
         validArray(i)(j) := false.B
       }
-    }
+    }    
   } .elsewhen(io.write.enable) {
     validArray(io.write.index)(io.write.way) := io.write.valid
     tagArray(io.write.index)(io.write.way) := io.write.tag
@@ -338,9 +338,9 @@ class ICacheCore (implicit val p: ICacheParams) extends Module with RISCVConstan
       metadata.io.write.valid := true.B
       metadata.io.write.tag := icache_core_reg_tag
 
-      for (i <- 0 until p.wordsPerBlock) {
+      (0 until p.wordsPerBlock).foreach { i =>
         dataArray(icache_core_reg_index)(replaceWay)(i) := blockBuffer(i)
-      }
+      }      
 
       io.out.valid := true.B
       io.in.ready := io.out.ready

@@ -107,7 +107,9 @@ static int decode_exec(Decode *s) {
   INSTPAT("??????? ????? ????? 101 ????? 00000 11", lhu    , I, R(rd) = Mr(src1 + imm, 2));
 
   INSTPAT("??????? ????? ????? 000 ????? 11001 11", jalr, I, 
+#ifdef CONFIG_ITRACE
     log_write("jump @ pc = 0x%08x : jalr to 0x%08x (src1=0x%08x, imm=%d)\n", s->pc, src1 + imm, src1, imm);
+#endif
     /* 函数返回判断：
        RISC-V 中常用 ret 的机器码是 jalr x0, x1, 0 
        即 rd=0, rs1=1, imm=0
@@ -143,7 +145,9 @@ static int decode_exec(Decode *s) {
   INSTPAT("??????? ????? ????? 001 ????? 01000 11", sh     , S, Mw(src1 + imm, 2, src2));
 
   INSTPAT("??????? ????? ????? ??? ????? 11011 11", jal, J, 
+#ifdef CONFIG_ITRACE
     log_write("jump @ pc = 0x%08x : jal to 0x%08x\n", s->pc, s->pc + imm);
+#endif
   #ifdef CONFIG_FTRACE
     if (rd == 1) {
       ftrace_call(s->pc, s->pc + imm);
@@ -154,32 +158,44 @@ static int decode_exec(Decode *s) {
   );  
 
   INSTPAT("??????? ????? ????? 000 ????? 11000 11", beq , B,
+#ifdef CONFIG_ITRACE
     log_write("branch @ pc = 0x%08x : beq %d == %d => %s\n", s->pc, src1, src2, ((int32_t)src1 == (int32_t)src2 ? "taken" : "not taken"));
+#endif
     if ((int32_t)src1 == (int32_t)src2) s->dnpc = s->pc + imm;
   );
   
   INSTPAT("??????? ????? ????? 001 ????? 11000 11", bne , B,
+#ifdef CONFIG_ITRACE
     log_write("branch @ pc = 0x%08x : bne %d != %d => %s\n", s->pc, src1, src2, ((int32_t)src1 != (int32_t)src2 ? "taken" : "not taken"));
+#endif
     if ((int32_t)src1 != (int32_t)src2) s->dnpc = s->pc + imm;
   );
   
   INSTPAT("??????? ????? ????? 100 ????? 11000 11", blt , B,
+#ifdef CONFIG_ITRACE
     log_write("branch @ pc = 0x%08x : blt %d < %d => %s\n", s->pc, src1, src2, ((int32_t)src1 < (int32_t)src2 ? "taken" : "not taken"));
+#endif
     if ((int32_t)src1 < (int32_t)src2) s->dnpc = s->pc + imm;
   );
   
   INSTPAT("??????? ????? ????? 101 ????? 11000 11", bge , B,
+#ifdef CONFIG_ITRACE
     log_write("branch @ pc = 0x%08x : bge %d >= %d => %s\n", s->pc, src1, src2, ((int32_t)src1 >= (int32_t)src2 ? "taken" : "not taken"));
+#endif
     if ((int32_t)src1 >= (int32_t)src2) s->dnpc = s->pc + imm;
   );
   
   INSTPAT("??????? ????? ????? 110 ????? 11000 11", bltu , B,
+#ifdef CONFIG_ITRACE
     log_write("branch @ pc = 0x%08x : bltu %u < %u => %s\n", s->pc, src1, src2, ((uint32_t)src1 < (uint32_t)src2 ? "taken" : "not taken"));
+#endif
     if ((uint32_t)src1 < (uint32_t)src2) s->dnpc = s->pc + imm;
   );
   
   INSTPAT("??????? ????? ????? 111 ????? 11000 11", bgeu , B,
+#ifdef CONFIG_ITRACE
     log_write("branch @ pc = 0x%08x : bgeu %u >= %u => %s\n", s->pc, src1, src2, ((uint32_t)src1 >= (uint32_t)src2 ? "taken" : "not taken"));
+#endif
     if ((uint32_t)src1 >= (uint32_t)src2) s->dnpc = s->pc + imm;
   );
   

@@ -1,4 +1,4 @@
-// `define ENABLE_APB_DELAY
+`define ENABLE_APB_DELAY
 
 module apb_delayer(
   input         clock,
@@ -43,7 +43,7 @@ module apb_delayer(
   reg [1:0] state;
 
   // Fixed-point parameters for accumulation
-  localparam integer r_times_s = 88;   // r=5.5, s=16
+  localparam integer r_times_s = 120;   // r=5.5, s=16
   localparam integer s = 16;
 
   reg [31:0] acc;             // Accumulator: stores r * s
