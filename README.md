@@ -30,3 +30,15 @@ IPC
 │ │0.009 → 0.007 → 0.036 → 0.048
 │①      ②      ③      ④      ⑤      ⑥      ⑦
 ╰────────────────────────────────────────────→ Commit / Timeline
+
+---
+
+## 📚 Related Work
+
+The Corelet is part of a family:
+
+| Core Variant         | Description                                      |
+|----------------------|--------------------------------------------------|
+| Golden Apple Seed     | Smallest core (RV32E), perfect for MCUs          |
+| Golden Apple Corelet  | Optimizable embedded core with pipeline tuning   |
+| Golden Apple Titan    | High-performance OoO + multi-issue (WIP)         |
